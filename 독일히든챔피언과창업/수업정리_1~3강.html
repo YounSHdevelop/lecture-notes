@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>독일 히든챔피언과 창업 - 수업 정리 (1~3강)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface2: #334155;
+      --border: #475569;
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+      --accent3: #f472b6;
+      --highlight: #fbbf24;
+      --green: #4ade80;
+      --red: #fb7185;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .main-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e1b4b 100%);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .main-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(56,189,248,0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 50%, rgba(129,140,248,0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .main-header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .main-header .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+    }
+
+    /* Navigation */
+    .nav-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(12px);
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .nav-bar a {
+      color: var(--text-dim);
+      text-decoration: none;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .nav-bar a:hover {
+      color: var(--accent);
+      background: rgba(56,189,248,0.1);
+      border-color: rgba(56,189,248,0.3);
+    }
+    .nav-bar a.lec1 { border-color: rgba(56,189,248,0.4); color: var(--accent); }
+    .nav-bar a.lec2 { border-color: rgba(129,140,248,0.4); color: var(--accent2); }
+    .nav-bar a.lec3 { border-color: rgba(244,114,182,0.4); color: var(--accent3); }
+    .nav-bar a.exam { border-color: rgba(251,191,36,0.4); color: var(--highlight); }
+
+    /* Lecture Section */
+    .lecture {
+      margin-bottom: 3rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .lecture-header {
+      padding: 1.5rem 2rem;
+      font-size: 1.4rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .lecture-header .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .lec1-header { background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(56,189,248,0.05)); border-bottom: 2px solid rgba(56,189,248,0.3); }
+    .lec1-header .num { background: var(--accent); color: var(--bg); }
+    .lec2-header { background: linear-gradient(135deg, rgba(129,140,248,0.15), rgba(129,140,248,0.05)); border-bottom: 2px solid rgba(129,140,248,0.3); }
+    .lec2-header .num { background: var(--accent2); color: var(--bg); }
+    .lec3-header { background: linear-gradient(135deg, rgba(244,114,182,0.15), rgba(244,114,182,0.05)); border-bottom: 2px solid rgba(244,114,182,0.3); }
+    .lec3-header .num { background: var(--accent3); color: var(--bg); }
+    .exam-header { background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(251,191,36,0.05)); border-bottom: 2px solid rgba(251,191,36,0.3); }
+    .exam-header .num { background: var(--highlight); color: var(--bg); }
+
+    .lecture-body { padding: 1.5rem 2rem 2rem; }
+
+    /* Keywords */
+    .keywords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+    .kw {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(56,189,248,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(56,189,248,0.25);
+    }
+    .lec2-kw { background: rgba(129,140,248,0.1); color: var(--accent2); border-color: rgba(129,140,248,0.25); }
+    .lec3-kw { background: rgba(244,114,182,0.1); color: var(--accent3); border-color: rgba(244,114,182,0.25); }
+
+    /* Section */
+    .section {
+      margin-bottom: 2rem;
+    }
+    .section:last-child { margin-bottom: 0; }
+    .section h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--surface2);
+      color: var(--text);
+    }
+    .section h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 1rem 0 0.5rem;
+      color: var(--accent);
+    }
+    .section h4.c2 { color: var(--accent2); }
+    .section h4.c3 { color: var(--accent3); }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.75rem 0;
+      font-size: 0.88rem;
+    }
+    thead th {
+      background: var(--surface2);
+      color: var(--text);
+      font-weight: 700;
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+    }
+    tbody td {
+      padding: 0.55rem 0.8rem;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.4);
+      vertical-align: top;
+    }
+    tbody tr:hover { background: rgba(56,189,248,0.04); }
+    tbody tr:last-child td { border-bottom: none; }
+    td strong { color: var(--highlight); font-weight: 700; }
+
+    /* Lists */
+    ul, ol {
+      padding-left: 1.3rem;
+      margin: 0.5rem 0;
+    }
+    li {
+      margin-bottom: 0.35rem;
+      font-size: 0.92rem;
+    }
+    li strong { color: var(--highlight); }
+
+    /* Sub list */
+    li ul { margin-top: 0.25rem; }
+    li ul li { color: var(--text-dim); font-size: 0.87rem; }
+
+    /* Blockquote */
+    blockquote {
+      margin: 0.75rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 3px solid var(--accent);
+      background: rgba(56,189,248,0.06);
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    /* Info card */
+    .info-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin: 0.75rem 0;
+    }
+    .info-card p {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      margin-bottom: 0.3rem;
+    }
+    .info-card p:last-child { margin-bottom: 0; }
+
+    /* Comparison row */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin: 0.75rem 0;
+    }
+    .compare-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+    .compare-card h5 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-dim);
+    }
+    .compare-card.kr h5 { color: var(--green); }
+    .compare-card.de h5 { color: var(--accent); }
+
+    /* Stat */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin: 0.75rem 0;
+    }
+    .stat-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .stat-card .stat-num {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--highlight);
+      display: block;
+    }
+    .stat-card .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-top: 0.2rem;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 1.5rem;
+      margin: 0.75rem 0;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--surface2);
+    }
+    .tl-item {
+      position: relative;
+      margin-bottom: 0.6rem;
+      font-size: 0.88rem;
+    }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -1.55rem;
+      top: 0.5rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .tl-item.c2::before { background: var(--accent2); }
+    .tl-item.c3::before { background: var(--accent3); }
+    .tl-item.gold::before { background: var(--highlight); }
+    .tl-year {
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 70px;
+      display: inline-block;
+    }
+    .tl-item.c2 .tl-year { color: var(--accent2); }
+    .tl-item.c3 .tl-year { color: var(--accent3); }
+    .tl-item.gold .tl-year { color: var(--highlight); }
+
+    /* Person card */
+    .person-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.75rem;
+      margin: 0.75rem 0;
+    }
+    .person-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+    .person-card .name {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--highlight);
+      margin-bottom: 0.3rem;
+    }
+    .person-card .detail {
+      font-size: 0.83rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* Emphasis Box - 교수님 강조 */
+    .prof-box {
+      margin: 2rem 0;
+      border-radius: 12px;
+      border: 1px solid rgba(251,191,36,0.35);
+      background: linear-gradient(135deg, rgba(251,191,36,0.08), rgba(251,191,36,0.02));
+      overflow: hidden;
+    }
+    .prof-box-header {
+      padding: 0.7rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--highlight);
+      background: rgba(251,191,36,0.1);
+      border-bottom: 1px solid rgba(251,191,36,0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .prof-box-body {
+      padding: 1rem 1.2rem;
+    }
+    .prof-box-body h5 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--highlight);
+      margin: 0.8rem 0 0.4rem;
+    }
+    .prof-box-body h5:first-child { margin-top: 0; }
+    .prof-box-body ul { margin: 0.3rem 0 0.5rem; }
+    .prof-box-body li { font-size: 0.85rem; color: var(--text-dim); }
+    .prof-box-body li strong { color: var(--text); }
+
+    /* Core Question Box */
+    .question-box {
+      margin: 2rem 0;
+      border-radius: 12px;
+      border: 1px solid rgba(74,222,128,0.35);
+      background: linear-gradient(135deg, rgba(74,222,128,0.08), rgba(74,222,128,0.02));
+      overflow: hidden;
+    }
+    .question-box-header {
+      padding: 0.7rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--green);
+      background: rgba(74,222,128,0.1);
+      border-bottom: 1px solid rgba(74,222,128,0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .question-box-body {
+      padding: 1rem 1.2rem;
+    }
+    .q-item {
+      margin-bottom: 0.8rem;
+    }
+    .q-item:last-child { margin-bottom: 0; }
+    .q-item .q-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 0.2rem;
+    }
+    .q-item .q-answer {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+    }
+    .q-item .q-answer strong { color: var(--text); }
+
+    /* Divider */
+    hr {
+      border: none;
+      border-top: 1px solid var(--surface2);
+      margin: 1.5rem 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      body { padding: 1rem 0.5rem; }
+      .main-header { padding: 2rem 1rem; }
+      .main-header h1 { font-size: 1.4rem; }
+      .lecture-body { padding: 1rem; }
+      .compare-grid { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+      table { font-size: 0.8rem; }
+      thead th, tbody td { padding: 0.4rem 0.5rem; }
+    }
+
+    /* Home Navigation */
+    .home-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0.8rem 0;
+      margin: -2rem -1rem 1.5rem -1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .home-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .home-nav a:hover {
+      background: rgba(56,189,248,0.1);
+    }
+  </style>
+</head>
+<body>
+<div class="home-nav">
+  <a href="../index.html">&#8592; 강의 목록으로</a>
+</div>
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="main-header">
+    <h1>독일 히든챔피언과 창업</h1>
+    <p class="subtitle">대한민국 시대의 한독관계 &mdash; 수업 정리 (1~3강)</p>
+  </header>
+
+  <!-- NAV -->
+  <nav class="nav-bar">
+    <a href="#lec1" class="lec1">1강 외교 재수립</a>
+    <a href="#lec2" class="lec2">2강 파독 근로자</a>
+    <a href="#lec3" class="lec3">3강 공동 운명</a>
+    <a href="#exam" class="exam">시험 핵심 정리</a>
+  </nav>
+
+  <!-- ============================================================ -->
+  <!-- 1강 -->
+  <!-- ============================================================ -->
+  <article class="lecture" id="lec1">
+    <div class="lecture-header lec1-header">
+      <span class="num">1</span> 외교관계 재수립과 한국 유학생
+    </div>
+    <div class="lecture-body">
+
+      <!-- Keywords -->
+      <div class="keywords">
+        <span class="kw">패전국</span>
+        <span class="kw">뉘른베르크 재판</span>
+        <span class="kw">도쿄 재판</span>
+        <span class="kw">외교관계 재수립</span>
+        <span class="kw">총영사관</span>
+        <span class="kw">손원일 초대 주독대사</span>
+        <span class="kw">1억 5천 마르크 차관</span>
+        <span class="kw">한국 유학생</span>
+        <span class="kw">고병익</span>
+        <span class="kw">전혜린</span>
+      </div>
+
+      <!-- 1-1 -->
+      <div class="section">
+        <h3>1. 2차 세계대전 종전과 한독 상황</h3>
+        <div class="compare-grid">
+          <div class="compare-card kr">
+            <h5>한국</h5>
+            <p>일본 패전으로 독립<br>1950년 한국전쟁 발발</p>
+          </div>
+          <div class="compare-card de">
+            <h5>독일</h5>
+            <p>패전국으로 서독/동독 분단<br>연합군 관할 하에 재건</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <p><strong>공통점:</strong> 분단국가라는 공동 운명체</p>
+          <p>독일은 한국전쟁 시 패전국 신분으로 연합군 파병 불가 &rarr; 대신 <strong>부산 야전병원</strong> 설립 등 의료 지원 + 기증금 47,619달러 제공 (유엔안전보장이사회 긴급구조계획)</p>
+        </div>
+      </div>
+
+      <!-- 1-2 -->
+      <div class="section">
+        <h3>2. 뉘른베르크 재판 vs 도쿄 재판</h3>
+        <table>
+          <thead>
+            <tr><th>구분</th><th>뉘른베르크 재판 (독일)</th><th>도쿄 재판 (일본)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>기간</td><td>1945.11 ~ 1946.10</td><td>1946.4 ~ 1948.11</td></tr>
+            <tr><td>피고인</td><td>헤르만 괴링 등 22명</td><td>도조 히데키 등 25명</td></tr>
+            <tr><td>적용 죄목</td><td>평화에 대한 죄, 전쟁 범죄, 반인도 범죄</td><td>평화에 대한 죄, 살인, 전쟁 범죄</td></tr>
+            <tr><td>선고</td><td>19명 유죄, 교수형 12명</td><td>25명 유죄, 교수형 7명</td></tr>
+            <tr><td><strong>패전국 이후 조치</strong></td><td><strong>특별법 제정, 전범 공직 취임 금지 등</strong></td><td><strong>없음</strong></td></tr>
+          </tbody>
+        </table>
+        <div class="info-card">
+          <p>독일은 재판 이후에도 자체적으로 특별법을 제정하여 전범 처리를 지속한 반면, 일본은 별도 조치가 없었음</p>
+        </div>
+      </div>
+
+      <!-- 1-3 -->
+      <div class="section">
+        <h3>3. 한독 외교관계 재수립 과정</h3>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-year">1954.10</span> 독일 <strong>레마겐</strong>에 총영사관 설치 (초대영사: 이아노 박사)</div>
+          <div class="tl-item"><span class="tl-year">1955.01</span> 독일 정부, 총영사관을 한국무역 대표로 승인</div>
+          <div class="tl-item gold"><span class="tl-year">1955.12</span> <strong>상호 국가 승인, 외교관계 수립</strong></div>
+          <div class="tl-item"><span class="tl-year">1956.10</span> 독일, 서울에 총영사관 설치</div>
+          <div class="tl-item gold"><span class="tl-year">1958</span> 공사관 &rarr; <strong>대사관 승격</strong> / <strong>손원일</strong> 초대 주독대사 부임</div>
+          <div class="tl-item"><span class="tl-year">1958</span> 김일환 상공부 장관 독일 방문 / 루드비히 에르하르트 서독 경제상 한국 방문</div>
+          <div class="tl-item"><span class="tl-year">1960</span> 제2공화국 수립 / 전규홍 제2대 주독대사 부임</div>
+          <div class="tl-item"><span class="tl-year">1960.10</span> 태환선 부흥부장관 서독 방문 &rarr; 경제협력 약속</div>
+        </div>
+      </div>
+
+      <!-- 1-4 -->
+      <div class="section">
+        <h3>4. 군사정권과 독일 차관</h3>
+        <ul>
+          <li>1961년 박정희 군사정권 수립 후 <strong>미국 케네디 정부 방문 &rarr; 냉대&middot;거부</strong>
+            <ul><li>군사 쿠데타 정권에 대한 경제원조 불가 통보</li></ul>
+          </li>
+          <li><strong>서독으로 방향 전환</strong>: 특사(김용식) 파견 &rarr; 서독 정부에 지원 요청</li>
+          <li><strong>1961년</strong>: 1억 5천 마르크(약 4천만 달러) <strong>장기 재정차관 + 상업차관</strong> 합의</li>
+          <li><strong>1962.10.27</strong>: 차관 승인 공식 발표 &rarr; 한국 경제발전의 근간</li>
+        </ul>
+      </div>
+
+      <!-- 1-5 -->
+      <div class="section">
+        <h3>5. 이후 한독 경제협력 심화</h3>
+        <table>
+          <thead><tr><th>연도</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td>1963.2</td><td>독일인 경제고문단 설치 협정 체결</td></tr>
+            <tr><td>1963.8</td><td>4대 주독대사 최덕신 부임</td></tr>
+            <tr><td>1963</td><td><strong>간호원&middot;광부 초청노동자협정 조인</strong></td></tr>
+            <tr><td>1964.12</td><td>한독 경제협력 의정서 체결 / 한독 재정원조 협정 체결</td></tr>
+            <tr><td>1961~1982</td><td>지속적인 재정 협정 및 다양한 사업 추진</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 1-6 -->
+      <div class="section">
+        <h3>6. 한국 유학생의 독일 진출</h3>
+        <ul>
+          <li>독일 대학의 특징: <strong>국립대학 등록금 무료</strong> (독일인뿐 아니라 모든 재학생 대상)
+            <ul><li>80~90년대 이후 일부 사립대학 등장 &rarr; 사립은 등록금 부과</li></ul>
+          </li>
+          <li>해방 이후 독일 유학생 지속 증가 &rarr; 현재 약 <strong>8,000여 명</strong></li>
+        </ul>
+        <h4>대표 유학생</h4>
+        <div class="person-grid">
+          <div class="person-card">
+            <div class="name">고병익</div>
+            <div class="detail">1924년 경북 문경 출생 / 1954년 독일 유학 / 1956년 뮌헨대학교 철학박사 / 전 서울대 총장</div>
+          </div>
+          <div class="person-card">
+            <div class="name">전혜린</div>
+            <div class="detail">1959년 뮌헨대학교 독문학 졸업 / 번역가&middot;수필가 / 성경관대 교수 / 안네 프랑크, 이미륵 &laquo;압록강은 흐른다&raquo;, 마리아 린저 작품 등 번역</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1-7 -->
+      <div class="section">
+        <h3>7. 독일의 칭호 문화</h3>
+        <ul>
+          <li>독일에서는 박사(Doktor), 교수(Professor) 등의 칭호를 <strong>이름의 일부</strong>로 취급</li>
+          <li>호칭 예시: <em>Herr Professor Doktor [이름]</em></li>
+          <li>전 서독 대통령 호이스: <em>"Bundespr&auml;sident Professor Doktor Heuss"</em></li>
+        </ul>
+      </div>
+
+      <!-- 교수님 강조 포인트 -->
+      <div class="prof-box">
+        <div class="prof-box-header">교수님 강조 포인트</div>
+        <div class="prof-box-body">
+          <h5>시험 출제 예상 개념</h5>
+          <ul>
+            <li><strong>1억 5천 마르크 차관</strong>의 의미: 미국에 거절당한 후 서독으로 전환한 배경과 한국 경제발전의 전환점</li>
+            <li><strong>외교관계 재수립 과정</strong>: 총영사관(1954) &rarr; 국가 승인(1955) &rarr; 대사관 승격(1958)의 단계적 발전</li>
+            <li>독일의 한국전쟁 지원 방식: 패전국이라 군사 파병 불가 &rarr; <strong>의료 지원(부산 야전병원)</strong>으로 대체</li>
+            <li>독일 대학의 <strong>등록금 무료 제도</strong>와 한국 유학생 증가의 관계</li>
+          </ul>
+          <h5>비교 개념 (표로 출제 가능)</h5>
+          <ul>
+            <li><strong>뉘른베르크 재판 vs 도쿄 재판</strong>: 기간, 피고인 수, 선고 결과, 특히 <strong>패전국 이후 조치의 차이</strong>(독일: 특별법 제정 / 일본: 없음)</li>
+            <li>종전 후 <strong>한국 vs 독일</strong>: 독립 vs 패전, 하지만 공통점으로 분단국가</li>
+          </ul>
+          <h5>사례형 문제 가능</h5>
+          <ul>
+            <li>&ldquo;만약 서독이 차관을 승인하지 않았다면?&rdquo; &rarr; 교수님이 직접 언급한 질문. 미국 거절 후 한국 경제발전의 대안 부재 상황을 서술</li>
+            <li><strong>케네디의 냉대 &rarr; 서독 전환</strong> 사례: 군사정권에 대한 국제사회 반응과 외교 전략의 변화</li>
+            <li>고병익, 전혜린 등 <strong>초기 유학생의 귀국 후 역할</strong>: 학문&middot;번역&middot;문화 분야 기여</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 이 강의의 핵심 질문 -->
+      <div class="question-box">
+        <div class="question-box-header">이 강의의 핵심 질문</div>
+        <div class="question-box-body">
+          <div class="q-item">
+            <div class="q-label">Q. 이 강의는 무엇을 설명하려는가?</div>
+            <div class="q-answer">해방 이후 단절되었던 한독 외교관계가 <strong>어떤 과정을 거쳐 재수립</strong>되었으며, 미국에 거절당한 한국이 <strong>왜 서독을 경제 파트너로 선택</strong>할 수밖에 없었는가를 설명한다. 또한 독일 유학생의 증가를 통해 양국 간 인적 교류의 시작을 보여준다.</div>
+          </div>
+          <div class="q-item">
+            <div class="q-label">Q. 이전 강의와 어떻게 연결되는가?</div>
+            <div class="q-answer">이전 수업(대한제국&middot;일제강점기)에서 다룬 <strong>초기 한독 접촉과 일제시대 독일 유학생</strong>(이미륵 등)의 맥락을 이어받아, 해방 후 주권 회복 상태에서의 <strong>공식적 외교관계 수립</strong>으로 발전시킨다. 일제시대에 끊어졌던 관계가 어떻게 다시 이어졌는가가 핵심 연결고리이다.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ============================================================ -->
+  <!-- 2강 -->
+  <!-- ============================================================ -->
+  <article class="lecture" id="lec2">
+    <div class="lecture-header lec2-header">
+      <span class="num">2</span> 제3공화국과 파독 근로자
+    </div>
+    <div class="lecture-body">
+
+      <div class="keywords">
+        <span class="kw lec2-kw">박정희 독일 방문(1964)</span>
+        <span class="kw lec2-kw">뤼프케 대통령</span>
+        <span class="kw lec2-kw">에르하르트 수상</span>
+        <span class="kw lec2-kw">파독 광부</span>
+        <span class="kw lec2-kw">파독 간호사</span>
+        <span class="kw lec2-kw">시드머니(seed money)</span>
+        <span class="kw lec2-kw">라인강의 기적</span>
+        <span class="kw lec2-kw">경제개발 5개년 계획</span>
+        <span class="kw lec2-kw">루르 지역</span>
+        <span class="kw lec2-kw">졸페라인</span>
+        <span class="kw lec2-kw">탄광의 문화공간 전환</span>
+      </div>
+
+      <!-- 2-1 -->
+      <div class="section">
+        <h3>1. 박정희 대통령의 독일 방문 (1964.12.6)</h3>
+        <ul>
+          <li><strong>뤼프케(L&uuml;bke) 대통령</strong> 초청으로 방문</li>
+          <li><strong>한국 국가원수 최초의 독일 공식 방문</strong></li>
+          <li>방문 목적 3가지:
+            <ol>
+              <li>미국 일변도 외교에서 <strong>유럽(독일) 중심으로 전환</strong></li>
+              <li>파독 광부&middot;간호사의 <strong>현지 상황 점검</strong></li>
+              <li><strong>지속적인 경제 지원</strong> 확보 (2&middot;3차 경제개발 5개년 계획 대비)</li>
+            </ol>
+          </li>
+          <li>독일의 <strong>라인강의 기적</strong>을 직접 목격하고자 함</li>
+          <li>베를린 방문: <strong>빌리 브란트</strong> 당시 베를린 시장과 동서 베를린 분단 현장 시찰</li>
+        </ul>
+
+        <h4 class="c2">독일 측 입장</h4>
+        <div class="info-card">
+          <p><strong>에르하르트(Erhard) 수상</strong>: 한국이 독일과 같은 분단국가라는 점에서 관심</p>
+          <p>&ldquo;통일이 될 때까지 지속적으로 한국에 관심을 갖겠다&rdquo;</p>
+          <p>직접 한국에 가서 경제고문 역할을 하고 싶다고 표명</p>
+        </div>
+      </div>
+
+      <!-- 2-2 -->
+      <div class="section">
+        <h3>2. 뤼프케 독일 대통령 방한 (1967)</h3>
+        <ul>
+          <li>박정희 대통령 방독에 대한 <strong>답방</strong></li>
+          <li>방문 의의:
+            <ul>
+              <li>한독 양국 우호관계 공고화</li>
+              <li><strong>경제고문단 파견</strong> (차관 운영 실태 확인 + 실질적 지원)</li>
+              <li>기술 협력 강화</li>
+            </ul>
+          </li>
+          <li>한국 측: 잉여노동력의 독일 파견 (광부, 간호원), 기술 훈련단 파견</li>
+          <li>기념우표 발행</li>
+        </ul>
+      </div>
+
+      <!-- 2-3 -->
+      <div class="section">
+        <h3>3. 파독 근로자 (광부&middot;간호사)</h3>
+
+        <h4 class="c2">배경</h4>
+        <ul>
+          <li>1962년 경제개발 5개년 계획 시작 &rarr; 외화보유고 약 <strong>1억 달러</strong> 수준</li>
+          <li>수출 상품 부재 (가발 수출 정도), 공장&middot;기술력 부족, 일자리 부족</li>
+          <li>한국 월급 1~2만원 vs 독일 <strong>10만원 이상</strong> (10배 차이)</li>
+          <li>수백 명 모집에 <strong>15만 명 응모</strong></li>
+        </ul>
+
+        <h4 class="c2">규모와 성과</h4>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-num">7,936명</span>
+            <span class="stat-label">파독 광부</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">10,564명</span>
+            <span class="stat-label">파독 간호사</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">~1억 달러</span>
+            <span class="stat-label">12년간 송금 총액</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">3,300여 명</span>
+            <span class="stat-label">현재 독일 체류</span>
+          </div>
+        </div>
+        <ul>
+          <li>12년간 송금액은 한국 경제발전의 <strong>시드머니(seed money)</strong></li>
+          <li>1977년 파독사업 종료 이후 &rarr; 유학생, 태권도 사범, 지상사 직원 중심 진출</li>
+          <li>2010년 이후 &rarr; 취업&middot;자영업자 증가 추세</li>
+          <li>현재: 1세대 퇴직&middot;연금수령, 2세대 독일 사회 주요 역할, 3세대 성장 중</li>
+        </ul>
+
+        <h4 class="c2">재독 한인 단체</h4>
+        <ul>
+          <li>재독한인총연합회</li>
+          <li>퇴직광산근로자 친목회 &ldquo;<strong>글뤽아우프(Gl&uuml;ck auf)</strong>&rdquo; = &ldquo;행운을 빌며 (다시 지상으로 올라오자)&rdquo;</li>
+          <li>재독한인간호협회, 재독한인체육회</li>
+          <li>교포신문, 우리신문, 유로저널</li>
+        </ul>
+
+        <h4 class="c2">박정희 대통령의 눈물의 연설</h4>
+        <blockquote>
+          &ldquo;우리가 못나서 이곳 이역만리에서 고생하고 있지만, 우리 후손들에게는 잘사는 조국을 물려줍시다.&rdquo;
+        </blockquote>
+        <div class="info-card">
+          <p>당시 국가원수임에도 호텔이 아닌 <strong>민박집에 숙박</strong> &rarr; 경제적 어려움 방증</p>
+        </div>
+      </div>
+
+      <!-- 2-4 -->
+      <div class="section">
+        <h3>4. 루르 지역의 탄광 &rarr; 문화공간 전환</h3>
+        <ul>
+          <li>위치: <strong>노르트라인-베스트팔렌(NRW)주</strong> (도르트문트, 쾰른 등) &mdash; 독일 중서부</li>
+          <li>과거: 독일 최대 산업&middot;탄광 지역</li>
+          <li>현재: <strong>문화 복합 공간</strong>으로 변신
+            <ul>
+              <li>디자인 센터&middot;디자인 학교 설립</li>
+              <li>연간 약 <strong>600억 원</strong> 수입</li>
+              <li><strong>졸페라인(Zollverein)</strong>: 세계적 미술관&middot;재생문화공간으로 연구 대상</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="info-card">
+          <p><strong>한국에의 시사점:</strong> 강원도 탄광지역 등을 문화산업으로 리모델링할 필요성</p>
+        </div>
+      </div>
+
+      <!-- 교수님 강조 포인트 -->
+      <div class="prof-box">
+        <div class="prof-box-header">교수님 강조 포인트</div>
+        <div class="prof-box-body">
+          <h5>시험 출제 예상 개념</h5>
+          <ul>
+            <li><strong>박정희 독일 방문(1964)의 3가지 목적</strong>: 유럽 외교 전환, 파독 근로자 점검, 경제 지원 확보</li>
+            <li><strong>파독 근로자 통계</strong>: 광부 7,936명, 간호사 10,564명, 12년간 1억 달러 송금 &rarr; 시드머니</li>
+            <li><strong>경제개발 5개년 계획</strong>과 독일 차관의 관계: 1차(1962~)부터 독일 지원이 근간</li>
+            <li><strong>에르하르트 수상</strong>의 한국에 대한 관심 표명 (분단국가 동질감)</li>
+          </ul>
+          <h5>비교 개념 (표로 출제 가능)</h5>
+          <ul>
+            <li><strong>한국의 당시 경제 상황 vs 독일</strong>: 외화보유고 1억 달러, 가발 수출, 월급 1~2만원 vs 독일 10만원+</li>
+            <li><strong>루르 탄광지역(과거) vs 졸페라인(현재)</strong>: 산업유산의 문화공간 전환 모델</li>
+            <li><strong>박정희 방독(1964) vs 뤼프케 방한(1967)</strong>: 초청&middot;답방 구조, 각국의 목적 차이</li>
+          </ul>
+          <h5>사례형 문제 가능</h5>
+          <ul>
+            <li><strong>파독 근로자의 경제적 역할</strong>: 수백 명 모집에 15만 명 응모, 국가원수가 민박에 숙박한 에피소드 등 구체 사례</li>
+            <li><strong>루르 지역 &rarr; 졸페라인 전환</strong>을 한국 강원도 탄광지역에 적용하는 방안 (교수님 직접 시사점 제시)</li>
+            <li>&ldquo;글뤽아우프(Gl&uuml;ck auf)&rdquo;의 의미와 파독 광부의 삶</li>
+            <li>눈물의 연설: 경제적 어려움 속에서 파독 근로자가 가진 사명감</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 이 강의의 핵심 질문 -->
+      <div class="question-box">
+        <div class="question-box-header">이 강의의 핵심 질문</div>
+        <div class="question-box-body">
+          <div class="q-item">
+            <div class="q-label">Q. 이 강의는 무엇을 설명하려는가?</div>
+            <div class="q-answer">1강에서 합의된 차관이 <strong>실제로 어떻게 실행</strong>되었으며, 외교관계가 <strong>인적 교류(파독 광부&middot;간호사)</strong>로 확대되어 한국 경제발전의 실질적 동력이 된 과정을 설명한다. 또한 독일의 산업유산 전환(루르 &rarr; 졸페라인) 사례를 통해 미래 한국에의 시사점을 제시한다.</div>
+          </div>
+          <div class="q-item">
+            <div class="q-label">Q. 이전 강의와 어떻게 연결되는가?</div>
+            <div class="q-answer">1강의 <strong>차관 합의(1961)와 경제협력 협정</strong>이 이 강의의 출발점이다. 1강이 &ldquo;외교적 토대 마련&rdquo;이었다면, 2강은 그 토대 위에서 <strong>실질적 경제 협력과 인력 교류</strong>가 어떻게 전개되었는가를 다룬다. 특히 1강에서 등장한 에르하르트, 뤼프케 등 인물이 2강에서 구체적 역할을 수행한다.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ============================================================ -->
+  <!-- 3강 -->
+  <!-- ============================================================ -->
+  <article class="lecture" id="lec3">
+    <div class="lecture-header lec3-header">
+      <span class="num">3</span> 공동 운명의 결속 (60~2000년대)
+    </div>
+    <div class="lecture-body">
+
+      <div class="keywords">
+        <span class="kw lec3-kw">동백림 사건(1967)</span>
+        <span class="kw lec3-kw">윤이상</span>
+        <span class="kw lec3-kw">동방정책(Ostpolitik)</span>
+        <span class="kw lec3-kw">빌리 브란트</span>
+        <span class="kw lec3-kw">접근을 통한 변화</span>
+        <span class="kw lec3-kw">동서독 기본조약(1972)</span>
+        <span class="kw lec3-kw">한독수교 100주년(1983)</span>
+        <span class="kw lec3-kw">베를린 장벽 붕괴(1989)</span>
+        <span class="kw lec3-kw">독일 통일(1990)</span>
+        <span class="kw lec3-kw">베를린 선언(2000)</span>
+        <span class="kw lec3-kw">드레스덴 선언</span>
+        <span class="kw lec3-kw">한독 워킹홀리데이(2009)</span>
+        <span class="kw lec3-kw">중소기업 육성</span>
+      </div>
+
+      <!-- 3-1 -->
+      <div class="section">
+        <h3>1. 동백림(동베를린) 사건 (1967.7.8)</h3>
+
+        <h4 class="c3">사건 개요</h4>
+        <ul>
+          <li><strong>동백림</strong> = 동베를린의 한자식 표기</li>
+          <li>중앙정보부 발표: 194명의 유학생&middot;교민이 동베를린 북한 대사관&middot;평양을 방문, 간첩교육을 받고 대남 적화활동을 했다고 주장</li>
+          <li>핵심 인물: <strong>윤이상</strong>, 이응로 등</li>
+          <li>독일&middot;유럽 거주 한국인을 <strong>강제 납치&middot;본국 송환</strong> &rarr; 독일과 외교 마찰</li>
+        </ul>
+
+        <h4 class="c3">배경: 베를린의 특수 상황</h4>
+        <ul>
+          <li>서베를린 &harr; 동베를린 이동이 비교적 자유로웠음</li>
+          <li>동베를린에 북한 대사관, 소련 대사관 등 소재</li>
+          <li>유학생들이 동베를린의 북한 유학생들과 교류한 것은 사실</li>
+        </ul>
+
+        <h4 class="c3">진실 규명</h4>
+        <div class="info-card">
+          <p><strong>2006년 국가정보원 과거사건 진실규명위원회</strong> 결론:</p>
+          <p>&bull; 박정희 정권이 <strong>정치적 목적으로 사건을 확대&middot;과장</strong>했다고 판단</p>
+          <p>&bull; 북한 방문은 사실이나 실질적 정보 제공&middot;간첩 행위는 인정 어려움</p>
+          <p>&bull; 불법 연행&middot;가혹 행위에 대해 정부에 <strong>사과 권고</strong></p>
+        </div>
+
+        <h4 class="c3">결과와 영향</h4>
+        <ul>
+          <li>한독관계 <strong>냉각기</strong> 진입 (급상승하던 관계에 손실)</li>
+          <li>국가안보 명분의 중형 선고, 법대 교수 투신자살 사건</li>
+          <li>서독 특별사절단 한국 방문</li>
+        </ul>
+
+        <h4 class="c3">윤이상 (1917~1995)</h4>
+        <div class="person-grid">
+          <div class="person-card" style="grid-column: 1 / -1;">
+            <div class="name">윤이상</div>
+            <div class="detail">
+              무기징역 선고 &rarr; 2년 후 석방 &rarr; 독일 귀환 / 1971년 <strong>독일 국적 취득</strong><br>
+              <strong>현대 5대 작곡가</strong> 중 한 명 / 총 <strong>150편</strong> 작곡, 동양과 서양 음악의 연결<br>
+              남북한 합동공연 성사 / 2017년 탄생 100주년 기념 오페라 공연
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3-2 -->
+      <div class="section">
+        <h3>2. 70년대: 화해 무드와 경제협력 재결속</h3>
+        <ul>
+          <li>동백림 사건 이후 냉각된 관계가 회복되기 시작</li>
+          <li>배경: <strong>서독의 동방정책(Ostpolitik)</strong> &mdash; 빌리 브란트 총리
+            <ul><li><strong>&ldquo;접근을 통한 변화(Wandel durch Ann&auml;herung)&rdquo;</strong></li>
+            <li>동서독 관계 정상화 움직임 &rarr; 한국에도 영향</li></ul>
+          </li>
+        </ul>
+        <div class="timeline">
+          <div class="tl-item c2"><span class="tl-year">1970</span> 국토통일원장 동서독 방문&middot;시찰</div>
+          <div class="tl-item gold"><span class="tl-year">1972</span> <strong>동서독 기본조약</strong> 체결 / 3억 5천만 마르크 차관 추가 지원</div>
+          <div class="tl-item c2"><span class="tl-year">1976</span> 이중과세 면제 협정 체결</div>
+          <div class="tl-item c2"><span class="tl-year">1977</span> 재정지원 협정 서명</div>
+          <div class="tl-item c2"><span class="tl-year">1979</span> 파견 전문가 각서교환, 농촌종합개발연구사업 각서교환</div>
+        </div>
+      </div>
+
+      <!-- 3-3 -->
+      <div class="section">
+        <h3>3. 80년대: 한독관계의 다방면 확대</h3>
+        <ul>
+          <li><strong>1983년</strong>: 한독수교 100주년 기념행사 개최</li>
+          <li>경제뿐 아니라 <strong>사회&middot;문화 전 분야</strong>로 교류 확대</li>
+          <li>수십 가지 협정 체결</li>
+          <li>파우스트 관련 문화 공연 개최</li>
+        </ul>
+      </div>
+
+      <!-- 3-4 -->
+      <div class="section">
+        <h3>4. 90년대: 교류의 총괄과 직항 시대</h3>
+        <ul>
+          <li><strong>1989년</strong>: 베를린 장벽 붕괴</li>
+          <li><strong>1990년</strong>: 독일 평화통일 달성</li>
+          <li>한독 직항 노선 개설 (한독항공운수협정)</li>
+          <li>한독정책기획협의회 설립</li>
+          <li>과학기술협정, 원자력협정 등 체결</li>
+        </ul>
+      </div>
+
+      <!-- 3-5 -->
+      <div class="section">
+        <h3>5. 2000년대: 동등한 파트너로서의 한독관계</h3>
+
+        <h4 class="c3">독일의 대한국 지지 성명</h4>
+        <table>
+          <thead><tr><th>연도</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td>2000</td><td>남북정상회담 환영&middot;지지 성명 채택</td></tr>
+            <tr><td>2001</td><td>한반도 평화&middot;안정&middot;통일 결의안 발표</td></tr>
+            <tr><td>2004</td><td>한독관계의 역동적 발전</td></tr>
+            <tr><td>2005~2006</td><td>북핵 관련 한반도 평화정착 지지 성명</td></tr>
+            <tr><td>2008</td><td><strong>한독수교 125주년</strong> 기념 특별결의안 채택</td></tr>
+            <tr><td>2010</td><td>천안함 폭침 비난 성명 / 연평도 포격 비난 성명</td></tr>
+          </tbody>
+        </table>
+
+        <h4 class="c3">역대 대통령 독일 방문과 대북 메시지</h4>
+        <table>
+          <thead><tr><th>대통령</th><th>시기</th><th>핵심 메시지</th></tr></thead>
+          <tbody>
+            <tr><td><strong>박정희</strong></td><td>1964</td><td>최초 국빈 방문, 경제협력</td></tr>
+            <tr><td><strong>전두환</strong></td><td>1980년대</td><td>기념우표 발행</td></tr>
+            <tr><td><strong>노태우</strong></td><td>1980년대</td><td>콜 총리 재임기 방문</td></tr>
+            <tr><td><strong>김영삼</strong></td><td>1995</td><td>베를린에서 &ldquo;북한이 필요한 어떤 분야에도 협력하겠다&rdquo;</td></tr>
+            <tr><td><strong>김대중</strong></td><td>2000.3</td><td>베를린 자유대학에서 <strong>베를린 선언</strong> &rarr; 3개월 후 <strong>6.15 남북정상회담&middot;공동선언</strong></td></tr>
+            <tr><td><strong>노무현</strong></td><td>2005</td><td>독일 통일 정책 조언 요청</td></tr>
+            <tr><td><strong>이명박</strong></td><td>-</td><td>서울 핵안보정상회의에 김정일 초청 메시지 (김정일 사망으로 무산)</td></tr>
+            <tr><td><strong>박근혜</strong></td><td>-</td><td>드레스덴 공대에서 <strong>드레스덴 선언</strong> (인도적 문제, 민생 인프라, 동질성 회복)</td></tr>
+            <tr><td><strong>문재인</strong></td><td>2017.7</td><td><strong>신베를린 선언</strong> (신한반도 평화 비전, 비핵화, 이산가족상봉) / 메르켈 수상과 정상회담</td></tr>
+          </tbody>
+        </table>
+
+        <h4 class="c3">2017년 한독정상회담 주요 합의</h4>
+        <table>
+          <thead><tr><th>분야</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td>안보</td><td>북한 비핵화 협력</td></tr>
+            <tr><td>외교</td><td>양국 전략 협력 증진</td></tr>
+            <tr><td>경제</td><td>일자리 창출, 성장 동력 확충, <strong>4차 산업혁명</strong> 공동 참여</td></tr>
+            <tr><td>에너지</td><td>탈원전, 신재생에너지</td></tr>
+            <tr><td>산업</td><td><strong>중소기업 육성 협력 강화</strong> (독일 기업의 98% 이상이 중소기업)</td></tr>
+            <tr><td>글로벌</td><td>포용적 성장, 자유무역, 기후변화, 여성 역량 강화</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 3-6 -->
+      <div class="section">
+        <h3>6. 한국의 위상 변화</h3>
+        <ul>
+          <li><strong>무비자 3개월 체류</strong> 가능</li>
+          <li>기업인&middot;대학생: <strong>장기 비자 2년, 복수 사증</strong> 발급</li>
+          <li><strong>2009년</strong>: 한독 <strong>워킹홀리데이 프로그램</strong> 시행 (1년 체류 가능)</li>
+          <li>주독 한국 공관: 베를린(대사관), 프랑크푸르트(영사관), 함부르크(영사관), 본(분관) &mdash; 총 4개</li>
+        </ul>
+      </div>
+
+      <!-- 3-7 -->
+      <div class="section">
+        <h3>7. 독일 통일의 교훈</h3>
+        <div class="info-card">
+          <p><strong>빌리 브란트</strong>의 동방정책: &ldquo;접근을 통한 변화&rdquo;</p>
+          <p>서독은 동독과의 교류&middot;이해를 기반으로 <strong>평화통일</strong> 달성 (1990)</p>
+          <p><strong>한국에의 시사점:</strong> 독일의 통일 과정을 연구하고 한반도 평화통일을 준비해야 함</p>
+        </div>
+      </div>
+
+      <!-- 교수님 강조 포인트 -->
+      <div class="prof-box">
+        <div class="prof-box-header">교수님 강조 포인트</div>
+        <div class="prof-box-body">
+          <h5>시험 출제 예상 개념</h5>
+          <ul>
+            <li><strong>동백림 사건(1967)</strong>: 사건 개요, 194명 연루, 강제 송환, 2006년 진실규명 결과까지 전 과정</li>
+            <li><strong>빌리 브란트의 동방정책</strong>: &ldquo;접근을 통한 변화(Wandel durch Ann&auml;herung)&rdquo; &rarr; 동서독 기본조약(1972) &rarr; 독일 통일(1990)</li>
+            <li><strong>역대 대통령 방독과 대북 메시지</strong>: 특히 김대중의 베를린 선언(2000) &rarr; 6.15 정상회담 연결</li>
+            <li><strong>2017년 한독정상회담 합의 6개 분야</strong>: 비핵화, 전략협력, 4차 산업혁명, 탈원전, 중소기업, 글로벌 협력</li>
+            <li><strong>독일 중소기업 98%</strong> vs 한국 대기업 중심 구조</li>
+          </ul>
+          <h5>비교 개념 (표로 출제 가능)</h5>
+          <ul>
+            <li><strong>동백림 사건의 &ldquo;정부 주장&rdquo; vs &ldquo;진실규명 결과&rdquo;</strong>: 간첩단 vs 확대&middot;과장, 국가안보 vs 정치적 목적</li>
+            <li><strong>60년대(밀월) vs 동백림 이후(냉각) vs 70년대(회복)</strong>: 한독관계의 3단계 변화</li>
+            <li><strong>역대 대통령별 방독 메시지 비교</strong>: 김영삼(협력 제안) &rarr; 김대중(베를린 선언) &rarr; 박근혜(드레스덴 선언) &rarr; 문재인(신베를린 선언)</li>
+            <li><strong>서독의 동방정책 vs 한국의 대북정책</strong>: &ldquo;접근을 통한 변화&rdquo;를 한반도에 적용 가능성</li>
+          </ul>
+          <h5>사례형 문제 가능</h5>
+          <ul>
+            <li><strong>윤이상 사례</strong>: 동백림 사건 연루 &rarr; 무기징역 &rarr; 석방 &rarr; 독일 국적 &rarr; 세계적 작곡가. 정치적 탄압과 예술적 성취의 대비</li>
+            <li><strong>베를린 선언(2000) &rarr; 6.15 남북정상회담</strong>: 독일에서 발표한 선언이 3개월 만에 실제 남북회담으로 이어진 과정</li>
+            <li><strong>독일 통일 과정의 한국에 대한 시사점</strong>: 교수님이 반복 강조한 주제. 동방정책의 원리를 한반도에 적용하는 논술형 가능</li>
+            <li>한국의 위상 변화: 차관을 받던 나라 &rarr; 무비자 체류, 워킹홀리데이 프로그램 시행 대상국</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 이 강의의 핵심 질문 -->
+      <div class="question-box">
+        <div class="question-box-header">이 강의의 핵심 질문</div>
+        <div class="question-box-body">
+          <div class="q-item">
+            <div class="q-label">Q. 이 강의는 무엇을 설명하려는가?</div>
+            <div class="q-answer">60~2000년대에 걸쳐 한독관계가 <strong>어떻게 위기(동백림)를 겪고 회복</strong>되었으며, 분단국가라는 <strong>공동 운명</strong>이 양국관계에 어떤 영향을 미쳤는가를 설명한다. 궁극적으로 독일 통일의 교훈이 <strong>한반도 평화통일에 어떤 시사점</strong>을 주는지가 이 강의의 핵심 메시지이다.</div>
+          </div>
+          <div class="q-item">
+            <div class="q-label">Q. 이전 강의와 어떻게 연결되는가?</div>
+            <div class="q-answer">2강에서 절정에 달했던 한독 밀월관계(박정희 방독, 파독 근로자)가 <strong>동백림 사건(1967)으로 냉각</strong>되는 것이 3강의 출발점이다. 2강의 &ldquo;경제적 협력&rdquo;에서 3강의 &ldquo;<strong>정치&middot;외교&middot;문화적 관계의 확장과 시련</strong>&rdquo;으로 논의가 심화된다. 1강(토대) &rarr; 2강(실행) &rarr; 3강(위기&middot;회복&middot;성숙)이라는 <strong>3단계 서사 구조</strong>를 이룬다.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ============================================================ -->
+  <!-- 시험 핵심 정리 -->
+  <!-- ============================================================ -->
+  <article class="lecture" id="exam">
+    <div class="lecture-header exam-header">
+      <span class="num">!</span> 시험 대비 핵심 정리
+    </div>
+    <div class="lecture-body">
+
+      <div class="section">
+        <h3>반드시 기억할 연도와 사건</h3>
+        <div class="timeline">
+          <div class="tl-item gold"><span class="tl-year">1955</span> 한독 외교관계 수립</div>
+          <div class="tl-item gold"><span class="tl-year">1958</span> 대사관 승격, 손원일 초대 주독대사</div>
+          <div class="tl-item gold"><span class="tl-year">1961</span> 1억 5천 마르크 차관 합의 (한국 경제발전의 전환점)</div>
+          <div class="tl-item gold"><span class="tl-year">1963</span> 파독 광부&middot;간호사 협정 조인</div>
+          <div class="tl-item gold"><span class="tl-year">1964</span> 박정희 대통령 독일 방문 (최초 국가원수)</div>
+          <div class="tl-item gold"><span class="tl-year">1967</span> 동백림 사건 (한독관계 냉각) / 뤼프케 대통령 방한</div>
+          <div class="tl-item gold"><span class="tl-year">1972</span> 동서독 기본조약 체결</div>
+          <div class="tl-item gold"><span class="tl-year">1983</span> 한독수교 100주년</div>
+          <div class="tl-item gold"><span class="tl-year">1989</span> 베를린 장벽 붕괴</div>
+          <div class="tl-item gold"><span class="tl-year">1990</span> 독일 통일</div>
+          <div class="tl-item gold"><span class="tl-year">2000</span> 김대중 대통령 베를린 선언 &rarr; 6.15 남북정상회담</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>핵심 개념 비교: 한국 vs 독일</h3>
+        <table>
+          <thead><tr><th>한국</th><th>독일</th></tr></thead>
+          <tbody>
+            <tr><td>대기업 중심 경제</td><td><strong>중소기업(98%) 중심</strong> 경제</td></tr>
+            <tr><td>분단 지속</td><td>1990년 평화통일 달성</td></tr>
+            <tr><td>강원도 탄광지역 (활용 과제)</td><td>루르 탄광 &rarr; 졸페라인 문화공간 (성공 사례)</td></tr>
+            <tr><td>한강의 기적</td><td><strong>라인강의 기적</strong></td></tr>
+            <tr><td>남북정상회담 (2000)</td><td>동서독 기본조약 (1972)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h3>핵심 인물</h3>
+        <div class="person-grid">
+          <div class="person-card">
+            <div class="name">손원일</div>
+            <div class="detail">초대 주독대사 (1958)</div>
+          </div>
+          <div class="person-card">
+            <div class="name">루드비히 에르하르트</div>
+            <div class="detail">서독 경제상 &rarr; 수상, 한국에 관심 표명</div>
+          </div>
+          <div class="person-card">
+            <div class="name">뤼프케</div>
+            <div class="detail">서독 대통령, 박정희 초청&middot;답방</div>
+          </div>
+          <div class="person-card">
+            <div class="name">빌리 브란트</div>
+            <div class="detail">동방정책, &ldquo;접근을 통한 변화&rdquo;</div>
+          </div>
+          <div class="person-card">
+            <div class="name">윤이상</div>
+            <div class="detail">동백림 사건 연루, 현대 5대 작곡가, 150편 작곡</div>
+          </div>
+          <div class="person-card">
+            <div class="name">전혜린</div>
+            <div class="detail">독문학자&middot;번역가, 뮌헨대 졸업</div>
+          </div>
+          <div class="person-card">
+            <div class="name">고병익</div>
+            <div class="detail">뮌헨대 철학박사, 전 서울대 총장</div>
+          </div>
+          <div class="person-card">
+            <div class="name">바이츠제커</div>
+            <div class="detail">전 독일 대통령, 김대중 대통령과 절친</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+</div>
+</body>
+</html>
