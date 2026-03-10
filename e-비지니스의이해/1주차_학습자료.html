@@ -1,12 +1,41 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1주차 - 전자상거래란 무엇인가?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        /* ── CSS Variables ── */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e3a8a;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.14);
+        }
 
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --nav-bg: rgba(15, 23, 42, 0.95);
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ── Reset & Base ── */
         * {
             margin: 0;
             padding: 0;
@@ -15,342 +44,422 @@
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #e0e0e0;
+            background-color: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding-top: 64px;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
+        /* ── Navigation ── */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 16px;
+            transition: background 0.3s, border-color 0.3s;
         }
 
-        /* ── 헤더 ── */
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-            position: relative;
+        .nav-logo {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        .header .week-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: #fff;
-            padding: 6px 24px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+        .nav-logo:hover {
+            opacity: 0.8;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            flex: 1;
+            justify-content: center;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.78rem;
             font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.08);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-theme {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: background 0.2s, border-color 0.2s, transform 0.1s;
+            color: var(--text);
+        }
+
+        .btn-theme:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-home {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .nav-home:hover {
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.08);
+        }
+
+        /* ── Page Header ── */
+        .page-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: #fff;
+            text-align: center;
+            padding: 56px 24px 48px;
+        }
+
+        .week-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .header h1 {
-            font-size: 2.4rem;
+        .page-header h1 {
+            font-size: 2.2rem;
             font-weight: 900;
-            background: linear-gradient(90deg, #a78bfa, #60a5fa, #34d399);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
         }
 
-        .header .subtitle {
-            font-size: 1rem;
-            color: #9ca3af;
+        .page-header .subtitle {
+            font-size: 0.95rem;
+            opacity: 0.85;
         }
 
-        /* ── 핵심 요약 카드 ── */
-        .summary-card {
-            background: rgba(255,255,255,0.06);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
+        /* ── Container ── */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        /* ── Section Card ── */
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
             padding: 36px;
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 32px;
+            transition: background 0.3s, box-shadow 0.3s;
         }
 
-        .summary-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        .section-card:hover {
+            box-shadow: var(--shadow-hover);
         }
 
-        .summary-card h2 {
-            font-size: 1.3rem;
+        .section-card.blue   { border-top: 4px solid #2563eb; }
+        .section-card.purple { border-top: 4px solid #7c3aed; }
+        .section-card.cyan   { border-top: 4px solid #0891b2; }
+        .section-card.amber  { border-top: 4px solid #d97706; }
+        .section-card.orange { border-top: 4px solid #ea580c; }
+
+        .section-title {
+            font-size: 1.2rem;
             font-weight: 700;
-            color: #c4b5fd;
-            margin-bottom: 18px;
+            color: var(--text);
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .summary-card h2 .icon {
-            font-size: 1.4rem;
-        }
-
-        .summary-card p, .summary-card li {
-            font-size: 0.95rem;
-            line-height: 1.85;
-            color: #d1d5db;
-        }
-
-        .summary-card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .summary-card ul li {
-            padding: 6px 0 6px 24px;
-            position: relative;
-        }
-
-        .summary-card ul li::before {
-            content: '▸';
-            position: absolute;
-            left: 4px;
-            color: #818cf8;
-            font-weight: 700;
-        }
-
-        /* ── 키워드 정의 영역 ── */
+        /* ── Keyword Box ── */
         .keyword-box {
-            background: rgba(99,102,241,0.1);
-            border-left: 4px solid #818cf8;
-            border-radius: 0 12px 12px 0;
-            padding: 20px 24px;
-            margin: 20px 0;
+            background: rgba(37, 99, 235, 0.06);
+            border-left: 4px solid #2563eb;
+            border-radius: 0 10px 10px 0;
+            padding: 18px 22px;
+            margin-bottom: 16px;
+        }
+
+        [data-theme="dark"] .keyword-box {
+            background: rgba(37, 99, 235, 0.12);
+        }
+
+        .keyword-box:last-child {
+            margin-bottom: 0;
         }
 
         .keyword-box .term {
             font-weight: 700;
-            color: #a5b4fc;
-            font-size: 1rem;
+            color: var(--primary);
+            font-size: 0.95rem;
             margin-bottom: 6px;
         }
 
         .keyword-box .def {
-            font-size: 0.92rem;
-            color: #c7d2fe;
-            line-height: 1.7;
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.75;
         }
 
-        /* ── 비교 테이블 ── */
-        .compare-section {
+        /* ── Compare Cards ── */
+        .compare-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 40px;
+            gap: 20px;
         }
 
         @media (max-width: 680px) {
-            .compare-section {
-                grid-template-columns: 1fr;
-            }
+            .compare-grid { grid-template-columns: 1fr; }
         }
 
         .compare-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
-            padding: 28px;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .compare-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
         }
 
         .compare-card.commerce {
-            border-top: 4px solid #60a5fa;
+            border-top: 4px solid #2563eb;
+            background: rgba(37, 99, 235, 0.04);
         }
 
         .compare-card.business {
-            border-top: 4px solid #34d399;
+            border-top: 4px solid #059669;
+            background: rgba(5, 150, 105, 0.04);
         }
 
+        [data-theme="dark"] .compare-card.commerce { background: rgba(37, 99, 235, 0.08); }
+        [data-theme="dark"] .compare-card.business { background: rgba(5, 150, 105, 0.08); }
+
         .compare-card h3 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             margin-bottom: 4px;
         }
 
-        .compare-card.commerce h3 { color: #93c5fd; }
-        .compare-card.business h3 { color: #6ee7b7; }
+        .compare-card.commerce h3 { color: #2563eb; }
+        .compare-card.business h3 { color: #059669; }
 
-        .compare-card .tag {
+        .compare-tag {
             display: inline-block;
-            font-size: 0.72rem;
-            padding: 3px 10px;
-            border-radius: 10px;
-            margin-bottom: 14px;
-            font-weight: 500;
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
 
-        .compare-card.commerce .tag {
-            background: rgba(96,165,250,0.15);
-            color: #93c5fd;
+        .compare-card.commerce .compare-tag {
+            background: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
         }
 
-        .compare-card.business .tag {
-            background: rgba(52,211,153,0.15);
-            color: #6ee7b7;
+        .compare-card.business .compare-tag {
+            background: rgba(5, 150, 105, 0.1);
+            color: #059669;
         }
 
         .compare-card p {
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             line-height: 1.75;
-            color: #d1d5db;
+            color: var(--text);
             margin-bottom: 14px;
         }
 
-        .compare-card .examples {
-            background: rgba(0,0,0,0.2);
-            border-radius: 10px;
-            padding: 14px 18px;
+        .compare-examples {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
         }
 
-        .compare-card .examples .label {
-            font-size: 0.75rem;
-            color: #9ca3af;
+        .compare-examples .label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 8px;
+            font-weight: 600;
         }
 
-        .compare-card .examples ul {
+        .compare-examples ul {
             list-style: none;
             padding: 0;
         }
 
-        .compare-card .examples ul li {
-            font-size: 0.85rem;
-            color: #d1d5db;
-            padding: 3px 0;
-            padding-left: 16px;
+        .compare-examples ul li {
+            font-size: 0.83rem;
+            color: var(--text);
+            padding: 3px 0 3px 14px;
             position: relative;
         }
 
-        .compare-card .examples ul li::before {
+        .compare-card.commerce .compare-examples ul li::before {
             content: '•';
             position: absolute;
             left: 2px;
+            color: #2563eb;
             font-weight: 700;
         }
 
-        .compare-card.commerce .examples ul li::before { color: #60a5fa; }
-        .compare-card.business .examples ul li::before { color: #34d399; }
-
-        /* ── 관계 다이어그램 ── */
-        .diagram-section {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-            padding: 36px;
-            margin-bottom: 40px;
-            text-align: center;
+        .compare-card.business .compare-examples ul li::before {
+            content: '•';
+            position: absolute;
+            left: 2px;
+            color: #059669;
+            font-weight: 700;
         }
 
-        .diagram-section h2 {
-            font-size: 1.2rem;
-            color: #c4b5fd;
-            margin-bottom: 28px;
-        }
-
-        .diagram {
+        /* ── Diagram ── */
+        .diagram-wrap {
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 8px 0 16px;
         }
 
         .circle-outer {
-            width: 380px;
-            height: 380px;
-            border: 3px dashed rgba(52,211,153,0.4);
+            width: 360px;
+            height: 360px;
+            border: 3px dashed rgba(8, 145, 178, 0.45);
             border-radius: 50%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
-            background: rgba(52,211,153,0.03);
+            background: rgba(8, 145, 178, 0.04);
+        }
+
+        [data-theme="dark"] .circle-outer {
+            border-color: rgba(8, 145, 178, 0.6);
+            background: rgba(8, 145, 178, 0.07);
         }
 
         .circle-outer-label {
             position: absolute;
-            top: 18px;
-            font-size: 0.85rem;
+            top: 16px;
+            font-size: 0.82rem;
             font-weight: 700;
-            color: #6ee7b7;
+            color: #0891b2;
             letter-spacing: 1px;
         }
 
         .circle-inner {
-            width: 200px;
-            height: 200px;
-            border: 3px solid rgba(96,165,250,0.5);
+            width: 190px;
+            height: 190px;
+            border: 3px solid rgba(37, 99, 235, 0.55);
             border-radius: 50%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgba(96,165,250,0.08);
+            background: rgba(37, 99, 235, 0.07);
+        }
+
+        [data-theme="dark"] .circle-inner {
+            border-color: rgba(37, 99, 235, 0.7);
+            background: rgba(37, 99, 235, 0.12);
         }
 
         .circle-inner-label {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
-            color: #93c5fd;
+            color: #2563eb;
             margin-bottom: 4px;
         }
 
         .circle-inner-desc {
-            font-size: 0.72rem;
-            color: #9ca3af;
+            font-size: 0.7rem;
+            color: var(--text-muted);
             text-align: center;
-            padding: 0 16px;
+            padding: 0 14px;
+            line-height: 1.5;
         }
 
         .outer-items {
             position: absolute;
-            font-size: 0.72rem;
-            color: #9ca3af;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            line-height: 1.6;
         }
 
-        .outer-items.top-right { top: 70px; right: 20px; text-align: right; }
-        .outer-items.bottom-left { bottom: 70px; left: 14px; text-align: left; }
-        .outer-items.bottom-right { bottom: 40px; right: 24px; text-align: right; }
+        .outer-items.top-right   { top: 68px; right: 18px; text-align: right; }
+        .outer-items.bottom-left  { bottom: 68px; left: 12px; text-align: left; }
+        .outer-items.bottom-right { bottom: 38px; right: 22px; text-align: right; }
+
+        .diagram-note {
+            margin-top: 16px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .diagram-note strong { color: var(--primary); }
 
         @media (max-width: 480px) {
             .circle-outer { width: 280px; height: 280px; }
-            .circle-inner { width: 150px; height: 150px; }
+            .circle-inner { width: 148px; height: 148px; }
         }
 
-        /* ── 확장학습 섹션 ── */
-        .expand-section {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 36px;
-            margin-bottom: 40px;
-        }
-
-        .expand-section h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #fbbf24;
-            margin-bottom: 22px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        /* ── Timeline ── */
         .timeline {
             position: relative;
             padding-left: 32px;
@@ -363,7 +472,7 @@
             top: 0;
             bottom: 0;
             width: 2px;
-            background: linear-gradient(180deg, #fbbf24, #f59e0b, #d97706, #92400e);
+            background: linear-gradient(180deg, #d97706, #f59e0b, #fbbf24);
         }
 
         .timeline-item {
@@ -371,307 +480,340 @@
             margin-bottom: 28px;
         }
 
+        .timeline-item:last-child { margin-bottom: 0; }
+
         .timeline-item::before {
             content: '';
             position: absolute;
             left: -28px;
-            top: 6px;
+            top: 5px;
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #fbbf24;
-            border: 3px solid #1e1b4b;
+            background: #d97706;
+            border: 3px solid var(--card-bg);
         }
 
         .timeline-item .era {
-            font-size: 0.78rem;
-            color: #fbbf24;
+            font-size: 0.76rem;
+            color: #d97706;
             font-weight: 700;
             letter-spacing: 1px;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
-        .timeline-item .title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #fde68a;
-            margin-bottom: 4px;
-        }
-
-        .timeline-item .desc {
-            font-size: 0.88rem;
-            color: #d1d5db;
-            line-height: 1.7;
-        }
-
-        /* ── 실생활 예시 ── */
-        .realworld {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 36px;
-            margin-bottom: 40px;
-        }
-
-        .realworld h2 {
-            font-size: 1.3rem;
+        .timeline-item .tl-title {
+            font-size: 0.97rem;
             font-weight: 700;
-            color: #fb923c;
-            margin-bottom: 22px;
+            color: var(--text);
+            margin-bottom: 5px;
         }
 
+        .timeline-item .tl-desc {
+            font-size: 0.87rem;
+            color: var(--text-muted);
+            line-height: 1.75;
+        }
+
+        .tl-highlight {
+            display: inline-block;
+            background: rgba(217, 119, 6, 0.1);
+            border: 1px solid rgba(217, 119, 6, 0.25);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 0.82rem;
+            margin-top: 8px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        [data-theme="dark"] .tl-highlight {
+            background: rgba(217, 119, 6, 0.15);
+        }
+
+        .tl-alert {
+            display: inline-block;
+            background: rgba(220, 38, 38, 0.08);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 0.82rem;
+            margin-top: 8px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        [data-theme="dark"] .tl-alert {
+            background: rgba(220, 38, 38, 0.15);
+        }
+
+        /* ── EDI vs Internet compare boxes ── */
+        .edi-compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 28px;
+        }
+
+        @media (max-width: 640px) { .edi-compare { grid-template-columns: 1fr; } }
+
+        .edi-box {
+            border-radius: 10px;
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+        }
+
+        .edi-box.old {
+            background: rgba(217, 119, 6, 0.05);
+            border-color: rgba(217, 119, 6, 0.2);
+        }
+
+        .edi-box.new {
+            background: rgba(37, 99, 235, 0.05);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        [data-theme="dark"] .edi-box.old { background: rgba(217, 119, 6, 0.1); }
+        [data-theme="dark"] .edi-box.new { background: rgba(37, 99, 235, 0.1); }
+
+        .edi-box .edi-title {
+            font-weight: 700;
+            font-size: 0.88rem;
+            margin-bottom: 10px;
+        }
+
+        .edi-box.old .edi-title { color: #d97706; }
+        .edi-box.new .edi-title { color: #2563eb; }
+
+        .edi-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .edi-box ul li {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            padding: 3px 0;
+            line-height: 1.6;
+        }
+
+        /* ── Example Grid ── */
         .example-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 14px;
         }
 
         .example-item {
-            background: rgba(0,0,0,0.25);
+            background: var(--bg);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 20px;
+            padding: 20px 16px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.06);
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .example-item:hover {
-            transform: scale(1.03);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
         }
 
         .example-item .emoji {
-            font-size: 2rem;
+            font-size: 1.9rem;
             margin-bottom: 10px;
         }
 
         .example-item .name {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #f9fafb;
-            margin-bottom: 4px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
         }
 
         .example-item .type {
-            font-size: 0.72rem;
+            display: inline-block;
+            font-size: 0.7rem;
             padding: 2px 10px;
             border-radius: 8px;
-            display: inline-block;
+            font-weight: 600;
             margin-bottom: 8px;
         }
 
-        .example-item .type.commerce-type {
-            background: rgba(96,165,250,0.15);
-            color: #93c5fd;
+        .type.commerce-type {
+            background: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
         }
 
-        .example-item .type.business-type {
-            background: rgba(52,211,153,0.15);
-            color: #6ee7b7;
+        .type.business-type {
+            background: rgba(5, 150, 105, 0.1);
+            color: #059669;
         }
 
         .example-item .detail {
-            font-size: 0.78rem;
-            color: #9ca3af;
-            line-height: 1.5;
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            line-height: 1.55;
         }
 
-        /* ── 퀴즈 ── */
-        .quiz-section {
-            background: rgba(139,92,246,0.08);
-            border: 1px solid rgba(139,92,246,0.2);
-            border-radius: 20px;
-            padding: 36px;
-            margin-bottom: 40px;
-        }
-
-        .quiz-section h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #c4b5fd;
-            margin-bottom: 22px;
-        }
-
-        .quiz-item {
-            margin-bottom: 24px;
-        }
-
-        .quiz-item .question {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #e0e7ff;
-            margin-bottom: 12px;
-        }
-
-        .quiz-item .options label {
-            display: block;
-            padding: 10px 16px;
-            margin-bottom: 6px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.88rem;
-            color: #d1d5db;
-            transition: background 0.2s, border-color 0.2s;
-        }
-
-        .quiz-item .options label:hover {
-            background: rgba(255,255,255,0.08);
-            border-color: rgba(139,92,246,0.3);
-        }
-
-        .quiz-item .options input[type="radio"] {
-            display: none;
-        }
-
-        .quiz-item .options input[type="radio"]:checked + span {
-            color: #a78bfa;
-            font-weight: 600;
-        }
-
-        .quiz-item .answer {
-            display: none;
-            margin-top: 10px;
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.88rem;
-            line-height: 1.6;
-        }
-
-        .quiz-item .answer.correct {
-            background: rgba(52,211,153,0.1);
-            border: 1px solid rgba(52,211,153,0.3);
-            color: #6ee7b7;
-        }
-
-        .quiz-item .answer.wrong {
-            background: rgba(239,68,68,0.1);
-            border: 1px solid rgba(239,68,68,0.3);
-            color: #fca5a5;
-        }
-
-        .btn-check {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: #fff;
-            border: none;
-            padding: 10px 28px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-
-        .btn-check:hover {
-            opacity: 0.85;
-        }
-
-        /* ── 사례연구 ── */
-        .case-study {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 36px;
-            margin-bottom: 40px;
-        }
-
-        .case-study h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #f472b6;
-            margin-bottom: 6px;
-        }
-
-        .case-study .case-subtitle {
-            font-size: 0.85rem;
-            color: #9ca3af;
-            margin-bottom: 24px;
-        }
-
-        .case-study .case-badge {
+        /* ── Case Study ── */
+        .case-badge {
             display: inline-block;
-            background: rgba(244,114,182,0.15);
-            color: #f9a8d4;
+            background: rgba(234, 88, 12, 0.1);
+            color: #ea580c;
             padding: 3px 12px;
-            border-radius: 10px;
-            font-size: 0.72rem;
-            font-weight: 600;
-            margin-bottom: 12px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
         }
 
-        .case-overview {
+        .case-subtitle {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .case-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 12px;
             margin-bottom: 24px;
         }
 
-        @media (max-width: 680px) {
-            .case-overview { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 640px) { .case-stats { grid-template-columns: 1fr 1fr; } }
 
         .case-stat {
-            background: rgba(0,0,0,0.25);
-            border-radius: 12px;
-            padding: 18px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.06);
         }
 
-        .case-stat .stat-value {
-            font-size: 1.4rem;
+        .stat-value {
+            font-size: 1.3rem;
             font-weight: 900;
             margin-bottom: 4px;
         }
 
-        .case-stat .stat-label {
-            font-size: 0.78rem;
-            color: #9ca3af;
+        .stat-label {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            line-height: 1.4;
         }
 
         .case-section-title {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 700;
-            color: #e0e7ff;
-            margin: 24px 0 14px 0;
+            color: var(--text);
+            margin: 22px 0 12px;
             padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .growth-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .growth-cell {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 8px;
+            text-align: center;
+        }
+
+        .growth-cell .g-year {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+        }
+
+        .growth-cell .g-val {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #ea580c;
         }
 
         .case-point {
-            background: rgba(0,0,0,0.15);
-            border-radius: 10px;
-            padding: 16px 20px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-left: 3px solid #ea580c;
+            border-radius: 0 10px 10px 0;
+            padding: 14px 18px;
             margin-bottom: 10px;
-            border-left: 3px solid rgba(244,114,182,0.4);
         }
 
-        .case-point .point-title {
-            font-size: 0.9rem;
+        .case-point.danger {
+            border-left-color: #dc2626;
+        }
+
+        .point-title {
+            font-size: 0.88rem;
             font-weight: 700;
-            color: #f9a8d4;
-            margin-bottom: 6px;
+            color: #ea580c;
+            margin-bottom: 5px;
         }
 
-        .case-point .point-desc {
-            font-size: 0.85rem;
-            color: #d1d5db;
+        .case-point.danger .point-title {
+            color: #dc2626;
+        }
+
+        .point-desc {
+            font-size: 0.84rem;
+            color: var(--text-muted);
             line-height: 1.7;
         }
 
+        .bm-compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 640px) { .bm-compare { grid-template-columns: 1fr; } }
+
+        .bm-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+
+        .bm-name {
+            font-size: 0.84rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+        }
+
+        .bm-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
         .case-connection {
-            background: rgba(139,92,246,0.08);
-            border: 1px dashed rgba(139,92,246,0.3);
-            border-radius: 12px;
-            padding: 18px 22px;
+            background: rgba(124, 58, 237, 0.06);
+            border: 1px dashed rgba(124, 58, 237, 0.3);
+            border-radius: 10px;
+            padding: 16px 20px;
             margin-top: 20px;
         }
 
-        .case-connection .conn-title {
+        [data-theme="dark"] .case-connection {
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .conn-title {
             font-size: 0.85rem;
             font-weight: 700;
-            color: #c4b5fd;
+            color: #7c3aed;
             margin-bottom: 10px;
         }
 
@@ -681,110 +823,181 @@
         }
 
         .case-connection ul li {
-            font-size: 0.85rem;
-            color: #d1d5db;
-            padding: 4px 0 4px 20px;
+            font-size: 0.83rem;
+            color: var(--text);
+            padding: 4px 0 4px 18px;
             position: relative;
-            line-height: 1.6;
+            line-height: 1.65;
         }
 
         .case-connection ul li::before {
-            content: '~';
+            content: '→';
             position: absolute;
-            left: 4px;
-            color: #a78bfa;
+            left: 0;
+            color: #7c3aed;
             font-weight: 700;
         }
 
-        .bm-compare {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-top: 14px;
+        /* ── Quiz ── */
+        .quiz-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
         }
 
-        @media (max-width: 680px) {
-            .bm-compare { grid-template-columns: 1fr; }
+        .quiz-item:last-of-type {
+            margin-bottom: 20px;
         }
 
-        .bm-card {
-            background: rgba(0,0,0,0.2);
-            border-radius: 10px;
-            padding: 16px;
-            border: 1px solid rgba(255,255,255,0.06);
+        .quiz-question {
+            font-size: 0.93rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 14px;
         }
 
-        .bm-card .bm-name {
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .quiz-options label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.86rem;
+            color: var(--text);
+            transition: border-color 0.2s, background 0.2s;
+            line-height: 1.5;
+        }
+
+        .quiz-options label:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.04);
+        }
+
+        .quiz-options input[type="radio"] {
+            margin-top: 2px;
+            flex-shrink: 0;
+            accent-color: var(--primary);
+        }
+
+        .quiz-feedback {
+            display: none;
+            padding: 10px 14px;
+            border-radius: 8px;
             font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .bm-card .bm-desc {
-            font-size: 0.8rem;
-            color: #9ca3af;
             line-height: 1.6;
+            margin-top: 8px;
         }
 
-        /* ── 푸터 ── */
+        .quiz-feedback.correct {
+            background: rgba(22, 163, 74, 0.1);
+            border: 1px solid rgba(22, 163, 74, 0.3);
+            color: var(--success);
+        }
+
+        [data-theme="dark"] .quiz-feedback.correct {
+            background: rgba(22, 163, 74, 0.15);
+            color: #4ade80;
+        }
+
+        .quiz-feedback.wrong {
+            background: rgba(220, 38, 38, 0.08);
+            border: 1px solid rgba(220, 38, 38, 0.25);
+            color: var(--danger);
+        }
+
+        [data-theme="dark"] .quiz-feedback.wrong {
+            background: rgba(220, 38, 38, 0.15);
+            color: #f87171;
+        }
+
+        .btn-check {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 9px 22px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .btn-check:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .btn-check:active {
+            transform: translateY(0);
+        }
+
+        /* ── Footer ── */
         .footer {
             text-align: center;
-            padding: 20px;
-            color: #6b7280;
+            padding: 24px;
+            color: var(--text-muted);
             font-size: 0.78rem;
         }
 
-        /* Home Navigation */
-        .home-nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 12px 20px;
-            margin: -40px -20px 20px -20px;
-            background: rgba(15, 12, 41, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .home-nav a {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            color: #667eea;
-            font-size: 0.9rem;
-            font-weight: 600;
-            padding: 6px 12px;
-            border-radius: 8px;
-            transition: background 0.2s;
-        }
-        .home-nav a:hover {
-            background: rgba(102, 126, 234, 0.1);
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 1.6rem; }
+            .section-card { padding: 24px 18px; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="home-nav">
-        <a href="../index.html">&#8592; 강의 목록으로</a>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="../index.html" class="nav-logo">&#8592; 강의 목록</a>
+        <div class="nav-links">
+            <a href="#summary">핵심 요약</a>
+            <a href="#compare">개념 비교</a>
+            <a href="#diagram">다이어그램</a>
+            <a href="#timeline">타임라인</a>
+            <a href="#examples">실생활 예시</a>
+            <a href="#casestudy">사례연구</a>
+            <a href="#quiz">퀴즈</a>
+        </div>
+        <div class="nav-right">
+            <button class="btn-theme" id="themeBtn" onclick="toggleTheme()" title="테마 전환">🌙</button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="week-badge">WEEK 01</div>
+        <h1>전자상거래란 무엇인가?</h1>
+        <p class="subtitle">e-비즈니스의 이해 &nbsp;|&nbsp; e-Commerce &amp; e-Business 핵심 개념 정리</p>
     </div>
+
     <div class="container">
 
-        <!-- 헤더 -->
-        <div class="header">
-            <div class="week-badge">WEEK 01</div>
-            <h1>전자상거래란 무엇인가?</h1>
-            <p class="subtitle">e-비즈니스의 이해 | e-Commerce &amp; e-Business 핵심 개념 정리</p>
-        </div>
+        <!-- ① 핵심 요약 -->
+        <div class="section-card blue" id="summary">
+            <div class="section-title">📋 핵심 요약 (30초 정리)</div>
 
-        <!-- 핵심 요약 -->
-        <div class="summary-card">
-            <h2><span class="icon">&#x1F4CB;</span> 핵심 요약 (30초 정리)</h2>
             <div class="keyword-box">
                 <div class="term">"e"의 의미</div>
                 <div class="def">
                     <strong>Electronic</strong>(전자적)의 약어로, 인터넷과 정보통신 기술을 통해 이루어지는 모든 활동을 가리킵니다.
                 </div>
             </div>
+
             <div class="keyword-box">
                 <div class="term">전자상거래(e-Commerce) 정의</div>
                 <div class="def">
@@ -792,6 +1005,7 @@
                     즉, 정보통신 네트워크를 통해 상품과 서비스의 <strong>거래</strong>가 이루어지는 모든 활동입니다.
                 </div>
             </div>
+
             <div class="keyword-box">
                 <div class="term">핵심 포인트</div>
                 <div class="def">
@@ -799,6 +1013,7 @@
                     e-Business는 이를 포함하여 <strong>기업 전반의 가치활동</strong>까지 포괄하는 더 넓은 개념입니다.
                 </div>
             </div>
+
             <div class="keyword-box">
                 <div class="term">전자상거래의 출현</div>
                 <div class="def">
@@ -808,47 +1023,50 @@
             </div>
         </div>
 
-        <!-- e-Commerce vs e-Business 비교 -->
-        <div class="compare-section">
-            <div class="compare-card commerce">
-                <h3>e-Commerce</h3>
-                <span class="tag">좁은 개념 (Narrow)</span>
-                <p>
-                    전자매체를 기반으로 한 <strong>상거래 활동</strong>, 특히 <strong>마케팅 및 판매활동</strong>에 초점을 맞춥니다.
-                    소비자가 온라인에서 상품을 사고파는 행위가 대표적입니다.
-                </p>
-                <div class="examples">
-                    <div class="label">대표 사례</div>
-                    <ul>
-                        <li>쇼핑몰에서의 온라인 상품 판매</li>
-                        <li>온라인 주식 매매</li>
-                        <li>인터넷 뱅킹 / 결제</li>
-                    </ul>
+        <!-- ② 개념 비교 -->
+        <div class="section-card purple" id="compare">
+            <div class="section-title">⚖️ e-Commerce vs e-Business 비교</div>
+            <div class="compare-grid">
+                <div class="compare-card commerce">
+                    <h3>e-Commerce</h3>
+                    <span class="compare-tag">좁은 개념 (Narrow)</span>
+                    <p>
+                        전자매체를 기반으로 한 <strong>상거래 활동</strong>, 특히 <strong>마케팅 및 판매활동</strong>에 초점을 맞춥니다.
+                        소비자가 온라인에서 상품을 사고파는 행위가 대표적입니다.
+                    </p>
+                    <div class="compare-examples">
+                        <div class="label">대표 사례</div>
+                        <ul>
+                            <li>쇼핑몰에서의 온라인 상품 판매</li>
+                            <li>온라인 주식 매매</li>
+                            <li>인터넷 뱅킹 / 결제</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="compare-card business">
-                <h3>e-Business</h3>
-                <span class="tag">넓은 개념 (Broad)</span>
-                <p>
-                    <strong>마케팅 및 판매활동에 초점</strong>이 맞춰지는 e-Commerce를 포괄하는 광범위한 개념입니다.
-                    인터넷과 정보기술의 적용 대상이 기업 <strong>전반의 가치활동</strong>으로 확대됩니다.
-                </p>
-                <div class="examples">
-                    <div class="label">대표 사례</div>
-                    <ul>
-                        <li>온라인 공급망 관리 (SCM)</li>
-                        <li>온라인 주문 처리 시스템</li>
-                        <li>온라인 고객관계 서비스 (CRM)</li>
-                        <li>전사적 자원관리 (ERP)</li>
-                    </ul>
+                <div class="compare-card business">
+                    <h3>e-Business</h3>
+                    <span class="compare-tag">넓은 개념 (Broad)</span>
+                    <p>
+                        <strong>마케팅 및 판매활동에 초점</strong>이 맞춰지는 e-Commerce를 포괄하는 광범위한 개념입니다.
+                        인터넷과 정보기술의 적용 대상이 기업 <strong>전반의 가치활동</strong>으로 확대됩니다.
+                    </p>
+                    <div class="compare-examples">
+                        <div class="label">대표 사례</div>
+                        <ul>
+                            <li>온라인 공급망 관리 (SCM)</li>
+                            <li>온라인 주문 처리 시스템</li>
+                            <li>온라인 고객관계 서비스 (CRM)</li>
+                            <li>전사적 자원관리 (ERP)</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 관계 다이어그램 -->
-        <div class="diagram-section">
-            <h2>e-Commerce와 e-Business의 관계</h2>
-            <div class="diagram">
+        <!-- ③ 관계 다이어그램 -->
+        <div class="section-card cyan" id="diagram">
+            <div class="section-title">🔵 e-Commerce와 e-Business의 관계</div>
+            <div class="diagram-wrap">
                 <div class="circle-outer">
                     <span class="circle-outer-label">e-Business</span>
                     <div class="circle-inner">
@@ -860,144 +1078,144 @@
                     <div class="outer-items bottom-right">HRM (인적자원관리)<br>BI (비즈니스 인텔리전스)</div>
                 </div>
             </div>
-            <p style="margin-top: 20px; font-size: 0.82rem; color: #9ca3af;">
-                e-Commerce는 e-Business의 <strong style="color:#93c5fd;">부분집합</strong>입니다.
+            <p class="diagram-note">
+                e-Commerce는 e-Business의 <strong>부분집합</strong>입니다.
                 모든 e-Commerce는 e-Business이지만, 모든 e-Business가 e-Commerce는 아닙니다.
             </p>
         </div>
 
-        <!-- 확장 학습: 전자상거래의 역사 -->
-        <div class="expand-section">
-            <h2><span class="icon">&#x1F4DA;</span> 전자상거래의 출현과 발전 과정</h2>
-            <p style="font-size: 0.92rem; color: #d1d5db; margin-bottom: 24px; line-height: 1.7;">
-                전자상거래는 인터넷이 상용화되기 <strong style="color: #fde68a;">훨씬 이전인 1970년대</strong>부터 시작되었습니다.
+        <!-- ④ 타임라인 -->
+        <div class="section-card amber" id="timeline">
+            <div class="section-title">📚 전자상거래의 출현과 발전 과정</div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.7;">
+                전자상거래는 인터넷이 상용화되기 <strong style="color: #d97706;">훨씬 이전인 1970년대</strong>부터 시작되었습니다.
             </p>
+
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="era">1970년대</div>
-                    <div class="title">EDI (Electronic Data Interchange | 전자적 문서교환) 출현</div>
-                    <div class="desc">
-                        <strong>EDI란?</strong> 종이 문서 대신 <strong>구조화되고 표준화된 데이터</strong>를 전산 네트워크를 통해 교환하고 처리하는 방식.
-                        <br><br>
-                        <span style="background: rgba(251,191,36,0.12); padding: 4px 10px; border-radius: 6px; font-size: 0.84rem;">
-                            &#x26A0;&#xFE0F; 핵심: EDI의 네트워크는 <strong>인터넷이 아닌 VAN</strong>(Value Added Network)이라는 일종의 <strong>인트라넷(Intranet)</strong>을 사용했습니다.
+                    <div class="tl-title">EDI (Electronic Data Interchange | 전자적 문서교환) 출현</div>
+                    <div class="tl-desc">
+                        <strong>EDI란?</strong> 종이 문서 대신 <strong>구조화되고 표준화된 데이터</strong>를 전산 네트워크를 통해 교환하고 처리하는 방식.<br><br>
+                        <span class="tl-highlight">
+                            ⚠️ 핵심: EDI의 네트워크는 <strong>인터넷이 아닌 VAN</strong>(Value Added Network)이라는 일종의 <strong>인트라넷(Intranet)</strong>을 사용했습니다.
                         </span>
                     </div>
                 </div>
+
                 <div class="timeline-item">
                     <div class="era">1980년대</div>
-                    <div class="title">전자메시징 & IOS & CALS 등장</div>
-                    <div class="desc">
-                        <strong>e-mail 등 전자메시징 기술</strong>이 발달하며 전자적 소통이 확산됨.
-                        <br><br>
-                        조직 간 정보시스템인 <strong>IOS(Inter-Organization System)</strong>를 기반으로 전자상거래가 이루어짐.
-                        <br><br>
-                        <span style="background: rgba(251,191,36,0.12); padding: 4px 10px; border-radius: 6px; font-size: 0.84rem;">
-                            &#x1F1FA;&#x1F1F8; 미국의 군수물자 공급을 기반으로 한 정부조달 프로세스인 <strong>CALS(Computer Aided Logistic Support)</strong>가 등장
+                    <div class="tl-title">전자메시징 &amp; IOS &amp; CALS 등장</div>
+                    <div class="tl-desc">
+                        <strong>e-mail 등 전자메시징 기술</strong>이 발달하며 전자적 소통이 확산됨.<br><br>
+                        조직 간 정보시스템인 <strong>IOS(Inter-Organization System)</strong>를 기반으로 전자상거래가 이루어짐.<br><br>
+                        <span class="tl-highlight">
+                            🇺🇸 미국의 군수물자 공급을 기반으로 한 정부조달 프로세스인 <strong>CALS(Computer Aided Logistic Support)</strong>가 등장
                         </span>
                     </div>
                 </div>
+
                 <div class="timeline-item">
                     <div class="era">1990년대 초반</div>
-                    <div class="title">WWW(World Wide Web) 등장</div>
-                    <div class="desc">오늘날과 같은 <strong>인터넷 기반의 전자상거래</strong>가 시작됨. 웹 브라우저를 통해 누구나 상거래에 참여할 수 있는 시대가 열림.</div>
+                    <div class="tl-title">WWW(World Wide Web) 등장</div>
+                    <div class="tl-desc">오늘날과 같은 <strong>인터넷 기반의 전자상거래</strong>가 시작됨. 웹 브라우저를 통해 누구나 상거래에 참여할 수 있는 시대가 열림.</div>
                 </div>
+
                 <div class="timeline-item">
                     <div class="era">1994년 7월</div>
-                    <div class="title">온라인 쇼핑몰의 등장 - Amazon.com</div>
-                    <div class="desc">
+                    <div class="tl-title">온라인 쇼핑몰의 등장 - Amazon.com</div>
+                    <div class="tl-desc">
                         미국의 <strong>아마존닷컴(Amazon.com)</strong>이 등장. 처음에는 <strong>온라인 도서 전문 판매점</strong>으로 시작하여 세계 최대의 e-Commerce 기업으로 성장.
                     </div>
                 </div>
+
                 <div class="timeline-item">
                     <div class="era">1996년 12월</div>
-                    <div class="title">한국 최초의 종합쇼핑몰 - 인터파크</div>
-                    <div class="desc">
-                        <strong>인터파크</strong>가 우리나라 <strong>최초의 종합쇼핑몰</strong>로 등장. G마켓을 자회사로 창업하며 한국 e-Commerce 시장을 개척함.
-                        <br><br>
-                        <span style="background: rgba(239,68,68,0.12); padding: 4px 10px; border-radius: 6px; font-size: 0.84rem;">
-                            &#x1F4C9; 이후 경쟁 심화로 <strong>2025년 12월 파산</strong> - 전자상거래 시장의 치열한 경쟁을 보여주는 사례
+                    <div class="tl-title">한국 최초의 종합쇼핑몰 - 인터파크</div>
+                    <div class="tl-desc">
+                        <strong>인터파크</strong>가 우리나라 <strong>최초의 종합쇼핑몰</strong>로 등장. G마켓을 자회사로 창업하며 한국 e-Commerce 시장을 개척함.<br><br>
+                        <span class="tl-alert">
+                            📉 이후 경쟁 심화로 <strong>2025년 12월 파산</strong> — 전자상거래 시장의 치열한 경쟁을 보여주는 사례
                         </span>
                     </div>
                 </div>
+
                 <div class="timeline-item">
                     <div class="era">2000년대 이후</div>
-                    <div class="title">다양한 형태의 전자상거래 발전</div>
-                    <div class="desc">
-                        인터넷 쇼핑이 <strong>우리 생활의 일부분</strong>으로 자리매김.
-                        <br><br>
-                        소비자들의 <strong>적극적인 참여</strong>가 가능해지면서 <strong>소셜커머스(Social Commerce)</strong>와 같은 새로운 형태의 전자상거래가 등장.
-                        <br><br>
+                    <div class="tl-title">다양한 형태의 전자상거래 발전</div>
+                    <div class="tl-desc">
+                        인터넷 쇼핑이 <strong>우리 생활의 일부분</strong>으로 자리매김.<br><br>
+                        소비자들의 <strong>적극적인 참여</strong>가 가능해지면서 <strong>소셜커머스(Social Commerce)</strong>와 같은 새로운 형태의 전자상거래가 등장.<br><br>
                         <strong>스마트폰의 대중화</strong>로 <strong>모바일커머스(M-Commerce)</strong>의 비중이 빠르게 증가.
                     </div>
                 </div>
             </div>
 
             <!-- EDI vs 인터넷 비교 박스 -->
-            <div style="margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                <div style="background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 12px; padding: 20px;">
-                    <div style="font-weight: 700; color: #fbbf24; font-size: 0.9rem; margin-bottom: 8px;">EDI + VAN (1970년대)</div>
-                    <ul style="list-style: none; padding: 0; font-size: 0.82rem; color: #d1d5db; line-height: 1.8;">
-                        <li>&#x1F4E6; 폐쇄형 전용 네트워크 (VAN)</li>
-                        <li>&#x1F3E2; 기업 간(B2B) 문서 교환 중심</li>
-                        <li>&#x1F4B0; 높은 구축/운영 비용</li>
-                        <li>&#x1F512; 참여 기업만 접근 가능</li>
+            <div class="edi-compare">
+                <div class="edi-box old">
+                    <div class="edi-title">EDI + VAN (1970년대)</div>
+                    <ul>
+                        <li>📦 폐쇄형 전용 네트워크 (VAN)</li>
+                        <li>🏢 기업 간(B2B) 문서 교환 중심</li>
+                        <li>💰 높은 구축/운영 비용</li>
+                        <li>🔒 참여 기업만 접근 가능</li>
                     </ul>
                 </div>
-                <div style="background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.2); border-radius: 12px; padding: 20px;">
-                    <div style="font-weight: 700; color: #60a5fa; font-size: 0.9rem; margin-bottom: 8px;">인터넷 기반 e-Commerce (1990년대~)</div>
-                    <ul style="list-style: none; padding: 0; font-size: 0.82rem; color: #d1d5db; line-height: 1.8;">
-                        <li>&#x1F310; 개방형 글로벌 네트워크 (Internet)</li>
-                        <li>&#x1F465; B2B, B2C, C2C 모두 가능</li>
-                        <li>&#x1F4B8; 낮은 진입 비용</li>
-                        <li>&#x1F513; 누구나 접근 가능</li>
+                <div class="edi-box new">
+                    <div class="edi-title">인터넷 기반 e-Commerce (1990년대~)</div>
+                    <ul>
+                        <li>🌐 개방형 글로벌 네트워크 (Internet)</li>
+                        <li>👥 B2B, B2C, C2C 모두 가능</li>
+                        <li>💸 낮은 진입 비용</li>
+                        <li>🔓 누구나 접근 가능</li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- 실생활 예시 -->
-        <div class="realworld">
-            <h2>&#x1F30D; 실생활 속 e-Commerce vs e-Business</h2>
+        <!-- ⑤ 실생활 예시 -->
+        <div class="section-card orange" id="examples">
+            <div class="section-title">🌍 실생활 속 e-Commerce vs e-Business</div>
             <div class="example-grid">
                 <div class="example-item">
-                    <div class="emoji">&#x1F6D2;</div>
+                    <div class="emoji">🛒</div>
                     <div class="name">쿠팡에서 물건 구매</div>
                     <span class="type commerce-type">e-Commerce</span>
                     <div class="detail">소비자가 상품을 검색하고 결제하는 거래 행위</div>
                 </div>
                 <div class="example-item">
-                    <div class="emoji">&#x1F69A;</div>
+                    <div class="emoji">🚚</div>
                     <div class="name">쿠팡의 로켓배송 시스템</div>
                     <span class="type business-type">e-Business</span>
                     <div class="detail">물류, 재고, 배송을 IT로 최적화하는 공급망 관리</div>
                 </div>
                 <div class="example-item">
-                    <div class="emoji">&#x1F4B3;</div>
+                    <div class="emoji">💳</div>
                     <div class="name">네이버페이 결제</div>
                     <span class="type commerce-type">e-Commerce</span>
                     <div class="detail">온라인 결제 서비스를 통한 전자적 거래</div>
                 </div>
                 <div class="example-item">
-                    <div class="emoji">&#x1F4CA;</div>
+                    <div class="emoji">📊</div>
                     <div class="name">넷플릭스 추천 알고리즘</div>
                     <span class="type business-type">e-Business</span>
                     <div class="detail">고객 데이터 분석을 통한 CRM 가치활동</div>
                 </div>
                 <div class="example-item">
-                    <div class="emoji">&#x1F4D6;</div>
+                    <div class="emoji">📖</div>
                     <div class="name">Amazon (1994)</div>
                     <span class="type commerce-type">e-Commerce</span>
                     <div class="detail">온라인 도서 판매로 시작, 세계 최대 전자상거래 기업으로 성장</div>
                 </div>
                 <div class="example-item">
-                    <div class="emoji">&#x1F1F0;&#x1F1F7;</div>
+                    <div class="emoji">🇰🇷</div>
                     <div class="name">인터파크 (1996)</div>
                     <span class="type commerce-type">e-Commerce</span>
                     <div class="detail">한국 최초 종합쇼핑몰. G마켓 창업 후 2025년 파산</div>
                 </div>
                 <div class="example-item">
-                    <div class="emoji">&#x1F916;</div>
+                    <div class="emoji">🤖</div>
                     <div class="name">삼성 스마트팩토리</div>
                     <span class="type business-type">e-Business</span>
                     <div class="detail">IoT와 AI를 활용한 제조공정의 디지털 전환</div>
@@ -1005,63 +1223,42 @@
             </div>
         </div>
 
-        <!-- 사례연구: 쿠팡 -->
-        <div class="case-study">
+        <!-- ⑥ 사례연구: 쿠팡 -->
+        <div class="section-card orange" id="casestudy">
             <span class="case-badge">CASE STUDY</span>
-            <h2>&#x1F4E6; 쿠팡의 경쟁력 사례연구</h2>
+            <div class="section-title">📦 쿠팡의 경쟁력 사례연구</div>
             <p class="case-subtitle">1주차 개념을 실제 기업에 적용하여 이해하기</p>
 
-            <!-- 기업 개요 -->
-            <div class="case-overview">
+            <div class="case-stats">
                 <div class="case-stat">
-                    <div class="stat-value" style="color: #f472b6;">2010년</div>
+                    <div class="stat-value" style="color: #ea580c;">2010년</div>
                     <div class="stat-label">김범석 회장, 7명과 소셜커머스로 창업</div>
                 </div>
                 <div class="case-stat">
-                    <div class="stat-value" style="color: #60a5fa;">9.3만명</div>
+                    <div class="stat-value" style="color: #2563eb;">9.3만명</div>
                     <div class="stat-label">총 종업원수 (삼성전자 다음 2위)</div>
                 </div>
                 <div class="case-stat">
-                    <div class="stat-value" style="color: #34d399;">49.1조원</div>
+                    <div class="stat-value" style="color: #059669;">49.1조원</div>
                     <div class="stat-label">2025년 매출액 (국내 소매업 1위)</div>
                 </div>
                 <div class="case-stat">
-                    <div class="stat-value" style="color: #fbbf24;">6.1조원</div>
+                    <div class="stat-value" style="color: #d97706;">6.1조원</div>
                     <div class="stat-label">2013~2022 누적 적자 (10년간)</div>
                 </div>
             </div>
 
-            <!-- 성장 스토리 -->
-            <div class="case-section-title">&#x1F4C8; 매출 성장 추이</div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 16px;">
-                <div style="background: rgba(244,114,182,0.05); border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(244,114,182,0.1);">
-                    <div style="font-size: 0.7rem; color: #9ca3af;">2013</div>
-                    <div style="font-size: 0.85rem; font-weight: 700; color: #f9a8d4;">4,779억</div>
-                </div>
-                <div style="background: rgba(244,114,182,0.08); border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(244,114,182,0.15);">
-                    <div style="font-size: 0.7rem; color: #9ca3af;">2015</div>
-                    <div style="font-size: 0.85rem; font-weight: 700; color: #f9a8d4;">1조</div>
-                </div>
-                <div style="background: rgba(244,114,182,0.12); border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(244,114,182,0.2);">
-                    <div style="font-size: 0.7rem; color: #9ca3af;">2018</div>
-                    <div style="font-size: 0.85rem; font-weight: 700; color: #f9a8d4;">4조</div>
-                </div>
-                <div style="background: rgba(244,114,182,0.16); border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(244,114,182,0.25);">
-                    <div style="font-size: 0.7rem; color: #9ca3af;">2020</div>
-                    <div style="font-size: 0.85rem; font-weight: 700; color: #f9a8d4;">13.9조</div>
-                </div>
-                <div style="background: rgba(244,114,182,0.22); border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(244,114,182,0.3);">
-                    <div style="font-size: 0.7rem; color: #9ca3af;">2024</div>
-                    <div style="font-size: 0.85rem; font-weight: 700; color: #f9a8d4;">41.3조</div>
-                </div>
-                <div style="background: rgba(244,114,182,0.28); border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(244,114,182,0.4);">
-                    <div style="font-size: 0.7rem; color: #9ca3af;">2025</div>
-                    <div style="font-size: 0.85rem; font-weight: 700; color: #f9a8d4;">49.1조</div>
-                </div>
+            <div class="case-section-title">📈 매출 성장 추이</div>
+            <div class="growth-grid">
+                <div class="growth-cell"><div class="g-year">2013</div><div class="g-val">4,779억</div></div>
+                <div class="growth-cell"><div class="g-year">2015</div><div class="g-val">1조</div></div>
+                <div class="growth-cell"><div class="g-year">2018</div><div class="g-val">4조</div></div>
+                <div class="growth-cell"><div class="g-year">2020</div><div class="g-val">13.9조</div></div>
+                <div class="growth-cell"><div class="g-year">2024</div><div class="g-val">41.3조</div></div>
+                <div class="growth-cell"><div class="g-year">2025</div><div class="g-val">49.1조</div></div>
             </div>
 
-            <!-- 경쟁력의 핵심 -->
-            <div class="case-section-title">&#x1F680; 쿠팡 경쟁력의 핵심 (차별화 전략)</div>
+            <div class="case-section-title">🚀 쿠팡 경쟁력의 핵심 (차별화 전략)</div>
 
             <div class="case-point">
                 <div class="point-title">1. 로켓배송</div>
@@ -1074,7 +1271,7 @@
                 <div class="point-title">2. 새벽배송</div>
                 <div class="point-desc">
                     쿠팡 점유율 <strong>75%</strong>. 국내 새벽배송 이용자 약 2,000만명.
-                    수익성보다 <strong>'락인(Lock-in) 효과'</strong>가 핵심 - 생필품+신선식품+공산품을 한 번에 해결하는 소비 패턴을 정착시켜 플랫폼을 생활 인프라화.
+                    수익성보다 <strong>'락인(Lock-in) 효과'</strong>가 핵심 — 생필품+신선식품+공산품을 한 번에 해결하는 소비 패턴을 정착시켜 플랫폼을 생활 인프라화.
                 </div>
             </div>
             <div class="case-point">
@@ -1100,253 +1297,297 @@
                 </div>
             </div>
 
-            <!-- 비즈니스 모델 비교 -->
-            <div class="case-section-title">&#x1F4CA; 비즈니스 모델 비교</div>
+            <div class="case-section-title">📊 비즈니스 모델 비교</div>
             <div class="bm-compare">
                 <div class="bm-card">
-                    <div class="bm-name" style="color: #9ca3af;">G마켓, 옥션, 11번가, 인터파크</div>
-                    <div class="bm-desc">판매자와 구매자를 <strong style="color:#e0e7ff;">연결</strong>해주고 수수료를 창출하는 <strong style="color:#93c5fd;">중개 플랫폼</strong> 모델</div>
+                    <div class="bm-name">G마켓, 옥션, 11번가, 인터파크</div>
+                    <div class="bm-desc">판매자와 구매자를 <strong>연결</strong>해주고 수수료를 창출하는 <strong>중개 플랫폼</strong> 모델</div>
                 </div>
                 <div class="bm-card">
-                    <div class="bm-name" style="color: #f472b6;">쿠팡</div>
-                    <div class="bm-desc">물건을 대부분 <strong style="color:#e0e7ff;">직접 구입</strong> 후 창고 보관 → 소비자 전달. <strong style="color:#f9a8d4;">직매입 + 자체물류</strong>로 24시간 내 배송</div>
+                    <div class="bm-name" style="color: #ea580c;">쿠팡</div>
+                    <div class="bm-desc">물건을 대부분 <strong>직접 구입</strong> 후 창고 보관 → 소비자 전달. <strong>직매입 + 자체물류</strong>로 24시간 내 배송</div>
                 </div>
             </div>
-            <div class="bm-compare" style="margin-top: 14px;">
+            <div class="bm-compare">
                 <div class="bm-card">
-                    <div class="bm-name" style="color: #9ca3af;">네이버</div>
-                    <div class="bm-desc">포털에서 상품검색 → 가격 비교 → 해당 쇼핑몰로 <strong style="color:#e0e7ff;">이동</strong>하여 구매하는 검색 기반 모델</div>
+                    <div class="bm-name">네이버</div>
+                    <div class="bm-desc">포털에서 상품검색 → 가격 비교 → 해당 쇼핑몰로 <strong>이동</strong>하여 구매하는 검색 기반 모델</div>
                 </div>
                 <div class="bm-card">
-                    <div class="bm-name" style="color: #f472b6;">쿠팡</div>
-                    <div class="bm-desc">네이버에 상품정보를 제공하지 않음. <strong style="color:#f9a8d4;">앱/홈페이지 직접 접속</strong> 유도 → 방문객 질 차별화</div>
+                    <div class="bm-name" style="color: #ea580c;">쿠팡</div>
+                    <div class="bm-desc">네이버에 상품정보를 제공하지 않음. <strong>앱/홈페이지 직접 접속</strong> 유도 → 방문객 질 차별화</div>
                 </div>
             </div>
 
-            <!-- 당면 과제 -->
-            <div class="case-section-title">&#x26A0;&#xFE0F; 쿠팡의 당면 과제</div>
+            <div class="case-section-title">⚠️ 쿠팡의 당면 과제</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div class="case-point" style="border-left-color: rgba(239,68,68,0.4);">
-                    <div class="point-title" style="color: #fca5a5;">국내 시장 성숙화</div>
+                <div class="case-point danger">
+                    <div class="point-title">국내 시장 성숙화</div>
                     <div class="point-desc">매출의 88%가 국내시장 발생. 해외 진출 필요 (2022년 대만 진출)</div>
                 </div>
-                <div class="case-point" style="border-left-color: rgba(239,68,68,0.4);">
-                    <div class="point-title" style="color: #fca5a5;">경쟁사 추격</div>
+                <div class="case-point danger">
+                    <div class="point-title">경쟁사 추격</div>
                     <div class="point-desc">네이버 새벽배송/지금배송, G마켓·SSG닷컴 등이 주 7일배송 서비스 실시</div>
                 </div>
-                <div class="case-point" style="border-left-color: rgba(239,68,68,0.4);">
-                    <div class="point-title" style="color: #fca5a5;">중국 C커머스 공습</div>
+                <div class="case-point danger">
+                    <div class="point-title">중국 C커머스 공습</div>
                     <div class="point-desc">알리익스프레스(MAU 912만), 테무(MAU 823만)가 국내 입지 확대 중</div>
                 </div>
-                <div class="case-point" style="border-left-color: rgba(239,68,68,0.4);">
-                    <div class="point-title" style="color: #fca5a5;">개인정보 유출</div>
+                <div class="case-point danger">
+                    <div class="point-title">개인정보 유출</div>
                     <div class="point-desc">2025.11 약 3,370만건 유출 → 100만명 이상 회원 탈퇴, 이미지 훼손</div>
                 </div>
             </div>
 
-            <!-- 1주차 개념 연결 -->
             <div class="case-connection">
-                <div class="conn-title">&#x1F517; 1주차 핵심 개념과의 연결</div>
+                <div class="conn-title">🔗 1주차 핵심 개념과의 연결</div>
                 <ul>
                     <li><strong>소셜커머스</strong> → 쿠팡은 2010년 소셜커머스 서비스로 시작 (2000년대 이후 전자상거래 다양화)</li>
                     <li><strong>e-Commerce</strong> → 쿠팡에서 소비자가 상품을 검색하고 구매·결제하는 행위 (마케팅 및 판매활동)</li>
                     <li><strong>e-Business</strong> → 로켓배송 물류시스템(SCM), 와우 멤버십(CRM), FBA 등 기업 전반의 가치활동</li>
-                    <li><strong>비즈니스 모델 차이</strong> → 인터파크·G마켓(중개 수수료) vs 쿠팡(직매입+자체물류) - 같은 e-Commerce라도 모델이 다름</li>
+                    <li><strong>비즈니스 모델 차이</strong> → 인터파크·G마켓(중개 수수료) vs 쿠팡(직매입+자체물류) — 같은 e-Commerce라도 모델이 다름</li>
                     <li><strong>M-Commerce</strong> → 스마트폰 대중화로 쿠팡 앱 MAU 3,260만명 (1위) 달성</li>
                 </ul>
             </div>
         </div>
 
-        <!-- 셀프 체크 퀴즈 -->
-        <div class="quiz-section">
-            <h2>&#x2705; 셀프 체크 퀴즈</h2>
+        <!-- ⑦ 셀프 체크 퀴즈 -->
+        <div class="section-card purple" id="quiz">
+            <div class="section-title">✅ 셀프 체크 퀴즈</div>
 
+            <!-- Q1 -->
             <div class="quiz-item" id="q1">
-                <div class="question">Q1. 전자상거래(e-Commerce)에서 'e'는 무엇의 약어인가?</div>
-                <div class="options">
-                    <label><input type="radio" name="q1" value="a"><span> a) Enterprise</span></label>
-                    <label><input type="radio" name="q1" value="b"><span> b) Electronic</span></label>
-                    <label><input type="radio" name="q1" value="c"><span> c) Economic</span></label>
-                    <label><input type="radio" name="q1" value="d"><span> d) Efficient</span></label>
+                <div class="quiz-question">Q1. 전자상거래(e-Commerce)에서 'e'는 무엇의 약어인가?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q1" value="a"> a) Enterprise</label>
+                    <label><input type="radio" name="q1" value="b"> b) Electronic</label>
+                    <label><input type="radio" name="q1" value="c"> c) Economic</label>
+                    <label><input type="radio" name="q1" value="d"> d) Efficient</label>
                 </div>
-                <div class="answer correct" id="a1c">&#x2705; 정답! 'e'는 <strong>Electronic(전자적)</strong>의 약어입니다.</div>
-                <div class="answer wrong" id="a1w">&#x274C; 오답입니다. 'e'는 <strong>Electronic(전자적)</strong>의 약어입니다.</div>
+                <button class="btn-check" onclick="checkQ('q1','b','Electronic(전자적)')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q1-correct">✅ 정답입니다! 'e'는 <strong>Electronic(전자적)</strong>의 약어입니다.</div>
+                <div class="quiz-feedback wrong" id="q1-wrong">❌ 틀렸습니다. 정답: <strong>b) Electronic(전자적)</strong></div>
             </div>
 
+            <!-- Q2 -->
             <div class="quiz-item" id="q2">
-                <div class="question">Q2. 다음 중 e-Commerce가 아닌 e-Business의 사례는?</div>
-                <div class="options">
-                    <label><input type="radio" name="q2" value="a"><span> a) 온라인 쇼핑몰에서 신발 구매</span></label>
-                    <label><input type="radio" name="q2" value="b"><span> b) 온라인 공급망 관리(SCM)</span></label>
-                    <label><input type="radio" name="q2" value="c"><span> c) 인터넷 주식 매매</span></label>
-                    <label><input type="radio" name="q2" value="d"><span> d) 온라인 항공권 예약</span></label>
+                <div class="quiz-question">Q2. 다음 중 e-Commerce가 아닌 e-Business의 사례는?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q2" value="a"> a) 온라인 쇼핑몰에서 신발 구매</label>
+                    <label><input type="radio" name="q2" value="b"> b) 온라인 공급망 관리(SCM)</label>
+                    <label><input type="radio" name="q2" value="c"> c) 인터넷 주식 매매</label>
+                    <label><input type="radio" name="q2" value="d"> d) 온라인 항공권 예약</label>
                 </div>
-                <div class="answer correct" id="a2c">&#x2705; 정답! 온라인 공급망 관리(SCM)는 직접적인 거래가 아닌 기업 내부 <strong>가치활동</strong>으로, e-Business에 해당합니다.</div>
-                <div class="answer wrong" id="a2w">&#x274C; 오답입니다. 온라인 공급망 관리(SCM)는 직접적인 거래가 아닌 기업 <strong>가치활동</strong>으로, e-Commerce가 아닌 e-Business의 고유 영역입니다.</div>
+                <button class="btn-check" onclick="checkQ('q2','b','b) 온라인 공급망 관리(SCM) — 직접 거래가 아닌 기업 가치활동')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q2-correct">✅ 정답입니다! 온라인 공급망 관리(SCM)는 직접적인 거래가 아닌 기업 내부 <strong>가치활동</strong>으로, e-Business에 해당합니다.</div>
+                <div class="quiz-feedback wrong" id="q2-wrong">❌ 틀렸습니다. 정답: <strong>b) 온라인 공급망 관리(SCM)</strong> — 기업 가치활동으로 e-Business의 고유 영역입니다.</div>
             </div>
 
+            <!-- Q3 -->
             <div class="quiz-item" id="q3">
-                <div class="question">Q3. e-Commerce와 e-Business의 관계를 가장 올바르게 설명한 것은?</div>
-                <div class="options">
-                    <label><input type="radio" name="q3" value="a"><span> a) 완전히 동일한 개념이다</span></label>
-                    <label><input type="radio" name="q3" value="b"><span> b) e-Commerce가 e-Business를 포함한다</span></label>
-                    <label><input type="radio" name="q3" value="c"><span> c) e-Business가 e-Commerce를 포함한다</span></label>
-                    <label><input type="radio" name="q3" value="d"><span> d) 서로 전혀 관련이 없다</span></label>
+                <div class="quiz-question">Q3. e-Commerce와 e-Business의 관계를 가장 올바르게 설명한 것은?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q3" value="a"> a) 완전히 동일한 개념이다</label>
+                    <label><input type="radio" name="q3" value="b"> b) e-Commerce가 e-Business를 포함한다</label>
+                    <label><input type="radio" name="q3" value="c"> c) e-Business가 e-Commerce를 포함한다</label>
+                    <label><input type="radio" name="q3" value="d"> d) 서로 전혀 관련이 없다</label>
                 </div>
-                <div class="answer correct" id="a3c">&#x2705; 정답! <strong>e-Business가 e-Commerce를 포괄하는 더 넓은 개념</strong>입니다. e-Commerce는 e-Business의 부분집합입니다.</div>
-                <div class="answer wrong" id="a3w">&#x274C; 오답입니다. <strong>e-Business가 e-Commerce를 포괄하는 광범위한 개념</strong>입니다. e-Commerce ⊂ e-Business 관계입니다.</div>
+                <button class="btn-check" onclick="checkQ('q3','c','c) e-Business가 e-Commerce를 포함한다')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q3-correct">✅ 정답입니다! <strong>e-Business가 e-Commerce를 포괄하는 더 넓은 개념</strong>입니다. e-Commerce ⊂ e-Business 관계입니다.</div>
+                <div class="quiz-feedback wrong" id="q3-wrong">❌ 틀렸습니다. 정답: <strong>c) e-Business가 e-Commerce를 포함한다</strong> — e-Commerce는 e-Business의 부분집합입니다.</div>
             </div>
 
+            <!-- Q4 -->
             <div class="quiz-item" id="q4">
-                <div class="question">Q4. EDI(Electronic Data Interchange)가 사용한 네트워크는?</div>
-                <div class="options">
-                    <label><input type="radio" name="q4" value="a"><span> a) 인터넷 (Internet)</span></label>
-                    <label><input type="radio" name="q4" value="b"><span> b) VAN (Value Added Network)</span></label>
-                    <label><input type="radio" name="q4" value="c"><span> c) Wi-Fi</span></label>
-                    <label><input type="radio" name="q4" value="d"><span> d) 블루투스 (Bluetooth)</span></label>
+                <div class="quiz-question">Q4. EDI(Electronic Data Interchange)가 사용한 네트워크는?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q4" value="a"> a) 인터넷 (Internet)</label>
+                    <label><input type="radio" name="q4" value="b"> b) VAN (Value Added Network)</label>
+                    <label><input type="radio" name="q4" value="c"> c) Wi-Fi</label>
+                    <label><input type="radio" name="q4" value="d"> d) 블루투스 (Bluetooth)</label>
                 </div>
-                <div class="answer correct" id="a4c">&#x2705; 정답! EDI는 인터넷이 아닌 <strong>VAN(Value Added Network)</strong>이라는 일종의 인트라넷을 사용했습니다.</div>
-                <div class="answer wrong" id="a4w">&#x274C; 오답입니다. EDI는 인터넷이 아닌 <strong>VAN(Value Added Network)</strong>을 사용했습니다. VAN은 폐쇄형 전용 네트워크(일종의 인트라넷)입니다.</div>
+                <button class="btn-check" onclick="checkQ('q4','b','b) VAN (Value Added Network)')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q4-correct">✅ 정답입니다! EDI는 인터넷이 아닌 <strong>VAN(Value Added Network)</strong>이라는 일종의 인트라넷을 사용했습니다.</div>
+                <div class="quiz-feedback wrong" id="q4-wrong">❌ 틀렸습니다. 정답: <strong>b) VAN(Value Added Network)</strong> — 폐쇄형 전용 네트워크(인트라넷)입니다.</div>
             </div>
 
+            <!-- Q5 -->
             <div class="quiz-item" id="q5">
-                <div class="question">Q5. EDI의 정의로 올바른 것은?</div>
-                <div class="options">
-                    <label><input type="radio" name="q5" value="a"><span> a) 소비자가 온라인으로 물건을 구매하는 시스템</span></label>
-                    <label><input type="radio" name="q5" value="b"><span> b) 종이 문서 대신 구조화되고 표준화된 데이터를 전산 네트워크를 통해 교환하고 처리하는 방식</span></label>
-                    <label><input type="radio" name="q5" value="c"><span> c) SNS를 통해 마케팅을 수행하는 방식</span></label>
-                    <label><input type="radio" name="q5" value="d"><span> d) 이메일을 통한 문서 전송 시스템</span></label>
+                <div class="quiz-question">Q5. EDI의 정의로 올바른 것은?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q5" value="a"> a) 소비자가 온라인으로 물건을 구매하는 시스템</label>
+                    <label><input type="radio" name="q5" value="b"> b) 종이 문서 대신 구조화되고 표준화된 데이터를 전산 네트워크를 통해 교환하고 처리하는 방식</label>
+                    <label><input type="radio" name="q5" value="c"> c) SNS를 통해 마케팅을 수행하는 방식</label>
+                    <label><input type="radio" name="q5" value="d"> d) 이메일을 통한 문서 전송 시스템</label>
                 </div>
-                <div class="answer correct" id="a5c">&#x2705; 정답! EDI는 <strong>종이 문서 대신 구조화되고 표준화된 데이터를 전산 네트워크를 통해 교환하고 처리하는 방식</strong>입니다.</div>
-                <div class="answer wrong" id="a5w">&#x274C; 오답입니다. EDI는 <strong>종이 문서 대신 구조화되고 표준화된 데이터를 전산 네트워크를 통해 교환하고 처리하는 방식</strong>입니다.</div>
+                <button class="btn-check" onclick="checkQ('q5','b','b) 종이 문서 대신 구조화된 데이터를 전산 네트워크로 교환·처리')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q5-correct">✅ 정답입니다! EDI는 <strong>종이 문서 대신 구조화되고 표준화된 데이터를 전산 네트워크를 통해 교환하고 처리하는 방식</strong>입니다.</div>
+                <div class="quiz-feedback wrong" id="q5-wrong">❌ 틀렸습니다. 정답: <strong>b) 종이 문서 대신 구조화되고 표준화된 데이터를 전산 네트워크를 통해 교환하고 처리하는 방식</strong></div>
             </div>
 
+            <!-- Q6 -->
             <div class="quiz-item" id="q6">
-                <div class="question">Q6. 1980년대 미국의 군수물자 공급을 기반으로 한 정부조달 프로세스는?</div>
-                <div class="options">
-                    <label><input type="radio" name="q6" value="a"><span> a) IOS (Inter-Organization System)</span></label>
-                    <label><input type="radio" name="q6" value="b"><span> b) EDI (Electronic Data Interchange)</span></label>
-                    <label><input type="radio" name="q6" value="c"><span> c) CALS (Computer Aided Logistic Support)</span></label>
-                    <label><input type="radio" name="q6" value="d"><span> d) ERP (Enterprise Resource Planning)</span></label>
+                <div class="quiz-question">Q6. 1980년대 미국의 군수물자 공급을 기반으로 한 정부조달 프로세스는?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q6" value="a"> a) IOS (Inter-Organization System)</label>
+                    <label><input type="radio" name="q6" value="b"> b) EDI (Electronic Data Interchange)</label>
+                    <label><input type="radio" name="q6" value="c"> c) CALS (Computer Aided Logistic Support)</label>
+                    <label><input type="radio" name="q6" value="d"> d) ERP (Enterprise Resource Planning)</label>
                 </div>
-                <div class="answer correct" id="a6c">&#x2705; 정답! <strong>CALS(Computer Aided Logistic Support)</strong>는 미국의 군수물자 공급을 기반으로 한 정부조달 프로세스입니다.</div>
-                <div class="answer wrong" id="a6w">&#x274C; 오답입니다. 미국 군수물자 공급 기반 정부조달 프로세스는 <strong>CALS(Computer Aided Logistic Support)</strong>입니다.</div>
+                <button class="btn-check" onclick="checkQ('q6','c','c) CALS (Computer Aided Logistic Support)')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q6-correct">✅ 정답입니다! <strong>CALS(Computer Aided Logistic Support)</strong>는 미국의 군수물자 공급을 기반으로 한 정부조달 프로세스입니다.</div>
+                <div class="quiz-feedback wrong" id="q6-wrong">❌ 틀렸습니다. 정답: <strong>c) CALS(Computer Aided Logistic Support)</strong></div>
             </div>
 
+            <!-- Q7 -->
             <div class="quiz-item" id="q7">
-                <div class="question">Q7. 오늘날과 같은 인터넷 기반 전자상거래가 시작된 계기는?</div>
-                <div class="options">
-                    <label><input type="radio" name="q7" value="a"><span> a) 1970년대 EDI 출현</span></label>
-                    <label><input type="radio" name="q7" value="b"><span> b) 1980년대 e-mail 기술 발달</span></label>
-                    <label><input type="radio" name="q7" value="c"><span> c) 1990년대 초반 WWW(World Wide Web) 등장</span></label>
-                    <label><input type="radio" name="q7" value="d"><span> d) 1980년대 CALS 등장</span></label>
+                <div class="quiz-question">Q7. 오늘날과 같은 인터넷 기반 전자상거래가 시작된 계기는?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q7" value="a"> a) 1970년대 EDI 출현</label>
+                    <label><input type="radio" name="q7" value="b"> b) 1980년대 e-mail 기술 발달</label>
+                    <label><input type="radio" name="q7" value="c"> c) 1990년대 초반 WWW(World Wide Web) 등장</label>
+                    <label><input type="radio" name="q7" value="d"> d) 1980년대 CALS 등장</label>
                 </div>
-                <div class="answer correct" id="a7c">&#x2705; 정답! <strong>1990년대 초반 WWW(World Wide Web)</strong>의 등장으로 오늘날과 같은 인터넷 기반 전자상거래가 시작되었습니다.</div>
-                <div class="answer wrong" id="a7w">&#x274C; 오답입니다. <strong>1990년대 초반 WWW(World Wide Web)</strong>의 등장이 인터넷 기반 전자상거래의 시작점입니다.</div>
+                <button class="btn-check" onclick="checkQ('q7','c','c) 1990년대 초반 WWW(World Wide Web) 등장')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q7-correct">✅ 정답입니다! <strong>1990년대 초반 WWW(World Wide Web)</strong>의 등장으로 오늘날과 같은 인터넷 기반 전자상거래가 시작되었습니다.</div>
+                <div class="quiz-feedback wrong" id="q7-wrong">❌ 틀렸습니다. 정답: <strong>c) 1990년대 초반 WWW(World Wide Web) 등장</strong></div>
             </div>
 
+            <!-- Q8 -->
             <div class="quiz-item" id="q8">
-                <div class="question">Q8. 1994년 7월 미국에서 온라인 도서 전문 판매점으로 시작한 기업은?</div>
-                <div class="options">
-                    <label><input type="radio" name="q8" value="a"><span> a) eBay</span></label>
-                    <label><input type="radio" name="q8" value="b"><span> b) Amazon.com (아마존닷컴)</span></label>
-                    <label><input type="radio" name="q8" value="c"><span> c) 인터파크</span></label>
-                    <label><input type="radio" name="q8" value="d"><span> d) 알리바바</span></label>
+                <div class="quiz-question">Q8. 1994년 7월 미국에서 온라인 도서 전문 판매점으로 시작한 기업은?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q8" value="a"> a) eBay</label>
+                    <label><input type="radio" name="q8" value="b"> b) Amazon.com (아마존닷컴)</label>
+                    <label><input type="radio" name="q8" value="c"> c) 인터파크</label>
+                    <label><input type="radio" name="q8" value="d"> d) 알리바바</label>
                 </div>
-                <div class="answer correct" id="a8c">&#x2705; 정답! <strong>아마존닷컴(Amazon.com)</strong>은 1994년 7월 온라인 도서 전문 판매점으로 시작했습니다.</div>
-                <div class="answer wrong" id="a8w">&#x274C; 오답입니다. 1994년 7월 온라인 도서 전문 판매점으로 시작한 기업은 <strong>아마존닷컴(Amazon.com)</strong>입니다.</div>
+                <button class="btn-check" onclick="checkQ('q8','b','b) Amazon.com (아마존닷컴)')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q8-correct">✅ 정답입니다! <strong>아마존닷컴(Amazon.com)</strong>은 1994년 7월 온라인 도서 전문 판매점으로 시작했습니다.</div>
+                <div class="quiz-feedback wrong" id="q8-wrong">❌ 틀렸습니다. 정답: <strong>b) Amazon.com (아마존닷컴)</strong></div>
             </div>
 
+            <!-- Q9 -->
             <div class="quiz-item" id="q9">
-                <div class="question">Q9. 우리나라 최초의 종합쇼핑몰은?</div>
-                <div class="options">
-                    <label><input type="radio" name="q9" value="a"><span> a) G마켓</span></label>
-                    <label><input type="radio" name="q9" value="b"><span> b) 쿠팡</span></label>
-                    <label><input type="radio" name="q9" value="c"><span> c) 인터파크 (1996년 12월)</span></label>
-                    <label><input type="radio" name="q9" value="d"><span> d) 11번가</span></label>
+                <div class="quiz-question">Q9. 우리나라 최초의 종합쇼핑몰은?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q9" value="a"> a) G마켓</label>
+                    <label><input type="radio" name="q9" value="b"> b) 쿠팡</label>
+                    <label><input type="radio" name="q9" value="c"> c) 인터파크 (1996년 12월)</label>
+                    <label><input type="radio" name="q9" value="d"> d) 11번가</label>
                 </div>
-                <div class="answer correct" id="a9c">&#x2705; 정답! <strong>인터파크</strong>는 1996년 12월 우리나라 최초의 종합쇼핑몰로 등장했으며, G마켓을 자회사로 창업했습니다.</div>
-                <div class="answer wrong" id="a9w">&#x274C; 오답입니다. 우리나라 최초의 종합쇼핑몰은 1996년 12월에 등장한 <strong>인터파크</strong>입니다. G마켓은 인터파크의 자회사로 창업되었습니다.</div>
+                <button class="btn-check" onclick="checkQ('q9','c','c) 인터파크 (1996년 12월)')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q9-correct">✅ 정답입니다! <strong>인터파크</strong>는 1996년 12월 우리나라 최초의 종합쇼핑몰로 등장했으며, G마켓을 자회사로 창업했습니다.</div>
+                <div class="quiz-feedback wrong" id="q9-wrong">❌ 틀렸습니다. 정답: <strong>c) 인터파크 (1996년 12월)</strong> — G마켓은 인터파크의 자회사로 창업되었습니다.</div>
             </div>
 
+            <!-- Q10 -->
             <div class="quiz-item" id="q10">
-                <div class="question">Q10. 2000년대 이후 스마트폰의 대중화로 비중이 빠르게 증가한 전자상거래 형태는?</div>
-                <div class="options">
-                    <label><input type="radio" name="q10" value="a"><span> a) EDI (Electronic Data Interchange)</span></label>
-                    <label><input type="radio" name="q10" value="b"><span> b) 소셜커머스 (Social Commerce)</span></label>
-                    <label><input type="radio" name="q10" value="c"><span> c) 모바일커머스 (M-Commerce)</span></label>
-                    <label><input type="radio" name="q10" value="d"><span> d) CALS</span></label>
+                <div class="quiz-question">Q10. 2000년대 이후 스마트폰의 대중화로 비중이 빠르게 증가한 전자상거래 형태는?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q10" value="a"> a) EDI (Electronic Data Interchange)</label>
+                    <label><input type="radio" name="q10" value="b"> b) 소셜커머스 (Social Commerce)</label>
+                    <label><input type="radio" name="q10" value="c"> c) 모바일커머스 (M-Commerce)</label>
+                    <label><input type="radio" name="q10" value="d"> d) CALS</label>
                 </div>
-                <div class="answer correct" id="a10c">&#x2705; 정답! <strong>스마트폰의 대중화</strong>로 <strong>모바일커머스(M-Commerce)</strong>의 비중이 빠르게 증가했습니다.</div>
-                <div class="answer wrong" id="a10w">&#x274C; 오답입니다. 스마트폰 대중화와 직접 연관된 것은 <strong>모바일커머스(M-Commerce)</strong>입니다.</div>
+                <button class="btn-check" onclick="checkQ('q10','c','c) 모바일커머스 (M-Commerce)')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q10-correct">✅ 정답입니다! <strong>스마트폰의 대중화</strong>로 <strong>모바일커머스(M-Commerce)</strong>의 비중이 빠르게 증가했습니다.</div>
+                <div class="quiz-feedback wrong" id="q10-wrong">❌ 틀렸습니다. 정답: <strong>c) 모바일커머스 (M-Commerce)</strong></div>
             </div>
 
+            <!-- Q11 -->
             <div class="quiz-item" id="q11">
-                <div class="question">Q11. 쿠팡이 2010년 처음 시작한 서비스 형태는?</div>
-                <div class="options">
-                    <label><input type="radio" name="q11" value="a"><span> a) 오픈마켓</span></label>
-                    <label><input type="radio" name="q11" value="b"><span> b) 소셜커머스</span></label>
-                    <label><input type="radio" name="q11" value="c"><span> c) 모바일커머스</span></label>
-                    <label><input type="radio" name="q11" value="d"><span> d) 종합쇼핑몰</span></label>
+                <div class="quiz-question">Q11. 쿠팡이 2010년 처음 시작한 서비스 형태는?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q11" value="a"> a) 오픈마켓</label>
+                    <label><input type="radio" name="q11" value="b"> b) 소셜커머스</label>
+                    <label><input type="radio" name="q11" value="c"> c) 모바일커머스</label>
+                    <label><input type="radio" name="q11" value="d"> d) 종합쇼핑몰</label>
                 </div>
-                <div class="answer correct" id="a11c">&#x2705; 정답! 쿠팡은 2010년 김범석 회장이 7명의 직원과 함께 <strong>소셜커머스</strong> 서비스로 시작했습니다.</div>
-                <div class="answer wrong" id="a11w">&#x274C; 오답입니다. 쿠팡은 2010년 <strong>소셜커머스</strong> 서비스로 시작하여 이후 혁신적인 쇼핑 플랫폼으로 도약했습니다.</div>
+                <button class="btn-check" onclick="checkQ('q11','b','b) 소셜커머스')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q11-correct">✅ 정답입니다! 쿠팡은 2010년 김범석 회장이 7명의 직원과 함께 <strong>소셜커머스</strong> 서비스로 시작했습니다.</div>
+                <div class="quiz-feedback wrong" id="q11-wrong">❌ 틀렸습니다. 정답: <strong>b) 소셜커머스</strong> — 쿠팡은 소셜커머스로 시작하여 이후 혁신적인 쇼핑 플랫폼으로 도약했습니다.</div>
             </div>
 
+            <!-- Q12 -->
             <div class="quiz-item" id="q12">
-                <div class="question">Q12. 쿠팡의 로켓배송은 어떤 서비스 전략을 국내 최초(2014년)로 적용한 것인가?</div>
-                <div class="options">
-                    <label><input type="radio" name="q12" value="a"><span> a) EDI (Electronic Data Interchange)</span></label>
-                    <label><input type="radio" name="q12" value="b"><span> b) SCM (Supply Chain Management)</span></label>
-                    <label><input type="radio" name="q12" value="c"><span> c) FBA (Fulfillment By Amazon)</span></label>
-                    <label><input type="radio" name="q12" value="d"><span> d) CRM (Customer Relationship Management)</span></label>
+                <div class="quiz-question">Q12. 쿠팡의 로켓배송은 어떤 서비스 전략을 국내 최초(2014년)로 적용한 것인가?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q12" value="a"> a) EDI (Electronic Data Interchange)</label>
+                    <label><input type="radio" name="q12" value="b"> b) SCM (Supply Chain Management)</label>
+                    <label><input type="radio" name="q12" value="c"> c) FBA (Fulfillment By Amazon)</label>
+                    <label><input type="radio" name="q12" value="d"> d) CRM (Customer Relationship Management)</label>
                 </div>
-                <div class="answer correct" id="a12c">&#x2705; 정답! 쿠팡의 로켓배송은 <strong>FBA(Fulfillment By Amazon)</strong> 전략을 국내 최초로 적용한 것입니다. 판매자가 물류센터에 상품을 입고하면 재고관리부터 배송, 반품까지 전 과정을 전담합니다.</div>
-                <div class="answer wrong" id="a12w">&#x274C; 오답입니다. 쿠팡의 로켓배송은 <strong>FBA(Fulfillment By Amazon)</strong> 서비스 전략을 2014년 국내 최초로 적용한 것입니다.</div>
+                <button class="btn-check" onclick="checkQ('q12','c','c) FBA (Fulfillment By Amazon)')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q12-correct">✅ 정답입니다! 쿠팡의 로켓배송은 <strong>FBA(Fulfillment By Amazon)</strong> 전략을 국내 최초로 적용한 것입니다. 재고관리부터 배송, 반품까지 전 과정을 전담합니다.</div>
+                <div class="quiz-feedback wrong" id="q12-wrong">❌ 틀렸습니다. 정답: <strong>c) FBA(Fulfillment By Amazon)</strong> — 2014년 국내 최초 적용</div>
             </div>
 
+            <!-- Q13 -->
             <div class="quiz-item" id="q13">
-                <div class="question">Q13. G마켓·인터파크와 쿠팡의 비즈니스 모델 차이로 올바른 것은?</div>
-                <div class="options">
-                    <label><input type="radio" name="q13" value="a"><span> a) 둘 다 직매입 후 판매 모델이다</span></label>
-                    <label><input type="radio" name="q13" value="b"><span> b) G마켓·인터파크는 중개 수수료 모델, 쿠팡은 직매입+자체물류 모델</span></label>
-                    <label><input type="radio" name="q13" value="c"><span> c) 쿠팡은 중개 수수료 모델, G마켓은 직매입 모델</span></label>
-                    <label><input type="radio" name="q13" value="d"><span> d) 둘 다 중개 수수료 모델이다</span></label>
+                <div class="quiz-question">Q13. G마켓·인터파크와 쿠팡의 비즈니스 모델 차이로 올바른 것은?</div>
+                <div class="quiz-options">
+                    <label><input type="radio" name="q13" value="a"> a) 둘 다 직매입 후 판매 모델이다</label>
+                    <label><input type="radio" name="q13" value="b"> b) G마켓·인터파크는 중개 수수료 모델, 쿠팡은 직매입+자체물류 모델</label>
+                    <label><input type="radio" name="q13" value="c"> c) 쿠팡은 중개 수수료 모델, G마켓은 직매입 모델</label>
+                    <label><input type="radio" name="q13" value="d"> d) 둘 다 중개 수수료 모델이다</label>
                 </div>
-                <div class="answer correct" id="a13c">&#x2705; 정답! G마켓·인터파크 등은 판매자와 구매자를 <strong>연결해주고 수수료</strong>를 받는 중개 모델이고, 쿠팡은 물건을 <strong>직접 구입 후 자체 물류</strong>로 배송하는 모델입니다.</div>
-                <div class="answer wrong" id="a13w">&#x274C; 오답입니다. G마켓·인터파크는 <strong>중개 수수료</strong> 모델, 쿠팡은 <strong>직매입+자체물류</strong> 모델로 근본적인 차이가 있습니다.</div>
+                <button class="btn-check" onclick="checkQ('q13','b','b) G마켓·인터파크는 중개 수수료 모델, 쿠팡은 직매입+자체물류 모델')">정답 확인</button>
+                <div class="quiz-feedback correct" id="q13-correct">✅ 정답입니다! G마켓·인터파크 등은 <strong>중개 수수료</strong> 모델이고, 쿠팡은 <strong>직매입+자체물류</strong> 모델로 근본적인 차이가 있습니다.</div>
+                <div class="quiz-feedback wrong" id="q13-wrong">❌ 틀렸습니다. 정답: <strong>b) G마켓·인터파크는 중개 수수료 모델, 쿠팡은 직매입+자체물류 모델</strong></div>
             </div>
 
-            <button class="btn-check" onclick="checkAnswers()">정답 확인하기</button>
         </div>
 
-        <!-- 푸터 -->
+        <!-- Footer -->
         <div class="footer">
-            e-비즈니스의 이해 | 1주차 학습자료
+            e-비즈니스의 이해 &nbsp;|&nbsp; 1주차 학습자료
         </div>
 
     </div>
 
     <script>
-        function checkAnswers() {
-            const answers = { q1: 'b', q2: 'b', q3: 'c', q4: 'b', q5: 'b', q6: 'c', q7: 'c', q8: 'b', q9: 'c', q10: 'c', q11: 'b', q12: 'c', q13: 'b' };
+        // ── Dark mode ──
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('themeBtn').textContent = '☀️';
+            }
+        })();
 
-            for (const [q, correct] of Object.entries(answers)) {
-                const selected = document.querySelector(`input[name="${q}"]:checked`);
-                const correctEl = document.getElementById(`a${q.slice(1)}c`);
-                const wrongEl = document.getElementById(`a${q.slice(1)}w`);
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn  = document.getElementById('themeBtn');
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                btn.textContent = '🌙';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                btn.textContent = '☀️';
+            }
+        }
 
-                // 이전 결과 숨기기
-                correctEl.style.display = 'none';
-                wrongEl.style.display = 'none';
+        // ── Quiz ──
+        function checkQ(qId, correctVal, correctLabel) {
+            const selected = document.querySelector(`input[name="${qId}"]:checked`);
+            const correctEl = document.getElementById(`${qId}-correct`);
+            const wrongEl   = document.getElementById(`${qId}-wrong`);
 
-                if (!selected) continue;
+            correctEl.style.display = 'none';
+            wrongEl.style.display   = 'none';
 
-                if (selected.value === correct) {
-                    correctEl.style.display = 'block';
-                } else {
-                    wrongEl.style.display = 'block';
-                }
+            if (!selected) {
+                alert('선택지를 먼저 선택해 주세요.');
+                return;
+            }
+
+            if (selected.value === correctVal) {
+                correctEl.style.display = 'block';
+            } else {
+                wrongEl.style.display = 'block';
             }
         }
     </script>

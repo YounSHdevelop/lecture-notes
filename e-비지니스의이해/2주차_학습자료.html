@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2주차 - 전자상거래 입문 | e-비즈니스의 이해</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #2563eb; --primary-dark: #1e3a8a;
+    --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+    --bg: #f3f4f6; --card-bg: #ffffff;
+    --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+    --nav-bg: rgba(255,255,255,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
+}
+[data-theme="dark"] {
+    --bg: #0f172a; --card-bg: #1e293b;
+    --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+    --nav-bg: rgba(15,23,42,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --shadow-hover: 0 8px 32px rgba(0,0,0,0.6);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding-top: 64px;
+    transition: background 0.3s, color 0.3s;
+    line-height: 1.6;
+}
+
+/* ── 네비게이션 ── */
+.nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    height: 60px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 16px;
+    padding: 0 20px;
+    transition: background 0.3s, border-color 0.3s;
+}
+.nav-logo {
+    font-weight: 700; font-size: 1rem; color: var(--primary);
+    text-decoration: none; white-space: nowrap; flex-shrink: 0;
+}
+.nav-links {
+    display: flex; gap: 4px; overflow-x: auto; flex: 1;
+    scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a {
+    text-decoration: none; color: var(--text-muted); font-size: 0.82rem;
+    font-weight: 500; padding: 6px 10px; border-radius: 8px;
+    white-space: nowrap; transition: background 0.2s, color 0.2s;
+}
+.nav-links a:hover { background: rgba(37,99,235,0.1); color: var(--primary); }
+.nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.nav-home {
+    text-decoration: none; color: var(--text-muted); font-size: 0.82rem;
+    font-weight: 500; padding: 6px 10px; border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+.nav-home:hover { background: rgba(37,99,235,0.1); color: var(--primary); }
+.btn-theme {
+    background: none; border: 1.5px solid var(--border);
+    border-radius: 8px; width: 36px; height: 36px;
+    font-size: 1rem; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    display: flex; align-items: center; justify-content: center;
+}
+.btn-theme:hover { background: rgba(37,99,235,0.1); border-color: var(--primary); }
+
+/* ── 헤더 ── */
+.page-header {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white; text-align: center;
+    padding: 56px 24px 48px;
+}
+.week-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px; padding: 4px 16px;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+    margin-bottom: 20px;
+}
+.page-header h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 14px; }
+.subtitle { font-size: 1rem; opacity: 0.85; font-weight: 300; }
+
+/* ── 메인 레이아웃 ── */
+main { max-width: 900px; margin: 0 auto; padding: 32px 16px 60px; }
+
+/* ── 섹션 카드 ── */
+.section-card {
+    background: var(--card-bg); border-radius: 16px;
+    padding: 32px; margin-bottom: 28px;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.3s, background 0.3s;
+}
+.section-card:hover { box-shadow: var(--shadow-hover); }
+.section-card.blue   { border-top: 4px solid #2563eb; }
+.section-card.purple { border-top: 4px solid #7c3aed; }
+.section-card.cyan   { border-top: 4px solid #0891b2; }
+.section-card.amber  { border-top: 4px solid #d97706; }
+.section-card.orange { border-top: 4px solid #ea580c; }
+.section-card.green  { border-top: 4px solid #16a34a; }
+
+.section-title {
+    font-size: 1.25rem; font-weight: 700; margin-bottom: 24px;
+    color: var(--text);
+}
+
+/* ── 키워드 박스 ── */
+.keyword-box {
+    background: rgba(37,99,235,0.06);
+    border-left: 4px solid #2563eb;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px; margin-bottom: 12px;
+}
+.keyword-box .term {
+    font-weight: 700; font-size: 1rem; color: var(--primary);
+    margin-bottom: 6px;
+}
+.keyword-box .def { font-size: 0.93rem; line-height: 1.75; color: var(--text); }
+.keyword-box .sub-list { margin-top: 8px; padding-left: 18px; }
+.keyword-box .sub-list li { font-size: 0.9rem; line-height: 1.8; color: var(--text); }
+
+/* ── 개념 비교 ── */
+.compare-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.compare-card {
+    border-radius: 12px; padding: 22px;
+    border: 1.5px solid var(--border);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.compare-card:hover { box-shadow: var(--shadow-hover); }
+.compare-card.tech { border-top: 3px solid #7c3aed; }
+.compare-card.eco  { border-top: 3px solid #0891b2; }
+.compare-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.compare-tag {
+    display: inline-block; border-radius: 6px; padding: 2px 10px;
+    font-size: 0.75rem; font-weight: 600; margin-bottom: 12px;
+}
+.compare-card.tech .compare-tag { background: rgba(124,58,237,0.1); color: #7c3aed; }
+.compare-card.eco  .compare-tag { background: rgba(8,145,178,0.1);  color: #0891b2; }
+.compare-card p { font-size: 0.9rem; line-height: 1.75; color: var(--text); }
+.compare-examples { margin-top: 14px; }
+.compare-examples .label {
+    font-size: 0.78rem; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
+}
+.compare-examples ul { padding-left: 18px; }
+.compare-examples li { font-size: 0.88rem; line-height: 1.8; color: var(--text); }
+
+/* ── 관계 다이어그램 ── */
+.diagram-flow {
+    display: flex; flex-direction: column; align-items: center; gap: 0;
+}
+.flow-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; flex-wrap: wrap;
+}
+.flow-box {
+    border-radius: 12px; padding: 14px 22px;
+    font-weight: 700; font-size: 0.95rem; text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.flow-box.root       { background: linear-gradient(135deg,#1e3a8a,#2563eb); color: white; font-size: 1.1rem; }
+.flow-box.tech-node  { background: rgba(124,58,237,0.12); color: #7c3aed; border: 1.5px solid #7c3aed; }
+.flow-box.eco-node   { background: rgba(8,145,178,0.12);  color: #0891b2; border: 1.5px solid #0891b2; }
+.flow-box.result-node { background: rgba(37,99,235,0.1); color: var(--primary); border: 1.5px solid var(--primary); }
+.flow-box.biz-node   { background: linear-gradient(135deg,#16a34a,#22c55e); color: white; }
+.flow-arrow {
+    font-size: 1.4rem; color: var(--text-muted);
+    margin: 8px 0; text-align: center;
+}
+.flow-sub {
+    font-size: 0.78rem; font-weight: 400; color: inherit;
+    margin-top: 4px; opacity: 0.8;
+}
+.diagram-label {
+    font-size: 0.82rem; color: var(--text-muted); text-align: center;
+    margin-top: 20px; font-style: italic;
+}
+
+/* ── 타임라인 ── */
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before {
+    content: '';
+    position: absolute; left: 5px; top: 0; bottom: 0; width: 3px;
+    background: linear-gradient(180deg, #d97706, #f59e0b, #fbbf24);
+    border-radius: 2px;
+}
+.timeline-item { position: relative; margin-bottom: 32px; }
+.timeline-item::before {
+    content: '';
+    position: absolute; left: -28px; top: 4px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #d97706; border: 2px solid var(--card-bg);
+    box-shadow: 0 0 0 2px #d97706;
+}
+.timeline-item .era {
+    font-size: 0.78rem; font-weight: 700; color: #d97706;
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;
+}
+.tl-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+.tl-desc  { font-size: 0.9rem; line-height: 1.75; color: var(--text); }
+.tl-highlight {
+    margin-top: 10px; padding: 8px 14px;
+    background: rgba(217,119,6,0.08); border-left: 3px solid #d97706;
+    border-radius: 0 8px 8px 0; font-size: 0.88rem; color: var(--text);
+}
+
+/* ── 실생활 예시 ── */
+.example-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.example-card {
+    border-radius: 12px; padding: 20px;
+    background: var(--card-bg); border: 1.5px solid var(--border);
+    border-top-width: 3px; transition: box-shadow 0.2s;
+}
+.example-card:hover { box-shadow: var(--shadow-hover); }
+.company { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.category {
+    display: inline-block; border-radius: 6px; padding: 2px 10px;
+    font-size: 0.75rem; font-weight: 600; margin-bottom: 10px;
+}
+.desc { font-size: 0.88rem; line-height: 1.75; color: var(--text); }
+
+/* ── 퀴즈 ── */
+.quiz-item { margin-bottom: 32px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+.quiz-item:last-child { border-bottom: none; margin-bottom: 0; }
+.quiz-q { font-size: 0.97rem; font-weight: 600; margin-bottom: 14px; line-height: 1.6; }
+.q-num { color: var(--primary); font-weight: 700; margin-right: 6px; }
+.quiz-options { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.quiz-options button {
+    width: 100%; text-align: left; padding: 11px 16px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    background: var(--card-bg); color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif; font-size: 0.9rem;
+    cursor: pointer; transition: border-color 0.2s, background 0.2s;
+}
+.quiz-options button:hover:not(:disabled) {
+    border-color: var(--primary); background: rgba(37,99,235,0.05);
+}
+.quiz-options button.correct {
+    border-color: var(--success); background: rgba(22,163,74,0.08); color: var(--success); font-weight: 700;
+}
+.quiz-options button.wrong {
+    border-color: var(--danger); background: rgba(220,38,38,0.08); color: var(--danger);
+}
+.quiz-feedback {
+    display: none; margin-top: 12px; padding: 12px 16px;
+    border-radius: 10px; font-size: 0.88rem; line-height: 1.6;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb { background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.3); color: var(--success); }
+.quiz-feedback.wrong-fb   { background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.3); color: var(--danger); }
+
+/* ── 푸터 ── */
+footer {
+    text-align: center; padding: 32px 20px;
+    color: var(--text-muted); font-size: 0.82rem; border-top: 1px solid var(--border);
+}
+
+/* ── 반응형 ── */
+@media (max-width: 680px) {
+    .page-header h1 { font-size: 1.5rem; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .example-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .section-card { padding: 22px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<nav class="nav">
+    <a href="../index.html" class="nav-logo">e-비즈니스의 이해</a>
+    <div class="nav-links">
+        <a href="#summary">📋 핵심요약</a>
+        <a href="#compare">⚖️ 개념비교</a>
+        <a href="#diagram">🔗 관계도</a>
+        <a href="#timeline">📅 타임라인</a>
+        <a href="#examples">💡 실생활예시</a>
+        <a href="#quiz">✏️ 퀴즈</a>
+    </div>
+    <div class="nav-right">
+        <a href="../index.html" class="nav-home">🏠 홈</a>
+        <button class="btn-theme" id="themeToggle" title="테마 전환">🌙</button>
+    </div>
+</nav>
+
+<!-- 헤더 -->
+<header class="page-header">
+    <div class="week-badge">WEEK 2 · e-비즈니스의 이해</div>
+    <h1>전자상거래 입문</h1>
+    <p class="subtitle">e-비즈니스의 이해 · 2주차 · 인터넷의 개념과 비즈니스 패러다임의 이동을 이해한다</p>
+</header>
+
+<main>
+
+    <!-- ① 핵심 요약 -->
+    <section class="section-card blue" id="summary">
+        <h2 class="section-title">📋 핵심 요약 <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">— 30초 정리</span></h2>
+
+        <div class="keyword-box">
+            <div class="term">인터넷 (Internet)</div>
+            <div class="def">전 세계에 흩어져 있는 컴퓨터 네트워크들을 상호 연결한 <strong>네트워크들의 집합체</strong>. 멀티미디어 데이터(텍스트·그림·음성·동화상)를 쉽게 송수신할 수 있으며, 이용자가 늘수록 서비스도 확대된다.</div>
+        </div>
+
+        <div class="keyword-box">
+            <div class="term">인터넷의 4가지 특성</div>
+            <div class="def">
+                <ul class="sub-list">
+                    <li><strong>개방성</strong> — 누구나 자유롭게 접속·참여 가능</li>
+                    <li><strong>멀티미디어 정보 송신 능력</strong> — 텍스트·영상·음성 등 다양한 형태 전송</li>
+                    <li><strong>네트워크 용량의 지속적인 확대</strong> — 기술 발전에 따라 대역폭 증가</li>
+                    <li><strong>지역적·시간적 장벽의 해소</strong> — 언제 어디서나 접근 가능</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="keyword-box">
+            <div class="term">TCP/IP (Transmission Control Protocol / Internet Protocol)</div>
+            <div class="def">인터넷을 통해 컴퓨터들 간에 의사소통을 할 수 있도록 하는 <strong>프로토콜(통신 표준 체계)</strong>. 인터넷 성공의 핵심 기술적 배경 중 하나.</div>
+        </div>
+
+        <div class="keyword-box">
+            <div class="term">WWW (World Wide Web)</div>
+            <div class="def"><strong>하이퍼텍스트와 멀티미디어를 기반으로</strong> 모든 인터넷 서비스를 통합 제공하는 인터넷 통합 서비스. 노인·어린이 등 누구든 쉽게 인터넷을 이용할 수 있는 환경을 제공함으로써 이용자를 급속히 확대시켰다.</div>
+        </div>
+
+        <div class="keyword-box">
+            <div class="term">하이퍼텍스트 (Hypertext)</div>
+            <div class="def">첫 페이지부터 마지막 페이지까지 단순히 <strong>순서대로 나열하지 않는다</strong>는 점에서 일반 텍스트와 다름. 링크를 통해 비선형적으로 정보를 탐색할 수 있다.</div>
+        </div>
+
+        <div class="keyword-box">
+            <div class="term">비즈니스 패러다임의 이동</div>
+            <div class="def">인터넷의 등장으로 <strong>전자상거래·e-비즈니스</strong>가 새로운 비즈니스 도구로 각광받게 되었고, 실시간 쌍방향 의사소통이 가능해지면서 <strong>정보의 주권이 기업 → 고객</strong>으로 이양되었다.</div>
+        </div>
+
+        <div class="keyword-box">
+            <div class="term">전자상거래 (EC: Electronic Commerce)</div>
+            <div class="def">1989년 미국의 LLNL(Lawrence Livermore National Laboratory)이 미 국방성 프로젝트를 수행하면서 <strong>처음 사용한 용어</strong>. 초기에는 거래 전 과정에서 서류를 사용하지 않는 기업 환경을 ICT로 달성하는 것이 목적이었다. 이후 <strong>인터넷 상용화·웹 기술</strong>을 기반으로 재화나 용역의 거래 행위로 발전했다.</div>
+        </div>
+
+        <div class="keyword-box">
+            <div class="term">e-비즈니스 → m-비즈니스 → u-비즈니스</div>
+            <div class="def">전자상거래가 단순 거래를 넘어 기업 간·기업 내로 확대되면서 <strong>e-비즈니스</strong>가 등장했다. 2000년대 이후 무선 인터넷 기술 발전으로 <strong>m-비즈니스(모바일 상거래)</strong>가, RFID 기술 활용으로 <strong>u-비즈니스(유비쿼터스 상거래)</strong>가 진행되었다. 무게 중심도 B2C → <strong>B2B</strong>로 이동했다.</div>
+        </div>
+
+        <div class="keyword-box">
+            <div class="term">소비자 주도시장</div>
+            <div class="def">소비자가 정보를 기반으로 시장에서 주도권을 확보하고, 공급자는 이에 따라 행동해야 하는 비즈니스 환경. <strong>판매되는 물건과 서비스를 둘러싼 정보 자체가 소비가치</strong>를 갖게 된다.
+                <ul class="sub-list">
+                    <li>소비자가 공급자보다 시장의 주도권을 가짐</li>
+                    <li>구입 전에 상호 커뮤니케이션이 이루어짐</li>
+                    <li>정보가 소비가치를 가짐</li>
+                    <li>서비스의 맞춤화가 이루어짐</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="keyword-box">
+            <div class="term">메트카프의 법칙 (Metcalfe's Law)</div>
+            <div class="def">"<strong>네트워크 가치는 가입자 수에 비례해 증가하며, 어느 시점부터 그 가치는 비약적으로 높아진다</strong>"는 법칙. 쓰리컴(3Com)의 설립자 밥 메트카프(Bob Metcalfe)가 1995년에 제창. e-비즈니스 패러다임 변화의 핵심 키워드로, <strong>네트워크 효과</strong>라고도 한다.</div>
+        </div>
+
+        <div class="keyword-box">
+            <div class="term">수확체증 vs 수확체감</div>
+            <div class="def"><strong>수확체증</strong>: 사업 규모가 두 배가 되면 산출량은 두 배 이상이 된다는 규모의 경제 원리. <strong>지식 주도형 산업(소프트웨어 등)</strong>에 적용된다. 소프트웨어는 초기 개발 비용이 크지만, 대량 복사할수록 단위 원가가 급격히 하락한다. <strong>수확체감</strong>: 일정 규모를 초과하면 수익성이 급격히 저하한다는 원리로, 전통 제조업에 적용된다.</div>
+        </div>
+    </section>
+
+    <!-- ② 개념 비교 -->
+    <section class="section-card purple" id="compare">
+        <h2 class="section-title">⚖️ 개념 비교</h2>
+
+        <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:16px;font-weight:600;">■ 인터넷 성공의 두 가지 배경</p>
+        <div class="compare-grid" style="margin-bottom:28px;">
+            <div class="compare-card tech">
+                <h3>기술적 배경</h3>
+                <span class="compare-tag">Technical Background</span>
+                <p>인터넷이 범세계적으로 확산될 수 있었던 기술 기반. 표준화된 통신 프로토콜과 사용자 친화적 인터페이스가 핵심이다.</p>
+                <div class="compare-examples">
+                    <div class="label">핵심 기술</div>
+                    <ul>
+                        <li>TCP/IP — 컴퓨터 간 공통 통신 언어</li>
+                        <li>WWW — 멀티미디어 통합 서비스</li>
+                        <li>하이퍼텍스트 — 비선형적 정보 탐색</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="compare-card eco">
+                <h3>경제적 배경</h3>
+                <span class="compare-tag">Economic Background</span>
+                <p>인터넷은 <strong>사용자가 많을수록 비용이 낮아지고 수익성이 높아지는</strong> 경제적 속성(네트워크 효과)을 가진다. 비용 분담 효과로 최저 원가 비즈니스 환경을 제공한다.</p>
+                <div class="compare-examples">
+                    <div class="label">핵심 속성</div>
+                    <ul>
+                        <li>규모의 경제 — 사용자↑ → 단위 비용↓</li>
+                        <li>네트워크 효과 — 사용자↑ → 가치↑</li>
+                        <li>진입 장벽 완화 — 누구나 비즈니스 가능</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:16px;font-weight:600;">■ 수확체증 vs 수확체감</p>
+        <div class="compare-grid">
+            <div class="compare-card tech">
+                <h3>수확체증 (Increasing Returns)</h3>
+                <span class="compare-tag">지식 주도형 산업</span>
+                <p>사업 규모가 두 배가 되면 <strong>산출량은 두 배 이상</strong>이 된다. 초기 대규모 투자 후 복제·확산 비용이 급감하는 디지털·지식 산업에 적용된다.</p>
+                <div class="compare-examples">
+                    <div class="label">예시</div>
+                    <ul>
+                        <li>소프트웨어 — 한 번 개발 후 무한 복사</li>
+                        <li>플랫폼 — 규모 클수록 단위 비용↓</li>
+                        <li>인터넷 서비스 — 사용자↑ → 수익성↑</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="compare-card eco">
+                <h3>수확체감 (Diminishing Returns)</h3>
+                <span class="compare-tag">전통 제조업</span>
+                <p>어떤 사업이 일정 규모를 초과하면 <strong>수익성이 급격히 저하</strong>한다. 원자재·설비 등 물리적 자원이 한계를 갖는 전통 제조업에 적용된다.</p>
+                <div class="compare-examples">
+                    <div class="label">예시</div>
+                    <ul>
+                        <li>자동차 공장 — 생산량 증가 시 원가↑</li>
+                        <li>농업 — 투입 증가 시 한계 생산↓</li>
+                        <li>전통 유통 — 점포 확대 비용 선형 증가</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ③ 관계 다이어그램 -->
+    <section class="section-card cyan" id="diagram">
+        <h2 class="section-title">🔗 관계 다이어그램 — 인터넷에서 e-비즈니스까지</h2>
+
+        <div class="diagram-flow">
+            <div class="flow-row">
+                <div class="flow-box root">인터넷 (Internet)<div class="flow-sub">네트워크들의 집합체</div></div>
+            </div>
+            <div class="flow-arrow">▼</div>
+            <div class="flow-row">
+                <div class="flow-box tech-node">TCP/IP<div class="flow-sub">통신 표준 프로토콜</div></div>
+                <span style="font-size:1.2rem;color:var(--text-muted);align-self:center;">+</span>
+                <div class="flow-box tech-node">WWW<div class="flow-sub">하이퍼텍스트 기반 통합 서비스</div></div>
+            </div>
+            <div class="flow-arrow">▼</div>
+            <div class="flow-row">
+                <div class="flow-box eco-node">개방성 · 멀티미디어 · 무장벽<div class="flow-sub">인터넷 4대 특성</div></div>
+            </div>
+            <div class="flow-arrow">▼</div>
+            <div class="flow-row">
+                <div class="flow-box result-node">비즈니스 패러다임 이동<div class="flow-sub">실시간 쌍방향 의사소통 → 정보 주권 이동</div></div>
+            </div>
+            <div class="flow-arrow">▼</div>
+            <div class="flow-row">
+                <div class="flow-box biz-node">전자상거래(EC) &amp; e-비즈니스<div class="flow-sub">새로운 비즈니스 도구 (B2C → B2B)</div></div>
+            </div>
+            <div class="flow-arrow">▼</div>
+            <div class="flow-row">
+                <div class="flow-box tech-node">m-비즈니스<div class="flow-sub">무선 인터넷 · 모바일 상거래</div></div>
+                <span style="font-size:1.2rem;color:var(--text-muted);align-self:center;">→</span>
+                <div class="flow-box eco-node">u-비즈니스<div class="flow-sub">RFID · 유비쿼터스 상거래</div></div>
+            </div>
+        </div>
+        <p class="diagram-label">인터넷의 기술·경제적 배경이 결합되어 e-비즈니스 환경을 창출, 모바일·유비쿼터스로 진화함</p>
+    </section>
+
+    <!-- ④ 타임라인 -->
+    <section class="section-card amber" id="timeline">
+        <h2 class="section-title">📅 타임라인 — 인터넷의 탄생과 발전</h2>
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="era">1969</div>
+                <div class="tl-title">ARPANET — 세계 최초의 인터넷</div>
+
+                <div class="tl-desc">미국 국방성 산하 첨단연구 프로젝트(ARPA)와 스탠퍼드·유타·UCLA·캘리포니아 대학이 공동 개발한 통신망을 연결한 네트워크. 인터넷의 출발점이다.</div>
+                <div class="tl-highlight">군사·학술 목적의 폐쇄적 네트워크에서 출발</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="era">1970~80년대</div>
+                <div class="tl-title">TCP/IP 프로토콜 표준화</div>
+                <div class="tl-desc">서로 다른 컴퓨터 시스템 간 통신을 가능하게 하는 공통 언어(TCP/IP)가 개발·표준화되면서 인터넷의 범세계적 확산을 위한 기술적 토대가 마련되었다.</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="era">1990년대 초</div>
+                <div class="tl-title">WWW(월드 와이드 웹) 등장</div>
+                <div class="tl-desc">하이퍼텍스트와 멀티미디어를 기반으로 한 WWW가 등장하면서 인터넷이 대중화되기 시작했다. 텍스트·그림·음성·동화상을 편리하게 전송할 수 있게 되었다.</div>
+                <div class="tl-highlight">노인·어린이 등 일반인도 쉽게 이용 가능한 환경 마련</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="era">1989</div>
+                <div class="tl-title">전자상거래(EC) 용어 최초 사용</div>
+                <div class="tl-desc">미국의 LLNL(Lawrence Livermore National Laboratory)이 미 국방성 프로젝트를 수행하면서 <strong>전자상거래(Electronic Commerce)</strong>라는 용어를 처음 사용. 서류 없는 기업 환경을 ICT로 달성하고자 하는 데 목적이 있었다.</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="era">1990년대 중반 이후</div>
+                <div class="tl-title">전자상거래 &amp; e-비즈니스 부상</div>
+                <div class="tl-desc">인터넷의 비약적 발전과 네티즌 커뮤니티의 급속한 성장으로 전자상거래와 e-비즈니스가 새로운 비즈니스 도구로 각광받기 시작했다.</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="era">2000년대 이후</div>
+                <div class="tl-title">m-비즈니스 · u-비즈니스 등장</div>
+                <div class="tl-desc">무선 인터넷 관련 기술의 발전으로 <strong>모바일 상거래(m-Commerce)</strong>가 활발해지고, RFID(Radio Frequency Identification) 기술 활용으로 <strong>유비쿼터스 상거래(u-Commerce)</strong>가 진행되었다. 전자상거래의 무게 중심이 B2C에서 <strong>B2B</strong>로 이동했다.</div>
+                <div class="tl-highlight">e-비즈니스의 고도화 → m-비즈니스 → u-비즈니스 순서로 발전</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="era">현재</div>
+                <div class="tl-title">SNS 태동과 실시간 쌍방향 시대</div>
+                <div class="tl-desc">인터넷은 멀티미디어 송수신을 넘어 고객과의 실시간 쌍방향 의사소통 수단으로 진화했으며, 정보의 주권이 기업에서 고객으로 이양되는 새로운 패러다임이 자리잡았다.</div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ⑤ 실생활 예시 -->
+    <section class="section-card orange" id="examples">
+        <h2 class="section-title">💡 실생활 예시 — 수업 개념과 기업 연결</h2>
+        <div class="example-grid">
+
+            <div class="example-card" style="border-top:3px solid #2563eb;">
+                <div class="company">구글 (Google)</div>
+                <span class="category" style="background:rgba(37,99,235,0.1);color:#2563eb;">WWW · 검색</span>
+                <div class="desc">WWW의 하이퍼텍스트 구조를 기반으로 전 세계 웹 페이지를 색인화한다. TCP/IP 위에서 동작하며, <strong>사용자가 많을수록 검색 품질이 향상</strong>되는 경제적 배경을 완벽하게 구현한 사례.</div>
+            </div>
+
+            <div class="example-card" style="border-top:3px solid #ea580c;">
+                <div class="company">쿠팡 (Coupang)</div>
+                <span class="category" style="background:rgba(234,88,12,0.1);color:#ea580c;">전자상거래</span>
+                <div class="desc">인터넷의 <strong>지역적·시간적 장벽 해소</strong> 특성을 활용, 24시간 전국 배송 서비스를 제공한다. 인터넷 기반 전자상거래가 전통적 오프라인 유통의 패러다임을 바꾼 대표 사례.</div>
+            </div>
+
+            <div class="example-card" style="border-top:3px solid #7c3aed;">
+                <div class="company">카카오 (Kakao)</div>
+                <span class="category" style="background:rgba(124,58,237,0.1);color:#7c3aed;">SNS · 실시간 소통</span>
+                <div class="desc">인터넷의 <strong>실시간 쌍방향 의사소통</strong> 기능을 극대화한 메신저·플랫폼. 사용자가 증가할수록 가치가 높아지는 <strong>네트워크 효과(경제적 배경)</strong>의 전형적 사례.</div>
+            </div>
+
+            <div class="example-card" style="border-top:3px solid #16a34a;">
+                <div class="company">넷플릭스 (Netflix)</div>
+                <span class="category" style="background:rgba(22,163,74,0.1);color:#16a34a;">멀티미디어 스트리밍</span>
+                <div class="desc">WWW의 <strong>멀티미디어 정보 송수신 능력</strong>을 활용, 전 세계에 영상 콘텐츠를 스트리밍한다. 인터넷 인프라가 없었다면 불가능했던 e-비즈니스 모델의 결정체.</div>
+            </div>
+
+            <div class="example-card" style="border-top:3px solid #0891b2;">
+                <div class="company">위키피디아 (Wikipedia)</div>
+                <span class="category" style="background:rgba(8,145,178,0.1);color:#0891b2;">하이퍼텍스트 · 개방성</span>
+                <div class="desc">인터넷의 <strong>개방성</strong>과 하이퍼텍스트 구조를 완벽히 구현한 집단 지성 플랫폼. 링크로 연결된 비선형 정보 탐색 방식이 하이퍼텍스트 개념 그 자체다.</div>
+            </div>
+
+            <div class="example-card" style="border-top:3px solid #d97706;">
+                <div class="company">배달의민족 (Baemin)</div>
+                <span class="category" style="background:rgba(217,119,6,0.1);color:#d97706;">O2O · 비즈니스 패러다임</span>
+                <div class="desc">인터넷이 <strong>정보의 주권을 고객에게 이양</strong>한 대표 사례. 고객이 직접 메뉴·가격·후기를 비교하며 선택하는 구조로, 음식 배달 비즈니스의 패러다임을 완전히 바꾸었다.</div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ⑥ 셀프 체크 퀴즈 -->
+    <section class="section-card green" id="quiz">
+        <h2 class="section-title">✏️ 셀프 체크 퀴즈 — 2주차 확인</h2>
+
+        <!-- Q1 -->
+        <div class="quiz-item" id="q1">
+            <p class="quiz-q"><span class="q-num">Q1.</span> 인터넷에 대한 설명으로 가장 올바른 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q1',0,1,'인터넷은 전 세계에 흩어져 있는 컴퓨터 네트워크들을 상호 연결한 네트워크들의 집합체입니다.')">① 특정 국가의 정부기관이 단독으로 관리하는 폐쇄형 네트워크</button></li>
+                <li><button onclick="checkQuiz('q1',1,1,'인터넷은 전 세계에 흩어져 있는 컴퓨터 네트워크들을 상호 연결한 네트워크들의 집합체입니다.')">② 전 세계에 흩어져 있는 컴퓨터 네트워크들을 상호 연결한 집합체</button></li>
+                <li><button onclick="checkQuiz('q1',2,1,'인터넷은 전 세계에 흩어져 있는 컴퓨터 네트워크들을 상호 연결한 네트워크들의 집합체입니다.')">③ 텍스트 데이터만 송수신할 수 있는 통신망</button></li>
+                <li><button onclick="checkQuiz('q1',3,1,'인터넷은 전 세계에 흩어져 있는 컴퓨터 네트워크들을 상호 연결한 네트워크들의 집합체입니다.')">④ 사용자가 늘수록 비용이 증가하는 시스템</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q1-feedback"></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="quiz-item" id="q2">
+            <p class="quiz-q"><span class="q-num">Q2.</span> 세계 최초의 인터넷(ARPANET)이 개발된 연도는?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q2',0,1,'ARPANET은 1969년 미국 국방성 산하 첨단연구 프로젝트와 스탠퍼드·유타·UCLA·캘리포니아 대학이 공동 개발했습니다.')">① 1945년</button></li>
+                <li><button onclick="checkQuiz('q2',1,1,'ARPANET은 1969년 미국 국방성 산하 첨단연구 프로젝트와 스탠퍼드·유타·UCLA·캘리포니아 대학이 공동 개발했습니다.')">② 1969년</button></li>
+                <li><button onclick="checkQuiz('q2',2,1,'ARPANET은 1969년 미국 국방성 산하 첨단연구 프로젝트와 스탠퍼드·유타·UCLA·캘리포니아 대학이 공동 개발했습니다.')">③ 1980년</button></li>
+                <li><button onclick="checkQuiz('q2',3,1,'ARPANET은 1969년 미국 국방성 산하 첨단연구 프로젝트와 스탠퍼드·유타·UCLA·캘리포니아 대학이 공동 개발했습니다.')">④ 1991년</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q2-feedback"></div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="quiz-item" id="q3">
+            <p class="quiz-q"><span class="q-num">Q3.</span> TCP/IP에 대한 설명으로 올바른 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q3',0,2,'TCP/IP는 인터넷을 통해 컴퓨터들 간에 의사소통을 할 수 있도록 하는 프로토콜, 즉 통신 표준 체계입니다.')">① 하이퍼텍스트와 멀티미디어를 통합한 인터넷 서비스</button></li>
+                <li><button onclick="checkQuiz('q3',1,2,'TCP/IP는 인터넷을 통해 컴퓨터들 간에 의사소통을 할 수 있도록 하는 프로토콜, 즉 통신 표준 체계입니다.')">② 인터넷 사용자를 관리하는 중앙 서버 시스템</button></li>
+                <li><button onclick="checkQuiz('q3',2,2,'TCP/IP는 인터넷을 통해 컴퓨터들 간에 의사소통을 할 수 있도록 하는 프로토콜, 즉 통신 표준 체계입니다.')">③ 인터넷을 통해 컴퓨터들 간에 의사소통을 가능하게 하는 프로토콜</button></li>
+                <li><button onclick="checkQuiz('q3',3,2,'TCP/IP는 인터넷을 통해 컴퓨터들 간에 의사소통을 할 수 있도록 하는 프로토콜, 즉 통신 표준 체계입니다.')">④ 전자상거래 결제를 위한 보안 표준</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q3-feedback"></div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="quiz-item" id="q4">
+            <p class="quiz-q"><span class="q-num">Q4.</span> 인터넷의 경제적 배경과 관련하여 올바른 설명은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q4',0,3,'인터넷은 사용자가 많을수록 비용 분담 효과가 증가하여 최저의 비용으로 비즈니스를 할 수 있는 경제적 속성을 가집니다.')">① 사용자가 많을수록 유지 비용이 기하급수적으로 증가한다</button></li>
+                <li><button onclick="checkQuiz('q4',1,3,'인터넷은 사용자가 많을수록 비용 분담 효과가 증가하여 최저의 비용으로 비즈니스를 할 수 있는 경제적 속성을 가집니다.')">② 인터넷 비즈니스는 초기 진입 비용이 매우 높아 대기업만 가능하다</button></li>
+                <li><button onclick="checkQuiz('q4',2,3,'인터넷은 사용자가 많을수록 비용 분담 효과가 증가하여 최저의 비용으로 비즈니스를 할 수 있는 경제적 속성을 가집니다.')">③ 인터넷 이용자 수는 비즈니스 수익성과 무관하다</button></li>
+                <li><button onclick="checkQuiz('q4',3,3,'인터넷은 사용자가 많을수록 비용 분담 효과가 증가하여 최저의 비용으로 비즈니스를 할 수 있는 경제적 속성을 가집니다.')">④ 사용자가 많을수록 비용이 낮아지고 수익성은 증가한다</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q4-feedback"></div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="quiz-item" id="q5">
+            <p class="quiz-q"><span class="q-num">Q5.</span> 하이퍼텍스트(Hypertext)의 특징으로 가장 올바른 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q5',0,1,'하이퍼텍스트는 첫 페이지부터 마지막 페이지까지 순서대로 나열하지 않는다는 점에서 일반 텍스트와 다르며, 링크를 통해 비선형적으로 정보를 탐색할 수 있습니다.')">① 처음부터 끝까지 순서대로만 읽어야 하는 선형적 텍스트</button></li>
+                <li><button onclick="checkQuiz('q5',1,1,'하이퍼텍스트는 첫 페이지부터 마지막 페이지까지 순서대로 나열하지 않는다는 점에서 일반 텍스트와 다르며, 링크를 통해 비선형적으로 정보를 탐색할 수 있습니다.')">② 순서에 구애받지 않고 비선형적으로 정보를 탐색할 수 있는 텍스트</button></li>
+                <li><button onclick="checkQuiz('q5',2,1,'하이퍼텍스트는 첫 페이지부터 마지막 페이지까지 순서대로 나열하지 않는다는 점에서 일반 텍스트와 다르며, 링크를 통해 비선형적으로 정보를 탐색할 수 있습니다.')">③ 음성과 동영상만을 포함하는 멀티미디어 형식</button></li>
+                <li><button onclick="checkQuiz('q5',3,1,'하이퍼텍스트는 첫 페이지부터 마지막 페이지까지 순서대로 나열하지 않는다는 점에서 일반 텍스트와 다르며, 링크를 통해 비선형적으로 정보를 탐색할 수 있습니다.')">④ TCP/IP 프로토콜로만 전송 가능한 암호화 텍스트</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q5-feedback"></div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="quiz-item" id="q6">
+            <p class="quiz-q"><span class="q-num">Q6.</span> 인터넷 등장 이후 비즈니스 패러다임 변화로 가장 올바른 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q6',0,1,'인터넷 등장으로 실시간 쌍방향 의사소통이 가능해지면서 정보의 주권이 기업에서 고객으로 이양되는 결과를 초래했습니다.')">① 기업이 정보를 독점하면서 소비자 선택권이 줄어들었다</button></li>
+                <li><button onclick="checkQuiz('q6',1,1,'인터넷 등장으로 실시간 쌍방향 의사소통이 가능해지면서 정보의 주권이 기업에서 고객으로 이양되는 결과를 초래했습니다.')">② 전자상거래·e-비즈니스가 새로운 비즈니스 도구로 각광받게 되었다</button></li>
+                <li><button onclick="checkQuiz('q6',2,1,'인터넷 등장으로 실시간 쌍방향 의사소통이 가능해지면서 정보의 주권이 기업에서 고객으로 이양되는 결과를 초래했습니다.')">③ 국내 비즈니스만 성장하고 글로벌 비즈니스는 축소되었다</button></li>
+                <li><button onclick="checkQuiz('q6',3,1,'인터넷 등장으로 실시간 쌍방향 의사소통이 가능해지면서 정보의 주권이 기업에서 고객으로 이양되는 결과를 초래했습니다.')">④ 고객과의 의사소통이 단방향으로 단순화되었다</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q6-feedback"></div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="quiz-item" id="q7">
+            <p class="quiz-q"><span class="q-num">Q7.</span> 메트카프의 법칙(Metcalfe's Law)에 대한 설명으로 가장 올바른 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q7',0,2,'메트카프의 법칙은 네트워크 가치는 가입자 수에 비례해 증가하며, 어느 시점부터 그 가치는 비약적으로 높아진다는 법칙입니다. 1995년 밥 메트카프가 제창했습니다.')">① 네트워크 사용자가 많을수록 운영 비용이 기하급수적으로 증가한다</button></li>
+                <li><button onclick="checkQuiz('q7',1,2,'메트카프의 법칙은 네트워크 가치는 가입자 수에 비례해 증가하며, 어느 시점부터 그 가치는 비약적으로 높아진다는 법칙입니다. 1995년 밥 메트카프가 제창했습니다.')">② 네트워크 가치는 일정한 가입자 수를 유지해야만 보존된다</button></li>
+                <li><button onclick="checkQuiz('q7',2,2,'메트카프의 법칙은 네트워크 가치는 가입자 수에 비례해 증가하며, 어느 시점부터 그 가치는 비약적으로 높아진다는 법칙입니다. 1995년 밥 메트카프가 제창했습니다.')">③ 네트워크 가치는 가입자 수에 비례해 증가하며 어느 시점부터 비약적으로 높아진다</button></li>
+                <li><button onclick="checkQuiz('q7',3,2,'메트카프의 법칙은 네트워크 가치는 가입자 수에 비례해 증가하며, 어느 시점부터 그 가치는 비약적으로 높아진다는 법칙입니다. 1995년 밥 메트카프가 제창했습니다.')">④ 가입자 수가 일정 수준을 넘으면 네트워크 가치가 오히려 하락한다</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q7-feedback"></div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="quiz-item" id="q8">
+            <p class="quiz-q"><span class="q-num">Q8.</span> 수확체증의 법칙이 적용되는 산업 분야로 가장 적합한 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q8',0,3,'수확체증은 지식 주도형 산업, 특히 소프트웨어 개발에 적용됩니다. 초기에 많은 비용이 투자되지만 한번 개발된 후에는 복사 비용이 원가에 가까워져 대량 생산할수록 유리합니다.')">① 철강 제조업 — 생산량이 늘수록 원자재 비용도 비례해서 증가</button></li>
+                <li><button onclick="checkQuiz('q8',1,3,'수확체증은 지식 주도형 산업, 특히 소프트웨어 개발에 적용됩니다. 초기에 많은 비용이 투자되지만 한번 개발된 후에는 복사 비용이 원가에 가까워져 대량 생산할수록 유리합니다.')">② 농업 — 비료를 많이 쓸수록 수확량이 무한히 증가</button></li>
+                <li><button onclick="checkQuiz('q8',2,3,'수확체증은 지식 주도형 산업, 특히 소프트웨어 개발에 적용됩니다. 초기에 많은 비용이 투자되지만 한번 개발된 후에는 복사 비용이 원가에 가까워져 대량 생산할수록 유리합니다.')">③ 전통 자동차 공장 — 라인을 늘릴수록 단위 비용이 급감</button></li>
+                <li><button onclick="checkQuiz('q8',3,3,'수확체증은 지식 주도형 산업, 특히 소프트웨어 개발에 적용됩니다. 초기에 많은 비용이 투자되지만 한번 개발된 후에는 복사 비용이 원가에 가까워져 대량 생산할수록 유리합니다.')">④ 소프트웨어 개발 — 초기 개발 후 복사 비용은 원가에 가까워짐</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q8-feedback"></div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="quiz-item" id="q9">
+            <p class="quiz-q"><span class="q-num">Q9.</span> 소비자 주도시장의 특징으로 올바르지 않은 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q9',0,3,'소비자 주도시장의 특징은 소비자가 주도권을 가짐, 구입 전 상호 커뮤니케이션, 정보가 소비가치를 가짐, 서비스 맞춤화입니다. 공급자가 정보를 독점하는 것은 소비자 주도시장의 특징이 아닙니다.')">① 소비자가 공급자보다 시장의 주도권을 가진다</button></li>
+                <li><button onclick="checkQuiz('q9',1,3,'소비자 주도시장의 특징은 소비자가 주도권을 가짐, 구입 전 상호 커뮤니케이션, 정보가 소비가치를 가짐, 서비스 맞춤화입니다. 공급자가 정보를 독점하는 것은 소비자 주도시장의 특징이 아닙니다.')">② 구입 전에 상호 커뮤니케이션이 이루어진다</button></li>
+                <li><button onclick="checkQuiz('q9',2,3,'소비자 주도시장의 특징은 소비자가 주도권을 가짐, 구입 전 상호 커뮤니케이션, 정보가 소비가치를 가짐, 서비스 맞춤화입니다. 공급자가 정보를 독점하는 것은 소비자 주도시장의 특징이 아닙니다.')">③ 서비스의 맞춤화가 이루어진다</button></li>
+                <li><button onclick="checkQuiz('q9',3,3,'소비자 주도시장의 특징은 소비자가 주도권을 가짐, 구입 전 상호 커뮤니케이션, 정보가 소비가치를 가짐, 서비스 맞춤화입니다. 공급자가 정보를 독점하는 것은 소비자 주도시장의 특징이 아닙니다.')">④ 공급자가 정보를 독점하여 소비자의 선택권을 제한한다</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q9-feedback"></div>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <p>e-비즈니스의 이해 · 2주차 학습자료 · 한신대학교</p>
+</footer>
+
+<script>
+// Dark Mode
+const html = document.documentElement;
+const btn = document.getElementById('themeToggle');
+const saved = localStorage.getItem('theme') || 'light';
+html.setAttribute('data-theme', saved);
+btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    btn.textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', next);
+});
+
+// Quiz
+function checkQuiz(qId, selected, correct, explanation) {
+    const item = document.getElementById(qId);
+    const buttons = item.querySelectorAll('.quiz-options button');
+    buttons.forEach(b => b.disabled = true);
+    buttons[selected].classList.add(selected === correct ? 'correct' : 'wrong');
+    if (selected !== correct) buttons[correct].classList.add('correct');
+    const fb = document.getElementById(qId + '-feedback');
+    fb.classList.add('show');
+    if (selected === correct) {
+        fb.classList.add('correct-fb');
+        fb.innerHTML = '✅ <strong>정답!</strong> ' + explanation;
+    } else {
+        fb.classList.add('wrong-fb');
+        fb.innerHTML = '❌ <strong>오답.</strong> 정답은 <strong>' + (correct + 1) + '번</strong>입니다. ' + explanation;
+    }
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+});
+</script>
+</body>
+</html>
