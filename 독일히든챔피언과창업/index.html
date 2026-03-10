@@ -6,165 +6,244 @@
   <title>독일 히든챔피언과 창업 - 강의 노트</title>
   <style>
     :root {
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --border: #475569;
-      --text: #e2e8f0;
-      --text-dim: #94a3b8;
-      --accent: #38bdf8;
-      --accent2: #818cf8;
-      --accent3: #f472b6;
-      --highlight: #fbbf24;
-      --green: #4ade80;
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --success: #16a34a;
+      --success-light: #dcfce7;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --card-bg: white;
+      --nav-bg: white;
+      --body-bg: #f3f4f6;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--body-bg);
+      color: var(--gray-900);
       line-height: 1.7;
-      min-height: 100vh;
-      padding: 2rem 1rem;
     }
-    .container { max-width: 720px; margin: 0 auto; }
 
-    /* Home Nav */
-    .home-nav {
-      position: sticky; top: 0; z-index: 100;
-      padding: 0.8rem 0;
-      margin: -2rem -1rem 1.5rem -1rem;
-      padding-left: 1rem; padding-right: 1rem;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
     }
-    .home-nav a {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      text-decoration: none; color: var(--accent);
-      font-size: 0.9rem; font-weight: 600;
-      padding: 0.4rem 0.8rem; border-radius: 8px;
-      transition: background 0.2s;
+    header .chapter-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 0.25rem 1rem;
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
     }
-    .home-nav a:hover { background: rgba(56,189,248,0.1); }
+    header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+    header p { opacity: 0.85; font-size: 0.95rem; }
 
-    /* Header */
-    .header {
-      text-align: center; margin-bottom: 2.5rem;
-      padding: 3rem 2rem;
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e1b4b 100%);
-      border-radius: 20px; border: 1px solid var(--border);
-      position: relative; overflow: hidden;
+    nav.toc {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      background: var(--nav-bg);
+      padding: 1rem;
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-    .header::before {
-      content: ''; position: absolute; top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      background: radial-gradient(circle at 30% 50%, rgba(56,189,248,0.08) 0%, transparent 50%),
-                  radial-gradient(circle at 70% 50%, rgba(129,140,248,0.08) 0%, transparent 50%);
-      pointer-events: none;
+    nav.toc a {
+      text-decoration: none;
+      color: var(--primary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      border: 1.5px solid var(--primary-light);
+      transition: background 0.2s, color 0.2s;
     }
-    .header .icon { font-size: 2.5rem; margin-bottom: 0.8rem; position: relative; }
-    .header h1 {
-      font-size: 1.8rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      margin-bottom: 0.5rem; position: relative;
-    }
-    .header p { color: var(--text-dim); font-size: 0.95rem; position: relative; }
+    nav.toc a:hover { background: var(--primary); color: white; }
 
-    /* Card List */
+    .theme-toggle {
+      margin-left: auto;
+      background: none;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 20px;
+      padding: 0.3rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--gray-700);
+      display: flex; align-items: center; gap: 0.4rem;
+      transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .theme-toggle:hover { border-color: var(--primary); color: var(--primary); }
+
+    main { max-width: 720px; margin: 2rem auto; padding: 0 1rem 4rem; }
+
     .card-list { display: flex; flex-direction: column; gap: 1rem; }
+
     .card {
-      display: flex; align-items: center; gap: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
       padding: 1.4rem 1.5rem;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; text-decoration: none; color: var(--text);
-      transition: all 0.25s ease; position: relative; overflow: hidden;
-    }
-    .card::before {
-      content: ''; position: absolute; left: 0; top: 0;
-      width: 4px; height: 100%; border-radius: 4px 0 0 4px;
-      background: var(--accent);
+      background: var(--card-bg);
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--gray-900);
+      border-top: 4px solid var(--primary);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
     .card:hover {
       transform: translateY(-2px);
-      border-color: rgba(56,189,248,0.4);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
+    .card.green { border-color: var(--success); }
+    .card.orange { border-color: var(--warning); }
+    .card.red { border-color: var(--danger); }
+
     .card-icon {
-      width: 48px; height: 48px; border-radius: 12px;
+      width: 52px; height: 52px;
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem; font-weight: 800; flex-shrink: 0;
-      background: rgba(56,189,248,0.15); color: var(--accent);
+      font-size: 1rem; font-weight: 800;
+      flex-shrink: 0;
+      background: var(--primary-light);
+      color: var(--primary);
     }
+    .card.green .card-icon { background: var(--success-light); color: var(--success); }
+    .card.orange .card-icon { background: var(--warning-light); color: var(--warning); }
+    .card.red .card-icon { background: var(--danger-light); color: var(--danger); }
+
     .card-body { flex: 1; min-width: 0; }
     .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
-    .card-desc { font-size: 0.82rem; color: var(--text-dim); }
+    .card-desc { font-size: 0.82rem; color: var(--gray-700); }
+
+    .tags { display: flex; gap: 0.4rem; margin-top: 0.45rem; flex-wrap: wrap; }
+    .tag {
+      font-size: 0.7rem; padding: 0.15rem 0.55rem; border-radius: 20px;
+      background: var(--primary-light); color: var(--primary);
+      font-weight: 600;
+    }
+    .card.green .tag { background: var(--success-light); color: var(--success); }
+    .card.orange .tag { background: var(--warning-light); color: var(--warning); }
+
     .card-arrow {
-      color: var(--text-dim); font-size: 1.2rem; flex-shrink: 0;
+      color: var(--gray-700); font-size: 1.3rem; flex-shrink: 0;
       transition: transform 0.2s;
     }
-    .card:hover .card-arrow { transform: translateX(4px); color: var(--accent); }
+    .card:hover .card-arrow { transform: translateX(4px); color: var(--primary); }
 
-    .tags { display: flex; gap: 0.4rem; margin-top: 0.4rem; flex-wrap: wrap; }
-    .tag {
-      font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 6px;
-      background: rgba(56,189,248,0.1); color: var(--accent);
-      border: 1px solid rgba(56,189,248,0.2);
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      padding: 2rem;
+      border-top: 1px solid var(--gray-200);
     }
 
-    .footer {
-      text-align: center; margin-top: 3rem; padding: 1.5rem;
-      color: var(--text-dim); font-size: 0.8rem;
+    /* ── 다크 테마 ── */
+    [data-theme="dark"] {
+      --primary-light: #1e3a5f;
+      --success-light: #14532d;
+      --warning-light: #451a03;
+      --danger-light:  #450a0a;
+      --gray-100: #0f172a;
+      --gray-200: #334155;
+      --gray-700: #94a3b8;
+      --gray-900: #e2e8f0;
+      --card-bg: #1e293b;
+      --nav-bg: #1e293b;
+      --body-bg: #0f172a;
     }
+    [data-theme="dark"] body { background: #0f172a; color: #e2e8f0; }
+    [data-theme="dark"] nav.toc { background: #1e293b; border-color: #334155; }
+    [data-theme="dark"] .card { background: #1e293b; color: #e2e8f0; }
+    [data-theme="dark"] .card-desc { color: #94a3b8; }
+    [data-theme="dark"] footer { color: #475569; border-color: #334155; }
+    [data-theme="dark"] .theme-toggle { color: #94a3b8; border-color: #334155; }
+    [data-theme="dark"] .theme-toggle:hover { color: #60a5fa; border-color: #60a5fa; }
   </style>
 </head>
 <body>
-  <div class="home-nav">
-    <a href="../index.html">&#8592; 강의 목록으로</a>
-  </div>
-  <div class="container">
-    <div class="header">
-      <div class="icon">🇩🇪</div>
-      <h1>독일 히든챔피언과 창업</h1>
-      <p>강의 노트 모음</p>
-    </div>
 
-    <div class="card-list">
+<header>
+  <div class="chapter-tag">독일 히든챔피언과 창업 · 한신대학교 2학년 1학기</div>
+  <h1>독일 히든챔피언과 창업</h1>
+  <p>강의 노트 모음</p>
+</header>
 
-      <a href="./수업정리_1~3강.html" class="card">
-        <div class="card-icon">1-3</div>
-        <div class="card-body">
-          <div class="card-title">1강 ~ 3강 수업 정리</div>
-          <div class="card-desc">독일 경제의 역사적 배경, 히든챔피언의 정의와 특징, 독일 산업구조</div>
-          <div class="tags">
-            <span class="tag">히든챔피언</span>
-            <span class="tag">독일경제</span>
-            <span class="tag">산업구조</span>
-          </div>
+<nav class="toc">
+  <a href="../index.html">← 강의 목록으로</a>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 야간 모드</button>
+</nav>
+
+<main>
+  <div class="card-list">
+
+    <a href="./수업정리_1~3강.html" class="card">
+      <div class="card-icon">1-3</div>
+      <div class="card-body">
+        <div class="card-title">1강 ~ 3강 수업 정리</div>
+        <div class="card-desc">독일 경제의 역사적 배경, 히든챔피언의 정의와 특징, 독일 산업구조</div>
+        <div class="tags">
+          <span class="tag">히든챔피언</span>
+          <span class="tag">독일경제</span>
+          <span class="tag">산업구조</span>
         </div>
-        <span class="card-arrow">›</span>
-      </a>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
 
-      <!-- 새 강의 추가 시 아래를 복사하세요
-      <a href="./수업정리_4~6강.html" class="card">
-        <div class="card-icon">4-6</div>
-        <div class="card-body">
-          <div class="card-title">4강 ~ 6강 수업 정리</div>
-          <div class="card-desc">강의 설명</div>
-          <div class="tags">
-            <span class="tag">키워드</span>
-          </div>
+    <!-- 새 강의 추가 시 아래를 복사하세요
+    <a href="./수업정리_4~6강.html" class="card green">
+      <div class="card-icon">4-6</div>
+      <div class="card-body">
+        <div class="card-title">4강 ~ 6강 수업 정리</div>
+        <div class="card-desc">강의 설명</div>
+        <div class="tags">
+          <span class="tag">키워드</span>
         </div>
-        <span class="card-arrow">›</span>
-      </a>
-      -->
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+    -->
 
-    </div>
-
-    <div class="footer">
-      2025-1학기 · 강의 노트는 계속 추가됩니다
-    </div>
   </div>
+</main>
+
+<footer>
+  독일 히든챔피언과 창업 · 한신대학교 2학년 1학기 | 강의 노트는 계속 추가됩니다
+</footer>
+
+<script>
+  const btn = document.getElementById('themeToggle');
+  function applyTheme(dark) {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    btn.textContent = dark ? '☀️ 라이트 모드' : '🌙 야간 모드';
+  }
+  function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    applyTheme(!isDark);
+  }
+  applyTheme(localStorage.getItem('theme') === 'dark');
+</script>
+
 </body>
 </html>

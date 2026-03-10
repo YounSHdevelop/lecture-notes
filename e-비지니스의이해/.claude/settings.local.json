@@ -4,7 +4,10 @@
       "Bash(start:*)",
       "Bash(python3:*)",
       "Bash(pip install:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Read(//c/Users/younsh/.claude/**)",
+      "Bash(find \"C:/Users/younsh/.claude/\" -name \"*.md\" 2>/dev/null | head -30)",
+      "Bash(mkdir -p \"C:/Users/younsh/.claude/skills/make-study-html\" && rm \"C:/Users/younsh/.claude/skills/make-study-html.md\")"
     ]
   }
 }

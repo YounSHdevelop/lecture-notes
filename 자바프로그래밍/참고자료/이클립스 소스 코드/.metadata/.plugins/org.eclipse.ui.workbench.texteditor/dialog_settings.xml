@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="hasShownOverlayPopupBefore" value="true"/>
+	<section name="java.lang.Class">
+		<item key="replaceBarOpen" value="false"/>
+		<list key="findhistory">
+			<item value="pane"/>
+			<item value="BufferedReader br = new BufferedReader"/>
+			<item value="ProcessBuilder"/>
+			<item value="test"/>
+			<item value="Compilation successful"/>
+			<item value="loadProjectFiles"/>
+			<item value="import java.util.Scanner;"/>
+			<item value="JSplitPane(JSplitPane"/>
+			<item value="jdvc"/>
+			<item value="---"/>
+			<item value="loadFile"/>
+			<item value="No Java files found.\n"/>
+			<item value="makeButton"/>
+			<item value="Loaded"/>
+			<item value="compiling"/>
+		</list>
+	</section>
+</section>
