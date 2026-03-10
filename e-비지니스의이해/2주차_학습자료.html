@@ -261,6 +261,59 @@ main { max-width: 900px; margin: 0 auto; padding: 32px 16px 60px; }
 .quiz-feedback.correct-fb { background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.3); color: var(--success); }
 .quiz-feedback.wrong-fb   { background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.3); color: var(--danger); }
 
+/* ── 자산 다이어그램 ── */
+.asset-diagram-wrap {
+    margin-top: 24px;
+}
+.asset-axis-row {
+    display: flex; justify-content: space-around;
+    margin-bottom: 6px;
+}
+.asset-axis-label {
+    font-size: 0.78rem; font-weight: 700; color: var(--text-muted);
+    letter-spacing: 0.06em; text-align: center; flex: 1;
+}
+.asset-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 10px;
+    position: relative;
+}
+.asset-box {
+    border-radius: 12px; padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    transition: box-shadow 0.2s;
+}
+.asset-box:hover { box-shadow: var(--shadow-hover); }
+.asset-box h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+.asset-box p  { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+.asset-box.a-relic    { border-top: 3px solid #7c3aed; background: rgba(124,58,237,0.06); }
+.asset-box.a-customer { border-top: 3px solid #0891b2; background: rgba(8,145,178,0.06); }
+.asset-box.a-finance  { border-top: 3px solid #d97706; background: rgba(217,119,6,0.06); }
+.asset-box.a-supplier { border-top: 3px solid #ea580c; background: rgba(234,88,12,0.06); }
+.asset-center-row {
+    grid-column: 1 / -1;
+    display: flex; justify-content: center; align-items: center;
+    padding: 6px 0;
+}
+.asset-center-box {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white; font-weight: 700; font-size: 1rem;
+    padding: 14px 48px; border-radius: 50px;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+}
+.asset-side-labels {
+    display: flex; justify-content: space-between;
+    margin-top: 10px; padding: 0 4px;
+}
+.asset-side-label {
+    font-size: 0.8rem; font-weight: 700;
+    padding: 4px 14px; border-radius: 20px;
+}
+.asset-side-label.tangible   { background: rgba(217,119,6,0.12); color: #d97706; }
+.asset-side-label.intangible { background: rgba(8,145,178,0.12); color: #0891b2; }
+
 /* ── 푸터 ── */
 footer {
     text-align: center; padding: 32px 20px;
@@ -374,6 +427,19 @@ footer {
         </div>
 
         <div class="keyword-box">
+            <div class="term">조직의 자산 — 유형자산 vs 무형자산</div>
+            <div class="def">기업의 자산은 <strong>유형자산</strong>과 <strong>무형자산</strong>으로 구분된다. e-비즈니스 시대에는 무형자산의 중요성이 급격히 높아지고 있다.
+                <ul class="sub-list">
+                    <li><strong>융적자산(무형)</strong> — 명성, 경영자의 리더십, 전략, 브랜드력, 기업문화, 프로세스, 조직구조, 지식, 지식재산권 등</li>
+                    <li><strong>고객자산(무형)</strong> — 고객, 판매채널이나 판매 제휴처 등</li>
+                    <li><strong>조직자산(중심)</strong> — 유·무형 자산을 아우르는 핵심</li>
+                    <li><strong>금융자산(유형)</strong> — 현금, 투자자산 등</li>
+                    <li><strong>공급자자산(유형)</strong> — 공급업자, 전략적 파트너십 등</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="keyword-box">
             <div class="term">수확체증 vs 수확체감</div>
             <div class="def"><strong>수확체증</strong>: 사업 규모가 두 배가 되면 산출량은 두 배 이상이 된다는 규모의 경제 원리. <strong>지식 주도형 산업(소프트웨어 등)</strong>에 적용된다. 소프트웨어는 초기 개발 비용이 크지만, 대량 복사할수록 단위 원가가 급격히 하락한다. <strong>수확체감</strong>: 일정 규모를 초과하면 수익성이 급격히 저하한다는 원리로, 전통 제조업에 적용된다.</div>
         </div>
@@ -478,57 +544,96 @@ footer {
             </div>
         </div>
         <p class="diagram-label">인터넷의 기술·경제적 배경이 결합되어 e-비즈니스 환경을 창출, 모바일·유비쿼터스로 진화함</p>
+
+        <!-- 조직의 자산과 무형 자산 다이어그램 -->
+        <div style="margin-top:36px;">
+            <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:16px;color:var(--text);">🏢 조직의 자산과 무형 자산</h3>
+            <div class="asset-axis-row">
+                <div class="asset-axis-label" style="color:#7c3aed;">← 무형 자산 →</div>
+                <div class="asset-axis-label" style="color:#d97706;">← 유형 자산 →</div>
+            </div>
+            <div class="asset-grid">
+                <!-- 융적자산 (무형, 좌상) -->
+                <div class="asset-box a-relic">
+                    <h4 style="color:#7c3aed;">융적자산</h4>
+                    <p>명성, 경영자의 리더십, 전략, 브랜드력, 기업문화, 프로세스, 조직구조, 지식, 지식재산권 등</p>
+                </div>
+                <!-- 고객자산 (무형, 우상) -->
+                <div class="asset-box a-customer">
+                    <h4 style="color:#0891b2;">고객자산</h4>
+                    <p>고객, 판매채널이나 판매 제휴처 등</p>
+                </div>
+                <!-- 중심: 조직자산 -->
+                <div class="asset-center-row">
+                    <div class="asset-center-box">조직자산</div>
+                </div>
+                <!-- 금융자산 (유형, 좌하) -->
+                <div class="asset-box a-finance">
+                    <h4 style="color:#d97706;">금융자산</h4>
+                    <p>현금, 유가증권, 투자자산 등 재무적 자원</p>
+                </div>
+                <!-- 공급자자산 (유형, 우하) -->
+                <div class="asset-box a-supplier">
+                    <h4 style="color:#ea580c;">공급자자산</h4>
+                    <p>공급업자, 전략적 파트너십 등</p>
+                </div>
+            </div>
+            <div class="asset-side-labels">
+                <span class="asset-side-label intangible">무형 자산 (Intangible)</span>
+                <span class="asset-side-label tangible">유형 자산 (Tangible)</span>
+            </div>
+            <p class="diagram-label" style="margin-top:12px;">e-비즈니스 시대에는 융적자산·고객자산 등 무형 자산의 중요성이 급격히 높아지고 있다</p>
+        </div>
     </section>
 
     <!-- ④ 타임라인 -->
     <section class="section-card amber" id="timeline">
-        <h2 class="section-title">📅 타임라인 — 인터넷의 탄생과 발전</h2>
+        <h2 class="section-title">📅 타임라인 — 전자상거래의 발전 과정</h2>
         <div class="timeline">
 
             <div class="timeline-item">
-                <div class="era">1969</div>
-                <div class="tl-title">ARPANET — 세계 최초의 인터넷</div>
-
-                <div class="tl-desc">미국 국방성 산하 첨단연구 프로젝트(ARPA)와 스탠퍼드·유타·UCLA·캘리포니아 대학이 공동 개발한 통신망을 연결한 네트워크. 인터넷의 출발점이다.</div>
-                <div class="tl-highlight">군사·학술 목적의 폐쇄적 네트워크에서 출발</div>
+                <div class="era">1970년대 후반 ~ 1980년대 초반</div>
+                <div class="tl-title">EDI·E-mail 등 전자 메세징 기술의 출현과 확산</div>
+                <div class="tl-desc">전자문서교환(EDI)과 이메일을 중심으로 전자 메세징 기술이 확산되면서 종이 기반 업무가 전자화되기 시작했다.</div>
+                <div class="tl-highlight">
+                    종이에 의한 작업 감소, 자동화의 확산<br>
+                    결제·구매요구서·선적문서 등의 전자화<br>
+                    재고관리·자금관리 등 업무의 전자적 처리
+                </div>
             </div>
 
             <div class="timeline-item">
-                <div class="era">1970~80년대</div>
-                <div class="tl-title">TCP/IP 프로토콜 표준화</div>
-                <div class="tl-desc">서로 다른 컴퓨터 시스템 간 통신을 가능하게 하는 공통 언어(TCP/IP)가 개발·표준화되면서 인터넷의 범세계적 확산을 위한 기술적 토대가 마련되었다.</div>
+                <div class="era">1980년대 중반</div>
+                <div class="tl-title">EC 관련 신기술의 확산 — 온라인 서비스의 등장</div>
+                <div class="tl-desc">대화형 통신 기술(IRC, News Group, FTP)이 등장하면서 가상사회가 창출되고 Global Village 개념이 태동했다.</div>
+                <div class="tl-highlight">
+                    대화형 통신 기술의 등장: IRC, News Group, FTP<br>
+                    가상사회의 창출 · Global Village 개념의 태동<br>
+                    인터넷에 의한 세계시장에서의 경제교류 가능성 제시
+                </div>
             </div>
 
             <div class="timeline-item">
-                <div class="era">1990년대 초</div>
-                <div class="tl-title">WWW(월드 와이드 웹) 등장</div>
-                <div class="tl-desc">하이퍼텍스트와 멀티미디어를 기반으로 한 WWW가 등장하면서 인터넷이 대중화되기 시작했다. 텍스트·그림·음성·동화상을 편리하게 전송할 수 있게 되었다.</div>
-                <div class="tl-highlight">노인·어린이 등 일반인도 쉽게 이용 가능한 환경 마련</div>
+                <div class="era">1980년대 후반 ~ 1990년대 초반</div>
+                <div class="tl-title">Workflow·Groupware 통합 및 ERP의 출현</div>
+                <div class="tl-desc">전자메세징 기술이 업무 흐름(Workflow) 또는 그룹웨어(Groupware) 기술과 통합되기 시작했으며, 기업 전체 자원을 통합 관리하는 <strong>ERP(Enterprise Resource Planning)</strong>가 출현했다.</div>
             </div>
 
             <div class="timeline-item">
-                <div class="era">1989</div>
-                <div class="tl-title">전자상거래(EC) 용어 최초 사용</div>
-                <div class="tl-desc">미국의 LLNL(Lawrence Livermore National Laboratory)이 미 국방성 프로젝트를 수행하면서 <strong>전자상거래(Electronic Commerce)</strong>라는 용어를 처음 사용. 서류 없는 기업 환경을 ICT로 달성하고자 하는 데 목적이 있었다.</div>
+                <div class="era">1990년대 초반 ~ 1990년대 후반</div>
+                <div class="tl-title">WWW 출현 — 인터넷의 쉬운 사용법 제공</div>
+                <div class="tl-desc">월드 와이드 웹(WWW)의 등장으로 인터넷을 누구나 쉽게 사용할 수 있게 되었고, 전자상거래가 체계적으로 발전하기 시작했다.</div>
+                <div class="tl-highlight">
+                    EC 활용의 보다 체계적인 수단과 다양한 기업응용 제공<br>
+                    범세계 시장에서의 동등한 경쟁력 제공
+                </div>
             </div>
 
             <div class="timeline-item">
-                <div class="era">1990년대 중반 이후</div>
-                <div class="tl-title">전자상거래 &amp; e-비즈니스 부상</div>
-                <div class="tl-desc">인터넷의 비약적 발전과 네티즌 커뮤니티의 급속한 성장으로 전자상거래와 e-비즈니스가 새로운 비즈니스 도구로 각광받기 시작했다.</div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="era">2000년대 이후</div>
-                <div class="tl-title">m-비즈니스 · u-비즈니스 등장</div>
-                <div class="tl-desc">무선 인터넷 관련 기술의 발전으로 <strong>모바일 상거래(m-Commerce)</strong>가 활발해지고, RFID(Radio Frequency Identification) 기술 활용으로 <strong>유비쿼터스 상거래(u-Commerce)</strong>가 진행되었다. 전자상거래의 무게 중심이 B2C에서 <strong>B2B</strong>로 이동했다.</div>
-                <div class="tl-highlight">e-비즈니스의 고도화 → m-비즈니스 → u-비즈니스 순서로 발전</div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="era">현재</div>
-                <div class="tl-title">SNS 태동과 실시간 쌍방향 시대</div>
-                <div class="tl-desc">인터넷은 멀티미디어 송수신을 넘어 고객과의 실시간 쌍방향 의사소통 수단으로 진화했으며, 정보의 주권이 기업에서 고객으로 이양되는 새로운 패러다임이 자리잡았다.</div>
+                <div class="era">2000년대</div>
+                <div class="tl-title">무선인터넷·유비쿼터스 컴퓨팅·스마트폰·SNS의 등장</div>
+                <div class="tl-desc">무선 인터넷 기술의 발전으로 <strong>모바일 상거래(m-Commerce)</strong>가 활발해지고, RFID 기술 활용으로 <strong>유비쿼터스 상거래(u-Commerce)</strong>가 진행되었다. 스마트폰과 SNS의 보급으로 소비자 주도 시장이 본격화되었다.</div>
+                <div class="tl-highlight">전자상거래 중심 B2C → B2B 이동 · m-비즈니스 → u-비즈니스로 진화</div>
             </div>
 
         </div>
@@ -688,6 +793,30 @@ footer {
                 <li><button onclick="checkQuiz('q9',3,3,'소비자 주도시장의 특징은 소비자가 주도권을 가짐, 구입 전 상호 커뮤니케이션, 정보가 소비가치를 가짐, 서비스 맞춤화입니다. 공급자가 정보를 독점하는 것은 소비자 주도시장의 특징이 아닙니다.')">④ 공급자가 정보를 독점하여 소비자의 선택권을 제한한다</button></li>
             </ul>
             <div class="quiz-feedback" id="q9-feedback"></div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="quiz-item" id="q10">
+            <p class="quiz-q"><span class="q-num">Q10.</span> 전자상거래 발전 과정에서 1980년대 중반에 나타난 특징으로 올바른 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q10',0,1,'1980년대 중반에는 IRC, News Group, FTP 등 대화형 통신 기술이 등장하고, 가상사회의 창출과 Global Village 개념이 태동했습니다. EDI는 1970년대 후반~1980년대 초반의 기술입니다.')">① EDI와 E-mail 등 전자 메세징 기술이 처음 등장했다</button></li>
+                <li><button onclick="checkQuiz('q10',1,1,'1980년대 중반에는 IRC, News Group, FTP 등 대화형 통신 기술이 등장하고, 가상사회의 창출과 Global Village 개념이 태동했습니다. EDI는 1970년대 후반~1980년대 초반의 기술입니다.')">② IRC, News Group, FTP 등 대화형 통신 기술이 등장하고 Global Village 개념이 태동했다</button></li>
+                <li><button onclick="checkQuiz('q10',2,1,'1980년대 중반에는 IRC, News Group, FTP 등 대화형 통신 기술이 등장하고, 가상사회의 창출과 Global Village 개념이 태동했습니다. EDI는 1970년대 후반~1980년대 초반의 기술입니다.')">③ WWW의 출현으로 인터넷의 쉬운 사용법이 제공되었다</button></li>
+                <li><button onclick="checkQuiz('q10',3,1,'1980년대 중반에는 IRC, News Group, FTP 등 대화형 통신 기술이 등장하고, 가상사회의 창출과 Global Village 개념이 태동했습니다. EDI는 1970년대 후반~1980년대 초반의 기술입니다.')">④ 전자메세징 기술이 ERP와 통합되어 기업 전체가 자동화되었다</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q10-feedback"></div>
+        </div>
+
+        <!-- Q11 -->
+        <div class="quiz-item" id="q11">
+            <p class="quiz-q"><span class="q-num">Q11.</span> 조직의 자산 중 <strong>무형 자산</strong>에 해당하지 않는 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q11',0,2,'융적자산(명성·브랜드력·지식재산권 등)과 고객자산(고객·판매채널 등)은 무형 자산입니다. 금융자산(현금·투자자산 등)은 유형 자산에 해당합니다.')">① 기업의 명성과 브랜드력 (융적자산)</button></li>
+                <li><button onclick="checkQuiz('q11',1,2,'융적자산(명성·브랜드력·지식재산권 등)과 고객자산(고객·판매채널 등)은 무형 자산입니다. 금융자산(현금·투자자산 등)은 유형 자산에 해당합니다.')">② 판매채널이나 판매 제휴처 (고객자산)</button></li>
+                <li><button onclick="checkQuiz('q11',2,2,'융적자산(명성·브랜드력·지식재산권 등)과 고객자산(고객·판매채널 등)은 무형 자산입니다. 금융자산(현금·투자자산 등)은 유형 자산에 해당합니다.')">③ 현금, 유가증권 등 재무적 자원 (금융자산)</button></li>
+                <li><button onclick="checkQuiz('q11',3,2,'융적자산(명성·브랜드력·지식재산권 등)과 고객자산(고객·판매채널 등)은 무형 자산입니다. 금융자산(현금·투자자산 등)은 유형 자산에 해당합니다.')">④ 지식재산권과 조직구조 (융적자산)</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q11-feedback"></div>
         </div>
 
     </section>
