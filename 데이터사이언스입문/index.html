@@ -3,23 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>한신대학교 2학년 1학기 - 강의 노트</title>
+  <title>데이터사이언스 입문 - 강의 노트</title>
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-light: #dbeafe;
+      --primary: #d97706;
+      --primary-light: #fef3c7;
       --success: #16a34a;
       --success-light: #dcfce7;
       --warning: #d97706;
       --warning-light: #fef3c7;
       --danger: #dc2626;
       --danger-light: #fee2e2;
-      --accent: #0ea5e9;
-      --accent-light: #e0f2fe;
-      --purple: #7c3aed;
-      --purple-light: #ede9fe;
-      --pink: #db2777;
-      --pink-light: #fce7f3;
       --gray-100: #f3f4f6;
       --gray-200: #e5e7eb;
       --gray-700: #374151;
@@ -70,12 +64,17 @@
       z-index: 100;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-    nav.toc span {
+    nav.toc a {
+      text-decoration: none;
+      color: var(--primary);
       font-size: 0.88rem;
       font-weight: 600;
-      color: var(--gray-700);
-      padding: 0.35rem 0.5rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      border: 1.5px solid var(--primary-light);
+      transition: background 0.2s, color 0.2s;
     }
+    nav.toc a:hover { background: var(--primary); color: white; }
 
     .theme-toggle {
       margin-left: auto;
@@ -95,17 +94,7 @@
 
     main { max-width: 720px; margin: 2rem auto; padding: 0 1rem 4rem; }
 
-    .section-label {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--gray-700);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.75rem;
-      padding-left: 0.25rem;
-    }
-
-    .card-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+    .card-list { display: flex; flex-direction: column; gap: 1rem; }
 
     .card {
       display: flex;
@@ -124,51 +113,35 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
-    .card.disabled {
-      opacity: 0.45;
-      pointer-events: none;
-    }
-
-    .card.c1 { border-color: var(--primary); }
-    .card.c2 { border-color: var(--purple); }
-    .card.c3 { border-color: var(--accent); }
-    .card.c4 { border-color: var(--warning); }
-    .card.c5 { border-color: var(--success); }
-    .card.c6 { border-color: var(--pink); }
-    .card.c7 { border-color: var(--danger); }
+    .card.green { border-color: var(--success); }
+    .card.blue { border-color: #2563eb; }
+    .card.red { border-color: var(--danger); }
 
     .card-icon {
       width: 52px; height: 52px;
       border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1rem; font-weight: 800;
       flex-shrink: 0;
+      background: var(--primary-light);
+      color: var(--primary);
     }
-    .card.c1 .card-icon { background: var(--primary-light); }
-    .card.c2 .card-icon { background: var(--purple-light); }
-    .card.c3 .card-icon { background: var(--accent-light); }
-    .card.c4 .card-icon { background: var(--warning-light); }
-    .card.c5 .card-icon { background: var(--success-light); }
-    .card.c6 .card-icon { background: var(--pink-light); }
-    .card.c7 .card-icon { background: var(--danger-light); }
+    .card.green .card-icon { background: var(--success-light); color: var(--success); }
+    .card.blue .card-icon { background: #dbeafe; color: #2563eb; }
+    .card.red .card-icon { background: var(--danger-light); color: var(--danger); }
 
     .card-body { flex: 1; min-width: 0; }
     .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
     .card-desc { font-size: 0.82rem; color: var(--gray-700); }
-    .card-badge {
-      display: inline-block;
-      margin-top: 0.35rem;
-      font-size: 0.7rem;
-      padding: 0.15rem 0.55rem;
-      border-radius: 20px;
+
+    .tags { display: flex; gap: 0.4rem; margin-top: 0.45rem; flex-wrap: wrap; }
+    .tag {
+      font-size: 0.7rem; padding: 0.15rem 0.55rem; border-radius: 20px;
+      background: var(--primary-light); color: var(--primary);
       font-weight: 600;
-      background: var(--success-light);
-      color: var(--success);
     }
-    .card.disabled .card-badge {
-      background: var(--gray-100);
-      color: var(--gray-700);
-    }
+    .card.green .tag { background: var(--success-light); color: var(--success); }
+    .card.blue .tag { background: #dbeafe; color: #2563eb; }
 
     .card-arrow {
       color: var(--gray-700); font-size: 1.3rem; flex-shrink: 0;
@@ -186,13 +159,10 @@
 
     /* ── 다크 테마 ── */
     [data-theme="dark"] {
-      --primary-light: #1e3a5f;
+      --primary-light: #451a03;
       --success-light: #14532d;
       --warning-light: #451a03;
       --danger-light:  #450a0a;
-      --accent-light:  #0c4a6e;
-      --purple-light:  #2e1065;
-      --pink-light:    #500724;
       --gray-100: #0f172a;
       --gray-200: #334155;
       --gray-700: #94a3b8;
@@ -208,102 +178,70 @@
     [data-theme="dark"] footer { color: #475569; border-color: #334155; }
     [data-theme="dark"] .theme-toggle { color: #94a3b8; border-color: #334155; }
     [data-theme="dark"] .theme-toggle:hover { color: #60a5fa; border-color: #60a5fa; }
-    [data-theme="dark"] .section-label { color: #94a3b8; }
-    [data-theme="dark"] nav.toc span { color: #94a3b8; }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="chapter-tag">한신대학교 · 2학년 1학기</div>
-  <h1>강의 노트 모음</h1>
-  <p>수강 과목별 학습 자료를 정리한 공간입니다</p>
+  <div class="chapter-tag">데이터사이언스 입문 · 한신대학교 2학년 1학기</div>
+  <h1>데이터사이언스 입문</h1>
+  <p>강의 노트 모음</p>
 </header>
 
 <nav class="toc">
-  <span>📚 강의 목록</span>
+  <a href="../index.html">← 강의 목록으로</a>
   <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 야간 모드</button>
 </nav>
 
 <main>
-  <div class="section-label">수강 과목</div>
   <div class="card-list">
 
-    <a href="./독일히든챔피언과창업/index.html" class="card c1">
-      <div class="card-icon">🇩🇪</div>
+    <a href="./데이터사이언스입문_1장_데이터과학과파이썬기초.html" class="card">
+      <div class="card-icon">Ch1</div>
       <div class="card-body">
-        <div class="card-title">독일 히든챔피언과 창업</div>
-        <div class="card-desc">독일 경제의 역사적 배경, 히든챔피언의 정의와 특징, 독일 산업구조</div>
-        <span class="card-badge">노트 있음</span>
+        <div class="card-title">1장 - 데이터과학과 파이썬 기초</div>
+        <div class="card-desc">데이터 사이언스의 개념, 파이썬 기초 문법과 데이터 타입</div>
+        <div class="tags">
+          <span class="tag">데이터 사이언스</span>
+          <span class="tag">파이썬 기초</span>
+        </div>
       </div>
       <span class="card-arrow">›</span>
     </a>
 
-    <a href="./e-비지니스의이해/index.html" class="card c2">
-      <div class="card-icon">💻</div>
+    <a href="./2주차_학습자료.html" class="card green">
+      <div class="card-icon">W2</div>
       <div class="card-body">
-        <div class="card-title">e-비지니스의 이해</div>
-        <div class="card-desc">e-비지니스 개념과 전략, 디지털 트랜스포메이션</div>
-        <span class="card-badge">노트 있음</span>
+        <div class="card-title">2주차 - 데이터 분석 라이브러리</div>
+        <div class="card-desc">NumPy, Pandas, Matplotlib 등 주요 데이터 분석 라이브러리 활용</div>
+        <div class="tags">
+          <span class="tag">NumPy</span>
+          <span class="tag">Pandas</span>
+          <span class="tag">Matplotlib</span>
+        </div>
       </div>
       <span class="card-arrow">›</span>
     </a>
 
-    <a href="./데이터통신/index.html" class="card c5">
-      <div class="card-icon">🌐</div>
+    <!-- 새 주차 추가 시 아래를 복사하세요
+    <a href="./N주차_학습자료.html" class="card blue">
+      <div class="card-icon">WN</div>
       <div class="card-body">
-        <div class="card-title">데이터통신</div>
-        <div class="card-desc">네트워크와 데이터 통신 원리</div>
-        <span class="card-badge">노트 있음</span>
+        <div class="card-title">N주차 - 제목</div>
+        <div class="card-desc">설명</div>
+        <div class="tags">
+          <span class="tag">키워드</span>
+        </div>
       </div>
       <span class="card-arrow">›</span>
     </a>
-
-    <a href="#" class="card c3 disabled">
-      <div class="card-icon">🤖</div>
-      <div class="card-body">
-        <div class="card-title">AIoT 설계입문</div>
-        <div class="card-desc">AIoT 시스템 설계 기초</div>
-        <span class="card-badge">준비 중</span>
-      </div>
-      <span class="card-arrow">›</span>
-    </a>
-
-    <a href="./데이터사이언스입문/index.html" class="card c4">
-      <div class="card-icon">📊</div>
-      <div class="card-body">
-        <div class="card-title">데이터사이언스 입문</div>
-        <div class="card-desc">데이터 사이언스 개념, 파이썬 기초, NumPy·Pandas 데이터 분석 라이브러리</div>
-        <span class="card-badge">노트 있음</span>
-      </div>
-      <span class="card-arrow">›</span>
-    </a>
-
-    <a href="./자료구조/index.html" class="card c6">
-      <div class="card-icon">📦</div>
-      <div class="card-body">
-        <div class="card-title">자료구조</div>
-        <div class="card-desc">알고리즘 복잡도, 빅O 표기법, 순환함수 개념과 연습문제</div>
-        <span class="card-badge">노트 있음</span>
-      </div>
-      <span class="card-arrow">›</span>
-    </a>
-
-    <a href="#" class="card c7 disabled">
-      <div class="card-icon">☕</div>
-      <div class="card-body">
-        <div class="card-title">자바프로그래밍</div>
-        <div class="card-desc">Java 프로그래밍 기초와 객체지향</div>
-        <span class="card-badge">준비 중</span>
-      </div>
-      <span class="card-arrow">›</span>
-    </a>
+    -->
 
   </div>
 </main>
 
 <footer>
-  한신대학교 2학년 1학기 · 강의 노트는 계속 추가됩니다
+  데이터사이언스 입문 · 한신대학교 2학년 1학기 | 강의 노트는 계속 추가됩니다
 </footer>
 
 <script>
