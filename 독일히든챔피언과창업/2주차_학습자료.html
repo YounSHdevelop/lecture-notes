@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2주차 — 한독문화교류의 발전 | 독일히든챔피언과창업</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb; --primary-dark: #1e3a8a;
+            --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+            --bg: #f3f4f6; --card-bg: #ffffff;
+            --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+            --nav-bg: rgba(255,255,255,0.95);
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
+        }
+        [data-theme="dark"] {
+            --bg: #0f172a; --card-bg: #1e293b;
+            --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+            --nav-bg: rgba(15,23,42,0.95);
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+            --shadow-hover: 0 8px 32px rgba(0,0,0,0.6);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; padding-top: 64px; }
+
+        /* NAV */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 60px;
+            background: var(--nav-bg); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; z-index: 1000; gap: 12px;
+        }
+        .nav-logo { font-weight: 700; font-size: 0.95rem; color: var(--primary); text-decoration: none; white-space: nowrap; }
+        .nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
+        .nav-links a { font-size: 0.78rem; color: var(--text-muted); text-decoration: none; padding: 4px 8px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; }
+        .nav-links a:hover { background: rgba(37,99,235,0.1); color: var(--primary); }
+        .nav-right { display: flex; align-items: center; gap: 8px; }
+        .nav-home { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; padding: 4px 10px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; }
+        .nav-home:hover { background: rgba(37,99,235,0.1); color: var(--primary); }
+        .btn-theme { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 1rem; color: var(--text); transition: all 0.2s; }
+        .btn-theme:hover { background: var(--border); }
+
+        /* HEADER */
+        .page-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            padding: 56px 24px 48px; text-align: center; color: #fff;
+        }
+        .week-badge {
+            display: inline-block; background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.3); border-radius: 20px;
+            padding: 4px 16px; font-size: 0.8rem; font-weight: 500;
+            letter-spacing: 0.05em; margin-bottom: 16px;
+        }
+        .page-header h1 { font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 900; margin-bottom: 12px; line-height: 1.3; }
+        .subtitle { font-size: 0.95rem; opacity: 0.85; font-weight: 300; }
+
+        /* MAIN */
+        main { max-width: 900px; margin: 0 auto; padding: 32px 16px 64px; display: flex; flex-direction: column; gap: 28px; }
+
+        /* SECTION CARD */
+        .section-card {
+            background: var(--card-bg); border-radius: 20px;
+            padding: 32px; box-shadow: var(--shadow);
+            transition: box-shadow 0.2s;
+        }
+        .section-card:hover { box-shadow: var(--shadow-hover); }
+
+        .section-title {
+            font-size: 1.25rem; font-weight: 700; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+
+        /* COLOR ACCENTS */
+        .blue { border-top: 4px solid #2563eb; }
+        .purple { border-top: 4px solid #7c3aed; }
+        .cyan { border-top: 4px solid #0891b2; }
+        .amber { border-top: 4px solid #d97706; }
+        .orange { border-top: 4px solid #ea580c; }
+        .green { border-top: 4px solid #16a34a; }
+
+        /* KEYWORD BOX */
+        .keyword-box {
+            background: rgba(37,99,235,0.06); border-left: 4px solid #2563eb;
+            border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 12px;
+        }
+        .keyword-box .term { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; color: var(--primary); }
+        .keyword-box .def { font-size: 0.88rem; line-height: 1.75; color: var(--text); }
+        .keyword-box:last-child { margin-bottom: 0; }
+
+        .lecture-label {
+            display: inline-block; font-size: 0.72rem; font-weight: 700;
+            padding: 2px 8px; border-radius: 4px; margin-bottom: 10px;
+            background: rgba(37,99,235,0.12); color: var(--primary);
+        }
+
+        /* COMPARE GRID */
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .compare-card {
+            border-radius: 14px; padding: 20px;
+            border: 1px solid var(--border);
+        }
+        .compare-card.nurse { background: rgba(14,165,233,0.06); border-top: 3px solid #0ea5e9; }
+        .compare-card.miner { background: rgba(234,88,12,0.06); border-top: 3px solid #ea580c; }
+        .compare-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+        .compare-tag { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin-bottom: 10px; }
+        .nurse .compare-tag { background: rgba(14,165,233,0.15); color: #0369a1; }
+        .miner .compare-tag { background: rgba(234,88,12,0.15); color: #c2410c; }
+        .compare-card p { font-size: 0.85rem; line-height: 1.7; margin-bottom: 10px; color: var(--text); }
+        .compare-examples .label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+        .compare-examples ul { padding-left: 16px; }
+        .compare-examples li { font-size: 0.82rem; line-height: 1.65; color: var(--text); }
+
+        /* DIAGRAM */
+        .diagram-container { display: flex; flex-direction: column; gap: 20px; }
+        .diagram-row { display: flex; gap: 12px; align-items: stretch; }
+        .diagram-center {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: #fff; border-radius: 14px; padding: 20px;
+            text-align: center; font-weight: 700; font-size: 1rem;
+            min-width: 140px; display: flex; align-items: center; justify-content: center;
+        }
+        .diagram-branches { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; flex: 1; }
+        .diagram-node {
+            border-radius: 10px; padding: 14px 12px;
+            text-align: center; font-size: 0.82rem; font-weight: 500;
+            border: 1px solid var(--border);
+        }
+        .diagram-node .icon { font-size: 1.3rem; margin-bottom: 6px; }
+        .diagram-node .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+        .node-blue { background: rgba(37,99,235,0.08); }
+        .node-purple { background: rgba(124,58,237,0.08); }
+        .node-cyan { background: rgba(8,145,178,0.08); }
+        .node-orange { background: rgba(234,88,12,0.08); }
+        .node-amber { background: rgba(217,119,6,0.08); }
+        .node-green { background: rgba(22,163,74,0.08); }
+        .node-red { background: rgba(220,38,38,0.08); }
+        .arrow-down { text-align: center; font-size: 1.4rem; color: var(--text-muted); }
+
+        /* TIMELINE */
+        .timeline { position: relative; padding-left: 32px; }
+        .timeline::before {
+            content: ''; position: absolute; left: 5px; top: 0; bottom: 0; width: 3px;
+            background: linear-gradient(180deg, #d97706, #f59e0b, #fbbf24);
+            border-radius: 2px;
+        }
+        .timeline-item { position: relative; margin-bottom: 28px; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -28px; top: 4px;
+            width: 12px; height: 12px; border-radius: 50%;
+            background: #d97706; border: 2px solid var(--card-bg); box-shadow: 0 0 0 2px #d97706;
+        }
+        .era { font-size: 0.78rem; font-weight: 700; color: #d97706; margin-bottom: 4px; }
+        .tl-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+        .tl-desc { font-size: 0.84rem; line-height: 1.7; color: var(--text-muted); }
+        .tl-highlight {
+            margin-top: 8px; background: rgba(217,119,6,0.08);
+            border-left: 3px solid #d97706; border-radius: 0 6px 6px 0;
+            padding: 6px 10px; font-size: 0.82rem; color: var(--text);
+        }
+
+        /* EXAMPLES */
+        .example-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .example-card {
+            border-radius: 12px; padding: 18px;
+            background: var(--bg); border: 1px solid var(--border);
+            transition: box-shadow 0.2s;
+        }
+        .example-card:hover { box-shadow: var(--shadow-hover); }
+        .company { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+        .category {
+            display: inline-block; font-size: 0.72rem; font-weight: 700;
+            padding: 2px 10px; border-radius: 20px; margin-bottom: 10px;
+        }
+        .desc { font-size: 0.84rem; line-height: 1.7; color: var(--text-muted); }
+
+        /* QUIZ */
+        .quiz-item { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+        .quiz-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .quiz-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; line-height: 1.6; }
+        .q-num { color: #16a34a; font-weight: 700; margin-right: 4px; }
+        .quiz-options { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .quiz-options button {
+            width: 100%; text-align: left; padding: 10px 14px;
+            border: 1.5px solid var(--border); border-radius: 8px;
+            background: var(--card-bg); color: var(--text);
+            font-family: 'Noto Sans KR', sans-serif; font-size: 0.86rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .quiz-options button:hover:not(:disabled) { border-color: #16a34a; background: rgba(22,163,74,0.06); }
+        .quiz-options button.correct { background: rgba(22,163,74,0.12); border-color: #16a34a; color: #15803d; font-weight: 700; }
+        .quiz-options button.wrong { background: rgba(220,38,38,0.08); border-color: #dc2626; color: #b91c1c; }
+        .quiz-options button:disabled { cursor: default; }
+        .quiz-feedback {
+            display: none; margin-top: 10px; padding: 10px 14px;
+            border-radius: 8px; font-size: 0.84rem; line-height: 1.6;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct-fb { background: rgba(22,163,74,0.1); color: #15803d; }
+        .quiz-feedback.wrong-fb { background: rgba(220,38,38,0.08); color: #b91c1c; }
+
+        /* FOOTER */
+        footer { text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 0.82rem; border-top: 1px solid var(--border); }
+
+        @media (max-width: 680px) {
+            .nav-links { display: none; }
+            .compare-grid { grid-template-columns: 1fr; }
+            .example-grid { grid-template-columns: 1fr; }
+            .diagram-branches { grid-template-columns: 1fr 1fr; }
+            .diagram-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="index.html" class="nav-logo">독일히든챔피언과창업</a>
+    <div class="nav-links">
+        <a href="#summary">📋 핵심요약</a>
+        <a href="#compare">⚖️ 개념비교</a>
+        <a href="#diagram">🔗 관계도</a>
+        <a href="#timeline">📅 타임라인</a>
+        <a href="#examples">💡 실생활예시</a>
+        <a href="#quiz">✏️ 퀴즈</a>
+    </div>
+    <div class="nav-right">
+        <a href="index.html" class="nav-home">🏠 홈</a>
+        <button class="btn-theme" id="themeToggle" title="테마 전환">🌙</button>
+    </div>
+</nav>
+
+<header class="page-header">
+    <div class="week-badge">WEEK 2 · 독일히든챔피언과창업</div>
+    <h1>한독문화교류의 발전</h1>
+    <p class="subtitle">독일히든챔피언과창업 · 2주차 · 종교·이민·학문 영역별 한독교류의 역사와 의의 이해</p>
+</header>
+
+<main>
+
+    <!-- 섹션 1: 핵심 요약 -->
+    <section class="section-card blue" id="summary">
+        <h2 class="section-title">📋 핵심 요약 <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">— 30초 정리</span></h2>
+
+        <div style="margin-bottom:8px;"><span class="lecture-label">1강</span></div>
+        <div class="keyword-box">
+            <div class="term">카톨릭교회를 통한 한독관계</div>
+            <div class="def">해방 전부터 독일 신부·수녀들이 포교활동. 1949년 북한이 베네딕트 수도원을 점령·폐쇄하며 북한 내 포교 중단. 남한에서는 김수환 추기경(1956~1963 뮌스터 대학 유학)이 한국 최초 추기경으로 임명되는 등 독일 유학을 통한 교류 지속.</div>
+        </div>
+        <div class="keyword-box">
+            <div class="term">프로테스탄트교회를 통한 한독관계</div>
+            <div class="def">광원룡 목사가 독일 지인을 통해 재정 지원을 이끌어내 1964년 11월 한국 크리스찬 아카데미를 설립. 이 기관은 한신대학교의 뿌리로 여겨지며, 종교·정치·사회·경제·문화 분야 전문가 세미나를 운영.</div>
+        </div>
+        <div class="keyword-box">
+            <div class="term">간호원(파독 간호사)을 통한 한독관계</div>
+            <div class="def">1957년 독일 신부 파피앙담의 주선으로 시작. 1965년 첫 일진 128명이 프랑크푸르트에 도착. 1965~1976년 약 1만 5천여 명 파독. 취업 동기 1위는 경제적 이유, 57%가 국내 규칙적 송금. 순환제도 도입 필요성 제기.</div>
+        </div>
+
+        <div style="margin-bottom:8px;margin-top:16px;"><span class="lecture-label">2강</span></div>
+        <div class="keyword-box">
+            <div class="term">광부를 통한 한독관계</div>
+            <div class="def">첫해 5,000명 모집에 약 4만 명 지원(약 8~10:1 경쟁). 루르 지역 탄광에서 지하 갱도 작업. 독일의 유급 휴가(부활절 4일, 연 22일) 등 근로조건이 한국보다 월등. "Glück auf(글릭 아우프, 행복하게 지상으로)" 표현이 상징. 이후 침목회 조직, 파독광부 30·45주년 단행본 발간.</div>
+        </div>
+        <div class="keyword-box">
+            <div class="term">인문과학을 통한 한독관계</div>
+            <div class="def">20~50년대 초창기 유학생은 주로 철학 전공. 김중세(1923 라이프치히 대학 철학박사·최초 유학생), 이극로(1927 베를린 대학·한글 발전 공헌), 안호상(1929 예나 대학·독일 최고 십자훈장). 80년대부터 등록금 무료 혜택으로 대거 유학, 단 박사학위 취득률 약 1%.</div>
+        </div>
+
+        <div style="margin-bottom:8px;margin-top:16px;"><span class="lecture-label">3강</span></div>
+        <div class="keyword-box">
+            <div class="term">사회과학(정치·경제·법학)을 통한 한독관계</div>
+            <div class="def">정치: 동백림(동베를린) 사건은 박정희 정권이 유신 반대여론 무마를 위해 조작한 사건으로, 독일 내 한국 유학생 강제소환으로 한독 외교 갈등 초래. 경제: 1961~1976년 독일 차관 지원(경부고속도로 건설 자금 포함). 1979년 독일이 한국의 제3 교역국. 법학: 독일 법체계 수용, 이후 한국 법학자 독일 유학 후 법제 정비.</div>
+        </div>
+        <div class="keyword-box">
+            <div class="term">의학·공학을 통한 한독관계</div>
+            <div class="def">의학: "한국 병리학사의 뿌리는 독일" — 일제강점기 경성의학전문학교 교수 대부분이 독일 의학을 배운 일본인. DAAD·훔볼트재단 장학금으로 한국 의학자 독일 유학 지원. 공학: 독일 기업 데마크의 지원으로 인천제철 설립 → 이후 현대제철로 발전. 포항종합제철은 독일 기업 참여 불발.</div>
+        </div>
+    </section>
+
+    <!-- 섹션 2: 개념 비교 -->
+    <section class="section-card purple" id="compare">
+        <h2 class="section-title">⚖️ 파독 인력 비교 <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">— 간호원 vs 광부</span></h2>
+        <div class="compare-grid">
+            <div class="compare-card nurse">
+                <h3>파독 간호원 💉</h3>
+                <span class="compare-tag">1957~1976 · 의료 분야</span>
+                <p>1957년 독일 신부 파피앙담의 개인 주선으로 시작. 1965년 첫 128명 공식 파독. 근무지 루르·베를린 지역 독일 병원. 80% 이상 미혼 여성.</p>
+                <div class="compare-examples">
+                    <div class="label">주요 특징</div>
+                    <ul>
+                        <li>독일 간호원 = 의사 보조 역할 (한국과 달리)</li>
+                        <li>월급 700~800마르크 (한국의 4배+)</li>
+                        <li>취업 동기 1위: 경제적 이유</li>
+                        <li>57% 규칙적 국내 송금</li>
+                        <li>언어 어려움: 초기 70% 겪음</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="compare-card miner">
+                <h3>파독 광부 ⛏️</h3>
+                <span class="compare-tag">1960년대~1970년대 · 탄광 분야</span>
+                <p>교회 주선 → 정부 간 협정(1960년대)으로 확대. 루르 지역 지하 갱도 작업. 90% 이상 기혼 남성. 5,000명 모집에 4만 명 지원(8~10:1).</p>
+                <div class="compare-examples">
+                    <div class="label">주요 특징</div>
+                    <ul>
+                        <li>고졸 이상 자격 (실제 대졸자도 다수 지원)</li>
+                        <li>유급 휴가: 부활절 4일 + 연 22일</li>
+                        <li>인종·체격 차이로 중노동 고충</li>
+                        <li>"Glück auf" — 광부 인사말</li>
+                        <li>침목회 조직, 30·45주년 단행본 발간</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top:16px;" class="keyword-box">
+            <div class="term">공통점</div>
+            <div class="def">① 초기에는 정부 차원이 아닌 독일 교회(신부·수녀) 주선으로 시작 → 이후 양국 정부 간 협정으로 공식화. ② 한국 경제 발전의 초석이 된 외화 송금. ③ 언어·문화적 어려움 속에서도 독일에 정착하거나 귀국 후 후학 양성.</div>
+        </div>
+    </section>
+
+    <!-- 섹션 3: 관계 다이어그램 -->
+    <section class="section-card cyan" id="diagram">
+        <h2 class="section-title">🔗 한독교류 영역 구조도</h2>
+        <div class="diagram-container">
+            <div style="text-align:center;">
+                <div class="diagram-center" style="display:inline-flex;padding:16px 32px;font-size:1.1rem;">
+                    🇰🇷 한독 문화교류 🇩🇪
+                </div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div class="diagram-branches" style="grid-template-columns:repeat(3,1fr);">
+                <div class="diagram-node node-blue">
+                    <div class="icon">✝️</div>
+                    <div><strong>종교</strong></div>
+                    <div class="label">카톨릭 · 개신교<br>아카데미 설립</div>
+                </div>
+                <div class="diagram-node node-cyan">
+                    <div class="icon">💉</div>
+                    <div><strong>파독 간호원</strong></div>
+                    <div class="label">1965~1976<br>~15,000명</div>
+                </div>
+                <div class="diagram-node node-orange">
+                    <div class="icon">⛏️</div>
+                    <div><strong>파독 광부</strong></div>
+                    <div class="label">루르 지역<br>탄광 근무</div>
+                </div>
+                <div class="diagram-node node-purple">
+                    <div class="icon">📚</div>
+                    <div><strong>인문과학</strong></div>
+                    <div class="label">철학 유학<br>한글 발전</div>
+                </div>
+                <div class="diagram-node node-amber">
+                    <div class="icon">⚖️</div>
+                    <div><strong>사회과학</strong></div>
+                    <div class="label">정치·경제·법학<br>차관 지원</div>
+                </div>
+                <div class="diagram-node node-green">
+                    <div class="icon">🏭</div>
+                    <div><strong>의학·공학</strong></div>
+                    <div class="label">독일의학 도입<br>인천제철 설립</div>
+                </div>
+            </div>
+            <div class="arrow-down">↓</div>
+            <div style="background:linear-gradient(135deg,#16a34a,#15803d);border-radius:14px;padding:18px 24px;color:#fff;text-align:center;">
+                <strong style="font-size:1rem;">결과: 대한민국 경제·학문·문화 발전의 초석 마련</strong>
+                <div style="font-size:0.84rem;opacity:0.85;margin-top:6px;">외화 송금 → 경제 재건 | 독일 유학 → 학문 발전 | 기술 지원 → 산업화</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 4: 타임라인 -->
+    <section class="section-card amber" id="timeline">
+        <h2 class="section-title">📅 한독교류 주요 연대기</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="era">1882년</div>
+                <div class="tl-title">세창양행 개업</div>
+                <div class="tl-desc">독일 기업이 인천 제물포에 개업. 독일 물품을 한국에 판매하며 초기 한독 무역의 시작.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1909~1920년대</div>
+                <div class="tl-title">초기 독일 유학생 등장</div>
+                <div class="tl-desc">김중세(1909 베를린, 1923 라이프치히 철학박사), 이극로(1927 베를린, 한글 발전 기여), 안호상(1929 예나, 철학박사) 등 일제강점기 지식인들의 독일 유학.</div>
+                <div class="tl-highlight">이극로: 귀국 후 조선어 사전 편찬, 한글 맞춤법 제정위원</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1945년</div>
+                <div class="tl-title">해방과 한반도 분단</div>
+                <div class="tl-desc">8.15 광복. 북한 소련 점령, 남한 미국 점령. 북한 내 종교 자유 억압 시작.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1949년</div>
+                <div class="tl-title">북한, 베네딕트 수도원 점령</div>
+                <div class="tl-desc">북한 정치보위부가 원산 베네딕트 수도원 점령. 신부·수사 체포·구금. 1950년 다수 성직자 처형. 북한 내 포교 사업 완전 중단.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1955년</div>
+                <div class="tl-title">한독 외교관계 정식 수립</div>
+                <div class="tl-desc">해방 후 중단되었던 한국-독일 외교관계 재수립. 무역 재개 및 학술·문화 교류 정상화.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1957년</div>
+                <div class="tl-title">파독 간호원 시작 (민간 주선)</div>
+                <div class="tl-desc">독일 신부 파피앙담이 성의여고 졸업생을 독일 병원에 추천. 정부 협정 이전 민간(교회) 차원의 첫 파독.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1960년대</div>
+                <div class="tl-title">한독 정부 간 협정 체결 / 광부 파독</div>
+                <div class="tl-desc">독일의 외국인 근로자 수요 + 한국의 외화 필요 → 광부·간호원 파독 협정. 첫해 광부 5,000명 모집에 4만 명 지원.</div>
+                <div class="tl-highlight">독일 차관 지원 → 경부고속도로 건설 자금으로 활용</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1964년</div>
+                <div class="tl-title">한국 크리스찬 아카데미 준공</div>
+                <div class="tl-desc">광원룡 목사가 독일 재정 지원 유치. 한신대학교의 뿌리. 종교·정치·사회·경제 세미나 운영 거점.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1965년 12월</div>
+                <div class="tl-title">파독 간호원 첫 공식 일진 도착</div>
+                <div class="tl-desc">128명이 프랑크푸르트 공항 도착. 루르·베를린 지역 병원 배치. 1965~1976년 약 15,000명+ 파독.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1967년</div>
+                <div class="tl-title">동백림(동베를린) 사건</div>
+                <div class="tl-desc">박정희 정권이 유신 반대여론 무마를 위해 조작한 간첩단 사건. 독일 거주 한국 유학생 강제소환 → 독일의 국제법 위반 항의 → 한독 외교 갈등.</div>
+                <div class="tl-highlight">훗날 조작사건으로 판명. 한독 무역관계 냉각기 초래</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1975년</div>
+                <div class="tl-title">독일 학자, 한국법 최초 언급</div>
+                <div class="tl-desc">볼프강 피켄처가 저서 《법의 방법》에서 한국법을 다양하게 설명. 이후 독일 학자들의 한국법 연구 시작.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1979년</div>
+                <div class="tl-title">독일, 한국의 제3 교역국 등극</div>
+                <div class="tl-desc">한독 수출입 교역량 각각 8억 달러 수준. 미국·일본 중심에서 독일로의 교역 다변화 성과.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="era">1980년대~</div>
+                <div class="tl-title">대학생 대거 독일 유학</div>
+                <div class="tl-desc">독일 대학 무료(내·외국인 동일) → 한국 학생 급증. 단 박사학위 취득률 약 1%에 불과.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 5: 실생활 예시 -->
+    <section class="section-card orange" id="examples">
+        <h2 class="section-title">💡 실생활 예시 <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">— 수업 개념 연결</span></h2>
+        <div class="example-grid">
+            <div class="example-card" style="border-top:3px solid #2563eb;">
+                <div class="company">현대제철</div>
+                <span class="category" style="background:rgba(37,99,235,0.12);color:#1d4ed8;">공학·산업 교류</span>
+                <div class="desc">독일 기업 데마크의 기술·설비 지원으로 세운 인천제철이 전신. 한독 공업 협력의 대표 성과로, 현재 코스피 상위 우량기업이자 현대차 강판 공급사로 성장.</div>
+            </div>
+            <div class="example-card" style="border-top:3px solid #7c3aed;">
+                <div class="company">한국 크리스찬 아카데미 (한신대)</div>
+                <span class="category" style="background:rgba(124,58,237,0.12);color:#6d28d9;">개신교 교류</span>
+                <div class="desc">광원룡 목사가 독일 재정 지원을 유치해 1964년 설립. 한신대학교의 뿌리로 여겨지며, 독일 아카데미 모델을 한국에 도입한 대표 사례. 독일 수상·대통령의 강연 장소로 활용.</div>
+            </div>
+            <div class="example-card" style="border-top:3px solid #0891b2;">
+                <div class="company">DAAD / 훔볼트재단</div>
+                <span class="category" style="background:rgba(8,145,178,0.12);color:#0e7490;">학술·의학 교류</span>
+                <div class="desc">독일 정부 학술교류처(DAAD)와 훔볼트재단이 제공하는 장학금으로 수많은 한국 의학·과학자들이 독일 유학. 한국 의학·자연과학 발전의 핵심 통로.</div>
+            </div>
+            <div class="example-card" style="border-top:3px solid #d97706;">
+                <div class="company">경부고속도로</div>
+                <span class="category" style="background:rgba(217,119,6,0.12);color:#b45309;">경제 차관 활용</span>
+                <div class="desc">1961~1976년 독일 경제 차관 지원금이 경부고속도로 건설 자금으로 활용. 파독 간호원·광부의 외화 송금과 함께 한국 경제 도약의 물적 토대 형성.</div>
+            </div>
+            <div class="example-card" style="border-top:3px solid #16a34a;">
+                <div class="company">조선어 사전 / 한글 맞춤법</div>
+                <span class="category" style="background:rgba(22,163,74,0.12);color:#15803d;">인문과학 교류</span>
+                <div class="desc">독일 베를린 대학 유학생 이극로가 귀국 후 한글 맞춤법 제정위원·조선어 표준어 사전위원으로 활동. 일제강점기 한글 말살 정책에 맞서 한글 보존·발전에 핵심적 기여.</div>
+            </div>
+            <div class="example-card" style="border-top:3px solid #ea580c;">
+                <div class="company">침목회 (파독 광부 동우회)</div>
+                <span class="category" style="background:rgba(234,88,12,0.12);color:#c2410c;">파독 광부 공동체</span>
+                <div class="desc">"Glück auf(글릭 아우프)"를 상징으로 파독 광부들이 조직한 친목단체. 귀국자들은 전남 해남 집단촌에 정착. 파독 30·45주년 단행본 400페이지 발간.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 6: 셀프 체크 퀴즈 -->
+    <section class="section-card green" id="quiz">
+        <h2 class="section-title">✏️ 셀프 체크 퀴즈 <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">— 개념 확인</span></h2>
+
+        <div class="quiz-item" id="q1">
+            <p class="quiz-q"><span class="q-num">Q1.</span> 1949년 북한 정치보위부가 점령하여 한국 내 독일 카톨릭 포교 활동을 사실상 중단시킨 곳은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q1',0,1,'베네딕트 수도원은 원산을 거점으로 포교활동을 하던 곳으로, 1949년 북한에 의해 점령·폐쇄되었습니다.')">① 성의여자 고등학교</button></li>
+                <li><button onclick="checkQuiz('q1',1,1,'베네딕트 수도원은 원산을 거점으로 포교활동을 하던 곳으로, 1949년 북한에 의해 점령·폐쇄되었습니다.')">② 베네딕트 수도원</button></li>
+                <li><button onclick="checkQuiz('q1',2,1,'베네딕트 수도원은 원산을 거점으로 포교활동을 하던 곳으로, 1949년 북한에 의해 점령·폐쇄되었습니다.')">③ 한국 크리스찬 아카데미</button></li>
+                <li><button onclick="checkQuiz('q1',3,1,'베네딕트 수도원은 원산을 거점으로 포교활동을 하던 곳으로, 1949년 북한에 의해 점령·폐쇄되었습니다.')">④ 경성의학전문학교</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q1-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="q2">
+            <p class="quiz-q"><span class="q-num">Q2.</span> 파독 간호원의 취업 동기 1순위는 무엇이었는가?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q2',0,0,'심윤종 박사의 연구 결과, 경제적 이유(돈 벌기)가 가장 큰 취업 동기였습니다. 서구 문명 체험, 공부 기회 등이 그 뒤를 이었습니다.')">① 경제적 이유(수입 확보)</button></li>
+                <li><button onclick="checkQuiz('q2',1,0,'심윤종 박사의 연구 결과, 경제적 이유(돈 벌기)가 가장 큰 취업 동기였습니다. 서구 문명 체험, 공부 기회 등이 그 뒤를 이었습니다.')">② 서구 문명 체험 및 모험심</button></li>
+                <li><button onclick="checkQuiz('q2',2,0,'심윤종 박사의 연구 결과, 경제적 이유(돈 벌기)가 가장 큰 취업 동기였습니다. 서구 문명 체험, 공부 기회 등이 그 뒤를 이었습니다.')">③ 독일에서 계속 공부할 가능성</button></li>
+                <li><button onclick="checkQuiz('q2',3,0,'심윤종 박사의 연구 결과, 경제적 이유(돈 벌기)가 가장 큰 취업 동기였습니다. 서구 문명 체험, 공부 기회 등이 그 뒤를 이었습니다.')">④ 독일인과의 결혼 희망</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q2-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="q3">
+            <p class="quiz-q"><span class="q-num">Q3.</span> 파독 광부들이 독일에서 사용한 인사말 "Glück auf"의 의미로 올바른 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q3',0,2,'Glück은 행운·행복, auf는 위로(올라가다)를 의미합니다. 지하 갱도에서 무사히 지상으로 올라오길 바라는 광부들의 인사말입니다.')">① 열심히 일하자</button></li>
+                <li><button onclick="checkQuiz('q3',1,2,'Glück은 행운·행복, auf는 위로(올라가다)를 의미합니다. 지하 갱도에서 무사히 지상으로 올라오길 바라는 광부들의 인사말입니다.')">② 독일에서 만나자</button></li>
+                <li><button onclick="checkQuiz('q3',2,2,'Glück은 행운·행복, auf는 위로(올라가다)를 의미합니다. 지하 갱도에서 무사히 지상으로 올라오길 바라는 광부들의 인사말입니다.')">③ 행복하게 (지상으로) 올라가세요</button></li>
+                <li><button onclick="checkQuiz('q3',3,2,'Glück은 행운·행복, auf는 위로(올라가다)를 의미합니다. 지하 갱도에서 무사히 지상으로 올라오길 바라는 광부들의 인사말입니다.')">④ 고향으로 돌아가자</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q3-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="q4">
+            <p class="quiz-q"><span class="q-num">Q4.</span> 동백림 사건에 대한 설명으로 올바른 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q4',0,2,'동백림 사건은 박정희 정권이 유신 반대여론 무마를 위해 독일 거주 한국 유학생들을 간첩으로 조작한 사건입니다. 독일의 국제법 위반 항의로 한독 외교 갈등이 발생했습니다.')">① 독일 유학생들이 실제 간첩 활동을 한 사건이다</button></li>
+                <li><button onclick="checkQuiz('q4',1,2,'동백림 사건은 박정희 정권이 유신 반대여론 무마를 위해 독일 거주 한국 유학생들을 간첩으로 조작한 사건입니다. 독일의 국제법 위반 항의로 한독 외교 갈등이 발생했습니다.')">② 독일이 한국에 경제 지원을 중단하기 위해 만든 사건이다</button></li>
+                <li><button onclick="checkQuiz('q4',2,2,'동백림 사건은 박정희 정권이 유신 반대여론 무마를 위해 독일 거주 한국 유학생들을 간첩으로 조작한 사건입니다. 독일의 국제법 위반 항의로 한독 외교 갈등이 발생했습니다.')">③ 박정희 정권이 유신 반대여론 무마를 위해 조작한 사건이다</button></li>
+                <li><button onclick="checkQuiz('q4',3,2,'동백림 사건은 박정희 정권이 유신 반대여론 무마를 위해 독일 거주 한국 유학생들을 간첩으로 조작한 사건입니다. 독일의 국제법 위반 항의로 한독 외교 갈등이 발생했습니다.')">④ 한독 간호원 파독 협정이 파기된 사건이다</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q4-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="q5">
+            <p class="quiz-q"><span class="q-num">Q5.</span> "한국 병리학사의 뿌리는 독일이다"라는 주장의 근거로 가장 적절한 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q5',0,3,'한국 의학은 일본을 통해 도입되었는데, 일본 병리학 자체가 독일 병리학에 전적으로 의존했습니다. 따라서 현대 병리학의 출발점인 독일이 한국 병리학사의 뿌리가 되는 것입니다.')">① 독일 의사들이 직접 한국에 와서 병원을 설립했기 때문이다</button></li>
+                <li><button onclick="checkQuiz('q5',1,3,'한국 의학은 일본을 통해 도입되었는데, 일본 병리학 자체가 독일 병리학에 전적으로 의존했습니다. 따라서 현대 병리학의 출발점인 독일이 한국 병리학사의 뿌리가 되는 것입니다.')">② 한국 최초 의대가 독일에 설립되었기 때문이다</button></li>
+                <li><button onclick="checkQuiz('q5',2,3,'한국 의학은 일본을 통해 도입되었는데, 일본 병리학 자체가 독일 병리학에 전적으로 의존했습니다. 따라서 현대 병리학의 출발점인 독일이 한국 병리학사의 뿌리가 되는 것입니다.')">③ 해방 직후 미군정 대신 독일이 한국 의학을 주도했기 때문이다</button></li>
+                <li><button onclick="checkQuiz('q5',3,3,'한국 의학은 일본을 통해 도입되었는데, 일본 병리학 자체가 독일 병리학에 전적으로 의존했습니다. 따라서 현대 병리학의 출발점인 독일이 한국 병리학사의 뿌리가 되는 것입니다.')">④ 일본 병리학이 독일 병리학에 전적으로 의존했고, 한국 의학은 일본을 통해 도입되었기 때문이다</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q5-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="q6">
+            <p class="quiz-q"><span class="q-num">Q6.</span> 독일 유학을 통해 한글 발전에 크게 기여한 인물로, 조선어 사전 편찬 및 한글 맞춤법 제정에 참여한 사람은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('q6',0,1,'이극로는 1927년 베를린 대학 철학부를 졸업한 뒤 귀국하여 조선어 사전 편찬위원, 한글 맞춤법 제정위원으로 활동했습니다.')">① 김중세</button></li>
+                <li><button onclick="checkQuiz('q6',1,1,'이극로는 1927년 베를린 대학 철학부를 졸업한 뒤 귀국하여 조선어 사전 편찬위원, 한글 맞춤법 제정위원으로 활동했습니다.')">② 이극로</button></li>
+                <li><button onclick="checkQuiz('q6',2,1,'이극로는 1927년 베를린 대학 철학부를 졸업한 뒤 귀국하여 조선어 사전 편찬위원, 한글 맞춤법 제정위원으로 활동했습니다.')">③ 안호상</button></li>
+                <li><button onclick="checkQuiz('q6',3,1,'이극로는 1927년 베를린 대학 철학부를 졸업한 뒤 귀국하여 조선어 사전 편찬위원, 한글 맞춤법 제정위원으로 활동했습니다.')">④ 백성욱</button></li>
+            </ul>
+            <div class="quiz-feedback" id="q6-feedback"></div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>독일히든챔피언과창업 · 2주차 학습자료 · 한독문화교류의 발전</p>
+    <p style="margin-top:6px;font-size:0.78rem;">1강 카톨릭·개신교·간호원 | 2강 광부·인문과학 | 3강 사회과학·의학·공학</p>
+</footer>
+
+<script>
+    // Dark Mode
+    const html = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', saved);
+    btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+    btn.addEventListener('click', () => {
+        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        btn.textContent = next === 'dark' ? '☀️' : '🌙';
+        localStorage.setItem('theme', next);
+    });
+
+    // Quiz
+    function checkQuiz(qId, selected, correct, explanation) {
+        const item = document.getElementById(qId);
+        const buttons = item.querySelectorAll('.quiz-options button');
+        buttons.forEach(b => b.disabled = true);
+        buttons[selected].classList.add(selected === correct ? 'correct' : 'wrong');
+        if (selected !== correct) buttons[correct].classList.add('correct');
+        const fb = document.getElementById(qId + '-feedback');
+        fb.classList.add('show');
+        if (selected === correct) {
+            fb.classList.add('correct-fb');
+            fb.innerHTML = '✅ <strong>정답!</strong> ' + explanation;
+        } else {
+            fb.classList.add('wrong-fb');
+            fb.innerHTML = '❌ <strong>오답.</strong> 정답은 <strong>' + (correct + 1) + '번</strong>입니다. ' + explanation;
+        }
+    }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const t = document.querySelector(a.getAttribute('href'));
+            if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+</script>
+
+</body>
+</html>

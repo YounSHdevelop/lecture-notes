@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터 사이언스 입문 — 2주차: 데이터 분석 라이브러리</title>
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e3a8a;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warning: #d97706;
+  --purple: #7c3aed;
+  --teal: #0d9488;
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --text: #1f2937;
+  --text-sub: #6b7280;
+  --border: #e5e7eb;
+  --code-bg: #1e293b;
+  --code-text: #e2e8f0;
+  --nav-bg: rgba(255,255,255,0.95);
+  --tag-bg: #eff6ff;
+  --tag-text: #1d4ed8;
+}
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --text-sub: #94a3b8;
+  --border: #334155;
+  --nav-bg: rgba(15,23,42,0.97);
+  --tag-bg: #1e3a8a;
+  --tag-text: #93c5fd;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--nav-bg); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem; height: 52px; gap: 0.5rem;
+}
+.nav-links { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.nav-links a {
+  font-size: 0.78rem; padding: 0.3rem 0.6rem; border-radius: 6px;
+  color: var(--text); text-decoration: none; transition: background 0.2s;
+}
+.nav-links a:hover { background: var(--border); }
+#themeBtn {
+  background: none; border: 1px solid var(--border); border-radius: 8px;
+  padding: 0.3rem 0.7rem; cursor: pointer; font-size: 1rem;
+  color: var(--text); transition: background 0.2s; white-space: nowrap;
+}
+#themeBtn:hover { background: var(--border); }
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white; text-align: center; padding: 5rem 2rem 3rem;
+  margin-top: 52px;
+}
+header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+header p { font-size: 1rem; opacity: 0.85; }
+.header-badges { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+.badge { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 0.25rem 0.9rem; font-size: 0.8rem; }
+
+/* SECTIONS */
+section { max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem; }
+.section-title {
+  font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.section-title .icon { font-size: 1.6rem; }
+
+/* CARDS */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.4rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-top: 4px solid var(--primary);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+.card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.card p, .card li { font-size: 0.88rem; color: var(--text-sub); line-height: 1.6; }
+.card ul { padding-left: 1.1rem; }
+.card.blue { border-top-color: var(--primary); }
+.card.green { border-top-color: var(--success); }
+.card.red { border-top-color: var(--danger); }
+.card.purple { border-top-color: var(--purple); }
+.card.teal { border-top-color: var(--teal); }
+.card.orange { border-top-color: var(--warning); }
+
+/* GOAL CARDS */
+.goal-card {
+  background: var(--card); border-radius: 12px; padding: 1rem 1.4rem;
+  display: flex; gap: 1rem; align-items: flex-start;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-left: 4px solid var(--primary);
+  margin-bottom: 0.8rem;
+}
+.goal-num {
+  background: var(--primary); color: white; border-radius: 50%;
+  width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
+}
+.goal-card p { font-size: 0.9rem; line-height: 1.5; color: var(--text); }
+
+/* CODE BLOCKS */
+pre {
+  background: var(--code-bg); color: var(--code-text);
+  border-radius: 10px; padding: 1rem 1.2rem; font-size: 0.82rem;
+  overflow-x: auto; line-height: 1.6; margin: 0.8rem 0;
+  font-family: 'Consolas', 'Monaco', monospace;
+}
+code { font-family: 'Consolas', 'Monaco', monospace; font-size: 0.85em; }
+.inline-code {
+  background: var(--tag-bg); color: var(--tag-text);
+  padding: 0.1em 0.4em; border-radius: 4px; font-size: 0.85em;
+  font-family: 'Consolas', monospace;
+}
+
+/* TABLE */
+.table-wrap { overflow-x: auto; margin: 1rem 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+th { background: var(--primary); color: white; padding: 0.7rem 1rem; text-align: left; }
+td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: none; }
+[data-theme="dark"] tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+
+/* CATCH */
+.catch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 1rem; }
+.catch-item {
+  background: var(--card); border-radius: 10px; padding: 1rem 1.2rem;
+  border-left: 4px solid var(--warning);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.catch-label { font-size: 0.7rem; font-weight: 700; color: var(--warning); letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+.catch-item p { font-size: 0.88rem; line-height: 1.5; }
+
+/* KEYWORD */
+.keyword-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 1rem; }
+.kw-card {
+  background: var(--card); border-radius: 10px; padding: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-top: 3px solid var(--teal);
+}
+.kw-en { font-size: 0.72rem; color: var(--teal); font-weight: 700; letter-spacing: 0.03em; }
+.kw-ko { font-size: 1rem; font-weight: 700; margin: 0.2rem 0; }
+.kw-desc { font-size: 0.82rem; color: var(--text-sub); line-height: 1.5; }
+
+/* QUIZ */
+.quiz-container { display: flex; flex-direction: column; gap: 1.5rem; }
+.quiz-card {
+  background: var(--card); border-radius: 12px; padding: 1.4rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+.quiz-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 1rem; line-height: 1.6; }
+.quiz-q .qnum { color: var(--primary); font-weight: 800; margin-right: 0.4rem; }
+.options { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+.option-btn {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 0.65rem 1rem; cursor: pointer; text-align: left; font-size: 0.87rem;
+  color: var(--text); transition: background 0.2s, border-color 0.2s;
+}
+.option-btn:hover:not(:disabled) { background: var(--tag-bg); border-color: var(--primary); }
+.option-btn.correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #166534 !important; }
+.option-btn.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; }
+[data-theme="dark"] .option-btn.correct { background: #14532d !important; color: #86efac !important; }
+[data-theme="dark"] .option-btn.wrong { background: #7f1d1d !important; color: #fca5a5 !important; }
+.feedback { font-size: 0.85rem; padding: 0.5rem 0.8rem; border-radius: 6px; display: none; }
+.feedback.show { display: block; }
+.feedback.ok { background: #dcfce7; color: #166534; }
+.feedback.no { background: #fee2e2; color: #991b1b; }
+[data-theme="dark"] .feedback.ok { background: #14532d; color: #86efac; }
+[data-theme="dark"] .feedback.no { background: #7f1d1d; color: #fca5a5; }
+
+/* SHORT ANSWER */
+.sa-input {
+  width: 100%; padding: 0.65rem; border: 1px solid var(--border); border-radius: 8px;
+  font-size: 0.87rem; background: var(--bg); color: var(--text);
+  margin-bottom: 0.7rem; font-family: inherit;
+}
+.sa-input:focus { outline: none; border-color: var(--primary); }
+.check-btn, .show-btn {
+  padding: 0.5rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.87rem;
+  border: none; font-family: inherit; transition: opacity 0.2s;
+}
+.check-btn { background: var(--primary); color: white; margin-right: 0.5rem; }
+.show-btn { background: var(--border); color: var(--text); }
+.check-btn:hover, .show-btn:hover { opacity: 0.85; }
+.answer-reveal { display: none; margin-top: 0.7rem; background: var(--tag-bg); border-radius: 8px; padding: 0.7rem 1rem; font-size: 0.87rem; color: var(--tag-text); }
+.answer-reveal.show { display: block; }
+
+/* CHAPTER BLOCK */
+.chapter-block {
+  background: var(--card); border-radius: 14px; padding: 1.8rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 2rem;
+}
+.chapter-title {
+  font-size: 1.15rem; font-weight: 700; margin-bottom: 1.2rem;
+  padding-bottom: 0.7rem; border-bottom: 2px solid var(--border);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.sub-title { font-size: 0.95rem; font-weight: 700; margin: 1.2rem 0 0.5rem; color: var(--text); }
+.note { font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; }
+.output-label { font-size: 0.7rem; color: var(--text-sub); margin-top: 0.3rem; font-family: monospace; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+@media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+/* FOOTER */
+footer { text-align: center; padding: 2rem; font-size: 0.82rem; color: var(--text-sub); border-top: 1px solid var(--border); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  header h1 { font-size: 1.4rem; }
+  nav { flex-wrap: wrap; height: auto; padding: 0.5rem 1rem; gap: 0.4rem; }
+  .nav-links { gap: 0.2rem; }
+  .nav-links a { font-size: 0.72rem; padding: 0.25rem 0.45rem; }
+  section { padding: 2rem 1rem; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-links">
+    <a href="#goals">학습목표</a>
+    <a href="#summary">핵심요약</a>
+    <a href="#numpy">NumPy</a>
+    <a href="#scipy">SciPy</a>
+    <a href="#pandas">Pandas</a>
+    <a href="#matplotlib">Matplotlib</a>
+    <a href="#catch">핵심캐치</a>
+    <a href="#keywords">키워드</a>
+    <a href="#quiz">연습문제</a>
+  </div>
+  <button id="themeBtn" onclick="toggleTheme()">🌙 야간모드</button>
+</nav>
+
+<header>
+  <h1>📊 데이터 분석 라이브러리</h1>
+  <p>데이터 사이언스 입문 — 2주차 학습자료</p>
+  <div class="header-badges">
+    <span class="badge">NumPy</span>
+    <span class="badge">SciPy</span>
+    <span class="badge">Pandas</span>
+    <span class="badge">Matplotlib</span>
+    <span class="badge">Python 데이터 생태계</span>
+  </div>
+</header>
+
+<!-- 학습 목표 -->
+<section id="goals">
+  <div class="section-title"><span class="icon">🎯</span> 학습 목표</div>
+  <div class="goal-card"><div class="goal-num">1</div><p>NumPy, SciPy, Pandas, Matplotlib 4대 라이브러리의 역할과 import 방법을 설명할 수 있다.</p></div>
+  <div class="goal-card"><div class="goal-num">2</div><p>NumPy 배열(ndarray)을 생성하고, 슬라이싱·정렬·난수 생성·행렬 연산 등 기본 기능을 사용할 수 있다.</p></div>
+  <div class="goal-card"><div class="goal-num">3</div><p>SciPy의 선형대수(linalg) 및 최적화(optimize) 함수를 이용해 수학 문제를 풀 수 있다.</p></div>
+  <div class="goal-card"><div class="goal-num">4</div><p>Pandas의 Series와 DataFrame을 생성하고, 필터링·병합·그룹화·결측값 처리를 수행할 수 있다.</p></div>
+  <div class="goal-card"><div class="goal-num">5</div><p>Matplotlib으로 다양한 차트(선 그래프, 산점도, 히스토그램, 서브플롯)를 그리고 제목·레이블·범례를 설정할 수 있다.</p></div>
+</section>
+
+<!-- 핵심 요약 -->
+<section id="summary">
+  <div class="section-title"><span class="icon">📌</span> 핵심 요약</div>
+  <div class="card-grid" style="margin-bottom:1.5rem;">
+    <div class="card blue">
+      <h3>🔢 NumPy</h3>
+      <p>수치 배열 처리 전문 라이브러리. N차원 배열 <span class="inline-code">ndarray</span>를 기반으로 원소 연산, 난수, 행렬 연산을 지원. 반복문 없이 벡터화 연산으로 빠른 처리.</p>
+    </div>
+    <div class="card green">
+      <h3>🔬 SciPy</h3>
+      <p>과학/공학 수치 계산 라이브러리. NumPy 위에서 동작하며 선형대수(<code>linalg</code>), 최적화(<code>optimize</code>), 통계, 신호처리 등 고급 수학 기능 제공.</p>
+    </div>
+    <div class="card purple">
+      <h3>🐼 Pandas</h3>
+      <p>데이터 분석용 라이브러리. 1차원 <code>Series</code>와 2차원 <code>DataFrame</code>으로 테이블 데이터를 다루며, 필터링·병합·그룹화·결측값 처리 기능 제공.</p>
+    </div>
+    <div class="card orange">
+      <h3>📈 Matplotlib</h3>
+      <p>데이터 시각화 라이브러리. <code>pyplot</code> 모듈로 선 그래프, 산점도, 히스토그램, 서브플롯 등 다양한 차트를 생성. Seaborn과 함께 자주 사용.</p>
+    </div>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">📦 Import 방법 비교</div>
+    <div class="two-col">
+      <div>
+        <div class="sub-title">방법 1: 모듈 전체 import (별칭 사용)</div>
+        <pre>import numpy as np
+import scipy as sp
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 사용 시
+arr = np.array([1, 2, 3])
+df = pd.DataFrame({'A': [1,2,3]})</pre>
+      </div>
+      <div>
+        <div class="sub-title">방법 2: 특정 기능만 import</div>
+        <pre>from numpy import array, zeros
+from scipy.linalg import det, inv
+from matplotlib.pyplot import plot
+
+# 사용 시 (모듈명 없이)
+arr = array([1, 2, 3])
+plot([1, 2, 3])</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">✨ 주피터 노트북 매직 명령어</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>명령어</th><th>설명</th><th>예시</th></tr>
+        <tr><td><span class="inline-code">%precision N</span></td><td>소수점 이하 표시 자릿수 설정</td><td><code>%precision 3</code> → 소수 3자리</td></tr>
+        <tr><td><span class="inline-code">%matplotlib inline</span></td><td>노트북 내에 그래프 출력</td><td>노트북에서 차트 바로 표시</td></tr>
+        <tr><td><span class="inline-code">%timeit</span></td><td>코드 실행 시간 측정</td><td><code>%timeit np.sum(arr)</code></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- NumPy -->
+<section id="numpy">
+  <div class="section-title"><span class="icon">🔢</span> Chapter 2. NumPy (넘파이)</div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">📐 배열 생성과 기본 속성</div>
+    <pre># 1차원 배열
+import numpy as np
+arr = np.array([0, 1, 2, 3, 4, 5])
+
+# 2차원 배열
+mat = np.array([[0, 1, 2],
+                [3, 4, 5]])
+
+print(mat.dtype)   # int64  — 데이터 타입
+print(mat.ndim)    # 2      — 차원 수
+print(mat.size)    # 6      — 전체 원소 수
+print(mat.shape)   # (2, 3) — 행 × 열</pre>
+    <div class="table-wrap">
+      <table>
+        <tr><th>dtype</th><th>설명</th><th>dtype</th><th>설명</th></tr>
+        <tr><td>int8/16/32/64</td><td>정수 (8~64비트)</td><td>float16/32/64</td><td>부동소수점</td></tr>
+        <tr><td>uint8/16/32/64</td><td>양의 정수</td><td>complex64/128</td><td>복소수</td></tr>
+        <tr><td>bool</td><td>불리언</td><td>object</td><td>파이썬 객체</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">⚡ 원소 연산 (벡터화)</div>
+    <pre>a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+print(a + b)    # [5, 7, 9]
+print(a * b)    # [4, 10, 18]
+print(a ** 2)   # [1, 4, 9]
+print(a + 1)    # [2, 3, 4]  ← 브로드캐스팅
+
+# 비교 연산 → 불리언 배열
+print(a > 2)    # [False, False, True]</pre>
+    <p class="note">NumPy 원소 연산은 반복문보다 수십~수백 배 빠름 (<span class="inline-code">%timeit</span>으로 확인 가능)</p>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🔀 정렬 및 슬라이싱</div>
+    <div class="two-col">
+      <div>
+        <div class="sub-title">정렬</div>
+        <pre>arr = np.array([3, 1, 4, 1, 5, 9])
+np.sort(arr)        # 오름차순 [1,1,3,4,5,9]
+np.sort(arr)[::-1]  # 내림차순 [9,5,4,3,1,1]</pre>
+      </div>
+      <div>
+        <div class="sub-title">슬라이싱</div>
+        <pre>arr = np.array([10, 20, 30, 40, 50])
+arr[1:3]     # [20, 30]
+arr[::-1]    # [50, 40, 30, 20, 10] — 역순
+arr[::2]     # [10, 30, 50] — 2칸 간격</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">📊 통계 함수</div>
+    <pre>arr = np.array([1, 2, 3, 4, 5])
+print(arr.min())     # 1
+print(arr.max())     # 5
+print(arr.sum())     # 15
+print(arr.cumsum())  # [ 1  3  6 10 15] ← 누적합</pre>
+    <div class="table-wrap">
+      <table>
+        <tr><th>함수</th><th>설명</th><th>함수</th><th>설명</th></tr>
+        <tr><td><code>np.min()</code></td><td>최솟값</td><td><code>np.max()</code></td><td>최댓값</td></tr>
+        <tr><td><code>np.sum()</code></td><td>합계</td><td><code>np.mean()</code></td><td>평균</td></tr>
+        <tr><td><code>np.cumsum()</code></td><td>누적합</td><td><code>np.std()</code></td><td>표준편차</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🎲 난수 생성</div>
+    <pre>np.random.seed(0)      # 시드 고정 → 재현 가능
+
+# 표준정규분포 난수 (평균0, 표준편차1)
+np.random.randn(3)     # array([ 1.764,  0.400, 0.978])
+
+# 0~9 중 3개 복원 추출 (중복 허용)
+np.random.choice(10, 3)
+
+# 0~9 중 3개 비복원 추출 (중복 불가)
+np.random.choice(10, 3, replace=False)</pre>
+    <p class="note"><strong>seed</strong>를 설정하면 매번 동일한 난수 생성 → 실험 재현성 보장</p>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🔄 reshape와 배열 생성 함수</div>
+    <div class="two-col">
+      <div>
+        <div class="sub-title">reshape — 형태 변환</div>
+        <pre>arr = np.arange(6)
+# [0, 1, 2, 3, 4, 5]
+
+mat = arr.reshape(2, 3)
+# [[0, 1, 2],
+#  [3, 4, 5]]</pre>
+      </div>
+      <div>
+        <div class="sub-title">배열 생성 함수</div>
+        <pre>np.arange(0, 10, 2)  # [0,2,4,6,8]
+np.zeros((2, 3))     # 2×3 영행렬
+np.ones((3, 3))      # 3×3 단위값 행렬</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">✖️ 행렬 연산</div>
+    <div class="two-col">
+      <div>
+        <div class="sub-title">원소별 곱 vs 행렬 곱</div>
+        <pre>A = np.array([[1,2],[3,4]])
+B = np.array([[5,6],[7,8]])
+
+A * B      # 원소별 곱 (Hadamard)
+# [[5,12],[21,32]]
+
+np.dot(A, B)  # 행렬 곱
+A @ B         # 동일 (Python 3.5+)
+# [[19,22],[43,50]]</pre>
+      </div>
+      <div>
+        <div class="sub-title">전치 행렬</div>
+        <pre>A = np.array([[1,2,3],
+              [4,5,6]])
+A.T
+# [[1,4],
+#  [2,5],
+#  [3,6]]
+# shape: (2,3) → (3,2)</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SciPy -->
+<section id="scipy">
+  <div class="section-title"><span class="icon">🔬</span> Chapter 3. SciPy (사이파이)</div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">📐 선형대수 (scipy.linalg)</div>
+    <pre>from scipy import linalg
+import numpy as np
+
+A = np.array([[1, 2],
+              [3, 4]])
+
+# 행렬식 (Determinant)
+linalg.det(A)    # -2.0
+
+# 역행렬 (Inverse)
+linalg.inv(A)
+# [[-2.  1. ],
+#  [ 1.5 -0.5]]
+
+# 고유값과 고유벡터 (Eigenvalue, Eigenvector)
+eigenvalues, eigenvectors = linalg.eig(A)
+# 고유값: [-0.372, 5.372]</pre>
+    <div class="table-wrap">
+      <table>
+        <tr><th>함수</th><th>수학적 의미</th><th>반환값</th></tr>
+        <tr><td><code>linalg.det(A)</code></td><td>행렬식 det(A)</td><td>스칼라</td></tr>
+        <tr><td><code>linalg.inv(A)</code></td><td>역행렬 A⁻¹</td><td>행렬</td></tr>
+        <tr><td><code>linalg.eig(A)</code></td><td>고유값 분해</td><td>(고유값배열, 고유벡터행렬)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🎯 수치 최적화 (scipy.optimize)</div>
+    <div class="two-col">
+      <div>
+        <div class="sub-title">뉴턴법 — 방정식의 근 구하기</div>
+        <pre>from scipy.optimize import newton
+
+# f(x) = x³ - 2 의 근
+def f(x):
+    return x**3 - 2
+
+# x=1에서 시작하여 근 탐색
+root = newton(f, x0=1)
+# 1.2599... ≈ ∛2</pre>
+      </div>
+      <div>
+        <div class="sub-title">minimize_scalar — 함수 최솟값</div>
+        <pre>from scipy.optimize import minimize_scalar
+
+# f(x) = (x-3)² + 2 의 최솟값
+def g(x):
+    return (x - 3)**2 + 2
+
+result = minimize_scalar(g,
+             method='Brent')
+result.x    # 3.0  ← 최솟값 위치
+result.fun  # 2.0  ← 최솟값</pre>
+      </div>
+    </div>
+    <p class="note" style="margin-top:0.8rem;"><strong>뉴턴법(Newton's Method)</strong>: 초기값 x₀에서 시작해 접선을 그어 근에 점점 수렴하는 수치해석 방법</p>
+  </div>
+</section>
+
+<!-- Pandas -->
+<section id="pandas">
+  <div class="section-title"><span class="icon">🐼</span> Chapter 4. Pandas (판다스)</div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🗂️ 기본 자료구조</div>
+    <div class="card-grid" style="margin-bottom:1rem;">
+      <div class="card purple">
+        <h3>Series (1차원)</h3>
+        <p>인덱스가 있는 1차원 배열. 딕셔너리처럼 라벨로 접근 가능.</p>
+        <pre style="font-size:0.76rem;margin-top:0.5rem;">s = pd.Series([1, 2, 3],
+    index=['a','b','c'])
+s['b']  # 2</pre>
+      </div>
+      <div class="card blue">
+        <h3>DataFrame (2차원)</h3>
+        <p>행과 열이 있는 2차원 테이블. 각 열이 Series. 엑셀 표와 유사.</p>
+        <pre style="font-size:0.76rem;margin-top:0.5rem;">df = pd.DataFrame({
+    'name': ['Kim','Lee'],
+    'score': [90, 85]
+})</pre>
+      </div>
+      <div class="card teal">
+        <h3>Panel (3차원)</h3>
+        <p>3차원 데이터 구조. items × major_axis × minor_axis. 최신 버전에서는 MultiIndex 사용 권장.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🔍 데이터 조회 및 필터링</div>
+    <pre>df = pd.DataFrame({
+    'name': ['Kim', 'Lee', 'Park', 'Choi'],
+    'dept': ['IT', 'HR', 'IT', 'Finance'],
+    'salary': [5000, 4500, 5500, 4800]
+})
+
+# 열 선택
+df['name']           # Series 반환
+df[['name','salary']] # DataFrame 반환
+
+# 전치 (행 ↔ 열 교환)
+df.T
+
+# 조건 필터링
+df[df['salary'] > 5000]
+df[df['dept'] == 'IT']
+
+# isin() — 여러 값 중 하나 포함 여부
+df[df['dept'].isin(['IT', 'HR'])]</pre>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🗑️ 열/행 삭제 (drop)</div>
+    <pre># 열 삭제 (axis=1)
+df.drop('salary', axis=1)
+
+# 행 삭제 (axis=0, 인덱스 지정)
+df.drop(0, axis=0)       # 0번 행 삭제
+df.drop([0, 2], axis=0)  # 0, 2번 행 삭제
+
+# 원본 변경: inplace=True 옵션 사용
+df.drop('salary', axis=1, inplace=True)</pre>
+    <p class="note">기본적으로 <code>drop()</code>은 원본을 변경하지 않고 복사본 반환. <span class="inline-code">inplace=True</span> 필요시 명시.</p>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🔗 데이터 병합 (merge)</div>
+    <pre>df1 = pd.DataFrame({
+    'id': [1, 2, 3],
+    'name': ['Kim', 'Lee', 'Park']
+})
+df2 = pd.DataFrame({
+    'id': [1, 2, 4],
+    'score': [90, 85, 78]
+})
+
+# id 기준으로 inner join
+pd.merge(df1, df2, on='id')
+# id=3(df1), id=4(df2) 제외 → id=1,2 만 포함</pre>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">📊 그룹화 및 정렬</div>
+    <div class="two-col">
+      <div>
+        <div class="sub-title">groupby — 그룹별 집계</div>
+        <pre>df.groupby('dept')['salary'].mean()
+# dept
+# Finance  4800.0
+# HR       4500.0
+# IT       5250.0</pre>
+      </div>
+      <div>
+        <div class="sub-title">정렬</div>
+        <pre># 인덱스 기준 정렬
+df.sort_index()
+df.sort_index(ascending=False)
+
+# 컬럼 값 기준 정렬
+df.sort_values('salary')
+df.sort_values('salary',
+    ascending=False)</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">❓ 결측값 처리 (NaN)</div>
+    <pre>import numpy as np
+import pandas as pd
+
+df = pd.DataFrame({
+    'A': [1, np.nan, 3],
+    'B': [4, 5, np.nan]
+})
+
+# 결측값 확인
+df.isnull()       # True/False 반환
+df.isnull().sum() # 각 컬럼별 결측값 수
+
+# 결측값 제거
+df.dropna()       # 결측값 있는 행 삭제
+
+# 결측값 대체
+df.fillna(0)      # 0으로 대체
+df.fillna(df.mean()) # 평균값으로 대체</pre>
+    <p class="note"><strong>NaN (Not a Number)</strong>: numpy에서 결측값을 표현하는 특수 부동소수점 값. <span class="inline-code">np.nan</span>으로 직접 생성 가능.</p>
+  </div>
+</section>
+
+<!-- Matplotlib -->
+<section id="matplotlib">
+  <div class="section-title"><span class="icon">📈</span> Chapter 5. Matplotlib (매트플롯립)</div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">📉 선 그래프 (plot)</div>
+    <pre>import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(0, 2*np.pi, 100)
+y = np.sin(x)
+
+plt.plot(x, y, color='blue', linestyle='-', label='sin(x)')
+plt.title('사인 곡선')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()   # 범례 표시
+plt.grid(True) # 격자 표시
+plt.show()</pre>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🔵 산점도 (scatter)</div>
+    <pre>x = np.random.randn(50)
+y = x * 2 + np.random.randn(50)
+
+plt.scatter(x, y, c='red', s=50, alpha=0.7)
+# c: 색상, s: 점 크기, alpha: 투명도
+plt.title('산점도 예시')
+plt.xlabel('X값')
+plt.ylabel('Y값')
+plt.show()</pre>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">📊 히스토그램 (hist)</div>
+    <pre>data = np.random.randn(1000)
+
+plt.hist(data, bins=30, color='steelblue',
+         edgecolor='white', alpha=0.8)
+plt.title('정규분포 히스토그램')
+plt.xlabel('값')
+plt.ylabel('빈도')
+plt.show()</pre>
+    <p class="note"><span class="inline-code">bins</span>: 막대 개수 (많을수록 세밀, 적을수록 뭉뚝)</p>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🗂️ 서브플롯 (subplot)</div>
+    <pre>fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+# figsize=(가로인치, 세로인치)
+
+# 첫 번째 플롯
+axes[0].plot([1,2,3],[4,5,6])
+axes[0].set_title('선 그래프')
+
+# 두 번째 플롯
+axes[1].scatter([1,2,3],[6,5,4])
+axes[1].set_title('산점도')
+
+plt.tight_layout()  # 간격 자동 조정
+plt.show()</pre>
+    <div class="table-wrap" style="margin-top:1rem;">
+      <table>
+        <tr><th>설정 함수</th><th>설명</th></tr>
+        <tr><td><code>plt.title('제목')</code></td><td>그래프 제목</td></tr>
+        <tr><td><code>plt.xlabel('레이블')</code></td><td>x축 이름</td></tr>
+        <tr><td><code>plt.ylabel('레이블')</code></td><td>y축 이름</td></tr>
+        <tr><td><code>plt.legend()</code></td><td>범례 표시</td></tr>
+        <tr><td><code>plt.grid(True)</code></td><td>격자선 표시</td></tr>
+        <tr><td><code>plt.tight_layout()</code></td><td>서브플롯 간격 자동 조정</td></tr>
+        <tr><td><code>plt.savefig('file.png')</code></td><td>이미지 파일로 저장</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 핵심 캐치 -->
+<section id="catch">
+  <div class="section-title"><span class="icon">⚠️</span> 핵심 캐치 — 시험 포인트</div>
+  <div class="catch-grid">
+    <div class="catch-item">
+      <div class="catch-label">★ POINT 1</div>
+      <p><strong>np.array()와 list의 차이</strong>: NumPy 배열은 원소별 연산(벡터화) 지원, 리스트는 <code>+</code>가 연결(concatenate)임</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-label">★ POINT 2</div>
+      <p><strong>dtype 자동 결정</strong>: 배열에 정수만 있으면 int64, 실수 섞이면 float64로 자동 결정됨</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-label">★ POINT 3</div>
+      <p><strong>[::-1] 역순 슬라이싱</strong>: 배열 뒤집기. <code>np.sort(arr)[::-1]</code>로 내림차순 정렬 가능</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-label">★ POINT 4</div>
+      <p><strong>np.dot(A, B) vs A*B</strong>: <code>@</code> 또는 <code>np.dot()</code>는 행렬 곱, <code>*</code>는 원소별 곱(Hadamard). 시험에서 자주 혼동!</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-label">★ POINT 5</div>
+      <p><strong>np.random.seed()</strong>: 난수 재현성 보장. 같은 seed → 같은 난수 시퀀스. 실험/테스트에서 필수</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-label">★ POINT 6</div>
+      <p><strong>replace=False</strong>: 비복원 추출(중복 불가). 기본값은 <code>replace=True</code>(복원 추출). 구분 필수!</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-label">★ POINT 7</div>
+      <p><strong>linalg.eig() 반환값</strong>: <code>(고유값 배열, 고유벡터 행렬)</code> 튜플 반환. 두 변수로 받아야 함</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-label">★ POINT 8</div>
+      <p><strong>df.drop() axis 구분</strong>: <code>axis=0</code>은 행 삭제, <code>axis=1</code>은 열 삭제. 반대로 쓰면 오류 발생!</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-label">★ POINT 9</div>
+      <p><strong>Series vs DataFrame</strong>: Series는 1차원(하나의 열), DataFrame은 2차원(여러 열). <code>df['열이름']</code>은 Series 반환, <code>df[['열이름']]</code>은 DataFrame 반환</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-label">★ POINT 10</div>
+      <p><strong>cumsum()</strong>: 누적합. <code>[1,2,3,4,5]</code>의 cumsum → <code>[1,3,6,10,15]</code>. sum()과 혼동 주의</p>
+    </div>
+  </div>
+</section>
+
+<!-- 키워드 -->
+<section id="keywords">
+  <div class="section-title"><span class="icon">🔑</span> 핵심 키워드</div>
+  <div class="keyword-grid">
+    <div class="kw-card">
+      <div class="kw-en">ndarray</div>
+      <div class="kw-ko">N차원 배열</div>
+      <div class="kw-desc">NumPy의 핵심 자료구조. 동일한 dtype의 원소로 구성된 N차원 배열</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">dtype</div>
+      <div class="kw-ko">데이터 타입</div>
+      <div class="kw-desc">배열 원소의 데이터 유형. int64, float64, bool 등. 배열 내 모든 원소가 동일</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Vectorization</div>
+      <div class="kw-ko">벡터화 연산</div>
+      <div class="kw-desc">반복문 없이 배열 전체에 연산을 적용하는 방식. NumPy의 핵심 성능 요인</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Broadcasting</div>
+      <div class="kw-ko">브로드캐스팅</div>
+      <div class="kw-desc">크기가 다른 배열 간 연산 시 자동으로 형태를 맞추는 NumPy 규칙</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">seed</div>
+      <div class="kw-ko">난수 시드</div>
+      <div class="kw-desc">난수 생성기의 초기값. 같은 seed 사용 시 항상 동일한 난수 시퀀스 생성</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Sampling with/without Replacement</div>
+      <div class="kw-ko">복원/비복원 추출</div>
+      <div class="kw-desc">복원: 뽑은 것을 되돌리고 다시 뽑음(중복 가능). 비복원: 뽑은 것 제외(중복 불가)</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">reshape</div>
+      <div class="kw-ko">형태 변환</div>
+      <div class="kw-desc">원소 수를 유지하면서 배열 형태(shape)를 변경. 예: (6,) → (2,3)</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Matrix Multiplication</div>
+      <div class="kw-ko">행렬 곱</div>
+      <div class="kw-desc">np.dot() 또는 @ 연산자. A(m×n) × B(n×p) = C(m×p)</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Determinant</div>
+      <div class="kw-ko">행렬식</div>
+      <div class="kw-desc">정방행렬의 특성값. 0이면 역행렬 없음. scipy.linalg.det()로 계산</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Eigenvalue / Eigenvector</div>
+      <div class="kw-ko">고유값 / 고유벡터</div>
+      <div class="kw-desc">Av = λv를 만족하는 λ(고유값)와 v(고유벡터). 데이터 분석(PCA 등)의 핵심</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Series</div>
+      <div class="kw-ko">시리즈</div>
+      <div class="kw-desc">Pandas의 1차원 자료구조. 인덱스가 있는 배열. DataFrame의 각 열</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">DataFrame</div>
+      <div class="kw-ko">데이터프레임</div>
+      <div class="kw-desc">Pandas의 2차원 자료구조. 행과 열이 있는 테이블 형태의 데이터</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">isin()</div>
+      <div class="kw-ko">포함 여부 확인</div>
+      <div class="kw-desc">값이 지정된 목록에 있는지 확인. 여러 조건을 OR로 연결할 때 유용</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">merge()</div>
+      <div class="kw-ko">데이터 병합</div>
+      <div class="kw-desc">공통 키를 기준으로 두 DataFrame 합치기. SQL의 JOIN과 동일한 개념</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">groupby()</div>
+      <div class="kw-ko">그룹화</div>
+      <div class="kw-desc">특정 열의 값을 기준으로 데이터를 묶고 집계(sum, mean, count 등) 적용</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">NaN (Not a Number)</div>
+      <div class="kw-ko">결측값</div>
+      <div class="kw-desc">누락된 데이터를 나타내는 특수값. isnull()로 확인, fillna()로 대체</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">subplot</div>
+      <div class="kw-ko">서브플롯</div>
+      <div class="kw-desc">하나의 그림(figure) 안에 여러 그래프를 배치. plt.subplots(행, 열)로 생성</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Newton's Method</div>
+      <div class="kw-ko">뉴턴법</div>
+      <div class="kw-desc">초기값에서 접선의 기울기를 이용해 방정식의 근을 반복적으로 근사하는 수치해석법</div>
+    </div>
+  </div>
+</section>
+
+<!-- 연습문제 -->
+<section id="quiz">
+  <div class="section-title"><span class="icon">✏️</span> 연습문제</div>
+  <div class="quiz-container">
+
+    <!-- Q1 -->
+    <div class="quiz-card">
+      <div class="quiz-q"><span class="qnum">Q1.</span> 다음 중 NumPy 배열(ndarray)과 Python 리스트의 차이점으로 옳은 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb1')">① 리스트는 다차원 배열을 지원하지 않는다</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb1')">② NumPy 배열은 원소별 수학 연산(벡터화)을 지원하고, 리스트의 + 는 연결 연산이다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb1')">③ NumPy 배열은 문자열 원소를 저장할 수 없다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb1')">④ 리스트는 dtype이 자동으로 결정된다</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-card">
+      <div class="quiz-q"><span class="qnum">Q2.</span> <code>np.array([1, 2, 3, 4, 5, 6]).reshape(2, 3)</code>의 결과로 올바른 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb2')">① [[1,2],[3,4],[5,6]] — shape (3,2)</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb2')">② [[1,2,3],[4,5,6]] — shape (2,3)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb2')">③ [[1,4],[2,5],[3,6]] — shape (3,2)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb2')">④ 오류 발생 (원소 수 불일치)</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-card">
+      <div class="quiz-q"><span class="qnum">Q3.</span> <code>np.random.choice(5, 3, replace=False)</code>에 대한 설명으로 옳은 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb3')">① 0~4 중 중복을 허용하여 3개를 추출한다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb3')">② 1~5 중 비복원 추출로 3개를 선택한다</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb3')">③ 0~4 중 중복 없이(비복원) 3개를 추출한다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb3')">④ 5개 중 3개를 선택하되 항상 같은 결과를 반환한다</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-card">
+      <div class="quiz-q"><span class="qnum">Q4.</span> <code>scipy.linalg.eig(A)</code>의 반환값에 대한 설명으로 옳은 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb4')">① 고유값만 담긴 배열을 반환한다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb4')">② 행렬식(determinant) 값을 반환한다</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb4')">③ (고유값 배열, 고유벡터 행렬) 튜플을 반환한다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb4')">④ 역행렬을 반환한다</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-card">
+      <div class="quiz-q"><span class="qnum">Q5.</span> Pandas DataFrame에서 <code>df.drop('salary', axis=1)</code>가 하는 동작은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb5')">① 'salary' 값이 있는 행을 삭제한다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb5')">② 'salary' 행을 인덱스로 지정한다</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb5')">③ 'salary' 열(column)을 삭제한 새 DataFrame을 반환한다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb5')">④ 원본 df에서 'salary' 열이 즉시 삭제된다</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-card">
+      <div class="quiz-q"><span class="qnum">Q6.</span> <code>df[['name']]</code>과 <code>df['name']</code>의 차이는?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb6')">① 동일한 결과를 반환한다</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb6')">② df[['name']]은 DataFrame, df['name']은 Series를 반환한다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb6')">③ df[['name']]은 복사본, df['name']은 원본을 참조한다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb6')">④ df[['name']]은 오류를 발생시킨다</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="quiz-card">
+      <div class="quiz-q"><span class="qnum">Q7.</span> Matplotlib에서 여러 그래프를 한 figure 안에 배치하는 함수는?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb7')">① plt.figure()</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb7')">② plt.layout()</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb7')">③ plt.subplots()</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb7')">④ plt.panel()</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+    </div>
+
+    <!-- SA1 -->
+    <div class="quiz-card">
+      <div class="quiz-q"><span class="qnum">단답 1.</span> NumPy에서 배열 <code>[3, 1, 4, 1, 5, 9]</code>을 <strong>내림차순</strong>으로 정렬하는 코드를 작성하시오. (빈칸 채우기)</div>
+      <pre>np.sort(arr)[  ???  ]</pre>
+      <input class="sa-input" id="sa1" placeholder="빈칸에 들어갈 슬라이싱을 입력하세요 (예: [0:3])">
+      <button class="check-btn" onclick="checkSA('sa1', '::-1', 'sfb1')">확인</button>
+      <button class="show-btn" onclick="showAnswer('ans1')">정답 보기</button>
+      <div class="feedback" id="sfb1"></div>
+      <div class="answer-reveal" id="ans1">✅ 정답: <code>[::-1]</code> — np.sort()는 오름차순 정렬하고, [::-1]로 배열을 역순으로 뒤집어 내림차순을 만든다.</div>
+    </div>
+
+    <!-- SA2 -->
+    <div class="quiz-card">
+      <div class="quiz-q"><span class="qnum">단답 2.</span> Pandas DataFrame에서 <code>'dept'</code> 열의 값이 <code>'IT'</code> 또는 <code>'HR'</code>인 행만 추출하는 코드를 작성하시오.</div>
+      <input class="sa-input" id="sa2" placeholder="df.___('dept').isin(['IT','HR']) 형태로 완성">
+      <button class="check-btn" onclick="checkSA('sa2', 'df[df[', 'sfb2')">확인</button>
+      <button class="show-btn" onclick="showAnswer('ans2')">정답 보기</button>
+      <div class="feedback" id="sfb2"></div>
+      <div class="answer-reveal" id="ans2">✅ 정답: <code>df[df['dept'].isin(['IT', 'HR'])]</code> — isin()은 리스트에 있는 값과 일치하는 행을 True로 반환하고, 이를 df[]로 필터링한다.</div>
+    </div>
+
+    <!-- SA3 -->
+    <div class="quiz-card">
+      <div class="quiz-q"><span class="qnum">단답 3.</span> NumPy에서 <code>A @ B</code>와 동일한 결과를 반환하는 함수를 쓰시오.</div>
+      <input class="sa-input" id="sa3" placeholder="np._____(A, B) 형태">
+      <button class="check-btn" onclick="checkSAKeyword('sa3', ['np.dot', 'dot'], 'sfb3')">확인</button>
+      <button class="show-btn" onclick="showAnswer('ans3')">정답 보기</button>
+      <div class="feedback" id="sfb3"></div>
+      <div class="answer-reveal" id="ans3">✅ 정답: <code>np.dot(A, B)</code> — @ 연산자와 np.dot()은 모두 행렬 곱(matrix multiplication)을 수행한다. Python 3.5부터 @ 사용 가능.</div>
+    </div>
+
+    <!-- SA4 -->
+    <div class="quiz-card">
+      <div class="quiz-q"><span class="qnum">단답 4.</span> Pandas DataFrame에서 <strong>결측값(NaN)이 있는 행을 모두 제거</strong>하는 메서드를 쓰시오.</div>
+      <input class="sa-input" id="sa4" placeholder="df._____ ()">
+      <button class="check-btn" onclick="checkSAKeyword('sa4', ['dropna', 'df.dropna'], 'sfb4')">확인</button>
+      <button class="show-btn" onclick="showAnswer('ans4')">정답 보기</button>
+      <div class="feedback" id="sfb4"></div>
+      <div class="answer-reveal" id="ans4">✅ 정답: <code>df.dropna()</code> — NaN 값이 하나라도 있는 행을 제거한 새 DataFrame 반환. inplace=True 옵션 없으면 원본 유지.</div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <p>📚 데이터 사이언스 입문 2주차 학습자료 | 한신대학교 2026 봄학기</p>
+  <p style="margin-top:0.3rem;">NumPy · SciPy · Pandas · Matplotlib</p>
+</footer>
+
+<script>
+// Theme toggle
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.getElementById('themeBtn');
+  if (html.getAttribute('data-theme') === 'light') {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀️ 라이트모드';
+    localStorage.setItem('theme', 'dark');
+  } else {
+    html.setAttribute('data-theme', 'light');
+    btn.textContent = '🌙 야간모드';
+    localStorage.setItem('theme', 'light');
+  }
+}
+
+// Restore saved theme
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.addEventListener('DOMContentLoaded', function() {
+      const btn = document.getElementById('themeBtn');
+      if (btn) btn.textContent = '☀️ 라이트모드';
+    });
+  }
+})();
+
+// Multiple choice check
+function checkMC(btn, isCorrect, fbId) {
+  const opts = btn.closest('.options').querySelectorAll('.option-btn');
+  opts.forEach(b => b.disabled = true);
+  const fb = document.getElementById(fbId);
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.textContent = '✅ 정답입니다!';
+    fb.className = 'feedback ok show';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '❌ 오답입니다. 다시 생각해보세요.';
+    fb.className = 'feedback no show';
+  }
+}
+
+// Short answer exact match
+function checkSA(inputId, answer, fbId) {
+  const val = document.getElementById(inputId).value.trim();
+  const fb = document.getElementById(fbId);
+  if (val === answer) {
+    fb.textContent = '✅ 정답입니다!';
+    fb.className = 'feedback ok show';
+  } else {
+    fb.textContent = '❌ 다시 시도해보세요. "정답 보기" 버튼을 눌러 확인하세요.';
+    fb.className = 'feedback no show';
+  }
+}
+
+// Short answer keyword match
+function checkSAKeyword(inputId, keywords, fbId) {
+  const val = document.getElementById(inputId).value.trim().toLowerCase();
+  const fb = document.getElementById(fbId);
+  const match = keywords.some(kw => val.includes(kw.toLowerCase()));
+  if (match) {
+    fb.textContent = '✅ 정답입니다!';
+    fb.className = 'feedback ok show';
+  } else {
+    fb.textContent = '❌ 다시 시도해보세요. "정답 보기" 버튼을 눌러 확인하세요.';
+    fb.className = 'feedback no show';
+  }
+}
+
+// Show answer
+function showAnswer(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+}
+
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터 사이언스 입문 | 1장: 데이터과학과 파이썬 기초</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1e3a8a;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --info: #0891b2;
+    --purple: #7c3aed;
+    --bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --text: #1f2937;
+    --text-sub: #6b7280;
+    --border: #e5e7eb;
+    --nav-bg: #ffffff;
+    --code-bg: #f8fafc;
+    --code-border: #e2e8f0;
+  }
+  [data-theme="dark"] {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #f1f5f9;
+    --text-sub: #94a3b8;
+    --border: #334155;
+    --nav-bg: #1e293b;
+    --code-bg: #0f172a;
+    --code-border: #334155;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  .header .badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 16px; font-size: 0.85rem; margin-bottom: 12px; }
+  .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+  .header p { font-size: 1rem; opacity: 0.85; }
+
+  /* Nav */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 0 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.3s;
+  }
+  .nav-links { display: flex; gap: 2px; overflow-x: auto; padding: 8px 0; }
+  .nav-links a {
+    text-decoration: none; color: var(--text-sub);
+    padding: 6px 12px; border-radius: 6px;
+    font-size: 0.82rem; white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-links a:hover { background: var(--bg); color: var(--primary); }
+  .theme-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 12px;
+    cursor: pointer; font-size: 1rem; color: var(--text);
+    white-space: nowrap; transition: background 0.2s;
+  }
+  .theme-btn:hover { background: var(--bg); }
+
+  /* Main */
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 20px 80px; }
+  section { margin-bottom: 56px; }
+  .section-title {
+    font-size: 1.35rem; font-weight: 700;
+    border-left: 4px solid var(--primary);
+    padding-left: 14px; margin-bottom: 24px;
+  }
+
+  /* Goal Cards */
+  .goal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .goal-card {
+    background: var(--card-bg); border-radius: 12px;
+    padding: 20px; border-top: 4px solid var(--primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .goal-num {
+    background: var(--primary); color: white;
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+  }
+  .goal-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+  .goal-card p { font-size: 0.85rem; color: var(--text-sub); line-height: 1.6; }
+
+  /* Summary Cards */
+  .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .card {
+    background: var(--card-bg); border-radius: 12px;
+    padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .card.blue { border-top: 4px solid var(--primary); }
+  .card.green { border-top: 4px solid var(--success); }
+  .card.orange { border-top: 4px solid var(--warning); }
+  .card.purple { border-top: 4px solid var(--purple); }
+  .card.red { border-top: 4px solid var(--danger); }
+  .card.info { border-top: 4px solid var(--info); }
+  .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  .card ul { padding-left: 18px; }
+  .card ul li { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 5px; line-height: 1.6; }
+  .card .tag { display: inline-block; background: var(--bg); border-radius: 4px; padding: 2px 8px; font-size: 0.75rem; color: var(--text-sub); margin: 2px; }
+
+  /* Venn Diagram Text */
+  .venn-box {
+    background: var(--card-bg); border-radius: 12px; padding: 24px;
+    border: 2px dashed var(--border); text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .venn-box .circles { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 12px 0; }
+  .venn-box .circle {
+    padding: 12px 20px; border-radius: 50px;
+    font-size: 0.85rem; font-weight: 600;
+  }
+  .venn-box .circle.c1 { background: rgba(37,99,235,0.15); color: #2563eb; }
+  .venn-box .circle.c2 { background: rgba(22,163,74,0.15); color: #16a34a; }
+  .venn-box .circle.c3 { background: rgba(217,119,6,0.15); color: #d97706; }
+  .venn-box .center { background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(37,99,235,0.15)); color: var(--purple); font-weight: 700; border-radius: 8px; padding: 8px 16px; margin-top: 8px; display: inline-block; }
+
+  /* 3V Grid */
+  .threev-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .threev-card {
+    background: var(--card-bg); border-radius: 12px; padding: 20px;
+    text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .threev-card .v-icon { font-size: 2rem; margin-bottom: 8px; }
+  .threev-card h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+  .threev-card p { font-size: 0.82rem; color: var(--text-sub); line-height: 1.5; }
+  .threev-card:nth-child(1) { border-top: 4px solid var(--primary); }
+  .threev-card:nth-child(2) { border-top: 4px solid var(--success); }
+  .threev-card:nth-child(3) { border-top: 4px solid var(--warning); }
+
+  /* Data Type Cards */
+  .dtype-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .dtype-card {
+    background: var(--card-bg); border-radius: 12px; padding: 18px;
+    border-left: 4px solid var(--info); box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .dtype-card:nth-child(2) { border-left-color: var(--purple); }
+  .dtype-card:nth-child(3) { border-left-color: var(--success); }
+  .dtype-card:nth-child(4) { border-left-color: var(--warning); }
+  .dtype-card h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+  .dtype-card p { font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; }
+
+  /* Framework Steps */
+  .framework { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .step-card {
+    background: var(--card-bg); border-radius: 12px; padding: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .step-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem; flex-shrink: 0; color: white;
+  }
+  .step-num.s1 { background: var(--primary); }
+  .step-num.s2 { background: var(--info); }
+  .step-num.s3 { background: var(--warning); }
+  .step-num.s4 { background: var(--success); }
+  .step-card h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; }
+  .step-card p { font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 12px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 24px; }
+  .tl-dot {
+    position: absolute; left: -26px; top: 4px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--primary); border: 3px solid var(--bg);
+  }
+  .tl-item .tl-year { font-size: 0.78rem; font-weight: 700; color: var(--primary); margin-bottom: 2px; }
+  .tl-item h3 { font-size: 0.92rem; font-weight: 700; margin-bottom: 4px; }
+  .tl-item p { font-size: 0.83rem; color: var(--text-sub); line-height: 1.6; }
+
+  /* Catch Cards */
+  .catch-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .catch-card {
+    background: linear-gradient(135deg, rgba(37,99,235,0.07), rgba(124,58,237,0.07));
+    border: 1px solid rgba(37,99,235,0.2);
+    border-radius: 12px; padding: 18px;
+    position: relative; overflow: hidden;
+  }
+  .catch-card::before {
+    content: '⚡'; position: absolute; right: 12px; top: 12px;
+    font-size: 1.5rem; opacity: 0.3;
+  }
+  .catch-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+  .catch-card p { font-size: 0.83rem; color: var(--text); line-height: 1.6; }
+  .catch-card .highlight { color: var(--danger); font-weight: 700; }
+
+  /* Comparison Table */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-size: 0.85rem; }
+  th { background: var(--primary); color: white; padding: 12px 16px; text-align: center; font-weight: 600; }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--border); text-align: center; color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg); }
+
+  /* Code Block */
+  .code-block {
+    background: var(--code-bg); border: 1px solid var(--code-border);
+    border-radius: 8px; padding: 14px 18px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.82rem; line-height: 1.7; overflow-x: auto;
+    color: var(--text);
+  }
+  .code-block .kw { color: #7c3aed; font-weight: 700; }
+  .code-block .str { color: #16a34a; }
+  .code-block .cmt { color: var(--text-sub); font-style: italic; }
+  .code-block .fn { color: #2563eb; }
+  .code-block .num { color: #d97706; }
+
+  /* Keyword Cards */
+  .kw-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .kw-card {
+    background: var(--card-bg); border-radius: 10px;
+    padding: 16px; border-left: 4px solid var(--primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+  .kw-card .kw-en { font-size: 0.75rem; color: var(--primary); font-weight: 700; letter-spacing: 0.05em; }
+  .kw-card .kw-ko { font-size: 0.95rem; font-weight: 700; margin: 2px 0 6px; }
+  .kw-card .kw-def { font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; }
+
+  /* Quiz */
+  .quiz-list { display: flex; flex-direction: column; gap: 24px; }
+  .quiz-item { background: var(--card-bg); border-radius: 12px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  .quiz-q { font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; line-height: 1.6; }
+  .quiz-q .qnum { background: var(--primary); color: white; border-radius: 50%; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; margin-right: 8px; flex-shrink: 0; }
+  .options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .option-btn {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; text-align: left;
+    cursor: pointer; font-size: 0.85rem; color: var(--text);
+    transition: all 0.2s; display: flex; gap: 10px; align-items: center;
+  }
+  .option-btn:hover { border-color: var(--primary); background: rgba(37,99,235,0.05); }
+  .option-btn.correct { background: rgba(22,163,74,0.1); border-color: var(--success); color: var(--success); }
+  .option-btn.wrong { background: rgba(220,38,38,0.1); border-color: var(--danger); color: var(--danger); }
+  .option-btn.disabled { cursor: default; pointer-events: none; }
+  .feedback {
+    padding: 10px 14px; border-radius: 8px; font-size: 0.85rem;
+    margin-top: 4px; display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { background: rgba(22,163,74,0.1); color: var(--success); border: 1px solid rgba(22,163,74,0.3); }
+  .feedback.no { background: rgba(220,38,38,0.1); color: var(--danger); border: 1px solid rgba(220,38,38,0.3); }
+  .sa-input-wrap { display: flex; gap: 8px; margin-bottom: 8px; }
+  .sa-input {
+    flex: 1; padding: 10px 14px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--bg);
+    color: var(--text); font-size: 0.85rem;
+  }
+  .sa-input:focus { outline: none; border-color: var(--primary); }
+  .sa-btn {
+    padding: 10px 18px; background: var(--primary); color: white;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  .sa-btn:hover { background: var(--primary-dark); }
+
+  /* Shortcut Table */
+  .shortcut-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .shortcut-item {
+    background: var(--card-bg); border-radius: 8px; padding: 12px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .shortcut-item kbd {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 2px 8px;
+    font-family: monospace; font-size: 0.78rem; color: var(--primary);
+  }
+  .shortcut-item span { font-size: 0.82rem; color: var(--text-sub); }
+
+  @media (max-width: 640px) {
+    .goal-grid, .card-grid, .dtype-grid, .framework, .catch-grid, .kw-grid, .threev-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.4rem; }
+    .shortcut-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="badge">데이터 사이언스 입문 | 한신대학교 AI·SW학전공</div>
+  <h1>1장: 데이터과학과 파이썬 기초</h1>
+  <p>고병수 교수 | Data Science, Research Environment, Python Basics</p>
+</header>
+
+<nav>
+  <div class="nav-links">
+    <a href="#goals">학습목표</a>
+    <a href="#summary">핵심요약</a>
+    <a href="#timeline">타임라인</a>
+    <a href="#catch">핵심캐치</a>
+    <a href="#keywords">키워드</a>
+    <a href="#quiz">연습문제</a>
+  </div>
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙 야간모드</button>
+</nav>
+
+<main>
+
+  <!-- 학습 목표 -->
+  <section id="goals">
+    <h2 class="section-title">🎯 학습 목표</h2>
+    <div class="goal-grid">
+      <div class="goal-card">
+        <div class="goal-num">1</div>
+        <div>
+          <h3>데이터 과학 프레임워크 이해</h3>
+          <p>데이터 과학의 전체 흐름을 파악하고, 데이터 과학자에게 필요한 지식과 역량을 이해한다.</p>
+        </div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-num">2</div>
+        <div>
+          <h3>파이썬 기초 프로그래밍</h3>
+          <p>JupyterLab 환경에서 변수, 자료구조, 조건문, 반복문, 함수, 클래스 등 파이썬 기초 문법을 실습한다.</p>
+        </div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-num">3</div>
+        <div>
+          <h3>연구 환경 구축</h3>
+          <p>아나콘다(Anaconda)와 JupyterLab을 설치하고, 데이터 과학 실습 환경을 구성할 수 있다.</p>
+        </div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-num">4</div>
+        <div>
+          <h3>객체 지향 프로그래밍 기초</h3>
+          <p>클래스, 인스턴스, 생성자, 메소드 등 OOP의 핵심 개념을 파이썬으로 구현할 수 있다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 핵심 요약 -->
+  <section id="summary">
+    <h2 class="section-title">📋 핵심 요약</h2>
+
+    <h3 style="font-size:1rem; margin: 0 0 14px; color:var(--text-sub);">Chapter 1 — 데이터 과학</h3>
+
+    <!-- 벤다이어그램 -->
+    <div class="venn-box" style="margin-bottom:16px;">
+      <p style="font-size:0.85rem; color:var(--text-sub); margin-bottom:8px;">데이터 과학 = 세 분야의 교집합</p>
+      <div class="circles">
+        <div class="circle c1">📊 통계학<br><small>Statistics</small></div>
+        <div class="circle c2">💻 컴퓨터 과학<br><small>Hacking Skills</small></div>
+        <div class="circle c3">🏢 도메인 지식<br><small>Domain Expertise</small></div>
+      </div>
+      <div class="center">⭐ DATA SCIENCE</div>
+    </div>
+
+    <!-- 빅데이터 3V -->
+    <h3 style="font-size:1rem; margin: 20px 0 12px; color:var(--text-sub);">빅데이터의 3V</h3>
+    <div class="threev-grid" style="margin-bottom:20px;">
+      <div class="threev-card">
+        <div class="v-icon">📦</div>
+        <h3>Volume (규모)</h3>
+        <p>테라바이트~엑사바이트 수준의 방대한 데이터</p>
+      </div>
+      <div class="threev-card">
+        <div class="v-icon">⚡</div>
+        <h3>Velocity (속도)</h3>
+        <p>실시간으로 생성·처리되는 데이터 스트림</p>
+      </div>
+      <div class="threev-card">
+        <div class="v-icon">🌈</div>
+        <h3>Variety (다양성)</h3>
+        <p>정형·반정형·비정형 데이터의 혼재</p>
+      </div>
+    </div>
+
+    <!-- 데이터 종류 -->
+    <h3 style="font-size:1rem; margin: 0 0 12px; color:var(--text-sub);">데이터의 종류</h3>
+    <div class="dtype-grid" style="margin-bottom:20px;">
+      <div class="dtype-card">
+        <h3>📊 정형 데이터 (Structured)</h3>
+        <p>행과 열로 구성된 테이블 형태. DB/엑셀 파일. SQL로 쉽게 분석 가능.</p>
+      </div>
+      <div class="dtype-card">
+        <h3>🤖 기계 생성 데이터 (Machine-generated)</h3>
+        <p>IoT 센서, 서버 로그, 스마트 기기에서 자동 생성. 실시간 스트리밍 처리 중요.</p>
+      </div>
+      <div class="dtype-card">
+        <h3>🕸️ 그래프/네트워크 데이터 (Graph)</h3>
+        <p>소셜 네트워크, 웹 페이지 링크 구조. 노드와 엣지로 관계 표현.</p>
+      </div>
+      <div class="dtype-card">
+        <h3>📝 비정형 데이터 (Unstructured)</h3>
+        <p>텍스트, 이미지, 영상, 오디오 등. 딥러닝·NLP 기술로 분석.</p>
+      </div>
+    </div>
+
+    <!-- 데이터 과학 프레임워크 -->
+    <h3 style="font-size:1rem; margin: 0 0 12px; color:var(--text-sub);">데이터 과학 프레임워크 (4단계)</h3>
+    <div class="framework" style="margin-bottom:32px;">
+      <div class="step-card">
+        <div class="step-num s1">1</div>
+        <div>
+          <h3>현실 세계 (Raw Data 수집)</h3>
+          <p>로그 파일, 이메일, 유전자 데이터 등 다양한 원시 데이터. 사람들의 활동 자체가 원천.</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num s2">2</div>
+        <div>
+          <h3>데이터 전처리 (Preprocessing)</h3>
+          <p>Python/R/SQL로 데이터 수집→처리→정제 파이프라인 구축. 결측값·이상값 처리 포함.</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num s3">3</div>
+        <div>
+          <h3>탐색적 데이터 분석 (EDA)</h3>
+          <p>변수 분포 시각화, 시계열 분석, 산점도 행렬, 요약 통계. 이상값 발견 시 재정제.</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num s4">4</div>
+        <div>
+          <h3>머신러닝 모델 & 의사결정 서비스</h3>
+          <p>kNN, 선형회귀, 나이브베이즈 등으로 분류·예측. 스팸 분류기, 추천 시스템 등 상품화. 피드백 루프로 추가 데이터 생성.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chapter 2: 연구 환경 -->
+    <h3 style="font-size:1rem; margin: 0 0 14px; color:var(--text-sub);">Chapter 2 — 연구 환경 구축</h3>
+    <div class="card-grid" style="margin-bottom:20px;">
+      <div class="card blue">
+        <h3>🐍 아나콘다 (Anaconda)</h3>
+        <ul>
+          <li>파이썬 기반 데이터 과학 플랫폼</li>
+          <li>Python + 300개 이상 라이브러리 한번에 설치</li>
+          <li>NumPy, Pandas, Matplotlib, Scikit-learn 포함</li>
+          <li>가상 환경(Virtual Environment) 관리 제공</li>
+          <li>Windows/macOS/Linux 모두 지원</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>📓 JupyterLab vs Jupyter Notebook</h3>
+        <ul>
+          <li>JupyterLab: Jupyter Notebook의 <strong>차세대 버전</strong></li>
+          <li>멀티탭, 분할 뷰, 파일 관리 등 향상된 UI</li>
+          <li>셀(Cell): 코드 또는 마크다운 입력 단위</li>
+          <li>커널(Kernel): 파이썬 코드를 실제 실행하는 엔진</li>
+          <li>본 강의에서는 JupyterLab 사용 권장 ⭐</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- JupyterLab 단축키 -->
+    <h3 style="font-size:1rem; margin: 0 0 12px; color:var(--text-sub);">JupyterLab 주요 단축키</h3>
+    <div class="shortcut-grid" style="margin-bottom:32px;">
+      <div class="shortcut-item"><kbd>Shift+Enter</kbd><span>셀 실행 + 다음 셀 이동</span></div>
+      <div class="shortcut-item"><kbd>A</kbd><span>위에 셀 추가 (명령 모드)</span></div>
+      <div class="shortcut-item"><kbd>B</kbd><span>아래에 셀 추가 (명령 모드)</span></div>
+      <div class="shortcut-item"><kbd>DD</kbd><span>셀 삭제 (명령 모드)</span></div>
+      <div class="shortcut-item"><kbd>M</kbd><span>마크다운 셀로 변환</span></div>
+      <div class="shortcut-item"><kbd>Y</kbd><span>코드 셀로 변환</span></div>
+      <div class="shortcut-item"><kbd>Esc</kbd><span>명령 모드 전환</span></div>
+      <div class="shortcut-item"><kbd>Enter</kbd><span>편집 모드 전환</span></div>
+    </div>
+
+    <!-- Chapter 3: 파이썬 기초 -->
+    <h3 style="font-size:1rem; margin: 0 0 14px; color:var(--text-sub);">Chapter 3 — 파이썬 기초</h3>
+    <div class="card-grid" style="margin-bottom:16px;">
+      <div class="card orange">
+        <h3>🔢 자료구조 비교</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>자료형</th><th>기호</th><th>순서</th><th>중복</th><th>변경</th></tr></thead>
+            <tbody>
+              <tr><td>리스트</td><td>[ ]</td><td>있음</td><td>허용</td><td>가능</td></tr>
+              <tr><td>튜플</td><td>( )</td><td>있음</td><td>허용</td><td>불가</td></tr>
+              <tr><td>딕셔너리</td><td>{k:v}</td><td>키 기반</td><td>키 중복 불가</td><td>가능</td></tr>
+              <tr><td>집합</td><td>{ }</td><td>없음</td><td>불가</td><td>가능</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card purple">
+        <h3>🔄 제어 흐름</h3>
+        <ul>
+          <li><strong>순차(Sequential)</strong>: 위→아래 순서대로 실행</li>
+          <li><strong>조건 분기(if)</strong>: 조건에 따라 다른 블록 실행</li>
+          <li><strong>for문</strong>: iterable 원소를 하나씩 꺼내 반복</li>
+          <li><strong>while문</strong>: 조건이 True인 동안 반복</li>
+          <li>⚠ 파이썬 들여쓰기: 반드시 <strong>스페이스 4칸</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-grid" style="margin-bottom:16px;">
+      <div class="card info">
+        <h3>⚙️ 함수 관련 핵심 개념</h3>
+        <ul>
+          <li><strong>def</strong>: 함수를 정의하는 키워드</li>
+          <li><strong>파라미터(parameter)</strong>: 함수 정의 시 입력값 이름</li>
+          <li><strong>인수(argument)</strong>: 호출 시 전달하는 실제 값</li>
+          <li><strong>return</strong>: 결과값 반환 키워드</li>
+          <li><strong>lambda</strong>: 이름 없이 즉시 생성하는 익명 함수</li>
+          <li><strong>map(함수, iterable)</strong>: 모든 원소에 함수 적용</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>🏗️ 객체 지향 프로그래밍 (OOP)</h3>
+        <ul>
+          <li><strong>클래스(Class)</strong>: 객체의 설계도 (붕어빵 틀)</li>
+          <li><strong>인스턴스(Instance)</strong>: 클래스로 만든 실체 (실제 붕어빵)</li>
+          <li><strong>__init__</strong>: 생성자, 인스턴스 생성 시 자동 호출</li>
+          <li><strong>self</strong>: 생성된 인스턴스 자기 자신을 가리킴</li>
+          <li><strong>OOP 장점</strong>: 캡슐화, 재사용성, 유지보수성, 상속</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 리스트 컴프리헨션 코드 예시 -->
+    <h3 style="font-size:1rem; margin: 12px 0 10px; color:var(--text-sub);">리스트 컴프리헨션 (List Comprehension)</h3>
+    <div class="code-block">
+<span class="cmt"># 일반 for 문</span>
+result = []
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    result.<span class="fn">append</span>(i * <span class="num">2</span>)
+
+<span class="cmt"># 컴프리헨션으로 간결하게</span>
+result = [i * <span class="num">2</span> <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>)]  <span class="cmt"># [0, 2, 4, 6, 8]</span>
+
+<span class="cmt"># 조건 포함</span>
+evens = [i <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>) <span class="kw">if</span> i % <span class="num">2</span> == <span class="num">0</span>]  <span class="cmt"># [0, 2, 4, 6, 8]</span>
+
+<span class="cmt"># 딕셔너리 .items() 순회</span>
+<span class="kw">for</span> k, v <span class="kw">in</span> dic_data.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="str">f'{k}: {v}'</span>)
+    </div>
+  </section>
+
+  <!-- 타임라인 -->
+  <section id="timeline">
+    <h2 class="section-title">📅 타임라인</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1990</div>
+        <h3>파이썬(Python) 탄생</h3>
+        <p>귀도 반 로섬(Guido van Rossum)이 암스테르담에서 개발. 이름의 유래는 영국 코미디쇼 'Monty Python's Flying Circus'. 로고·책 표지에 뱀 그림이 많은 이유: Python은 큰 뱀을 의미.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2012</div>
+        <h3>빅데이터 시대 본격화</h3>
+        <p>Volume·Velocity·Variety의 3V 개념이 확산. 데이터 과학자라는 직업이 주목받기 시작.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2015</div>
+        <h3>Doing Data Science 출판 (참고 교재)</h3>
+        <p>Rachel Schutt and Cathy O'Neil, O'REILLY. 데이터 과학 벤다이어그램(통계학+해킹 스킬+도메인 지식)이 널리 알려짐.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">현재</div>
+        <h3>아나콘다 + JupyterLab 표준 환경</h3>
+        <p>데이터 과학 실습의 표준 개발 환경으로 자리잡음. Google, Instagram, Netflix, Amazon 등 글로벌 기업에서 파이썬 광범위 사용.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 핵심 캐치 -->
+  <section id="catch">
+    <h2 class="section-title">⚡ 핵심 캐치 (시험 포인트)</h2>
+    <div class="catch-grid">
+      <div class="catch-card">
+        <h3>데이터 과학 벤다이어그램 3요소</h3>
+        <p><span class="highlight">통계학(Statistics)</span> + <span class="highlight">컴퓨터 과학/해킹 스킬</span> + <span class="highlight">도메인 지식</span>의 교집합이 데이터 과학. 이 세 가지를 모두 갖춘 사람이 데이터 과학자.</p>
+      </div>
+      <div class="catch-card">
+        <h3>빅데이터 3V 암기</h3>
+        <p><span class="highlight">Volume(규모)</span> · <span class="highlight">Velocity(속도)</span> · <span class="highlight">Variety(다양성)</span>. "부피-속도-다양" 순서로 암기. 간혹 Veracity(정확성)을 추가해 4V로 보기도 함.</p>
+      </div>
+      <div class="catch-card">
+        <h3>파이썬 창시자 & 연도</h3>
+        <p><span class="highlight">1990년</span> <span class="highlight">귀도 반 로섬(Guido van Rossum)</span>이 개발. 이름의 유래는 Monty Python's Flying Circus (뱀이 아님!).</p>
+      </div>
+      <div class="catch-card">
+        <h3>통계학 vs 데이터 과학의 핵심 차이</h3>
+        <p>데이터 과학은 <span class="highlight">피드백 루프</span>를 통해 더 많은 데이터를 생성하는 것이 통계학과의 핵심 차이점. 서비스 → 데이터 → 분석 → 서비스의 순환.</p>
+      </div>
+      <div class="catch-card">
+        <h3>리스트 × 2 의 의미</h3>
+        <p><span class="highlight">data_list * 2</span>는 원소 값을 두 배로 만드는 것이 아니라, <span class="highlight">리스트 전체를 한 번 더 복제</span>함. 예: [1,2,3] * 2 → [1,2,3,1,2,3]</p>
+      </div>
+      <div class="catch-card">
+        <h3>생성자 __init__와 self</h3>
+        <p><span class="highlight">__init__</span>은 인스턴스 생성 시 자동 호출되는 매직 메소드(생성자). <span class="highlight">self</span>는 생성된 인스턴스 자기 자신을 가리키는 첫 번째 파라미터.</p>
+      </div>
+      <div class="catch-card">
+        <h3>for vs while 사용 기준</h3>
+        <p><span class="highlight">for</span>: 반복 횟수가 정해져 있을 때 (리스트, range 등). <span class="highlight">while</span>: 조건에 따라 반복 횟수가 동적으로 변할 때. while은 반드시 탈출 조건 필요 (무한루프 방지).</p>
+      </div>
+      <div class="catch-card">
+        <h3>딕셔너리 순회 메소드</h3>
+        <p><code>.keys()</code> 키만 / <code>.values()</code> 값만 / <span class="highlight">.items()</span> 키+값 동시 순회 ⭐. 실무에서 가장 자주 사용하는 패턴: <code>for k, v in dict.items():</code></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 핵심 키워드 -->
+  <section id="keywords">
+    <h2 class="section-title">🔑 핵심 키워드</h2>
+    <div class="kw-grid">
+      <div class="kw-card">
+        <div class="kw-en">Data Science</div>
+        <div class="kw-ko">데이터 과학</div>
+        <div class="kw-def">통계학·컴퓨터 공학·도메인 지식이 결합된 융합 학문. 방대한 데이터에서 유의미한 패턴과 통찰을 발견하는 과정 전체.</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Data Scientist</div>
+        <div class="kw-ko">데이터 과학자</div>
+        <div class="kw-def">지저분한(raw) 데이터에서 통찰력(인사이트)을 발견하는 사람. 통계, 프로그래밍, 비즈니스 감각을 모두 갖춘 융합형 전문가.</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">EDA (Exploratory Data Analysis)</div>
+        <div class="kw-ko">탐색적 데이터 분석</div>
+        <div class="kw-def">모델링 전, 데이터의 분포·패턴·이상값을 시각화와 통계로 파악하는 분석 과정.</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Anaconda</div>
+        <div class="kw-ko">아나콘다</div>
+        <div class="kw-def">파이썬 기반 데이터 과학 플랫폼. Python + 300개 이상 라이브러리를 한 번에 설치하며, 가상 환경 관리 기능 제공.</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">JupyterLab</div>
+        <div class="kw-ko">주피터 랩</div>
+        <div class="kw-def">Jupyter Notebook의 차세대 통합 개발 환경. 멀티탭, 분할 뷰, 파일 관리 등 향상된 UI 제공. 셀 단위로 코드 실행.</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Variable</div>
+        <div class="kw-ko">변수</div>
+        <div class="kw-def">데이터를 저장하는 메모리 공간. 파이썬은 타입 선언 없이 값 대입만으로 즉시 사용 가능 (동적 타이핑).</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">List / Dictionary / Tuple / Set</div>
+        <div class="kw-ko">리스트 / 딕셔너리 / 튜플 / 집합</div>
+        <div class="kw-def">파이썬의 4대 컬렉션 타입. 각각 [], {k:v}, (), {} 기호 사용. 순서·중복·변경 가능 여부가 다름.</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">List Comprehension</div>
+        <div class="kw-ko">리스트 컴프리헨션</div>
+        <div class="kw-def">for문을 이용해 리스트를 간결하게 생성하는 파이썬 문법. [표현식 for 변수 in iterable (if 조건)] 구조.</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Lambda Function</div>
+        <div class="kw-ko">익명 함수 (람다)</div>
+        <div class="kw-def">이름 없이 즉시 생성하는 함수. lambda 파라미터: 반환식 형태. map, filter, sorted 등 고차 함수와 함께 사용.</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">OOP (Object-Oriented Programming)</div>
+        <div class="kw-ko">객체 지향 프로그래밍</div>
+        <div class="kw-def">데이터(속성)와 처리 코드(메소드)를 하나의 객체로 묶는 프로그래밍 패러다임. 캡슐화·재사용성·상속 등이 핵심.</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Class / Instance</div>
+        <div class="kw-ko">클래스 / 인스턴스</div>
+        <div class="kw-def">클래스는 객체의 설계도(붕어빵 틀). 인스턴스는 클래스로부터 만들어진 실체(실제 붕어빵). 하나의 클래스에서 여러 인스턴스 생성 가능.</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Constructor (__init__)</div>
+        <div class="kw-ko">생성자</div>
+        <div class="kw-def">인스턴스가 생성될 때 자동으로 실행되는 특별한 매직 메소드. self는 생성된 인스턴스 자기 자신을 가리킴.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 연습문제 -->
+  <section id="quiz">
+    <h2 class="section-title">✏️ 연습문제</h2>
+    <div class="quiz-list">
+
+      <!-- Q1 -->
+      <div class="quiz-item">
+        <div class="quiz-q"><span class="qnum">1</span> 데이터 과학의 벤다이어그램에서 교집합을 이루는 세 가지 요소가 아닌 것은?</div>
+        <div class="options" id="q1">
+          <button class="option-btn" onclick="checkMCQ(this,'q1',false)"><span>①</span> 통계학 (Statistics)</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q1',false)"><span>②</span> 컴퓨터 과학/해킹 스킬 (Hacking Skills)</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q1',false)"><span>③</span> 도메인 지식 (Domain Expertise)</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q1',true)"><span>④</span> 인공지능 (Artificial Intelligence)</button>
+        </div>
+        <div class="feedback" id="q1-fb"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="quiz-item">
+        <div class="quiz-q"><span class="qnum">2</span> 빅데이터의 3V에 해당하지 않는 것은?</div>
+        <div class="options" id="q2">
+          <button class="option-btn" onclick="checkMCQ(this,'q2',false)"><span>①</span> Volume (규모)</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q2',false)"><span>②</span> Velocity (속도)</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q2',true)"><span>③</span> Validity (유효성)</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q2',false)"><span>④</span> Variety (다양성)</button>
+        </div>
+        <div class="feedback" id="q2-fb"></div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="quiz-item">
+        <div class="quiz-q"><span class="qnum">3</span> 파이썬을 개발한 사람과 연도가 올바르게 짝지어진 것은?</div>
+        <div class="options" id="q3">
+          <button class="option-btn" onclick="checkMCQ(this,'q3',false)"><span>①</span> 리누스 토르발즈 - 1991년</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q3',true)"><span>②</span> 귀도 반 로섬 - 1990년</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q3',false)"><span>③</span> 제임스 고슬링 - 1995년</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q3',false)"><span>④</span> 귀도 반 로섬 - 2000년</button>
+        </div>
+        <div class="feedback" id="q3-fb"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="quiz-item">
+        <div class="quiz-q"><span class="qnum">4</span> 다음 중 파이썬 자료구조에 대한 설명으로 옳지 않은 것은?</div>
+        <div class="options" id="q4">
+          <button class="option-btn" onclick="checkMCQ(this,'q4',false)"><span>①</span> 리스트(list)는 순서가 있고 중복 원소를 허용한다.</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q4',false)"><span>②</span> 튜플(tuple)은 생성 후 원소 변경이 불가능하다.</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q4',true)"><span>③</span> 딕셔너리(dict)는 키(key) 중복이 허용된다.</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q4',false)"><span>④</span> 집합(set)은 중복 원소가 없고 순서가 없다.</button>
+        </div>
+        <div class="feedback" id="q4-fb"></div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="quiz-item">
+        <div class="quiz-q"><span class="qnum">5</span> JupyterLab에서 현재 셀을 실행하고 다음 셀로 이동하는 단축키는?</div>
+        <div class="options" id="q5">
+          <button class="option-btn" onclick="checkMCQ(this,'q5',false)"><span>①</span> Ctrl+Enter</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q5',true)"><span>②</span> Shift+Enter</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q5',false)"><span>③</span> Alt+Enter</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q5',false)"><span>④</span> Tab+Enter</button>
+        </div>
+        <div class="feedback" id="q5-fb"></div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="quiz-item">
+        <div class="quiz-q"><span class="qnum">6</span> 다음 코드의 출력 결과로 올바른 것은?<br>
+        <code style="background:var(--code-bg);padding:4px 8px;border-radius:4px;font-size:0.85rem;">data = [1, 2, 3]; print(data * 2)</code></div>
+        <div class="options" id="q6">
+          <button class="option-btn" onclick="checkMCQ(this,'q6',false)"><span>①</span> [2, 4, 6]</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q6',true)"><span>②</span> [1, 2, 3, 1, 2, 3]</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q6',false)"><span>③</span> [[1,2,3], [1,2,3]]</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q6',false)"><span>④</span> [1, 2, 3, 6]</button>
+        </div>
+        <div class="feedback" id="q6-fb"></div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="quiz-item">
+        <div class="quiz-q"><span class="qnum">7</span> 다음 중 클래스와 인스턴스에 대한 설명으로 틀린 것은?</div>
+        <div class="options" id="q7">
+          <button class="option-btn" onclick="checkMCQ(this,'q7',false)"><span>①</span> 클래스는 객체의 설계도이다.</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q7',false)"><span>②</span> __init__은 인스턴스 생성 시 자동으로 호출된다.</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q7',true)"><span>③</span> 하나의 클래스에서 하나의 인스턴스만 생성할 수 있다.</button>
+          <button class="option-btn" onclick="checkMCQ(this,'q7',false)"><span>④</span> self는 생성된 인스턴스 자기 자신을 가리킨다.</button>
+        </div>
+        <div class="feedback" id="q7-fb"></div>
+      </div>
+
+      <!-- Q8: 단답형 -->
+      <div class="quiz-item">
+        <div class="quiz-q"><span class="qnum">8</span> [단답형] range(0, 10, 2) 의 출력 결과를 쓰시오. (단, 리스트 형태로 작성)</div>
+        <div class="sa-input-wrap">
+          <input class="sa-input" id="q8-input" type="text" placeholder="예: [0, 2, 4, ...]">
+          <button class="sa-btn" onclick="checkSA('q8', ['[0, 2, 4, 6, 8]', '0, 2, 4, 6, 8'])">확인</button>
+        </div>
+        <div class="feedback" id="q8-fb"></div>
+      </div>
+
+      <!-- Q9: 단답형 -->
+      <div class="quiz-item">
+        <div class="quiz-q"><span class="qnum">9</span> [단답형] 딕셔너리에서 키(key)와 값(value)을 동시에 순회할 때 사용하는 메소드는?</div>
+        <div class="sa-input-wrap">
+          <input class="sa-input" id="q9-input" type="text" placeholder="메소드명 입력">
+          <button class="sa-btn" onclick="checkSA('q9', ['.items()', 'items()', '.items'])">확인</button>
+        </div>
+        <div class="feedback" id="q9-fb"></div>
+      </div>
+
+      <!-- Q10: 단답형 -->
+      <div class="quiz-item">
+        <div class="quiz-q"><span class="qnum">10</span> [단답형] 데이터 과학의 프레임워크에서 통계학과의 핵심 차이점으로 언급된 것은? (한 단어 또는 짧은 문구)</div>
+        <div class="sa-input-wrap">
+          <input class="sa-input" id="q10-input" type="text" placeholder="핵심 키워드 입력">
+          <button class="sa-btn" onclick="checkSA('q10', ['피드백 루프', '피드백루프', 'feedback loop', 'feedback'])">확인</button>
+        </div>
+        <div class="feedback" id="q10-fb"></div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Dark Mode
+  (function() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('themeBtn').textContent = '☀️ 라이트모드';
+    }
+  })();
+
+  function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.getElementById('themeBtn');
+    if (html.getAttribute('data-theme') === 'dark') {
+      html.removeAttribute('data-theme');
+      btn.textContent = '🌙 야간모드';
+      localStorage.setItem('theme', 'light');
+    } else {
+      html.setAttribute('data-theme', 'dark');
+      btn.textContent = '☀️ 라이트모드';
+      localStorage.setItem('theme', 'dark');
+    }
+  }
+
+  // MCQ
+  function checkMCQ(btn, groupId, isCorrect) {
+    const group = document.getElementById(groupId);
+    const allBtns = group.querySelectorAll('.option-btn');
+    const fb = document.getElementById(groupId + '-fb');
+    allBtns.forEach(b => b.classList.add('disabled'));
+    if (isCorrect) {
+      btn.classList.add('correct');
+      fb.textContent = '✅ 정답입니다!';
+      fb.className = 'feedback show ok';
+    } else {
+      btn.classList.add('wrong');
+      const correctBtn = Array.from(allBtns).find(b => b.onclick.toString().includes('true'));
+      if (correctBtn) correctBtn.classList.add('correct');
+      fb.textContent = '❌ 오답입니다. 정답은 초록색으로 표시된 항목입니다.';
+      fb.className = 'feedback show no';
+    }
+  }
+
+  // Short Answer
+  function checkSA(id, answers) {
+    const input = document.getElementById(id + '-input');
+    const fb = document.getElementById(id + '-fb');
+    const userAnswer = input.value.trim().toLowerCase();
+    const isCorrect = answers.some(a => userAnswer === a.toLowerCase() || userAnswer.includes(a.toLowerCase().replace(/[.()]/g, '')));
+    if (isCorrect) {
+      fb.textContent = '✅ 정답입니다! 정답: ' + answers[0];
+      fb.className = 'feedback show ok';
+      input.style.borderColor = 'var(--success)';
+    } else {
+      fb.textContent = '❌ 오답입니다. 정답: ' + answers[0];
+      fb.className = 'feedback show no';
+      input.style.borderColor = 'var(--danger)';
+    }
+  }
+</script>
+</body>
+</html>

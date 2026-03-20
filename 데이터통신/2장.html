@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터통신 2장 — 네트워크 분류와 프로토콜</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-sub: #64748b;
+    --border: #e2e8f0;
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --teal: #0d9488;
+    --teal-light: #ccfbf1;
+    --nav-bg: rgba(255,255,255,0.95);
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #f1f5f9;
+    --text-sub: #94a3b8;
+    --border: #334155;
+    --primary-light: #1e3a8a;
+    --success-light: #14532d;
+    --danger-light: #7f1d1d;
+    --warning-light: #78350f;
+    --purple-light: #3b0764;
+    --teal-light: #134e4a;
+    --nav-bg: rgba(15,23,42,0.97);
+    --shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; gap: 4px;
+    padding: 0 16px; height: 52px;
+    overflow-x: auto; white-space: nowrap;
+    box-shadow: var(--shadow);
+  }
+  nav a {
+    color: var(--text-sub); text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    padding: 6px 10px; border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+  nav a:hover { background: var(--primary-light); color: var(--primary); }
+  .nav-spacer { flex: 1; }
+  #darkToggle {
+    background: none; border: 1px solid var(--border);
+    color: var(--text); cursor: pointer;
+    padding: 6px 10px; border-radius: 8px;
+    font-size: 16px; flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  #darkToggle:hover { background: var(--primary-light); }
+
+  /* ── HEADER ── */
+  header {
+    margin-top: 52px;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white; padding: 48px 24px 36px; text-align: center;
+  }
+  header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px; padding: 4px 14px;
+    font-size: 13px; margin-bottom: 12px;
+  }
+  header h1 { font-size: clamp(22px, 5vw, 32px); font-weight: 700; margin-bottom: 8px; }
+  header p { font-size: 15px; opacity: 0.85; }
+
+  /* ── MAIN ── */
+  main { max-width: 900px; margin: 0 auto; padding: 32px 16px 64px; }
+
+  section { margin-bottom: 48px; scroll-margin-top: 68px; }
+  .section-title {
+    font-size: 20px; font-weight: 700;
+    margin-bottom: 20px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary);
+    color: var(--text);
+  }
+  .section-title span { color: var(--primary); }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--primary);
+    transition: transform 0.2s;
+  }
+  .card:hover { transform: translateY(-2px); }
+  .card.green  { border-top-color: var(--success); }
+  .card.orange { border-top-color: var(--warning); }
+  .card.purple { border-top-color: var(--purple); }
+  .card.teal   { border-top-color: var(--teal); }
+  .card.red    { border-top-color: var(--danger); }
+  .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  .card p, .card li { font-size: 14px; color: var(--text-sub); line-height: 1.7; }
+  .card ul { padding-left: 18px; }
+
+  /* ── GOAL CARDS ── */
+  .goal-list { display: flex; flex-direction: column; gap: 12px; }
+  .goal-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: var(--card-bg); border-radius: 10px;
+    padding: 16px; box-shadow: var(--shadow);
+  }
+  .goal-num {
+    min-width: 32px; height: 32px;
+    background: var(--primary); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+  .goal-item p { font-size: 14px; line-height: 1.6; }
+
+  /* ── CLASSIFICATION TABLE ── */
+  .class-table {
+    width: 100%; border-collapse: collapse;
+    background: var(--card-bg); border-radius: 12px;
+    overflow: hidden; box-shadow: var(--shadow);
+  }
+  .class-table th {
+    background: var(--primary); color: white;
+    padding: 12px 16px; font-size: 14px; text-align: left;
+  }
+  .class-table td {
+    padding: 12px 16px; font-size: 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .class-table tr:last-child td { border-bottom: none; }
+  .class-table tr:hover td { background: var(--primary-light); }
+  .class-table td:first-child { font-weight: 600; color: var(--primary); white-space: nowrap; }
+
+  /* ── NETWORK COMPARISON ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .net-card {
+    background: var(--card-bg); border-radius: 12px;
+    padding: 22px; box-shadow: var(--shadow);
+    border-left: 5px solid var(--primary);
+  }
+  .net-card.man { border-left-color: var(--warning); }
+  .net-card.wan { border-left-color: var(--success); }
+  .net-card .net-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 4px;
+  }
+  .net-card .net-sub {
+    font-size: 12px; color: var(--text-sub); margin-bottom: 14px;
+  }
+  .net-card li {
+    font-size: 13.5px; color: var(--text-sub);
+    line-height: 1.7; margin-bottom: 4px;
+  }
+  .net-card ul { padding-left: 16px; }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px; border-radius: 12px;
+    font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 6px;
+  }
+  .tag-blue { background: var(--primary-light); color: var(--primary); }
+  .tag-green { background: var(--success-light); color: var(--success); }
+  .tag-orange { background: var(--warning-light); color: var(--warning); }
+
+  /* ── MINDMAP ── */
+  .mindmap-wrap {
+    background: var(--card-bg); border-radius: 16px;
+    padding: 28px; box-shadow: var(--shadow);
+  }
+  .mindmap {
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
+  }
+  .mm-center {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white; font-weight: 700; font-size: 16px;
+    padding: 16px 28px; border-radius: 40px;
+  }
+  .mm-branches {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+    width: 100%;
+  }
+  .mm-branch {
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 12px; padding: 14px 18px;
+    text-align: center; min-width: 130px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+  }
+  .mm-branch:hover { transform: scale(1.04); }
+  .mm-branch .mm-icon { font-size: 22px; margin-bottom: 6px; }
+  .mm-branch .mm-label { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .mm-branch .mm-desc { font-size: 11.5px; color: var(--text-sub); line-height: 1.5; }
+  .mm-branch.blue { border-color: var(--primary); }
+  .mm-branch.green { border-color: var(--success); }
+  .mm-branch.orange { border-color: var(--warning); }
+  .mm-branch.purple { border-color: var(--purple); }
+  .mm-branch.teal { border-color: var(--teal); }
+  .mm-branch.red { border-color: var(--danger); }
+
+  /* ── PROTOCOL CARDS ── */
+  .proto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  .proto-card {
+    background: var(--card-bg); border-radius: 12px;
+    padding: 22px; box-shadow: var(--shadow);
+  }
+  .proto-card .proto-q {
+    font-size: 12px; color: var(--text-sub); margin-bottom: 4px; font-weight: 600;
+  }
+  .proto-card .proto-name {
+    font-size: 18px; font-weight: 700; margin-bottom: 10px;
+  }
+  .proto-card p { font-size: 13.5px; color: var(--text-sub); line-height: 1.7; }
+  .proto-card .example {
+    margin-top: 10px; padding: 10px;
+    background: var(--primary-light); border-radius: 8px;
+    font-size: 12.5px; color: var(--primary); line-height: 1.6;
+  }
+
+  /* ── CATCH ── */
+  .catch-list { display: flex; flex-direction: column; gap: 12px; }
+  .catch-item {
+    background: var(--card-bg); border-radius: 10px;
+    padding: 16px 20px; box-shadow: var(--shadow);
+    border-left: 4px solid var(--danger);
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .catch-item.exam { border-left-color: var(--danger); }
+  .catch-item.tip  { border-left-color: var(--warning); }
+  .catch-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .catch-item p { font-size: 14px; line-height: 1.7; }
+  .catch-item strong { color: var(--danger); }
+  .catch-item.tip strong { color: var(--warning); }
+
+  /* ── KEYWORDS ── */
+  .kw-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .kw-card {
+    background: var(--card-bg); border-radius: 10px;
+    padding: 16px; box-shadow: var(--shadow);
+    border-top: 3px solid var(--purple);
+  }
+  .kw-card .kw-en { font-size: 11px; color: var(--text-sub); font-style: italic; margin-bottom: 4px; }
+  .kw-card .kw-ko { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .kw-card .kw-def { font-size: 13px; color: var(--text-sub); line-height: 1.6; }
+
+  /* ── QUIZ ── */
+  .quiz-list { display: flex; flex-direction: column; gap: 24px; }
+  .quiz-item {
+    background: var(--card-bg); border-radius: 12px;
+    padding: 22px; box-shadow: var(--shadow);
+  }
+  .quiz-num { font-size: 12px; color: var(--primary); font-weight: 700; margin-bottom: 8px; }
+  .quiz-q { font-size: 15px; font-weight: 600; margin-bottom: 16px; line-height: 1.6; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option-btn {
+    width: 100%; text-align: left;
+    padding: 11px 16px; border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--bg); color: var(--text);
+    font-size: 14px; cursor: pointer;
+    transition: all 0.2s; font-family: inherit;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); }
+  .option-btn.correct { background: var(--success-light); border-color: var(--success); color: var(--success); font-weight: 600; }
+  .option-btn.wrong   { background: var(--danger-light);  border-color: var(--danger);  color: var(--danger); }
+  .feedback {
+    margin-top: 12px; padding: 10px 14px;
+    border-radius: 8px; font-size: 13.5px; display: none; line-height: 1.6;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok  { background: var(--success-light); color: var(--success); }
+  .feedback.no  { background: var(--danger-light);  color: var(--danger); }
+  .short-input {
+    width: 100%; padding: 10px 14px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 14px; font-family: inherit;
+    background: var(--bg); color: var(--text);
+    margin-bottom: 10px;
+  }
+  .short-input:focus { outline: none; border-color: var(--primary); }
+  .check-btn {
+    padding: 9px 22px; border-radius: 8px;
+    background: var(--primary); color: white;
+    border: none; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    transition: opacity 0.2s;
+  }
+  .check-btn:hover { opacity: 0.85; }
+
+  @media (max-width: 600px) {
+    .card-grid, .compare-grid, .kw-grid, .proto-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#goals">학습목표</a>
+  <a href="#classify">네트워크 분류</a>
+  <a href="#networks">LAN/MAN/WAN</a>
+  <a href="#internet">인터넷 구성</a>
+  <a href="#protocol">프로토콜</a>
+  <a href="#proto-func">프로토콜 기능</a>
+  <a href="#standards">표준</a>
+  <a href="#catch">핵심 캐치</a>
+  <a href="#keywords">키워드</a>
+  <a href="#quiz">연습문제</a>
+  <div class="nav-spacer"></div>
+  <button id="darkToggle" onclick="toggleDark()" title="야간모드 전환">🌙</button>
+</nav>
+
+<!-- HEADER -->
+<header>
+  <div class="badge">데이터통신 · 2장</div>
+  <h1>네트워크 분류와 프로토콜</h1>
+  <p>LAN · MAN · WAN 의 특징 비교 &amp; 프로토콜의 3대 요소</p>
+</header>
+
+<main>
+
+  <!-- ① 학습 목표 -->
+  <section id="goals">
+    <h2 class="section-title">① <span>학습 목표</span></h2>
+    <div class="goal-list">
+      <div class="goal-item">
+        <div class="goal-num">1</div>
+        <p>네트워크를 데이터 전송형태, 연결형태, 규모, 교환 방식, 사용목적으로 분류할 수 있다.</p>
+      </div>
+      <div class="goal-item">
+        <div class="goal-num">2</div>
+        <p>LAN, MAN, WAN의 개념과 각각의 특징을 설명할 수 있다.</p>
+      </div>
+      <div class="goal-item">
+        <div class="goal-num">3</div>
+        <p>인터넷의 주요 구성 요소(라우터, 스위치, 서버 등)와 그 역할을 이해한다.</p>
+      </div>
+      <div class="goal-item">
+        <div class="goal-num">4</div>
+        <p>프로토콜의 개념과 3가지 주요 요소(구문·의미·타이밍)를 설명할 수 있다.</p>
+      </div>
+      <div class="goal-item">
+        <div class="goal-num">5</div>
+        <p>표준의 분류(참여범위·규정내용·적용방법)와 주요 표준화 기구(ISO, ITU, IEEE, EIA, ANSI, KS/KICS, IETF)의 특징을 구분할 수 있다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 네트워크 분류 -->
+  <section id="classify">
+    <h2 class="section-title">② <span>네트워크 분류 체계</span></h2>
+    <table class="class-table">
+      <thead>
+        <tr><th>분류 기준</th><th>종류</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>데이터 전송형태</td>
+          <td>아날로그 통신망, 디지털 통신망</td>
+        </tr>
+        <tr>
+          <td>연결형태 (토폴로지)</td>
+          <td>스타형, 버스형, 링형, 트리형, 메쉬형, 혼합형</td>
+        </tr>
+        <tr>
+          <td>네트워크 규모</td>
+          <td>LAN (근거리), MAN (도시형), WAN (광역)</td>
+        </tr>
+        <tr>
+          <td>교환 방식</td>
+          <td>회선 교환망, 패킷 교환망, 메시지 교환망</td>
+        </tr>
+        <tr>
+          <td>사용 목적</td>
+          <td>부가가치 통신망, 종합 정보 통신망, 공중망</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ③ LAN / MAN / WAN -->
+  <section id="networks">
+    <h2 class="section-title">③ <span>LAN · MAN · WAN 비교</span></h2>
+    <div class="compare-grid">
+
+      <!-- LAN -->
+      <div class="net-card">
+        <div class="net-title">🏢 LAN</div>
+        <div class="net-sub">Local Area Network · 근거리 통신망</div>
+        <div>
+          <span class="tag tag-blue">반경 수 km 이내</span>
+          <span class="tag tag-blue">사설 기관 소유</span>
+        </div>
+        <ul>
+          <li>한 건물/회사/공장/병원 내 장치들을 연결</li>
+          <li>수 Mbps ~ 수백 Mbps 고속 전송 지원</li>
+          <li>단일 기관 소유 → 확장·재배치 유리</li>
+          <li>광대역 전송 매체 → 고속 통신 가능</li>
+          <li>신뢰성 높음, 오류율 낮음</li>
+          <li>초기: 공유채널 → 현재: <strong>LAN 스위치</strong> 구조</li>
+          <li>기가비트 이더넷, 무선 LAN 등 다양한 방식 사용</li>
+        </ul>
+      </div>
+
+      <!-- MAN -->
+      <div class="net-card man">
+        <div class="net-title">🏙️ MAN</div>
+        <div class="net-sub">Metropolitan Area Network · 도시형 통신망</div>
+        <div>
+          <span class="tag tag-orange">LAN과 WAN 중간</span>
+          <span class="tag tag-orange">경계 모호화</span>
+        </div>
+        <ul>
+          <li>하나의 도시/지역을 연결</li>
+          <li>오류율과 지연시간이 LAN보다 큼</li>
+          <li>최근 LAN이 발달하면서 LAN의 확장 형태로 간주</li>
+          <li><strong>"MAN"이라는 용어는 잘 사용되지 않음</strong></li>
+          <li>IEEE 표준: <strong>DQDB</strong>(Distributed Queue Dual Bus) 프로토콜 권장</li>
+        </ul>
+      </div>
+
+      <!-- WAN -->
+      <div class="net-card wan">
+        <div class="net-title">🌍 WAN</div>
+        <div class="net-sub">Wide Area Network · 광역 통신망</div>
+        <div>
+          <span class="tag tag-green">국가·대륙·전세계</span>
+          <span class="tag tag-green">공중망 임대</span>
+        </div>
+        <ul>
+          <li>국가, 대륙, 전 세계를 포괄</li>
+          <li>데이터·음성·영상 등 다양한 정보 전송</li>
+          <li>통신사업자가 구축한 공중망을 임대하여 사용</li>
+          <li>네트워크 형태가 매우 복잡</li>
+          <li><strong>스위칭 개념 사용</strong> (↓ 아래 설명 참고)</li>
+          <li>구축 비용이 많이 들고 전송 속도가 LAN보다 느림</li>
+          <li>소유 주체가 불분명 (통신사업자 vs 임대자)</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- WAN 스위칭 이유 -->
+    <div style="margin-top:20px; background: var(--card-bg); border-radius:12px; padding:20px; box-shadow: var(--shadow); border-left: 5px solid var(--success);">
+      <h3 style="font-size:15px; font-weight:700; margin-bottom:10px;">💡 WAN이 스위칭 개념을 사용하는 이유</h3>
+      <p style="font-size:14px; color:var(--text-sub); line-height:1.8;">
+        WAN은 수천 km에 걸쳐 무수히 많은 노드가 분산되어 있습니다.
+        모든 노드 쌍 사이에 <strong style="color:var(--text)">전용 회선(dedicated line)</strong>을 깔면 비용이 천문학적으로 증가합니다.
+        <br><br>
+        대신 <strong style="color:var(--text)">스위칭(교환)을 사용하면</strong> 하나의 물리적 링크를 여러 통신이 <em>공유</em>할 수 있어
+        효율적으로 자원을 활용할 수 있습니다. 즉, 필요할 때만 경로를 연결하거나 패킷을 적절한 경로로 전달함으로써
+        <strong style="color:var(--text)">비용 절감 + 자원 공유</strong>라는 두 가지 효과를 동시에 달성합니다.
+        <br><br>
+        📌 WAN에서 사용하는 스위칭 방식: 회선 교환(Circuit Switching), 패킷 교환(Packet Switching), 메시지 교환(Message Switching)
+      </p>
+    </div>
+  </section>
+
+  <!-- ④ 인터넷 주요 구성 요소 -->
+  <section id="internet">
+    <h2 class="section-title">④ <span>인터넷의 주요 구성 요소</span></h2>
+    <div class="mindmap-wrap">
+      <div class="mindmap">
+        <div class="mm-center">🌐 인터넷 (Internet)</div>
+        <div class="mm-branches">
+          <div class="mm-branch blue">
+            <div class="mm-icon">🖥️</div>
+            <div class="mm-label">메인프레임</div>
+            <div class="mm-desc">대용량 데이터 처리<br>기업·기관용 중앙 컴퓨터</div>
+          </div>
+          <div class="mm-branch orange">
+            <div class="mm-icon">📡</div>
+            <div class="mm-label">라우터</div>
+            <div class="mm-desc">WAN에서 패킷 경로 결정<br>네트워크 간 연결 핵심 장비</div>
+          </div>
+          <div class="mm-branch green">
+            <div class="mm-icon">🌐</div>
+            <div class="mm-label">WAN</div>
+            <div class="mm-desc">국가·대륙 연결<br>공중망 임대 방식</div>
+          </div>
+          <div class="mm-branch teal">
+            <div class="mm-icon">🏢</div>
+            <div class="mm-label">LAN</div>
+            <div class="mm-desc">건물·캠퍼스 내부 연결<br>고속·저오류율</div>
+          </div>
+          <div class="mm-branch purple">
+            <div class="mm-icon">🔀</div>
+            <div class="mm-label">LAN 스위치</div>
+            <div class="mm-desc">LAN 내 장치 연결·교환<br>최신 LAN의 핵심 장비</div>
+          </div>
+          <div class="mm-branch blue">
+            <div class="mm-icon">💻</div>
+            <div class="mm-label">PC</div>
+            <div class="mm-desc">최종 사용자 단말<br>클라이언트 역할</div>
+          </div>
+          <div class="mm-branch red">
+            <div class="mm-icon">🗄️</div>
+            <div class="mm-label">서버</div>
+            <div class="mm-desc">웹·메일·파일 서비스 제공<br>클라이언트 요청 처리</div>
+          </div>
+          <div class="mm-branch orange">
+            <div class="mm-icon">🖥️</div>
+            <div class="mm-label">워크스테이션</div>
+            <div class="mm-desc">고성능 업무용 단말<br>설계·과학 계산 등 전문 작업</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ 프로토콜 -->
+  <section id="protocol">
+    <h2 class="section-title">⑤ <span>프로토콜 (Protocol)</span></h2>
+
+    <div style="background:var(--card-bg); border-radius:12px; padding:20px; box-shadow:var(--shadow); margin-bottom:20px;">
+      <p style="font-size:14px; line-height:1.8; color:var(--text-sub);">
+        <strong style="color:var(--text)">프로토콜(Protocol)</strong>은 원래 '의정서, 조서'를 의미하는 외교상의 용어입니다.
+        <br>
+        <strong style="color:var(--text)">통신 프로토콜</strong>이란 통신을 위한 <em>약속들의 집합</em>으로, 서로 다른 장치 간에 데이터를 주고받기 위한 규칙을 정의합니다.
+      </p>
+    </div>
+
+    <div class="proto-grid">
+      <div class="proto-card" style="border-top:4px solid var(--primary);">
+        <div class="proto-q">무엇을? (What?)</div>
+        <div class="proto-name" style="color:var(--primary);">구문 (Syntax)</div>
+        <p>
+          데이터의 <strong>구조나 형식</strong>을 정의합니다.<br>
+          데이터가 어떤 순서로 표현되는지를 의미하며, <strong>순서에 따라 의미가 달라집니다.</strong>
+        </p>
+        <div class="example">
+          예) IP 패킷 헤더에서 출발지 주소가 앞에 오는지 뒤에 오는지는 구문(문법)의 문제
+        </div>
+      </div>
+
+      <div class="proto-card" style="border-top:4px solid var(--success);">
+        <div class="proto-q">어떻게? (How?)</div>
+        <div class="proto-name" style="color:var(--success);">의미 (Semantics)</div>
+        <p>
+          데이터의 <strong>의미·뜻</strong>을 정의합니다.<br>
+          특정 패턴이 어떻게 해석되며, 그 해석에 따라 <strong>어떤 동작을 취할지</strong>를 결정합니다.
+        </p>
+        <div class="example" style="background:var(--success-light); color:var(--success);">
+          예) 헤더의 특정 비트가 '1'이면 오류 발생을 의미하고, 재전송을 요청해야 함
+        </div>
+      </div>
+
+      <div class="proto-card" style="border-top:4px solid var(--warning);">
+        <div class="proto-q">언제? (When?)</div>
+        <div class="proto-name" style="color:var(--warning);">타이밍 (Timing)</div>
+        <p>
+          <strong>언제</strong> 전송할지, <strong>얼마나 빠르게</strong> 전송할지를 결정합니다.<br>
+          흐름 제어(Flow Control)와 관련이 있습니다.
+        </p>
+        <div class="example" style="background:var(--warning-light); color:var(--warning);">
+          🤔 송신기: 100Mbps 전송 / 수신기: 10Mbps 처리<br>
+          → 버퍼 오버플로우 발생! 데이터 손실 위험
+        </div>
+      </div>
+    </div>
+
+    <!-- 요약 표 -->
+    <div style="margin-top:20px; background:var(--card-bg); border-radius:12px; overflow:hidden; box-shadow:var(--shadow);">
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr style="background:var(--primary); color:white;">
+            <th style="padding:12px 16px; font-size:14px; text-align:center;">요소</th>
+            <th style="padding:12px 16px; font-size:14px; text-align:center;">질문</th>
+            <th style="padding:12px 16px; font-size:14px; text-align:left;">핵심 키워드</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:12px 16px; text-align:center; font-weight:700; color:var(--primary);">구문</td>
+            <td style="padding:12px 16px; text-align:center; color:var(--text-sub); font-size:14px;">무엇을?</td>
+            <td style="padding:12px 16px; font-size:14px; color:var(--text);">데이터 구조·형식, 순서</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:12px 16px; text-align:center; font-weight:700; color:var(--success);">의미</td>
+            <td style="padding:12px 16px; text-align:center; color:var(--text-sub); font-size:14px;">어떻게?</td>
+            <td style="padding:12px 16px; font-size:14px; color:var(--text);">패턴 해석, 동작 결정</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 16px; text-align:center; font-weight:700; color:var(--warning);">타이밍</td>
+            <td style="padding:12px 16px; text-align:center; color:var(--text-sub); font-size:14px;">언제?</td>
+            <td style="padding:12px 16px; font-size:14px; color:var(--text);">전송 시점·속도, 흐름 제어</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ⑥ 프로토콜의 주요기능 -->
+  <section id="proto-func">
+    <h2 class="section-title">⑥ <span>프로토콜의 주요 기능</span></h2>
+    <div class="card-grid">
+
+      <div class="card" style="border-top-color:var(--primary);">
+        <h3>📍 주소지정 (Addressing)</h3>
+        <p>데이터가 목적지까지 정확하게 전송될 수 있도록 <strong>목적지 주소와 경로를 부여</strong>하는 기능.</p>
+      </div>
+
+      <div class="card green">
+        <h3>🔢 순서 제어 (Sequencing)</h3>
+        <p>전송되는 패킷에 <strong>전송 순서를 부여</strong>하는 기능.<br>흐름 제어 및 오류 제어를 용이하게 함.</p>
+      </div>
+
+      <div class="card orange">
+        <h3>✂️ 단편화 및 재조립</h3>
+        <p>
+          <strong>단편화(Fragmentation):</strong> 송신측에서 데이터를 작은 패킷으로 분할하여 전송.<br>
+          <strong>재조립(Reassembly):</strong> 수신측에서 패킷들을 원래 데이터로 복원.<br>
+          <em>이유: 지연시간 최소화 + 오류 발생 확률 감소</em>
+        </p>
+      </div>
+
+      <div class="card purple">
+        <h3>📦 캡슐화 (Encapsulation)</h3>
+        <p>주소, 오류검출 부호 등 <strong>프로토콜 제어정보를 부가</strong>하는 것.<br>보통 <strong>헤더(Header)</strong>와 <strong>트레일러(Trailer)</strong>를 덧붙이는 방식으로 수행.</p>
+      </div>
+
+      <div class="card teal">
+        <h3>🔗 연결 제어 (Connection Control)</h3>
+        <p>데이터 교환 시 연결 설정 유무에 따라:</p>
+        <ul>
+          <li><strong>연결 지향형</strong>: 전송 전 연결 설정 후 통신</li>
+          <li><strong>비연결 지향형</strong>: 연결 없이 바로 전송</li>
+        </ul>
+      </div>
+
+      <div class="card" style="border-top-color:var(--teal);">
+        <h3>🌊 흐름 제어 (Flow Control)</h3>
+        <p>수신 측에서 데이터가 <strong>넘치지 않도록</strong> 수신 측의 처리 능력에 맞게 송신 측의 <strong>송신 데이터 양을 조절</strong>하는 기능.</p>
+      </div>
+
+      <div class="card red">
+        <h3>🛠️ 오류 제어 (Error Control)</h3>
+        <p>전송 도중 발생하는 오류를 <strong>검출하고 정정</strong>하는 기능.</p>
+        <ul>
+          <li>패리티 비트 (Parity Bit)</li>
+          <li>CRC (순환 중복 검사)</li>
+          <li>검사합 (Checksum)</li>
+        </ul>
+      </div>
+
+      <div class="card" style="border-top-color:var(--warning);">
+        <h3>⏱️ 동기화 (Synchronization)</h3>
+        <p>송수신 측이 <strong>같은 상태를 유지</strong>하도록 타이밍을 맞추는 기능.</p>
+      </div>
+
+      <div class="card" style="border-top-color:var(--purple);">
+        <h3>📡 다중화 (Multiplexing)</h3>
+        <p>하나의 통신 회선을 <strong>여러 가입자가 동시에</strong> 이용할 수 있도록 하는 기능.</p>
+      </div>
+
+      <div class="card" style="border-top-color:var(--teal);">
+        <h3>🗺️ 라우팅 (Routing)</h3>
+        <p>출발지에서 목적지까지 <strong>최적의 경로를 설정</strong>하는 기능.</p>
+      </div>
+
+      <div class="card" style="border-top-color:var(--success);">
+        <h3>🎛️ 전송 서비스 (Transmission Service)</h3>
+        <p><strong>우선순위 결정</strong> 및 <strong>서비스 등급</strong>과 <strong>보안 요구 제어</strong> 등의 서비스를 말한다.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ⑦ 표준의 분류 및 표준화 기구 -->
+  <section id="standards">
+    <h2 class="section-title">⑦ <span>표준의 분류 &amp; 표준화 기구</span></h2>
+
+    <!-- 표준 분류 3축 -->
+    <div class="card-grid" style="margin-bottom:20px;">
+
+      <div class="card" style="border-top-color:var(--primary);">
+        <h3>👥 참여 범위에 따른 분류</h3>
+        <ul>
+          <li><strong>국제 표준:</strong> 세계 모든 국가가 참여해 합의를 도출</li>
+          <li><strong>지역 표준:</strong> 특정 지역 소속 국가들이 합의하여 제정</li>
+          <li><strong>국가 표준:</strong> 특정 국가 내 이해 당사자들이 합의한 표준</li>
+          <li><strong>단체 표준:</strong> 특정 단체·산업 내에서 제정하는 표준</li>
+        </ul>
+      </div>
+
+      <div class="card green">
+        <h3>📋 규정 내용에 따른 분류</h3>
+        <ul>
+          <li><strong>기본 표준:</strong> 가장 기초가 되는 원칙·용어 정의</li>
+          <li><strong>기능 표준:</strong> 특정 기능 수행을 위한 세부 규정</li>
+          <li><strong>이용자 표준:</strong> 사용자 관점의 요구사항 규정</li>
+          <li><strong>시험 표준:</strong> 표준 적합성 검증 방법 규정</li>
+        </ul>
+      </div>
+
+      <div class="card orange">
+        <h3>⚖️ 적용 방법에 따른 분류</h3>
+        <ul>
+          <li><strong>강제 표준:</strong> 반드시 따라야 하는 법적 강제력이 있는 표준</li>
+          <li><strong>권고 표준:</strong> 따르도록 권장하지만 강제성은 없는 표준</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- 공식 표준 vs 사실상의 표준 -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin-bottom:20px;">
+      <div style="background:var(--card-bg); border-radius:12px; padding:20px; box-shadow:var(--shadow); border-left:5px solid var(--primary);">
+        <h3 style="font-size:15px; font-weight:700; margin-bottom:10px;">🏛️ 공식 표준 (De Jure Standard)</h3>
+        <p style="font-size:14px; color:var(--text-sub); line-height:1.7;">
+          공인된 표준화 기구가 공식 절차를 거쳐 제정한 표준.<br>
+          대표적 기구: <strong style="color:var(--text)">ITU, ISO, IEC, ISO/IEC</strong>
+        </p>
+      </div>
+      <div style="background:var(--card-bg); border-radius:12px; padding:20px; box-shadow:var(--shadow); border-left:5px solid var(--warning);">
+        <h3 style="font-size:15px; font-weight:700; margin-bottom:10px;">🌐 사실상의 표준 (De Facto Standard)</h3>
+        <p style="font-size:14px; color:var(--text-sub); line-height:1.7;">
+          정부 기관이 관여하지 않고 <strong style="color:var(--text)">민간 차원에서 자율적인 표준화</strong> 작업을 수행하는 표준화 기구에 의해 만들어진 표준.<br>
+          시장에서 널리 채택되어 사실상 표준이 된 것.
+        </p>
+      </div>
+    </div>
+
+    <!-- 표준화 기구 -->
+    <div style="background:var(--card-bg); border-radius:12px; overflow:hidden; box-shadow:var(--shadow);">
+      <div style="background:var(--primary); color:white; padding:14px 20px; font-weight:700; font-size:15px;">🏢 주요 표준화 기구</div>
+      <div style="padding:20px; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px;">
+
+        <div style="border:1.5px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:18px; font-weight:700; color:var(--primary); margin-bottom:4px;">ISO</div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:10px;">International Organization for Standardization · 국제표준화기구</div>
+          <ul style="font-size:13.5px; color:var(--text-sub); padding-left:16px; line-height:1.8;">
+            <li>1947년 창설</li>
+            <li>현재 <strong style="color:var(--text)">163개국</strong> 국가 표준단체로 구성</li>
+            <li>OSI 참조 모델 등 다양한 국제 표준 제정</li>
+          </ul>
+        </div>
+
+        <div style="border:1.5px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:18px; font-weight:700; color:var(--success); margin-bottom:4px;">OSI 참조 모델</div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:10px;">Open Systems Interconnection Reference Model</div>
+          <ul style="font-size:13.5px; color:var(--text-sub); padding-left:16px; line-height:1.8;">
+            <li>다른 기종 간의 <strong style="color:var(--text)">상호접속</strong>을 가능케 하는 표준 개방형 통신망</li>
+            <li>네트워크를 위한 <strong style="color:var(--text)">7계층 참조 모델</strong> 정의</li>
+            <li>ISO가 제정한 대표적 네트워크 표준</li>
+          </ul>
+        </div>
+
+        <div style="border:1.5px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:18px; font-weight:700; color:var(--warning); margin-bottom:4px;">ITU</div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:10px;">International Telecommunication Union · 국제전기통신연합</div>
+          <ul style="font-size:13.5px; color:var(--text-sub); padding-left:16px; line-height:1.8;">
+            <li>공식 표준화 기구 중 하나</li>
+            <li>전기통신 분야 국제 표준 담당</li>
+          </ul>
+        </div>
+
+        <div style="border:1.5px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:18px; font-weight:700; color:var(--purple); margin-bottom:4px;">IEEE</div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:10px;">Institute of Electrical and Electronics Engineers · 전기전자기술자협회</div>
+          <ul style="font-size:13.5px; color:var(--text-sub); padding-left:16px; line-height:1.8;">
+            <li><strong style="color:var(--text)">1963년</strong> 미국 전기학회와 무선학회의 합병으로 창설</li>
+            <li>세계 최대의 전기·전자·전기통신·컴퓨터 분야 전문가 단체</li>
+            <li><strong style="color:var(--text)">IEEE 802 표준안</strong>: 현재 널리 사용되는 LAN 관련 권고 표준안</li>
+            <li>IEEE 표준은 국제 표준으로 채택되거나 그 바탕이 되기도 함</li>
+          </ul>
+        </div>
+
+        <div style="border:1.5px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:18px; font-weight:700; color:var(--teal); margin-bottom:4px;">EIA</div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:10px;">Electronic Industries Association · 전자산업협회</div>
+          <ul style="font-size:13.5px; color:var(--text-sub); padding-left:16px; line-height:1.8;">
+            <li><strong style="color:var(--text)">1924년</strong> RMA로 창설 → <strong style="color:var(--text)">1957년</strong> EIA로 개칭</li>
+            <li>신호 품질, 디지털 인터페이스, 통신망 인터페이스 등 <strong style="color:var(--text)">주로 하드웨어에 관한 규격</strong> 개발</li>
+          </ul>
+        </div>
+
+        <div style="border:1.5px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:18px; font-weight:700; color:var(--danger); margin-bottom:4px;">IEC</div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:10px;">International Electrotechnical Commission · 국제전기기술위원회</div>
+          <ul style="font-size:13.5px; color:var(--text-sub); padding-left:16px; line-height:1.8;">
+            <li>전기·전자 기술 분야의 국제 표준 제정</li>
+            <li>ISO와 함께 <strong style="color:var(--text)">ISO/IEC</strong> 공동 표준도 발행</li>
+          </ul>
+        </div>
+
+        <div style="border:1.5px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:18px; font-weight:700; color:var(--primary); margin-bottom:4px;">ANSI</div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:10px;">American National Standards Institute · 미국 국립표준협회</div>
+          <ul style="font-size:13.5px; color:var(--text-sub); padding-left:16px; line-height:1.8;">
+            <li><strong style="color:var(--text)">1918년</strong> 설립</li>
+            <li>미국의 규격공업 표준 제정</li>
+          </ul>
+        </div>
+
+        <div style="border:1.5px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:18px; font-weight:700; color:var(--success); margin-bottom:4px;">KS / KICS</div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:10px;">한국 산업표준 / 한국 정보통신표준</div>
+          <ul style="font-size:13.5px; color:var(--text-sub); padding-left:16px; line-height:1.8;">
+            <li><strong style="color:var(--text)">KS</strong>: 한국 산업표준</li>
+            <li><strong style="color:var(--text)">KICS</strong>: 한국 정보통신표준</li>
+            <li>1997년 정보기술 분야 표준 개편: <strong style="color:var(--text)">KS-C 시리즈 → KS X 시리즈</strong>(정보산업)</li>
+          </ul>
+        </div>
+
+        <div style="border:1.5px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:18px; font-weight:700; color:var(--warning); margin-bottom:4px;">IETF</div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:10px;">Internet Engineering Task Force · 국제인터넷 표준화 기구</div>
+          <ul style="font-size:13.5px; color:var(--text-sub); padding-left:16px; line-height:1.8;">
+            <li>인터넷 관련 기술 표준 개발 및 제정</li>
+            <li>RFC(Request for Comments) 문서를 통해 표준 발행</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑧ 핵심 캐치 -->
+  <section id="catch">
+    <h2 class="section-title">⑧ <span>핵심 캐치</span> — 시험 포인트</h2>
+    <div class="catch-list">
+      <div class="catch-item exam">
+        <div class="catch-icon">🔥</div>
+        <p><strong>중간고사 출제 확정:</strong> "프로토콜의 주요 요소 3가지를 작성하고 각 요소의 설명을 작성하시오." — <strong>구문(Syntax) · 의미(Semantics) · 타이밍(Timing)</strong> 반드시 암기!</p>
+      </div>
+      <div class="catch-item exam">
+        <div class="catch-icon">⚠️</div>
+        <p><strong>MAN 핵심 포인트:</strong> 최근 LAN이 발달하면서 <strong>MAN이라는 용어 자체가 잘 사용되지 않음</strong>. MAN = LAN의 확장 형태로 간주. IEEE 표준은 <strong>DQDB(Distributed Queue Dual Bus)</strong> 프로토콜.</p>
+      </div>
+      <div class="catch-item tip">
+        <div class="catch-icon">💡</div>
+        <p><strong>LAN의 변화:</strong> 초기에는 공유채널 개념 → 현재는 <strong>LAN 스위치</strong>를 채택하는 구조로 변경됨. 기가비트 이더넷, 무선 LAN이 대표적.</p>
+      </div>
+      <div class="catch-item tip">
+        <div class="catch-icon">💡</div>
+        <p><strong>WAN의 스위칭:</strong> 넓은 지역을 커버하는 WAN은 모든 노드 간 전용 회선 연결이 불가능하므로 <strong>스위칭으로 물리적 링크를 공유</strong>. LAN은 소유 주체가 명확하지만 WAN은 공중망 임대.</p>
+      </div>
+      <div class="catch-item tip">
+        <div class="catch-icon">📊</div>
+        <p><strong>타이밍 예시 이해:</strong> 송신기 100Mbps → 수신기 10Mbps면 <strong>버퍼 오버플로우</strong> 발생, 데이터 손실. 이를 해결하는 것이 흐름 제어(Flow Control).</p>
+      </div>
+      <div class="catch-item tip">
+        <div class="catch-icon">🏛️</div>
+        <p><strong>공식 표준 vs 사실상의 표준 구분:</strong> 공식 표준(De Jure) = ITU·ISO·IEC 등 공인 기구 제정. 사실상의 표준(De Facto) = <strong>민간 차원 자율적 표준화</strong>. 구분 가능해야 함.</p>
+      </div>
+      <div class="catch-item tip">
+        <div class="catch-icon">🌐</div>
+        <p><strong>ISO 수치 암기:</strong> <strong>1947년</strong> 창설, <strong>163개국</strong> 참여. OSI 참조 모델 = ISO가 정의한 <strong>7계층</strong> 네트워크 참조 모델.</p>
+      </div>
+      <div class="catch-item tip">
+        <div class="catch-icon">✂️</div>
+        <p><strong>단편화 이유 2가지:</strong> ① <strong>지연시간 최소화</strong> ② <strong>오류 발생 확률 감소</strong>. 단순 암기보다 이유를 이해해두면 서술형에서도 활용 가능.</p>
+      </div>
+      <div class="catch-item exam">
+        <div class="catch-icon">🔥</div>
+        <p><strong>IEEE 핵심 암기:</strong> <strong>1963년</strong> 창설 (미국 전기학회 + 무선학회 합병). <strong>IEEE 802 표준안</strong> = 현재 널리 사용되는 LAN 관련 권고 표준. 세계 최대 전기·전자·컴퓨터 전문가 단체.</p>
+      </div>
+      <div class="catch-item tip">
+        <div class="catch-icon">📅</div>
+        <p><strong>기구별 설립 연도 암기:</strong> ISO <strong>1947년</strong> / ANSI <strong>1918년</strong> / EIA <strong>1924년</strong>(1957년 개칭) / IEEE <strong>1963년</strong>. 시험에서 연도 혼동 주의!</p>
+      </div>
+      <div class="catch-item tip">
+        <div class="catch-icon">🇰🇷</div>
+        <p><strong>KS 표준 개편:</strong> 1997년에 정보기술 분야 표준이 <strong>KS-C 시리즈 → KS X 시리즈</strong>(정보산업)로 개편됨. KS는 한국 산업표준, KICS는 한국 정보통신표준.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑧ 핵심 키워드 -->
+  <section id="keywords">
+    <h2 class="section-title">⑨ <span>핵심 키워드</span></h2>
+    <div class="kw-grid">
+      <div class="kw-card">
+        <div class="kw-en">Local Area Network</div>
+        <div class="kw-ko">LAN (근거리 통신망)</div>
+        <div class="kw-def">반경 수 km 이내, 단일 기관 소유의 고속 사설망</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Metropolitan Area Network</div>
+        <div class="kw-ko">MAN (도시형 통신망)</div>
+        <div class="kw-def">도시 규모의 네트워크. 최근 LAN 확장 형태로 간주됨</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Wide Area Network</div>
+        <div class="kw-ko">WAN (광역 통신망)</div>
+        <div class="kw-def">국가·대륙을 아우르는 대규모 공중망 기반 통신망</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Protocol</div>
+        <div class="kw-ko">프로토콜</div>
+        <div class="kw-def">통신을 위한 약속들의 집합 (원래 외교 용어 '의정서')</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Syntax</div>
+        <div class="kw-ko">구문</div>
+        <div class="kw-def">데이터의 구조·형식·순서 (무엇을?)</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Semantics</div>
+        <div class="kw-ko">의미</div>
+        <div class="kw-def">데이터 패턴의 해석과 그에 따른 동작 (어떻게?)</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Timing</div>
+        <div class="kw-ko">타이밍</div>
+        <div class="kw-def">전송 시점과 속도, 흐름 제어 관련 (언제?)</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Distributed Queue Dual Bus</div>
+        <div class="kw-ko">DQDB</div>
+        <div class="kw-def">IEEE 권장 MAN 표준 프로토콜. 분산 큐 이중 버스 방식</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Switching</div>
+        <div class="kw-ko">스위칭 (교환)</div>
+        <div class="kw-def">공유 링크를 통해 다수의 통신을 효율적으로 라우팅하는 기법</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Router</div>
+        <div class="kw-ko">라우터</div>
+        <div class="kw-def">WAN에서 네트워크 간 패킷 경로를 결정하는 장비</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Addressing</div>
+        <div class="kw-ko">주소지정</div>
+        <div class="kw-def">데이터가 목적지까지 전송되도록 주소와 경로를 부여하는 기능</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Sequencing</div>
+        <div class="kw-ko">순서 제어</div>
+        <div class="kw-def">패킷에 전송 순서를 부여하여 흐름·오류 제어를 용이하게 함</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Fragmentation & Reassembly</div>
+        <div class="kw-ko">단편화 및 재조립</div>
+        <div class="kw-def">데이터를 작은 패킷으로 나눠 전송 후 수신측에서 원래대로 복원</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Encapsulation</div>
+        <div class="kw-ko">캡슐화</div>
+        <div class="kw-def">헤더·트레일러 형태로 제어정보를 데이터에 부가하는 것</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Flow Control</div>
+        <div class="kw-ko">흐름 제어</div>
+        <div class="kw-def">수신 측 처리 능력에 맞춰 송신 측의 전송량을 조절하는 기능</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Error Control</div>
+        <div class="kw-ko">오류 제어</div>
+        <div class="kw-def">패리티 비트·CRC·검사합으로 오류를 검출하고 정정하는 기능</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Synchronization</div>
+        <div class="kw-ko">동기화</div>
+        <div class="kw-def">송수신 측이 같은 상태를 유지하도록 타이밍을 맞추는 기능</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Multiplexing</div>
+        <div class="kw-ko">다중화</div>
+        <div class="kw-def">하나의 통신 회선을 여러 가입자가 동시에 이용 가능하게 하는 기능</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">Routing</div>
+        <div class="kw-ko">라우팅</div>
+        <div class="kw-def">출발지에서 목적지까지 최적의 경로를 설정하는 기능</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">De Jure Standard</div>
+        <div class="kw-ko">공식 표준</div>
+        <div class="kw-def">ITU, ISO, IEC 등 공인 기구가 공식 절차를 거쳐 제정한 표준</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">De Facto Standard</div>
+        <div class="kw-ko">사실상의 표준</div>
+        <div class="kw-def">정부 관여 없이 민간 차원에서 자율적으로 만들어져 시장에서 통용되는 표준</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">ISO</div>
+        <div class="kw-ko">국제표준화기구</div>
+        <div class="kw-def">1947년 창설, 163개국 참여. OSI 참조 모델 등 국제 표준 제정</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">OSI Reference Model</div>
+        <div class="kw-ko">OSI 참조 모델</div>
+        <div class="kw-def">다른 기종 간 상호접속을 위한 개방형 통신망 표준. 네트워크를 7계층으로 정의</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">IEEE (Institute of Electrical and Electronics Engineers)</div>
+        <div class="kw-ko">전기전자기술자협회</div>
+        <div class="kw-def">1963년 창설. 세계 최대 전기·전자·컴퓨터 전문가 단체. IEEE 802 표준으로 LAN 권고 표준 제정</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">EIA (Electronic Industries Association)</div>
+        <div class="kw-ko">전자산업협회</div>
+        <div class="kw-def">1924년 RMA로 창설, 1957년 EIA 개칭. 신호품질·디지털인터페이스 등 하드웨어 규격 개발</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">ANSI (American National Standards Institute)</div>
+        <div class="kw-ko">미국 국립표준협회</div>
+        <div class="kw-def">1918년 설립. 미국의 규격공업 표준 제정 기구</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">KS / KICS</div>
+        <div class="kw-ko">한국 산업표준 / 한국 정보통신표준</div>
+        <div class="kw-def">1997년 정보기술 분야 개편: KS-C → KS X 시리즈(정보산업)</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">IETF (Internet Engineering Task Force)</div>
+        <div class="kw-ko">국제인터넷 표준화 기구</div>
+        <div class="kw-def">인터넷 기술 표준 개발 기구. RFC 문서를 통해 표준 발행</div>
+      </div>
+      <div class="kw-card">
+        <div class="kw-en">IEEE 802</div>
+        <div class="kw-ko">IEEE 802 표준안</div>
+        <div class="kw-def">현재 널리 사용되는 LAN 관련 권고 표준안. IEEE가 제정하여 국제표준으로도 채택됨</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑨ 연습문제 -->
+  <section id="quiz">
+    <h2 class="section-title">⑩ <span>연습문제</span></h2>
+    <div class="quiz-list">
+
+      <!-- Q1 객관식 -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 1</div>
+        <div class="quiz-q">다음 중 LAN(근거리 통신망)의 특징으로 옳지 않은 것은?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q1')">① 단일 기관이 소유하며 확장 및 재배치가 유리하다.</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q1')">② 광대역 전송 매체를 사용하므로 고속 통신이 가능하다.</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q1')">③ 오류율과 지연시간이 MAN보다 낮으므로 WAN에서 주로 사용된다.</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q1')">④ 초기에는 공유채널 방식이었으나 현재는 LAN 스위치 구조가 일반적이다.</button>
+        </div>
+        <div class="feedback" id="q1">LAN은 건물/캠퍼스 내부에서 사용되며, 오류율이 낮고 신뢰성이 높습니다. WAN에서 LAN을 사용한다는 설명은 틀렸습니다.</div>
+      </div>
+
+      <!-- Q2 객관식 -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 2</div>
+        <div class="quiz-q">프로토콜의 3가지 주요 요소가 올바르게 나열된 것은?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q2')">① 주소, 타이밍, 흐름 제어</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q2')">② 구문, 의미, 타이밍</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q2')">③ 형식, 속도, 오류 제어</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q2')">④ 구문, 흐름, 연결</button>
+        </div>
+        <div class="feedback" id="q2">프로토콜의 3요소: 구문(Syntax) - 무엇을?, 의미(Semantics) - 어떻게?, 타이밍(Timing) - 언제?</div>
+      </div>
+
+      <!-- Q3 객관식 -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 3</div>
+        <div class="quiz-q">WAN(광역 통신망)에 대한 설명으로 옳은 것은?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q3')">① WAN은 단일 기관이 소유하는 사설망이다.</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q3')">② WAN은 LAN에 비해 전송 속도가 빠르다.</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q3')">③ WAN은 통신사업자가 구축한 공중망을 임대하여 사용한다.</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q3')">④ WAN은 전용 회선 방식만 사용한다.</button>
+        </div>
+        <div class="feedback" id="q3">WAN은 공중망으로 통신사업자가 구축한 망을 임대하여 사용합니다. LAN보다 전송 속도가 느리며 스위칭 방식을 사용합니다.</div>
+      </div>
+
+      <!-- Q4 객관식 -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 4</div>
+        <div class="quiz-q">MAN(도시형 통신망)의 IEEE 표준 프로토콜로 권장된 것은?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q4')">① TCP/IP</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q4')">② Ethernet</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q4')">③ DQDB (Distributed Queue Dual Bus)</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q4')">④ Wi-Fi (802.11)</button>
+        </div>
+        <div class="feedback" id="q4">IEEE는 MAN의 표준으로 DQDB(분산 큐 이중 버스) 프로토콜을 권장합니다. 단, 현재 MAN이라는 용어는 거의 사용되지 않습니다.</div>
+      </div>
+
+      <!-- Q5 단답형 -->
+      <div class="quiz-item">
+        <div class="quiz-num">단답형 1</div>
+        <div class="quiz-q">
+          프로토콜의 주요 요소 중 "<strong>언제 데이터를 전송할 것인가</strong>와 <strong>어느 정도의 속도로 전송할 것인가</strong>"에 해당하는 요소는 무엇인가?
+        </div>
+        <input class="short-input" id="s1" type="text" placeholder="답 입력...">
+        <button class="check-btn" onclick="checkShort('s1', ['타이밍', 'timing'], 'sf1')">확인</button>
+        <div class="feedback" id="sf1"></div>
+      </div>
+
+      <!-- Q6 단답형 -->
+      <div class="quiz-item">
+        <div class="quiz-num">단답형 2</div>
+        <div class="quiz-q">
+          프로토콜의 3가지 주요 요소를 쓰고 각각 어떤 물음에 해당하는지 작성하시오. (중간고사 예상 문제)
+        </div>
+        <input class="short-input" id="s2" type="text" placeholder="예) 구문 - 무엇을?, ...">
+        <button class="check-btn" onclick="checkShort3('s2', 'sf2')">확인</button>
+        <div class="feedback" id="sf2"></div>
+      </div>
+
+      <!-- Q7 단답형 -->
+      <div class="quiz-item">
+        <div class="quiz-num">단답형 3</div>
+        <div class="quiz-q">
+          WAN이 스위칭(교환) 개념을 사용하는 이유를 한 문장으로 설명하시오.
+        </div>
+        <input class="short-input" id="s3" type="text" placeholder="답 입력...">
+        <button class="check-btn" onclick="checkShort('s3', ['공유', '비용', '효율'], 'sf3')">확인</button>
+        <div class="feedback" id="sf3"></div>
+      </div>
+
+      <!-- Q8 객관식 — 프로토콜 주요기능 -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 5</div>
+        <div class="quiz-q">송신측에서 전송할 데이터를 작은 패킷으로 나누어 전송하고, 수신측에서 원래의 데이터로 다시 조립하는 프로토콜 기능은?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q5')">① 캡슐화</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q5')">② 흐름 제어</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q5')">③ 단편화 및 재조립</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q5')">④ 순서 제어</button>
+        </div>
+        <div class="feedback" id="q5">단편화(Fragmentation)는 데이터를 작은 패킷으로 분할하고, 재조립(Reassembly)은 수신측에서 원래 데이터로 복원합니다. 지연시간 최소화 + 오류 발생 확률 감소가 목적입니다.</div>
+      </div>
+
+      <!-- Q9 객관식 -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 6</div>
+        <div class="quiz-q">오류 제어(Error Control)에서 사용되는 기법으로 옳지 않은 것은?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q6')">① 패리티 비트 (Parity Bit)</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q6')">② CRC (순환 중복 검사)</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q6')">③ 검사합 (Checksum)</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q6')">④ 다중화 (Multiplexing)</button>
+        </div>
+        <div class="feedback" id="q6">다중화는 하나의 회선을 여러 가입자가 동시에 사용하게 하는 기능으로, 오류 제어와 무관합니다. 오류 제어 기법: 패리티 비트, CRC, 검사합.</div>
+      </div>
+
+      <!-- Q10 객관식 -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 7</div>
+        <div class="quiz-q">주소나 오류검출 부호 등의 프로토콜 제어정보를 데이터에 부가하는 것으로, 보통 헤더와 트레일러를 덧붙이는 기능은?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q7')">① 동기화</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q7')">② 캡슐화</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q7')">③ 주소지정</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q7')">④ 다중화</button>
+        </div>
+        <div class="feedback" id="q7">캡슐화(Encapsulation)는 제어정보(헤더·트레일러)를 데이터에 부가하는 기능입니다. 데이터가 네트워크 계층을 지날 때마다 각 계층의 헤더가 덧붙여집니다.</div>
+      </div>
+
+      <!-- Q8-2 객관식 — 표준 -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 8</div>
+        <div class="quiz-q">다음 중 표준화 참여 범위에 따른 분류에 해당하지 않는 것은?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q8')">① 국제 표준</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q8')">② 지역 표준</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q8')">③ 기능 표준</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q8')">④ 단체 표준</button>
+        </div>
+        <div class="feedback" id="q8">기능 표준은 '규정 내용에 따른 분류'에 해당합니다. 참여 범위에 따른 분류는 국제·지역·국가·단체 표준입니다.</div>
+      </div>
+
+      <!-- Q9-2 객관식 — 표준화 기구 -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 9</div>
+        <div class="quiz-q">ISO(국제표준화기구)에 대한 설명으로 옳은 것은?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q9')">① 1957년에 창설되었다.</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q9')">② 현재 약 50개국이 참여하고 있다.</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q9')">③ OSI 7계층 참조 모델을 정의하였다.</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q9')">④ 민간 차원의 사실상의 표준화 기구이다.</button>
+        </div>
+        <div class="feedback" id="q9">ISO는 1947년 창설, 163개국 참여의 공식 표준화 기구이며, OSI 7계층 참조 모델을 정의하였습니다.</div>
+      </div>
+
+      <!-- Q10-2 객관식 -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 10</div>
+        <div class="quiz-q">정부 기관이 관여하지 않고 민간 차원에서 자율적인 표준화 작업을 수행하여 시장에서 널리 채택된 표준을 무엇이라 하는가?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q10')">① 공식 표준 (De Jure Standard)</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q10')">② 강제 표준</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q10')">③ 사실상의 표준 (De Facto Standard)</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q10')">④ 기본 표준</button>
+        </div>
+        <div class="feedback" id="q10">사실상의 표준(De Facto Standard)은 공식 기구 없이 민간에서 자율적으로 만들어져 시장에서 통용되는 표준입니다. (예: Wi-Fi, Bluetooth)</div>
+      </div>
+
+      <!-- Q11 단답형 -->
+      <div class="quiz-item">
+        <div class="quiz-num">단답형 4</div>
+        <div class="quiz-q">
+          프로토콜의 기능 중 <strong>수신 측에서 데이터가 흘러 넘치지 않도록</strong> 송신 측의 전송량을 조절하는 기능은 무엇인가?
+        </div>
+        <input class="short-input" id="s4" type="text" placeholder="답 입력...">
+        <button class="check-btn" onclick="checkShort('s4', ['흐름 제어', '흐름제어', 'flow control', 'flow'], 'sf4')">확인</button>
+        <div class="feedback" id="sf4"></div>
+      </div>
+
+      <!-- Q12 단답형 -->
+      <div class="quiz-item">
+        <div class="quiz-num">단답형 5</div>
+        <div class="quiz-q">
+          단편화(Fragmentation)를 사용하는 이유 두 가지를 작성하시오.
+        </div>
+        <input class="short-input" id="s5" type="text" placeholder="답 입력...">
+        <button class="check-btn" onclick="checkShort('s5', ['지연', '오류'], 'sf5')">확인</button>
+        <div class="feedback" id="sf5">정답: ① 지연시간을 최소화하기 위해 ② 오류 발생 확률을 낮추기 위해</div>
+      </div>
+
+      <!-- Q13 객관식 — IEEE -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 11</div>
+        <div class="quiz-q">IEEE(전기전자기술자협회)에 대한 설명으로 옳지 않은 것은?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q11')">① 1963년에 미국 전기학회와 무선학회의 합병으로 창설되었다.</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q11')">② 세계 최대의 전기·전자·컴퓨터 분야 전문가 단체이다.</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q11')">③ IEEE 표준은 국제 표준으로 채택될 수 없다.</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q11')">④ IEEE 802 표준안은 LAN 관련 권고 표준안이다.</button>
+        </div>
+        <div class="feedback" id="q11">IEEE 표준은 국제 표준으로 채택되거나 그 바탕이 되기도 합니다. 나머지 설명은 모두 옳습니다.</div>
+      </div>
+
+      <!-- Q14 객관식 — EIA / ANSI -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 12</div>
+        <div class="quiz-q">EIA(전자산업협회)에 대한 설명으로 옳은 것은?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q12')">① 1963년에 창설된 국제 표준화 기구이다.</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q12')">② 1924년 RMA로 창설되어 1957년 EIA로 개칭되었다.</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q12')">③ 소프트웨어 분야의 표준 규격을 주로 개발한다.</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q12')">④ 한국의 국가 표준화 기구이다.</button>
+        </div>
+        <div class="feedback" id="q12">EIA는 1924년 RMA로 창설, 1957년 EIA로 개칭. 신호품질·디지털인터페이스·통신망인터페이스 등 주로 하드웨어에 관한 규격을 개발합니다.</div>
+      </div>
+
+      <!-- Q15 단답형 — 설립연도 -->
+      <div class="quiz-item">
+        <div class="quiz-num">단답형 6</div>
+        <div class="quiz-q">
+          한국의 정보기술 분야 표준은 1997년 어떻게 개편되었는가? (KS 시리즈 명칭 변화 중심으로)
+        </div>
+        <input class="short-input" id="s6" type="text" placeholder="답 입력...">
+        <button class="check-btn" onclick="checkShort('s6', ['KS-C', 'KS X', 'ks x', 'ks-c'], 'sf6')">확인</button>
+        <div class="feedback" id="sf6">정답: KS-C 시리즈 → KS X 시리즈(정보산업)로 개편되었습니다.</div>
+      </div>
+
+      <!-- Q16 객관식 — 표준화 기구 매칭 -->
+      <div class="quiz-item">
+        <div class="quiz-num">객관식 13</div>
+        <div class="quiz-q">다음 중 1918년에 설립된 미국의 규격공업 표준 제정 기구는?</div>
+        <div class="options">
+          <button class="option-btn" onclick="checkMC(this, false, 'q13')">① IEEE</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q13')">② EIA</button>
+          <button class="option-btn" onclick="checkMC(this, true, 'q13')">③ ANSI</button>
+          <button class="option-btn" onclick="checkMC(this, false, 'q13')">④ IETF</button>
+        </div>
+        <div class="feedback" id="q13">ANSI(American National Standards Institute, 미국 국립표준협회)는 1918년 설립되어 미국의 규격공업 표준을 제정합니다.</div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Dark mode
+  function toggleDark() {
+    const html = document.documentElement;
+    const isDark = html.dataset.theme === 'dark';
+    html.dataset.theme = isDark ? 'light' : 'dark';
+    document.getElementById('darkToggle').textContent = isDark ? '🌙' : '☀️';
+    localStorage.setItem('theme', html.dataset.theme);
+  }
+  (function() {
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      document.documentElement.dataset.theme = saved;
+      document.getElementById('darkToggle').textContent = saved === 'dark' ? '☀️' : '🌙';
+    }
+  })();
+
+  // MC quiz
+  function checkMC(btn, correct, feedbackId) {
+    const parent = btn.closest('.quiz-item');
+    const btns = parent.querySelectorAll('.option-btn');
+    btns.forEach(b => b.disabled = true);
+    btn.classList.add(correct ? 'correct' : 'wrong');
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show', correct ? 'ok' : 'no');
+    if (correct) {
+      fb.textContent = '✅ 정답! ' + fb.textContent;
+    } else {
+      // highlight correct
+      btns.forEach(b => { if (b.onclick.toString().includes('true')) b.classList.add('correct'); });
+      fb.textContent = '❌ 오답. ' + fb.textContent;
+    }
+  }
+
+  // Short answer - keyword match
+  function checkShort(inputId, keywords, feedbackId) {
+    const val = document.getElementById(inputId).value.trim().toLowerCase();
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    const hit = keywords.some(k => val.includes(k.toLowerCase()));
+    if (hit) {
+      fb.className = 'feedback show ok';
+      fb.textContent = '✅ 정답입니다!';
+    } else {
+      fb.className = 'feedback show no';
+      fb.textContent = '❌ 힌트: ' + keywords.join(' / ') + ' 개념을 포함해야 합니다.';
+    }
+  }
+
+  // Q6 특별 채점
+  function checkShort3(inputId, feedbackId) {
+    const val = document.getElementById(inputId).value.trim();
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    const hasSyntax = val.includes('구문') || val.toLowerCase().includes('syntax');
+    const hasSemantics = val.includes('의미') || val.toLowerCase().includes('semantics');
+    const hasTiming = val.includes('타이밍') || val.includes('timing') || val.toLowerCase().includes('timing');
+    if (hasSyntax && hasSemantics && hasTiming) {
+      fb.className = 'feedback show ok';
+      fb.textContent = '✅ 완벽합니다! 구문(무엇을?) · 의미(어떻게?) · 타이밍(언제?) 모두 포함됨.';
+    } else {
+      fb.className = 'feedback show no';
+      const missing = [];
+      if (!hasSyntax) missing.push('구문(Syntax)');
+      if (!hasSemantics) missing.push('의미(Semantics)');
+      if (!hasTiming) missing.push('타이밍(Timing)');
+      fb.textContent = '❌ 누락된 요소: ' + missing.join(', ');
+    }
+  }
+</script>
+</body>
+</html>

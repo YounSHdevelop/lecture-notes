@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터통신 3장 — OSI 참조 모델</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-sub: #64748b;
+    --border: #e2e8f0;
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --teal: #0d9488;
+    --teal-light: #ccfbf1;
+    --nav-bg: rgba(255,255,255,0.95);
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #f1f5f9;
+    --text-sub: #94a3b8;
+    --border: #334155;
+    --primary-light: #1e3a8a;
+    --success-light: #14532d;
+    --danger-light: #7f1d1d;
+    --warning-light: #78350f;
+    --purple-light: #3b0764;
+    --teal-light: #134e4a;
+    --nav-bg: rgba(15,23,42,0.97);
+    --shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; gap: 4px;
+    padding: 0 16px; height: 52px;
+    overflow-x: auto; white-space: nowrap;
+    box-shadow: var(--shadow);
+  }
+  nav a {
+    color: var(--text-sub); text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    padding: 6px 10px; border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+  nav a:hover { background: var(--primary-light); color: var(--primary); }
+  .nav-spacer { flex: 1; }
+  #darkToggle {
+    background: none; border: 1px solid var(--border);
+    color: var(--text); cursor: pointer;
+    padding: 6px 10px; border-radius: 8px;
+    font-size: 16px; flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  #darkToggle:hover { background: var(--primary-light); }
+
+  /* ── HEADER ── */
+  header {
+    margin-top: 52px;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white; padding: 48px 24px 36px; text-align: center;
+  }
+  header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px; padding: 4px 14px;
+    font-size: 13px; margin-bottom: 12px;
+  }
+  header h1 { font-size: clamp(22px, 5vw, 32px); font-weight: 700; margin-bottom: 8px; }
+  header p { font-size: 15px; opacity: 0.85; }
+
+  /* ── MAIN ── */
+  main { max-width: 900px; margin: 0 auto; padding: 32px 16px 64px; }
+  section { margin-bottom: 48px; scroll-margin-top: 68px; }
+  .section-title {
+    font-size: 20px; font-weight: 700;
+    margin-bottom: 20px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .icon { font-size: 22px; }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--primary);
+  }
+  .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .card p, .card li { font-size: 14px; color: var(--text-sub); line-height: 1.7; }
+  .card ul { padding-left: 16px; }
+  .card.green { border-top-color: var(--success); }
+  .card.orange { border-top-color: var(--warning); }
+  .card.purple { border-top-color: var(--purple); }
+  .card.teal { border-top-color: var(--teal); }
+  .card.red { border-top-color: var(--danger); }
+
+  /* ── GOAL CARDS ── */
+  .goal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .goal-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .goal-num {
+    background: var(--primary);
+    color: white; font-weight: 700; font-size: 14px;
+    border-radius: 50%; width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .goal-card p { font-size: 14px; line-height: 1.6; }
+
+  /* ── OSI LAYER TABLE ── */
+  .layer-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 14px;
+  }
+  .layer-table th {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white; padding: 12px 16px; text-align: left;
+  }
+  .layer-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .layer-table tr:last-child td { border-bottom: none; }
+  .layer-table tr:hover td { background: var(--primary-light); }
+  .layer-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    font-weight: 700; font-size: 13px; color: white;
+    flex-shrink: 0;
+  }
+  .l1 { background: #6b7280; }
+  .l2 { background: #0d9488; }
+  .l3 { background: #2563eb; }
+  .l4 { background: #16a34a; }
+  .l5 { background: #d97706; }
+  .l6 { background: #7c3aed; }
+  .l7 { background: #dc2626; }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-wrap {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .compare-col h4 {
+    font-size: 15px; font-weight: 700;
+    margin-bottom: 14px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .compare-col.osi h4 { background: var(--primary-light); color: var(--primary); }
+  .compare-col.tcpip h4 { background: var(--success-light); color: var(--success); }
+  .layer-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    border-radius: 8px;
+    background: var(--bg);
+    font-size: 14px; font-weight: 500;
+  }
+
+  /* ── CATCH BOXES ── */
+  .catch-box {
+    background: var(--warning-light);
+    border-left: 4px solid var(--warning);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .catch-box .catch-title {
+    font-weight: 700; font-size: 14px;
+    color: var(--warning); margin-bottom: 6px;
+  }
+  .catch-box p { font-size: 14px; line-height: 1.7; }
+
+  .exam-box {
+    background: var(--danger-light);
+    border-left: 4px solid var(--danger);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .exam-box .exam-title {
+    font-weight: 700; font-size: 14px;
+    color: var(--danger); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .exam-box p, .exam-box li { font-size: 14px; line-height: 1.7; }
+  .exam-box ul { padding-left: 18px; }
+
+  /* ── KEYWORD CARDS ── */
+  .keyword-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .keyword-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--primary);
+  }
+  .keyword-card .kw-en {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    color: var(--primary); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .keyword-card .kw-ko {
+    font-size: 16px; font-weight: 700; margin-bottom: 8px;
+  }
+  .keyword-card .kw-def {
+    font-size: 13px; color: var(--text-sub); line-height: 1.65;
+  }
+  .keyword-card.green { border-left-color: var(--success); }
+  .keyword-card.green .kw-en { color: var(--success); }
+  .keyword-card.purple { border-left-color: var(--purple); }
+  .keyword-card.purple .kw-en { color: var(--purple); }
+  .keyword-card.teal { border-left-color: var(--teal); }
+  .keyword-card.teal .kw-en { color: var(--teal); }
+  .keyword-card.orange { border-left-color: var(--warning); }
+  .keyword-card.orange .kw-en { color: var(--warning); }
+  .keyword-card.red { border-left-color: var(--danger); }
+  .keyword-card.red .kw-en { color: var(--danger); }
+
+  /* ── QUIZ ── */
+  .quiz-item {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .quiz-q { font-size: 15px; font-weight: 600; margin-bottom: 14px; line-height: 1.6; }
+  .quiz-q .q-num { color: var(--primary); margin-right: 6px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .quiz-opt {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 14px; cursor: pointer;
+    transition: all 0.2s; text-align: left;
+    color: var(--text);
+  }
+  .quiz-opt:hover { border-color: var(--primary); background: var(--primary-light); }
+  .quiz-opt.correct { background: var(--success-light); border-color: var(--success); color: var(--success); font-weight: 600; }
+  .quiz-opt.wrong { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
+  .quiz-feedback {
+    display: none; padding: 10px 14px;
+    border-radius: 8px; font-size: 13px; line-height: 1.6;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: var(--success-light); color: var(--success); }
+  .quiz-feedback.no { background: var(--danger-light); color: var(--danger); }
+  .short-input {
+    width: 100%; padding: 10px 14px;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 14px; background: var(--bg); color: var(--text);
+    margin-bottom: 10px;
+  }
+  .short-input:focus { outline: none; border-color: var(--primary); }
+  .check-btn {
+    background: var(--primary); color: white;
+    border: none; border-radius: 8px;
+    padding: 9px 18px; font-size: 14px; cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .check-btn:hover { opacity: 0.85; }
+
+  /* ── CAPSULE DIAGRAM ── */
+  .capsule-diagram {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+  .capsule-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 6px;
+  }
+  .capsule-label {
+    font-size: 12px; font-weight: 700; color: white;
+    padding: 4px 10px; border-radius: 4px;
+    min-width: 70px; text-align: center;
+  }
+  .capsule-data {
+    font-size: 12px; padding: 4px 10px; border-radius: 4px;
+    background: var(--bg); border: 1px solid var(--border);
+    color: var(--text-sub);
+  }
+  .capsule-arrow { color: var(--text-sub); font-size: 18px; }
+
+  @media (max-width: 640px) {
+    .card-grid, .goal-grid, .keyword-grid { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .layer-table { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#goals">학습목표</a>
+  <a href="#summary">핵심요약</a>
+  <a href="#layers">계층구조</a>
+  <a href="#functions">계층기능</a>
+  <a href="#concepts">주요개념</a>
+  <a href="#catch">핵심캐치</a>
+  <a href="#keywords">키워드</a>
+  <a href="#quiz">연습문제</a>
+  <div class="nav-spacer"></div>
+  <button id="darkToggle">🌙</button>
+</nav>
+
+<header>
+  <div class="badge">데이터통신 · 3장</div>
+  <h1>OSI 참조 모델</h1>
+  <p>네트워크 통신의 국제 표준 — 7계층 구조와 핵심 개념</p>
+</header>
+
+<main>
+
+  <!-- ── 학습 목표 ── -->
+  <section id="goals">
+    <div class="section-title"><span class="icon">🎯</span> 학습 목표</div>
+    <div class="goal-grid">
+      <div class="goal-card">
+        <div class="goal-num">1</div>
+        <p>OSI 참조 모델의 등장 배경과 목적을 설명할 수 있다.</p>
+      </div>
+      <div class="goal-card">
+        <div class="goal-num">2</div>
+        <p>OSI 7계층의 이름과 순서를 암기하고 각 계층의 역할을 설명할 수 있다.</p>
+      </div>
+      <div class="goal-card">
+        <div class="goal-num">3</div>
+        <p>OSI 7계층과 TCP/IP 5계층을 비교하여 설명할 수 있다.</p>
+      </div>
+      <div class="goal-card">
+        <div class="goal-num">4</div>
+        <p>캡슐화·역캡슐화, SDU, PDU 개념을 이해하고 설명할 수 있다.</p>
+      </div>
+      <div class="goal-card">
+        <div class="goal-num">5</div>
+        <p>프로토콜, 인터페이스, 서비스 프리미티브의 차이를 설명할 수 있다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 핵심 요약 ── -->
+  <section id="summary">
+    <div class="section-title"><span class="icon">📌</span> 핵심 요약</div>
+    <div class="card-grid">
+      <div class="card">
+        <h3>OSI 참조 모델이란?</h3>
+        <p>1984년 <strong>ISO</strong>에서 이기종 컴퓨터 간 통신을 가능하게 하기 위해 개발한 통신 프로토콜 표준 모델. 통신의 전 과정을 <strong>7개 계층</strong>으로 분리하여 정의한다.</p>
+      </div>
+      <div class="card green">
+        <h3>참조 모델 vs 실제 표준</h3>
+        <p>OSI는 실제 사용되는 프로토콜로 개발되지 못하였지만, 통신 프로토콜을 <strong>이해하고 설명하는 기준 모델</strong>로 사용된다. 실제적인 표준은 <strong>TCP/IP</strong>이다.</p>
+      </div>
+      <div class="card orange">
+        <h3>계층화의 개념</h3>
+        <p>하나의 일을 수행하기 위해 관련 기능들을 모아 그룹화한 구조. 각 계층은 인접한 <strong>하위 계층의 서비스를 이용</strong>하고, 바로 위 계층에 서비스를 제공한다.</p>
+      </div>
+      <div class="card purple">
+        <h3>중간 노드의 동작 범위</h3>
+        <p>중간 노드(라우터 등)들은 <strong>3계층(네트워크 계층)까지</strong>만 동작하며, 종단 간 연결을 위한 상위 계층은 종단 시스템에서만 동작한다.</p>
+      </div>
+      <div class="card teal">
+        <h3>캡슐화 (Encapsulation)</h3>
+        <p>전송 데이터에 각 계층의 제어 정보(헤더)를 추가하여 다음 계층으로 전달하는 과정. <strong>2계층</strong>에서는 오류 제어를 위한 <strong>트레일러</strong>도 추가한다.</p>
+      </div>
+      <div class="card red">
+        <h3>데이터 단위</h3>
+        <ul>
+          <li><strong>SDU</strong>: 상·하위 계층 간 인터페이스를 통해 전달되는 실제 정보</li>
+          <li><strong>PDU</strong>: 동일 계층 간에 운반(교환)되는 데이터<br><em>(PDU = SDU + 헤더)</em></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── OSI / TCP-IP 계층 비교 ── -->
+  <section id="layers">
+    <div class="section-title"><span class="icon">🔢</span> OSI 7계층 vs TCP/IP 5계층</div>
+    <div class="compare-wrap">
+      <div class="compare-grid">
+        <div class="compare-col osi">
+          <h4>OSI 7계층 (참조 모델)</h4>
+          <div class="layer-item"><span class="layer-num l7">7</span> 응용 계층 (Application)</div>
+          <div class="layer-item"><span class="layer-num l6">6</span> 표현 계층 (Presentation)</div>
+          <div class="layer-item"><span class="layer-num l5">5</span> 세션 계층 (Session)</div>
+          <div class="layer-item"><span class="layer-num l4">4</span> 전송 계층 (Transport)</div>
+          <div class="layer-item"><span class="layer-num l3">3</span> 네트워크 계층 (Network)</div>
+          <div class="layer-item"><span class="layer-num l2">2</span> 데이터링크 계층 (Data Link)</div>
+          <div class="layer-item"><span class="layer-num l1">1</span> 물리 계층 (Physical)</div>
+        </div>
+        <div class="compare-col tcpip">
+          <h4>TCP/IP 5계층 (실제 표준)</h4>
+          <div class="layer-item"><span class="layer-num l7">5</span> 응용 계층 (Application)</div>
+          <div class="layer-item" style="background:var(--bg);opacity:0.3;font-size:12px;padding:4px 12px;">↑ OSI 표현·세션 계층 포함 ↑</div>
+          <div class="layer-item" style="background:var(--bg);opacity:0.3;font-size:12px;padding:4px 12px;margin-bottom:6px;"></div>
+          <div class="layer-item"><span class="layer-num l4">4</span> 전송 계층 (Transport)</div>
+          <div class="layer-item"><span class="layer-num l3">3</span> 인터넷 계층 (Internet)</div>
+          <div class="layer-item"><span class="layer-num l2">2</span> 데이터 계층 (Data Link)</div>
+          <div class="layer-item"><span class="layer-num l1">1</span> 물리 계층 (Physical)</div>
+        </div>
+      </div>
+      <p style="margin-top:18px;font-size:13px;color:var(--text-sub);text-align:center;">
+        ⚠️ <strong>계층의 순서는 무조건 외워야 함!</strong> — 강의 강조 사항
+      </p>
+    </div>
+  </section>
+
+  <!-- ── 각 계층 주요 기능 ── -->
+  <section id="functions">
+    <div class="section-title"><span class="icon">⚙️</span> 각 계층의 주요 기능</div>
+    <table class="layer-table">
+      <thead>
+        <tr>
+          <th>계층</th>
+          <th>이름</th>
+          <th>주요 기능</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="layer-num l7" style="display:inline-flex;">7</span></td>
+          <td><strong>응용 계층</strong><br><small style="color:var(--text-sub)">Application</small></td>
+          <td>사용자가 네트워크에 접속하는 것을 가능하게 하고, 사용자 인터페이스를 제공. 파일 전송·이메일 같은 종단 사용자 서비스 제공</td>
+        </tr>
+        <tr>
+          <td><span class="layer-num l6" style="display:inline-flex;">6</span></td>
+          <td><strong>표현 계층</strong><br><small style="color:var(--text-sub)">Presentation</small></td>
+          <td>데이터의 표현을 공통된 형식으로 변환, <strong>압축</strong>, <strong>암호화</strong> 기능 수행</td>
+        </tr>
+        <tr>
+          <td><span class="layer-num l5" style="display:inline-flex;">5</span></td>
+          <td><strong>세션 계층</strong><br><small style="color:var(--text-sub)">Session</small></td>
+          <td>특정 프로세스 간에 세션이라는 연결을 확립하고 유지. 응용 프로그램 간 데이터 동기화, 데이터 오류 검사 및 복구</td>
+        </tr>
+        <tr>
+          <td><span class="layer-num l4" style="display:inline-flex;">4</span></td>
+          <td><strong>전송 계층</strong><br><small style="color:var(--text-sub)">Transport</small></td>
+          <td><strong>종단 간 신뢰성 있는 데이터 전송</strong>. 종단 간 오류 제어, 흐름 제어</td>
+        </tr>
+        <tr>
+          <td><span class="layer-num l3" style="display:inline-flex;">3</span></td>
+          <td><strong>네트워크 계층</strong><br><small style="color:var(--text-sub)">Network</small></td>
+          <td>호스트 간의 데이터 전송 기능. <strong>데이터의 전송 경로 설정</strong> (라우팅)</td>
+        </tr>
+        <tr>
+          <td><span class="layer-num l2" style="display:inline-flex;">2</span></td>
+          <td><strong>데이터링크 계층</strong><br><small style="color:var(--text-sub)">Data Link</small></td>
+          <td><strong>인접 노드 사이</strong>의 데이터 전송 기능 수행. 인접 노드 사이의 오류 제어, 흐름 제어, 전송 제어. <strong>트레일러</strong> 추가</td>
+        </tr>
+        <tr>
+          <td><span class="layer-num l1" style="display:inline-flex;">1</span></td>
+          <td><strong>물리 계층</strong><br><small style="color:var(--text-sub)">Physical</small></td>
+          <td>물리적인 전송로를 제공. 전송 방식: 신호 형태, 케이블 형태 등 물리적인 전송 매체를 통해 데이터를 목적지까지 전송하기 위해 필요한 기능들을 제어</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── 주요 개념 ── -->
+  <section id="concepts">
+    <div class="section-title"><span class="icon">💡</span> 주요 개념</div>
+    <div class="card-grid">
+      <div class="card">
+        <h3>프로토콜 (Protocol)</h3>
+        <p>각 계층의 프로토콜은 <strong>동일 계층 사이(peer-to-peer)</strong>에 존재한다. 같은 계층끼리 약속된 규칙으로 통신한다.</p>
+      </div>
+      <div class="card green">
+        <h3>인터페이스 (Interface)</h3>
+        <p><strong>동일한 장치 내에서</strong> 다른 계층과 상호작용하는 것. 같은 장치 안의 인접 계층 간 연결 방식.</p>
+      </div>
+      <div class="card orange">
+        <h3>서비스 프리미티브<br>(Service Primitive)</h3>
+        <p>인터페이스를 통해 이루어지는 계층 간 상호 작용을 추상화하여 단순한 모습으로 제공하기 위한 <strong>서비스 단위</strong>.</p>
+      </div>
+      <div class="card purple">
+        <h3>SDU vs PDU</h3>
+        <ul>
+          <li><strong>SDU</strong> (Service Data Unit): 상·하위 계층 간 인터페이스를 통해 전달되는 실제 정보</li>
+          <li><strong>PDU</strong> (Protocol Data Unit): 동일 계층 간에 운반되는 데이터<br><code>PDU = SDU + 헤더</code></li>
+        </ul>
+      </div>
+      <div class="card teal">
+        <h3>캡슐화 (Encapsulation)</h3>
+        <p>전송 데이터에 각 계층의 요구 조건과 처리 정보를 포함하는 <strong>헤더</strong>를 추가하며 하위 계층으로 전달. 2계층은 <strong>트레일러</strong>도 추가.</p>
+      </div>
+      <div class="card red">
+        <h3>역캡슐화 (Decapsulation)</h3>
+        <p>수신 측에서 각 계층이 자신의 헤더를 제거하며 상위 계층으로 데이터를 전달하는 과정. 캡슐화의 반대 과정.</p>
+      </div>
+    </div>
+
+    <!-- 캡슐화 다이어그램 -->
+    <div class="capsule-diagram" style="margin-top:20px;">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px;">캡슐화 과정 (송신 측)</h3>
+      <div class="capsule-row">
+        <span class="capsule-label l7" style="background:#dc2626;">7 응용</span>
+        <span class="capsule-data">데이터</span>
+        <span style="font-size:13px;color:var(--text-sub);">← 사용자 데이터 생성</span>
+      </div>
+      <div class="capsule-row">
+        <span class="capsule-label l6" style="background:#7c3aed;">6 표현</span>
+        <span class="capsule-data" style="background:var(--purple-light);">H6</span>
+        <span class="capsule-data">데이터</span>
+      </div>
+      <div class="capsule-row">
+        <span class="capsule-label l5" style="background:#d97706;">5 세션</span>
+        <span class="capsule-data" style="background:var(--warning-light);">H5</span>
+        <span class="capsule-data" style="background:var(--purple-light);">H6</span>
+        <span class="capsule-data">데이터</span>
+      </div>
+      <div class="capsule-row">
+        <span class="capsule-label l4" style="background:#16a34a;">4 전송</span>
+        <span class="capsule-data" style="background:var(--success-light);">H4</span>
+        <span class="capsule-data">…</span>
+        <span style="font-size:13px;color:var(--text-sub);">→ 세그먼트 (Segment)</span>
+      </div>
+      <div class="capsule-row">
+        <span class="capsule-label l3" style="background:#2563eb;">3 네트워크</span>
+        <span class="capsule-data" style="background:var(--primary-light);">H3</span>
+        <span class="capsule-data">…</span>
+        <span style="font-size:13px;color:var(--text-sub);">→ 패킷 (Packet)</span>
+      </div>
+      <div class="capsule-row">
+        <span class="capsule-label l2" style="background:#0d9488;">2 데이터링크</span>
+        <span class="capsule-data" style="background:var(--teal-light);">H2</span>
+        <span class="capsule-data">…</span>
+        <span class="capsule-data" style="background:var(--teal-light);">T2</span>
+        <span style="font-size:13px;color:var(--text-sub);">→ 프레임 (Frame) + 트레일러</span>
+      </div>
+      <div class="capsule-row">
+        <span class="capsule-label l1" style="background:#6b7280;">1 물리</span>
+        <span class="capsule-data">비트(Bit) 스트림으로 전송</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 핵심 캐치 ── -->
+  <section id="catch">
+    <div class="section-title"><span class="icon">🔥</span> 핵심 캐치 & 시험 포인트</div>
+
+    <div class="exam-box">
+      <div class="exam-title">📝 중간고사 예상 문제 (강의 직접 언급)</div>
+      <ul>
+        <li>OSI 7계층을 순서대로 나열하시오.</li>
+        <li>OSI 7계층을 나열하고 <strong>3개 계층(임의 선택)</strong>을 설명하라.</li>
+      </ul>
+    </div>
+
+    <div class="catch-box">
+      <div class="catch-title">⭐ 계층 순서 암기법</div>
+      <p>물 → 데 → 네 → 전 → 세 → 표 → 응<br>
+      <strong>물데네전세표응</strong> (아래→위 순서)<br>
+      1물리 · 2데이터링크 · 3네트워크 · 4전송 · 5세션 · 6표현 · 7응용</p>
+    </div>
+
+    <div class="catch-box">
+      <div class="catch-title">⭐ OSI vs TCP/IP 핵심 차이</div>
+      <p>OSI는 <strong>참조 모델</strong>(이해·설명 기준), TCP/IP는 <strong>실제 표준</strong>. OSI가 1984년 ISO에서 먼저 나왔으나, 실제 인터넷은 TCP/IP 기반으로 동작한다.</p>
+    </div>
+
+    <div class="catch-box">
+      <div class="catch-title">⭐ 오류 제어 범위 구분</div>
+      <p>
+        • <strong>데이터링크 계층(2)</strong>: <u>인접 노드 사이</u>의 오류 제어, 흐름 제어<br>
+        • <strong>전송 계층(4)</strong>: <u>종단 간(end-to-end)</u>의 오류 제어, 흐름 제어
+      </p>
+    </div>
+
+    <div class="catch-box">
+      <div class="catch-title">⭐ 트레일러는 2계층(데이터링크)에서만!</div>
+      <p>헤더는 모든 계층에서 추가하지만, <strong>트레일러(오류 제어용)</strong>는 2계층 데이터링크 계층에서만 추가한다.</p>
+    </div>
+
+    <div class="catch-box">
+      <div class="catch-title">⭐ 중간 노드는 3계층까지만 동작</div>
+      <p>라우터 같은 중간 노드는 <strong>1~3계층</strong>(물리·데이터링크·네트워크)까지만 처리한다. 4~7계층은 종단 시스템(호스트)에서만 동작한다.</p>
+    </div>
+  </section>
+
+  <!-- ── 핵심 키워드 ── -->
+  <section id="keywords">
+    <div class="section-title"><span class="icon">📚</span> 핵심 키워드</div>
+    <div class="keyword-grid">
+      <div class="keyword-card">
+        <div class="kw-en">OSI Reference Model</div>
+        <div class="kw-ko">OSI 참조 모델</div>
+        <div class="kw-def">1984년 ISO에서 이기종 컴퓨터 간 통신 표준화를 위해 개발한 7계층 네트워크 구조 모델. 실제 프로토콜은 아니며 참조·이해용 기준 모델.</div>
+      </div>
+      <div class="keyword-card green">
+        <div class="kw-en">Protocol</div>
+        <div class="kw-ko">프로토콜</div>
+        <div class="kw-def">동일 계층(peer-to-peer) 사이에 존재하는 통신 규약. 서로 다른 시스템 간에 데이터를 교환하기 위한 규칙의 집합.</div>
+      </div>
+      <div class="keyword-card purple">
+        <div class="kw-en">Interface</div>
+        <div class="kw-ko">인터페이스</div>
+        <div class="kw-def">동일한 장치 내에서 인접한 계층들이 상호 작용하는 방식. 같은 기계 안에서 계층 간 통신 방법.</div>
+      </div>
+      <div class="keyword-card teal">
+        <div class="kw-en">Service Primitive</div>
+        <div class="kw-ko">서비스 프리미티브</div>
+        <div class="kw-def">인터페이스를 통한 계층 간 상호 작용을 추상화한 서비스 단위. 계층 간 교환되는 기본적인 서비스 요청/응답 형식.</div>
+      </div>
+      <div class="keyword-card orange">
+        <div class="kw-en">Encapsulation / Decapsulation</div>
+        <div class="kw-ko">캡슐화 / 역캡슐화</div>
+        <div class="kw-def">캡슐화: 송신 시 각 계층이 헤더(+트레일러)를 추가하는 과정. 역캡슐화: 수신 시 각 계층이 자신의 헤더를 제거하는 과정.</div>
+      </div>
+      <div class="keyword-card red">
+        <div class="kw-en">SDU (Service Data Unit)</div>
+        <div class="kw-ko">서비스 데이터 단위</div>
+        <div class="kw-def">상위 계층과 하위 계층 간의 인터페이스를 통해 전달되는 실제 정보(페이로드).</div>
+      </div>
+      <div class="keyword-card">
+        <div class="kw-en">PDU (Protocol Data Unit)</div>
+        <div class="kw-ko">프로토콜 데이터 단위</div>
+        <div class="kw-def">동일 계층 간에 운반(교환)되는 데이터. PDU = SDU + 헤더. 계층마다 다른 이름(패킷, 프레임, 비트 등)으로 불린다.</div>
+      </div>
+      <div class="keyword-card green">
+        <div class="kw-en">Header / Trailer</div>
+        <div class="kw-ko">헤더 / 트레일러</div>
+        <div class="kw-def">헤더: 각 계층이 캡슐화 시 추가하는 제어 정보. 트레일러: 2계층(데이터링크)에서 오류 제어를 위해 데이터 뒤에 추가하는 정보.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 연습문제 ── -->
+  <section id="quiz">
+    <div class="section-title"><span class="icon">✏️</span> 연습문제</div>
+
+    <!-- Q1 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q1.</span> OSI 참조 모델은 몇 년에 누가 개발했는가?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A1')">① 1974년, ITU</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A1')">② 1984년, ISO</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A1')">③ 1990년, IEEE</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A1')">④ 1969년, ARPA</button>
+      </div>
+      <div class="quiz-feedback" id="A1"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q2.</span> OSI 7계층을 하위(1계층)에서 상위(7계층) 순서로 올바르게 나열한 것은?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A2')">① 응용 → 표현 → 세션 → 전송 → 네트워크 → 데이터링크 → 물리</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A2')">② 물리 → 데이터링크 → 네트워크 → 전송 → 세션 → 표현 → 응용</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A2')">③ 물리 → 네트워크 → 데이터링크 → 전송 → 세션 → 표현 → 응용</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A2')">④ 물리 → 데이터링크 → 전송 → 네트워크 → 세션 → 표현 → 응용</button>
+      </div>
+      <div class="quiz-feedback" id="A2"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q3.</span> 다음 중 <strong>종단 간(end-to-end) 신뢰성 있는 데이터 전송</strong>을 담당하는 계층은?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A3')">① 데이터링크 계층</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A3')">② 네트워크 계층</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A3')">③ 전송 계층</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A3')">④ 세션 계층</button>
+      </div>
+      <div class="quiz-feedback" id="A3"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q4.</span> 캡슐화 과정에서 <strong>트레일러(Trailer)</strong>를 추가하는 계층은?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A4')">① 물리 계층</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A4')">② 데이터링크 계층</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A4')">③ 네트워크 계층</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A4')">④ 전송 계층</button>
+      </div>
+      <div class="quiz-feedback" id="A4"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q5.</span> OSI와 TCP/IP에 대한 설명으로 옳은 것은?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A5')">① OSI는 실제 인터넷 표준으로 널리 사용된다.</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A5')">② TCP/IP는 OSI보다 계층 수가 더 많다.</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A5')">③ OSI는 참조 모델로 사용되고, 실제 표준은 TCP/IP이다.</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A5')">④ OSI는 4계층으로 구성된다.</button>
+      </div>
+      <div class="quiz-feedback" id="A5"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q6.</span> PDU(Protocol Data Unit)의 구성으로 옳은 것은?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A6')">① PDU = SDU + 트레일러</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A6')">② PDU = SDU + 헤더</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A6')">③ PDU = SDU × 헤더</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A6')">④ PDU = 헤더만으로 구성</button>
+      </div>
+      <div class="quiz-feedback" id="A6"></div>
+    </div>
+
+    <!-- Q7 단답형 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q7.</span> [단답형] 라우터 등 중간 노드가 처리하는 OSI 계층은 몇 계층까지인가? (숫자로 입력)</div>
+      <input type="text" class="short-input" id="S7" placeholder="숫자를 입력하세요 (예: 3)">
+      <button class="check-btn" onclick="checkShort('S7', ['3'], 'FA7', '중간 노드(라우터 등)는 1~3계층(물리·데이터링크·네트워크)까지만 동작합니다.')">확인</button>
+      <div class="quiz-feedback" id="FA7"></div>
+    </div>
+
+    <!-- Q8 단답형 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q8.</span> [단답형] 데이터의 압축과 암호화 기능을 수행하는 OSI 계층의 이름은?</div>
+      <input type="text" class="short-input" id="S8" placeholder="계층 이름을 입력하세요">
+      <button class="check-btn" onclick="checkShort('S8', ['표현계층','표현 계층','presentation'], 'FA8', '표현 계층(Presentation Layer)입니다. 데이터 형식 변환, 압축, 암호화를 담당합니다.')">확인</button>
+      <div class="quiz-feedback" id="FA8"></div>
+    </div>
+
+    <!-- Q9 단답형 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q9.</span> [단답형] 동일 계층 간에 존재하는 통신 규약을 무엇이라 하는가?</div>
+      <input type="text" class="short-input" id="S9" placeholder="용어를 입력하세요">
+      <button class="check-btn" onclick="checkShort('S9', ['프로토콜','protocol'], 'FA9', '프로토콜(Protocol)입니다. 동일 계층(peer-to-peer) 사이의 통신 규칙입니다.')">확인</button>
+      <div class="quiz-feedback" id="FA9"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+  // 다크 모드
+  const toggle = document.getElementById('darkToggle');
+  const html = document.documentElement;
+  const saved = localStorage.getItem('theme') || 'light';
+  html.setAttribute('data-theme', saved);
+  toggle.textContent = saved === 'dark' ? '☀️' : '🌙';
+  toggle.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    toggle.textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', next);
+  });
+
+  // 객관식
+  function answerMC(btn, correct, feedbackId) {
+    const item = btn.closest('.quiz-item');
+    const opts = item.querySelectorAll('.quiz-opt');
+    opts.forEach(o => o.disabled = true);
+    const fb = document.getElementById(feedbackId);
+    if (correct) {
+      btn.classList.add('correct');
+      fb.textContent = '✅ 정답입니다!';
+      fb.className = 'quiz-feedback show ok';
+    } else {
+      btn.classList.add('wrong');
+      fb.textContent = '❌ 오답입니다. 다시 생각해 보세요.';
+      fb.className = 'quiz-feedback show no';
+    }
+  }
+
+  // 단답형
+  function checkShort(inputId, answers, feedbackId, explanation) {
+    const val = document.getElementById(inputId).value.trim().toLowerCase();
+    const fb = document.getElementById(feedbackId);
+    const correct = answers.some(a => val === a.toLowerCase() || val.includes(a.toLowerCase()));
+    if (correct) {
+      fb.textContent = '✅ 정답입니다! ' + explanation;
+      fb.className = 'quiz-feedback show ok';
+    } else {
+      fb.textContent = '❌ 오답입니다. 정답: ' + explanation;
+      fb.className = 'quiz-feedback show no';
+    }
+  }
+</script>
+</body>
+</html>

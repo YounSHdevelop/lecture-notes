@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자료구조 1주차 - 알고리즘 복잡도 & 순환함수</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f3f4f6; --card-bg: #ffffff; --text: #1e293b; --text-sub: #64748b;
+  --border: #e2e8f0; --primary: #2563eb; --success: #16a34a; --danger: #dc2626;
+  --warning: #d97706; --purple: #7c3aed; --teal: #0d9488;
+  --nav-bg: rgba(255,255,255,0.95); --shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+[data-theme="dark"] {
+  --bg: #0f172a; --card-bg: #1e293b; --text: #e2e8f0; --text-sub: #94a3b8;
+  --border: #334155; --nav-bg: rgba(15,23,42,0.95); --shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); transition:background .3s,color .3s; }
+
+header { background:linear-gradient(135deg,#1e3a8a,#2563eb); color:white; padding:60px 20px 40px; text-align:center; }
+header .badge { display:inline-block; background:rgba(255,255,255,.2); padding:4px 16px; border-radius:20px; font-size:.85rem; margin-bottom:16px; }
+header h1 { font-size:2rem; font-weight:700; margin-bottom:8px; }
+header p { opacity:.85; font-size:1rem; }
+
+nav { position:sticky; top:0; z-index:100; background:var(--nav-bg); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); padding:0 20px; display:flex; align-items:center; justify-content:space-between; }
+.nav-links { display:flex; gap:4px; padding:10px 0; overflow-x:auto; }
+nav a { text-decoration:none; color:var(--text-sub); padding:6px 14px; border-radius:20px; font-size:.85rem; white-space:nowrap; transition:all .2s; }
+nav a:hover { background:var(--primary); color:white; }
+.theme-btn { background:none; border:1px solid var(--border); border-radius:20px; padding:6px 14px; cursor:pointer; font-size:.9rem; color:var(--text); white-space:nowrap; transition:all .2s; flex-shrink:0; margin-left:8px; }
+.theme-btn:hover { border-color:var(--primary); color:var(--primary); }
+
+main { max-width:1100px; margin:0 auto; padding:40px 20px; }
+section { margin-bottom:60px; }
+section h2 { font-size:1.4rem; font-weight:700; margin-bottom:24px; display:flex; align-items:center; gap:10px; }
+section h2 .icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+h3.sub { font-size:1.05rem; color:var(--text-sub); margin-bottom:16px; }
+
+.card { background:var(--card-bg); border-radius:12px; padding:20px; box-shadow:var(--shadow); border-top:4px solid transparent; transition:transform .2s,box-shadow .2s; }
+.card:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.12); }
+.grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+@media(max-width:768px){ .grid-2,.grid-3 { grid-template-columns:1fr; } header h1 { font-size:1.5rem; } }
+
+/* Objectives */
+.obj-card { display:flex; gap:16px; align-items:flex-start; background:var(--card-bg); border-radius:12px; padding:20px; box-shadow:var(--shadow); border-left:4px solid var(--primary); margin-bottom:12px; }
+.obj-num { width:32px; height:32px; background:var(--primary); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.9rem; flex-shrink:0; }
+.obj-text { font-size:.95rem; line-height:1.6; padding-top:4px; }
+
+/* Notation cards */
+.notation-card { background:var(--card-bg); border-radius:12px; padding:20px; box-shadow:var(--shadow); text-align:center; }
+.notation-symbol { font-size:2rem; font-weight:700; margin-bottom:8px; }
+.notation-name { font-size:.95rem; font-weight:600; margin-bottom:6px; }
+.notation-desc { font-size:.82rem; color:var(--text-sub); line-height:1.6; }
+
+/* Bar chart */
+.bar-chart { display:flex; flex-direction:column; gap:10px; padding:20px; background:var(--card-bg); border-radius:12px; box-shadow:var(--shadow); }
+.bar-row { display:flex; align-items:center; gap:12px; }
+.bar-label { width:90px; font-size:.85rem; font-weight:600; text-align:right; flex-shrink:0; font-family:monospace; }
+.bar-track { flex:1; height:22px; background:var(--bg); border-radius:4px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:8px; font-size:.75rem; color:white; font-weight:600; }
+.badge-fast { background:#dcfce7; color:#16a34a; padding:2px 10px; border-radius:12px; font-size:.8rem; font-weight:600; flex-shrink:0; }
+.badge-mid  { background:#fef9c3; color:#d97706; padding:2px 10px; border-radius:12px; font-size:.8rem; font-weight:600; flex-shrink:0; }
+.badge-slow { background:#fee2e2; color:#dc2626; padding:2px 10px; border-radius:12px; font-size:.8rem; font-weight:600; flex-shrink:0; }
+
+/* Case cards */
+.case-card { background:var(--card-bg); border-radius:12px; padding:20px; box-shadow:var(--shadow); text-align:center; }
+.case-icon { font-size:2rem; margin-bottom:10px; }
+.case-title { font-weight:700; font-size:1rem; margin-bottom:8px; }
+.case-notation { font-size:1.4rem; font-weight:700; margin-bottom:8px; font-family:monospace; }
+.case-desc { font-size:.85rem; color:var(--text-sub); line-height:1.6; text-align:left; }
+
+/* Code */
+.code-block { background:#0f172a; color:#e2e8f0; padding:18px; border-radius:10px; font-family:'Courier New',monospace; font-size:.88rem; line-height:1.8; overflow-x:auto; margin:12px 0; }
+.cc { color:#64748b; } .ck { color:#93c5fd; } .cf { color:#a78bfa; } .cn { color:#86efac; }
+
+/* Timeline */
+.timeline { position:relative; padding-left:40px; }
+.timeline::before { content:''; position:absolute; left:14px; top:0; bottom:0; width:2px; background:linear-gradient(to bottom,var(--primary),#7c3aed); }
+.tl-item { position:relative; margin-bottom:24px; }
+.tl-dot { position:absolute; left:-33px; top:4px; width:18px; height:18px; border-radius:50%; border:3px solid var(--bg); box-shadow:0 0 0 2px var(--primary); }
+.tl-card { background:var(--card-bg); border-radius:10px; padding:16px 20px; box-shadow:var(--shadow); }
+.tl-label { font-size:.75rem; font-weight:700; color:var(--primary); text-transform:uppercase; margin-bottom:4px; }
+.tl-title { font-weight:600; margin-bottom:6px; }
+.tl-body { font-size:.88rem; color:var(--text-sub); line-height:1.7; }
+
+/* Catches */
+.catch-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+@media(max-width:768px){ .catch-grid { grid-template-columns:1fr; } }
+.catch-card { background:var(--card-bg); border-radius:12px; padding:20px; box-shadow:var(--shadow); border-left:5px solid var(--warning); display:flex; gap:14px; align-items:flex-start; }
+.catch-icon { font-size:1.5rem; flex-shrink:0; }
+.catch-title { font-weight:700; margin-bottom:6px; color:var(--warning); }
+.catch-body { font-size:.9rem; line-height:1.6; color:var(--text-sub); }
+
+/* Keywords */
+.kw-card { background:var(--card-bg); border-radius:12px; padding:18px; box-shadow:var(--shadow); border-top:4px solid var(--purple); }
+.kw-en { font-size:.75rem; color:var(--primary); font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+.kw-ko { font-weight:700; font-size:1rem; margin-bottom:8px; }
+.kw-def { font-size:.88rem; color:var(--text-sub); line-height:1.6; }
+
+/* Quiz */
+.quiz-card { background:var(--card-bg); border-radius:12px; padding:24px; box-shadow:var(--shadow); margin-bottom:16px; border-left:4px solid var(--primary); }
+.quiz-q { font-weight:600; margin-bottom:16px; line-height:1.6; }
+.q-num { display:inline-block; background:var(--primary); color:white; width:26px; height:26px; border-radius:50%; text-align:center; line-height:26px; font-size:.85rem; margin-right:8px; }
+.quiz-options { display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
+.quiz-options label { display:flex; align-items:center; gap:10px; padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:.9rem; transition:all .2s; }
+.quiz-options label:hover { border-color:var(--primary); background:rgba(37,99,235,.04); }
+.quiz-options input { accent-color:var(--primary); }
+.check-btn { background:var(--primary); color:white; border:none; padding:8px 22px; border-radius:8px; cursor:pointer; font-size:.9rem; font-weight:500; transition:opacity .2s; }
+.check-btn:hover { opacity:.85; }
+.feedback { margin-top:12px; padding:12px 16px; border-radius:8px; font-size:.9rem; display:none; line-height:1.6; }
+.feedback.correct { background:#dcfce7; color:#15803d; border:1px solid #86efac; display:block; }
+.feedback.wrong   { background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; display:block; }
+.short-answer { width:100%; padding:10px 14px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-size:.9rem; margin-bottom:10px; font-family:inherit; }
+.short-answer:focus { outline:none; border-color:var(--primary); }
+
+footer { text-align:center; padding:40px 20px; color:var(--text-sub); font-size:.85rem; border-top:1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">자료구조 · 1주차</div>
+  <h1>알고리즘 성능 분석과 복잡도</h1>
+  <p>빅5 표기법 · 시간복잡도 · 순환함수(재귀)</p>
+</header>
+
+<nav>
+  <div class="nav-links">
+    <a href="#objectives">📌 학습목표</a>
+    <a href="#summary">📊 핵심요약</a>
+    <a href="#timeline">🕐 재귀흐름</a>
+    <a href="#catches">⚡ 핵심캐치</a>
+    <a href="#keywords">📖 키워드</a>
+    <a href="#quiz">✏️ 연습문제</a>
+  </div>
+  <button class="theme-btn" onclick="toggleTheme()">🌙 야간모드</button>
+</nav>
+
+<main>
+
+<!-- ① 학습 목표 -->
+<section id="objectives">
+  <h2><span class="icon" style="background:#dbeafe;color:#2563eb">📌</span>학습 목표</h2>
+  <div class="obj-card"><div class="obj-num">1</div><div class="obj-text">알고리즘의 성능을 분석하기 위해 <strong>복잡도(연산 횟수)</strong>를 계산하는 방법을 이해한다.</div></div>
+  <div class="obj-card"><div class="obj-num">2</div><div class="obj-text"><strong>빅5 표기법</strong>(Big-O, Big-Ω, Big-Θ, little-o, little-ω)으로 복잡도를 간결하게 표현할 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">3</div><div class="obj-text">시간복잡도의 <strong>최선·평균·최악의 경우</strong>를 구분하고, 분석 시 최악의 경우를 기준으로 삼는 이유를 설명할 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">4</div><div class="obj-text"><strong>순환함수(재귀)</strong>의 작동 원리를 이해하고, 팩토리얼 예제를 직접 추적(trace)할 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">5</div><div class="obj-text"><strong>순환과 반복</strong>의 장단점을 비교하여 상황에 맞는 방법을 선택할 수 있다.</div></div>
+</section>
+
+<!-- ② 핵심 요약 -->
+<section id="summary">
+  <h2><span class="icon" style="background:#dcfce7;color:#16a34a">📊</span>핵심 요약</h2>
+
+  <h3 class="sub">📐 빅5 표기법 (Big-5 Asymptotic Notation)</h3>
+  <div class="grid-3" style="margin-bottom:32px">
+    <div class="notation-card" style="border-top:4px solid #2563eb">
+      <div class="notation-symbol" style="color:#2563eb">O(f(n))</div>
+      <div class="notation-name">Big-O (빅오)</div>
+      <div class="notation-desc"><strong>상한 (Upper Bound)</strong><br>최악의 경우 성능 보장<br>→ 가장 많이 사용</div>
+    </div>
+    <div class="notation-card" style="border-top:4px solid #16a34a">
+      <div class="notation-symbol" style="color:#16a34a">Ω(f(n))</div>
+      <div class="notation-name">Big-Omega (빅오메가)</div>
+      <div class="notation-desc"><strong>하한 (Lower Bound)</strong><br>최선의 경우 성능 보장<br>→ 이것보다 빠를 수 없음</div>
+    </div>
+    <div class="notation-card" style="border-top:4px solid #7c3aed">
+      <div class="notation-symbol" style="color:#7c3aed">Θ(f(n))</div>
+      <div class="notation-name">Big-Theta (빅세타)</div>
+      <div class="notation-desc"><strong>정확한 한계 (Tight Bound)</strong><br>상한 = 하한일 때<br>→ 평균적 성능 표현</div>
+    </div>
+    <div class="notation-card" style="border-top:4px solid #0d9488">
+      <div class="notation-symbol" style="color:#0d9488">o(f(n))</div>
+      <div class="notation-name">Little-o (스몰오)</div>
+      <div class="notation-desc"><strong>순수 상한 (등호 제외)</strong><br>f(n)보다 확실히 작은 함수<br>→ 같아지는 경우 제외</div>
+    </div>
+    <div class="notation-card" style="border-top:4px solid #d97706">
+      <div class="notation-symbol" style="color:#d97706">ω(f(n))</div>
+      <div class="notation-name">Little-omega (스몰오메가)</div>
+      <div class="notation-desc"><strong>순수 하한 (등호 제외)</strong><br>f(n)보다 확실히 큰 함수<br>→ 같아지는 경우 제외</div>
+    </div>
+    <div class="notation-card" style="border-top:4px solid #dc2626">
+      <div class="notation-symbol" style="color:#dc2626; font-size:1.2rem">계산 원칙</div>
+      <div class="notation-name">빅O 계산 핵심 규칙</div>
+      <div class="notation-desc" style="text-align:left">• 가장 큰 차수 항만 남김<br>• 계수(상수)는 무시<br>• 3n² + 5n + 2 → <strong>O(n²)</strong><br>• 이유: n이 클 때 나머지 무의미</div>
+    </div>
+  </div>
+
+  <h3 class="sub">⏱️ 주요 복잡도 클래스 (빠른 순)</h3>
+  <div class="bar-chart" style="margin-bottom:32px">
+    <div class="bar-row"><div class="bar-label">O(1)</div><div class="bar-track"><div class="bar-fill" style="width:8%;background:#16a34a">상수</div></div><span class="badge-fast">매우 빠름</span></div>
+    <div class="bar-row"><div class="bar-label">O(log n)</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:#65a30d">로그</div></div><span class="badge-fast">빠름</span></div>
+    <div class="bar-row"><div class="bar-label">O(n)</div><div class="bar-track"><div class="bar-fill" style="width:35%;background:#d97706">선형</div></div><span class="badge-mid">보통</span></div>
+    <div class="bar-row"><div class="bar-label">O(n log n)</div><div class="bar-track"><div class="bar-fill" style="width:52%;background:#ea580c">선형로그</div></div><span class="badge-mid">보통</span></div>
+    <div class="bar-row"><div class="bar-label">O(n²)</div><div class="bar-track"><div class="bar-fill" style="width:70%;background:#dc2626">이차</div></div><span class="badge-slow">느림</span></div>
+    <div class="bar-row"><div class="bar-label">O(2ⁿ)</div><div class="bar-track"><div class="bar-fill" style="width:92%;background:#9f1239">지수</div></div><span class="badge-slow">매우 느림</span></div>
+  </div>
+
+  <h3 class="sub">📊 최선 / 평균 / 최악의 경우 비교</h3>
+  <div class="grid-3" style="margin-bottom:32px">
+    <div class="case-card" style="border-top:4px solid #16a34a">
+      <div class="case-icon">🍀</div>
+      <div class="case-title">최선의 경우 (Best Case)</div>
+      <div class="case-notation" style="color:#16a34a">Ω(f(n))</div>
+      <div class="case-desc">입력이 가장 유리한 경우<br>예) 선형탐색에서 첫 번째 원소가 정답<br><br><strong>⚠️ 분석 의미 낮음</strong> — 운이 좋은 경우라 일반화 불가</div>
+    </div>
+    <div class="case-card" style="border-top:4px solid #7c3aed">
+      <div class="case-icon">📊</div>
+      <div class="case-title">평균의 경우 (Average Case)</div>
+      <div class="case-notation" style="color:#7c3aed">Θ(f(n))</div>
+      <div class="case-desc">모든 입력에 대한 평균<br>예) 선형탐색 평균 n/2번<br><br><strong>계산이 복잡함</strong> — 실제로는 최악과 동일한 경향</div>
+    </div>
+    <div class="case-card" style="border-top:4px solid #dc2626">
+      <div class="case-icon">🔥</div>
+      <div class="case-title">최악의 경우 (Worst Case)</div>
+      <div class="case-notation" style="color:#dc2626">O(f(n))</div>
+      <div class="case-desc">입력이 가장 불리한 경우<br>예) 선형탐색에서 마지막 원소가 정답<br><br><strong>✅ 일반적으로 이것을 사용</strong> — 어떤 입력에서도 성능 보장</div>
+    </div>
+  </div>
+
+  <h3 class="sub">🔄 순환함수(재귀) vs 반복 비교</h3>
+  <div class="grid-2">
+    <div class="card" style="border-top-color:#7c3aed">
+      <h4 style="color:#7c3aed;margin-bottom:12px">🔄 순환함수 (Recursion)</h4>
+      <p style="font-size:.9rem;color:var(--text-sub);margin-bottom:12px">함수가 자기 자신을 호출하는 방식</p>
+      <div class="code-block">
+<span class="ck">int</span> <span class="cf">factorial</span>(<span class="ck">int</span> n) {
+  <span class="ck">if</span> (n == <span class="cn">0</span>) <span class="ck">return</span> <span class="cn">1</span>; <span class="cc">// 기저조건(필수!)</span>
+  <span class="ck">return</span> n * <span class="cf">factorial</span>(n-<span class="cn">1</span>); <span class="cc">// 재귀호출</span>
+}</div>
+      <ul style="font-size:.88rem;padding-left:18px;line-height:1.9;color:var(--text-sub)">
+        <li>✅ 코드가 간결하고 직관적</li>
+        <li>✅ 트리/그래프 탐색, 분할정복에 효과적</li>
+        <li>❌ 함수 호출 오버헤드 발생</li>
+        <li>❌ 깊어질수록 스택 오버플로우 위험</li>
+        <li><strong>⚠️ 기저조건(종료조건) 반드시 필요</strong></li>
+      </ul>
+    </div>
+    <div class="card" style="border-top-color:#0d9488">
+      <h4 style="color:#0d9488;margin-bottom:12px">🔁 반복 (Iteration)</h4>
+      <p style="font-size:.9rem;color:var(--text-sub);margin-bottom:12px">반복문(for/while)으로 구현하는 방식</p>
+      <div class="code-block">
+<span class="ck">int</span> <span class="cf">factorial</span>(<span class="ck">int</span> n) {
+  <span class="ck">int</span> result = <span class="cn">1</span>;
+  <span class="ck">for</span>(<span class="ck">int</span> i=<span class="cn">1</span>; i&lt;=n; i++) {
+    result *= i;
+  }
+  <span class="ck">return</span> result;
+}</div>
+      <ul style="font-size:.88rem;padding-left:18px;line-height:1.9;color:var(--text-sub)">
+        <li>✅ 실행 속도 빠름 (오버헤드 없음)</li>
+        <li>✅ 메모리 효율 좋음</li>
+        <li>❌ 복잡한 문제는 코드가 길어짐</li>
+        <li>❌ 트리/그래프 탐색에 불리</li>
+        <li><strong>⚠️ 대부분 순환↔반복 변환 가능</strong></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ③ 타임라인: 재귀 실행 흐름 -->
+<section id="timeline">
+  <h2><span class="icon" style="background:#fef9c3;color:#d97706">🕐</span>factorial(4) 재귀 실행 흐름</h2>
+  <p style="color:var(--text-sub);margin-bottom:24px;font-size:.9rem">재귀 호출이 어떤 순서로 쌓이고 풀리는지 단계별로 추적합니다.</p>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot" style="background:#2563eb"></div>
+      <div class="tl-card">
+        <div class="tl-label">STEP 1 — 호출 시작</div>
+        <div class="tl-title">factorial(4) 호출</div>
+        <div class="tl-body">4 ≠ 0 → <code>return 4 × factorial(3)</code> 실행 요청. factorial(3)의 결과를 기다리며 대기 상태로 스택에 쌓임.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:#7c3aed"></div>
+      <div class="tl-card">
+        <div class="tl-label">STEP 2</div>
+        <div class="tl-title">factorial(3) → factorial(2) → factorial(1) 연쇄 호출</div>
+        <div class="tl-body">같은 방식으로 n이 줄어들며 계속 호출. 각 호출은 스택에 차곡차곡 쌓임.<br><code>Stack: factorial(4) → factorial(3) → factorial(2) → factorial(1)</code></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:#16a34a"></div>
+      <div class="tl-card">
+        <div class="tl-label">STEP 3 — 기저조건 도달 ✅</div>
+        <div class="tl-title">factorial(0) = 1 반환</div>
+        <div class="tl-body">n == 0 조건 만족 → <strong>1 반환</strong>. 더 이상 재귀 호출 없음. 이제 스택을 역순으로 풀기 시작.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:#d97706"></div>
+      <div class="tl-card">
+        <div class="tl-label">STEP 4 — 역전파 (스택 풀림)</div>
+        <div class="tl-title">결과값이 역순으로 전달</div>
+        <div class="tl-body">
+          factorial(1) = 1 × <strong>1</strong> = 1<br>
+          factorial(2) = 2 × <strong>1</strong> = 2<br>
+          factorial(3) = 3 × <strong>2</strong> = 6<br>
+          factorial(4) = 4 × <strong>6</strong> = <strong style="color:var(--success)">24 ← 최종 결과</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ④ 핵심 캐치 -->
+<section id="catches">
+  <h2><span class="icon" style="background:#fef9c3;color:#d97706">⚡</span>핵심 캐치 (시험 포인트)</h2>
+  <div class="catch-grid">
+    <div class="catch-card">
+      <div class="catch-icon">🎯</div>
+      <div>
+        <div class="catch-title">빅O 계산의 핵심 규칙</div>
+        <div class="catch-body">복잡도 계산 시 <strong>가장 큰 차수 항만 남기고 계수는 버린다.</strong><br>
+        5n³ + 100n² + 999 → <strong>O(n³)</strong><br>
+        이유: n이 매우 클 때 나머지 항의 영향이 무시될 정도로 작아진다.</div>
+      </div>
+    </div>
+    <div class="catch-card">
+      <div class="catch-icon">🔥</div>
+      <div>
+        <div class="catch-title">왜 최악의 경우를 사용하는가?</div>
+        <div class="catch-body">최선은 운이 좋은 경우라 일반화 불가. 평균은 확률 분포 가정이 필요해 복잡. <strong>최악의 경우를 기준으로 하면 어떤 입력에서도 성능이 보장된다.</strong></div>
+      </div>
+    </div>
+    <div class="catch-card">
+      <div class="catch-icon">⚠️</div>
+      <div>
+        <div class="catch-title">재귀함수의 필수 요소: 기저조건</div>
+        <div class="catch-body">재귀함수에는 반드시 <strong>기저조건(Base Case)</strong>이 있어야 한다.<br>
+        없으면 → 무한 재귀 → <strong>스택 오버플로우(Stack Overflow)</strong> 발생!</div>
+      </div>
+    </div>
+    <div class="catch-card">
+      <div class="catch-icon">⚖️</div>
+      <div>
+        <div class="catch-title">순환 vs 반복 선택 기준</div>
+        <div class="catch-body">대부분의 순환은 반복으로 변환 가능. 단, <strong>트리 탐색·분할정복(퀵정렬·병합정렬)은 순환이 훨씬 직관적.</strong> 단순 반복 작업은 반복문이 메모리 효율 우세.</div>
+      </div>
+    </div>
+    <div class="catch-card">
+      <div class="catch-icon">📏</div>
+      <div>
+        <div class="catch-title">n이 클 때만 복잡도 차이가 드러남</div>
+        <div class="catch-body">n이 작을 때는 O(n²)과 O(n log n)의 실제 실행 시간 차이가 미미. <strong>n이 커질수록 복잡도 클래스의 차이가 기하급수적으로 벌어진다.</strong></div>
+      </div>
+    </div>
+    <div class="catch-card">
+      <div class="catch-icon">🔄</div>
+      <div>
+        <div class="catch-title">재귀 호출 = 내부적으로 스택 사용</div>
+        <div class="catch-body">재귀는 내부적으로 <strong>호출 스택(Call Stack)</strong>을 사용. 깊이가 깊어질수록 스택 메모리 소비 증가. 반복보다 메모리 효율이 낮을 수 있다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑤ 핵심 키워드 -->
+<section id="keywords">
+  <h2><span class="icon" style="background:#ede9fe;color:#7c3aed">📖</span>핵심 키워드</h2>
+  <div class="grid-3">
+    <div class="kw-card">
+      <div class="kw-en">Time Complexity</div>
+      <div class="kw-ko">시간 복잡도</div>
+      <div class="kw-def">알고리즘 실행에 필요한 <em>연산 횟수</em>를 입력 크기 n의 함수로 나타낸 것. 실제 시간이 아닌 연산의 수를 측정.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Big-O Notation</div>
+      <div class="kw-ko">빅오 표기법</div>
+      <div class="kw-def">알고리즘의 <strong>최악의 경우 상한</strong>을 표현. 가장 많이 사용되는 복잡도 표기법. O(n), O(n²) 등으로 표기.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Recursion</div>
+      <div class="kw-ko">순환함수 (재귀함수)</div>
+      <div class="kw-def">함수가 자기 자신을 직접 또는 간접적으로 호출하는 방식. 반드시 기저조건(종료조건)이 필요.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Base Case</div>
+      <div class="kw-ko">기저조건 (종료조건)</div>
+      <div class="kw-def">재귀함수에서 더 이상 자신을 호출하지 않고 값을 반환하는 조건. 재귀의 종료를 담당.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Call Stack</div>
+      <div class="kw-ko">호출 스택</div>
+      <div class="kw-def">함수 호출 시 정보를 저장하는 스택 메모리. 재귀가 깊어질수록 쌓이고, 과도하면 Stack Overflow 발생.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Best / Average / Worst Case</div>
+      <div class="kw-ko">최선 / 평균 / 최악의 경우</div>
+      <div class="kw-def">입력에 따른 성능 구분. 일반적으로 <strong>최악의 경우(Big-O)</strong>를 기준으로 분석.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Complexity Analysis</div>
+      <div class="kw-ko">복잡도 분석</div>
+      <div class="kw-def">알고리즘의 효율성을 이론적으로 측정하는 방법. 하드웨어와 무관하게 알고리즘 자체의 성능을 비교 가능.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Stack Overflow</div>
+      <div class="kw-ko">스택 오버플로우</div>
+      <div class="kw-def">재귀 호출이 무한히 반복되거나 너무 깊어져 스택 메모리가 초과될 때 발생하는 오류.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Factorial</div>
+      <div class="kw-ko">팩토리얼</div>
+      <div class="kw-def">n! = n × (n-1) × … × 1 (단, 0! = 1). 재귀함수의 대표적 예시. 시간복잡도: O(n)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑥ 연습문제 -->
+<section id="quiz">
+  <h2><span class="icon" style="background:#fee2e2;color:#dc2626">✏️</span>연습문제</h2>
+
+  <!-- Q1 -->
+  <div class="quiz-card">
+    <div class="quiz-q"><span class="q-num">1</span> 복잡도 분석에서 일반적으로 사용하는 경우는?</div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q1" value="a"> ① 최선의 경우 (Best Case)</label>
+      <label><input type="radio" name="q1" value="b"> ② 평균의 경우 (Average Case)</label>
+      <label><input type="radio" name="q1" value="c"> ③ 최악의 경우 (Worst Case)</label>
+      <label><input type="radio" name="q1" value="d"> ④ 입력 크기와 무관한 경우</label>
+    </div>
+    <button class="check-btn" onclick="checkMC('q1','c','fb1','최악의 경우(Worst Case)를 사용합니다. 어떤 입력에서도 성능이 보장되며, 평균과 거의 유사한 경향을 보이기 때문입니다.')">정답 확인</button>
+    <div class="feedback" id="fb1"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-card">
+    <div class="quiz-q"><span class="q-num">2</span> 다음 복잡도를 빅O 표기법으로 올바르게 표현한 것은?<br><code style="background:var(--bg);padding:4px 10px;border-radius:4px;font-size:.95rem">T(n) = 5n³ + 100n² + 3n + 500</code></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q2" value="a"> ① O(5n³)</label>
+      <label><input type="radio" name="q2" value="b"> ② O(n³)</label>
+      <label><input type="radio" name="q2" value="c"> ③ O(n²)</label>
+      <label><input type="radio" name="q2" value="d"> ④ O(n³ + n²)</label>
+    </div>
+    <button class="check-btn" onclick="checkMC('q2','b','fb2','O(n³)입니다. 가장 큰 차수 항(5n³)만 남기고, 계수(5)와 나머지 항은 모두 무시합니다.')">정답 확인</button>
+    <div class="feedback" id="fb2"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-card">
+    <div class="quiz-q"><span class="q-num">3</span> 재귀함수에 반드시 포함되어야 하는 요소는?</div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q3" value="a"> ① 반복문 (for/while)</label>
+      <label><input type="radio" name="q3" value="b"> ② 전역 변수</label>
+      <label><input type="radio" name="q3" value="c"> ③ 기저조건 (Base Case, 종료조건)</label>
+      <label><input type="radio" name="q3" value="d"> ④ void 반환 타입 선언</label>
+    </div>
+    <button class="check-btn" onclick="checkMC('q3','c','fb3','기저조건(Base Case)이 반드시 필요합니다. 없으면 재귀가 무한히 반복되어 Stack Overflow가 발생합니다.')">정답 확인</button>
+    <div class="feedback" id="fb3"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-card">
+    <div class="quiz-q"><span class="q-num">4</span> 복잡도 클래스를 빠른 순(작은 복잡도)으로 올바르게 나열한 것은?</div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q4" value="a"> ① O(n) &lt; O(log n) &lt; O(1) &lt; O(n²)</label>
+      <label><input type="radio" name="q4" value="b"> ② O(1) &lt; O(log n) &lt; O(n) &lt; O(n²)</label>
+      <label><input type="radio" name="q4" value="c"> ③ O(log n) &lt; O(1) &lt; O(n) &lt; O(n²)</label>
+      <label><input type="radio" name="q4" value="d"> ④ O(1) &lt; O(n) &lt; O(log n) &lt; O(n²)</label>
+    </div>
+    <button class="check-btn" onclick="checkMC('q4','b','fb4','O(1) &lt; O(log n) &lt; O(n) &lt; O(n²) 순서입니다. O(1)은 상수 시간, O(log n)은 이진탐색처럼 절반씩 줄어드는 경우입니다.')">정답 확인</button>
+    <div class="feedback" id="fb4"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-card">
+    <div class="quiz-q"><span class="q-num">5</span> 순환(재귀)보다 반복(iteration)이 더 유리한 상황은?</div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q5" value="a"> ① 이진 트리 전체를 탐색할 때</label>
+      <label><input type="radio" name="q5" value="b"> ② 1부터 n까지 단순 합산할 때</label>
+      <label><input type="radio" name="q5" value="c"> ③ 퀵정렬을 구현할 때</label>
+      <label><input type="radio" name="q5" value="d"> ④ 하노이의 탑을 풀 때</label>
+    </div>
+    <button class="check-btn" onclick="checkMC('q5','b','fb5','단순 반복 연산(1~n 합산 등)은 반복문이 스택 오버헤드 없이 더 효율적입니다. 트리 탐색, 하노이의 탑, 퀵정렬 등은 재귀가 훨씬 직관적입니다.')">정답 확인</button>
+    <div class="feedback" id="fb5"></div>
+  </div>
+
+  <!-- Q6 단답형 -->
+  <div class="quiz-card" style="border-left-color:var(--purple)">
+    <div class="quiz-q"><span class="q-num" style="background:var(--purple)">6</span> 단답형: factorial(4)의 결과값은?</div>
+    <input type="text" class="short-answer" id="q6" placeholder="숫자만 입력">
+    <button class="check-btn" style="background:var(--purple)" onclick="checkShort('q6','24','fb6','4! = 4×3×2×1 = 24. 재귀적으로 factorial(0)=1까지 내려간 뒤 역순으로 곱해집니다.')">정답 확인</button>
+    <div class="feedback" id="fb6"></div>
+  </div>
+
+  <!-- Q7 단답형 -->
+  <div class="quiz-card" style="border-left-color:var(--teal)">
+    <div class="quiz-q"><span class="q-num" style="background:var(--teal)">7</span> 단답형: T(n) = 3n + 7의 빅O 표기법은? (예: O(n²))</div>
+    <input type="text" class="short-answer" id="q7" placeholder="O( ) 형태로 입력">
+    <button class="check-btn" style="background:var(--teal)" onclick="checkShortFlex('q7',['O(n)','o(n)'],'fb7','O(n)입니다. 가장 큰 차수는 n이고, 계수 3과 상수 7은 무시합니다.')">정답 확인</button>
+    <div class="feedback" id="fb7"></div>
+  </div>
+
+  <!-- Q8 단답형 -->
+  <div class="quiz-card" style="border-left-color:var(--danger)">
+    <div class="quiz-q"><span class="q-num" style="background:var(--danger)">8</span> 단답형: 재귀함수에서 기저조건 없이 무한 재귀가 발생하면 어떤 오류가 발생하는가?</div>
+    <input type="text" class="short-answer" id="q8" placeholder="영문 또는 한국어로 입력">
+    <button class="check-btn" style="background:var(--danger)" onclick="checkShortFlex('q8',['스택오버플로우','Stack Overflow','StackOverflow','스택 오버플로우'],'fb8','Stack Overflow(스택 오버플로우)입니다. 호출 스택이 계속 쌓여 메모리 한계를 초과하면 발생합니다.')">정답 확인</button>
+    <div class="feedback" id="fb8"></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>자료구조 1주차 학습자료 · 한신대학교</p>
+  <p style="margin-top:6px;font-size:.8rem">강의 내용 기반 제작 — 이론 보강 포함</p>
+</footer>
+
+<script>
+(function(){
+  const saved = localStorage.getItem('ds-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateBtn(saved);
+})();
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('ds-theme', next);
+  updateBtn(next);
+}
+function updateBtn(t) {
+  const b = document.querySelector('.theme-btn');
+  if(b) b.textContent = t === 'dark' ? '☀️ 라이트모드' : '🌙 야간모드';
+}
+
+function checkMC(name, correct, fbId, explanation) {
+  const sel = document.querySelector(`input[name="${name}"]:checked`);
+  const fb = document.getElementById(fbId);
+  if (!sel) { fb.className='feedback wrong'; fb.textContent='선택지를 골라주세요!'; return; }
+  if (sel.value === correct) {
+    fb.className='feedback correct';
+    fb.innerHTML='✅ 정답입니다! ' + explanation;
+  } else {
+    fb.className='feedback wrong';
+    fb.innerHTML='❌ 오답입니다. ' + explanation;
+  }
+}
+
+function checkShort(inputId, correct, fbId, explanation) {
+  const val = document.getElementById(inputId).value.trim();
+  const fb = document.getElementById(fbId);
+  if (!val) { fb.className='feedback wrong'; fb.textContent='답을 입력해주세요!'; return; }
+  if (val === correct) {
+    fb.className='feedback correct';
+    fb.innerHTML='✅ 정답입니다! ' + explanation;
+  } else {
+    fb.className='feedback wrong';
+    fb.innerHTML=`❌ 오답입니다. 정답: <strong>${correct}</strong>. ` + explanation;
+  }
+}
+
+function checkShortFlex(inputId, corrects, fbId, explanation) {
+  const val = document.getElementById(inputId).value.trim().replace(/\s/g,'').toLowerCase();
+  const fb = document.getElementById(fbId);
+  if (!val) { fb.className='feedback wrong'; fb.textContent='답을 입력해주세요!'; return; }
+  const norm = corrects.map(c => c.replace(/\s/g,'').toLowerCase());
+  if (norm.includes(val)) {
+    fb.className='feedback correct';
+    fb.innerHTML='✅ 정답입니다! ' + explanation;
+  } else {
+    fb.className='feedback wrong';
+    fb.innerHTML=`❌ 오답입니다. 정답: <strong>${corrects[0]}</strong>. ` + explanation;
+  }
+}
+</script>
+</body>
+</html>

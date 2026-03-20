@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>빅O 표기법 연습문제 — 자료구조</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f3f4f6; --card-bg: #ffffff; --text: #1e293b; --text-sub: #64748b;
+  --border: #e2e8f0; --primary: #2563eb; --success: #16a34a; --danger: #dc2626;
+  --warning: #d97706; --purple: #7c3aed; --teal: #0d9488;
+  --nav-bg: rgba(255,255,255,0.95); --shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+[data-theme="dark"] {
+  --bg: #0f172a; --card-bg: #1e293b; --text: #e2e8f0; --text-sub: #94a3b8;
+  --border: #334155; --nav-bg: rgba(15,23,42,0.95); --shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); transition:background .3s,color .3s; min-height:100vh; }
+
+/* Header */
+header { background:linear-gradient(135deg,#1e3a8a,#2563eb); color:white; padding:56px 20px 40px; text-align:center; }
+header .badge { display:inline-block; background:rgba(255,255,255,.2); padding:4px 16px; border-radius:20px; font-size:.85rem; margin-bottom:14px; }
+header h1 { font-size:1.9rem; font-weight:700; margin-bottom:8px; }
+header p { opacity:.85; font-size:.95rem; }
+
+/* Nav */
+nav { position:sticky; top:0; z-index:100; background:var(--nav-bg); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.nav-left { font-size:.9rem; font-weight:600; color:var(--text-sub); padding:12px 0; white-space:nowrap; }
+.theme-btn { background:none; border:1px solid var(--border); border-radius:20px; padding:6px 14px; cursor:pointer; font-size:.88rem; color:var(--text); white-space:nowrap; transition:all .2s; }
+.theme-btn:hover { border-color:var(--primary); color:var(--primary); }
+
+/* Score bar */
+.score-bar { background:var(--card-bg); border-bottom:1px solid var(--border); padding:14px 24px; display:flex; align-items:center; gap:16px; justify-content:center; }
+.score-label { font-size:.9rem; color:var(--text-sub); }
+.score-val { font-size:1.3rem; font-weight:700; color:var(--primary); }
+.score-total { font-size:.85rem; color:var(--text-sub); }
+.progress-wrap { flex:1; max-width:300px; height:8px; background:var(--bg); border-radius:4px; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,#2563eb,#7c3aed); border-radius:4px; transition:width .4s ease; }
+
+/* Main */
+main { max-width:780px; margin:0 auto; padding:36px 20px 60px; }
+
+/* Section label */
+.section-label { font-size:.8rem; font-weight:700; color:var(--text-sub); text-transform:uppercase; letter-spacing:1px; margin-bottom:16px; margin-top:40px; display:flex; align-items:center; gap:8px; }
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* Quiz card */
+.quiz-card {
+  background:var(--card-bg); border-radius:14px; padding:26px 28px;
+  box-shadow:var(--shadow); margin-bottom:18px;
+  border-left:5px solid var(--primary);
+  transition:box-shadow .2s;
+}
+.quiz-card.answered { border-left-color: var(--success); }
+.quiz-card.answered-wrong { border-left-color: var(--danger); }
+
+.q-header { display:flex; align-items:flex-start; gap:14px; margin-bottom:18px; }
+.q-num {
+  width:34px; height:34px; border-radius:50%; background:var(--primary);
+  color:white; font-weight:700; font-size:.9rem;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;
+}
+.q-text { font-size:1rem; font-weight:600; line-height:1.65; }
+.q-sub { font-size:.88rem; color:var(--text-sub); margin-top:6px; font-weight:400; }
+
+/* Code block */
+.code-block {
+  background:#0f172a; color:#e2e8f0;
+  padding:16px 18px; border-radius:10px;
+  font-family:'Courier New',monospace; font-size:.88rem; line-height:1.8;
+  overflow-x:auto; margin:14px 0;
+}
+[data-theme="light"] .code-block { background:#1e293b; }
+.cc { color:#64748b; } .ck { color:#93c5fd; } .cf { color:#a78bfa; } .cn { color:#86efac; }
+
+/* Options */
+.options { display:flex; flex-direction:column; gap:9px; margin-bottom:16px; }
+.opt-label {
+  display:flex; align-items:center; gap:12px;
+  padding:11px 16px; border:1.5px solid var(--border); border-radius:10px;
+  cursor:pointer; font-size:.93rem; transition:all .2s; user-select:none;
+}
+.opt-label:hover:not(.disabled) { border-color:var(--primary); background:rgba(37,99,235,.05); }
+.opt-label input { accent-color:var(--primary); width:16px; height:16px; flex-shrink:0; }
+.opt-label.correct-ans { border-color:var(--success); background:#dcfce7; color:#15803d; }
+.opt-label.wrong-ans   { border-color:var(--danger);  background:#fee2e2; color:#b91c1c; }
+.opt-label.disabled { cursor:default; }
+[data-theme="dark"] .opt-label.correct-ans { background:rgba(22,163,74,.2);  color:#86efac; }
+[data-theme="dark"] .opt-label.wrong-ans   { background:rgba(220,38,38,.2);  color:#fca5a5; }
+
+/* Short answer */
+.short-row { display:flex; gap:10px; margin-bottom:14px; }
+.short-input {
+  flex:1; padding:10px 14px; border:1.5px solid var(--border); border-radius:10px;
+  background:var(--bg); color:var(--text); font-size:.93rem; font-family:inherit; transition:border .2s;
+}
+.short-input:focus { outline:none; border-color:var(--primary); }
+.short-input:disabled { opacity:.6; cursor:not-allowed; }
+
+/* Buttons */
+.check-btn {
+  padding:10px 22px; border:none; border-radius:10px; cursor:pointer;
+  font-size:.9rem; font-weight:600; color:white; background:var(--primary);
+  transition:opacity .2s, transform .1s; white-space:nowrap;
+}
+.check-btn:hover:not(:disabled) { opacity:.87; }
+.check-btn:active { transform:scale(.97); }
+.check-btn:disabled { opacity:.45; cursor:not-allowed; }
+
+/* Feedback */
+.feedback {
+  display:none; padding:13px 16px; border-radius:10px;
+  font-size:.9rem; line-height:1.65; margin-top:4px;
+}
+.feedback.show { display:block; }
+.feedback.correct { background:#dcfce7; color:#15803d; border:1px solid #86efac; }
+.feedback.wrong   { background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; }
+[data-theme="dark"] .feedback.correct { background:rgba(22,163,74,.15);  color:#86efac; border-color:rgba(22,163,74,.3); }
+[data-theme="dark"] .feedback.wrong   { background:rgba(220,38,38,.15);  color:#fca5a5; border-color:rgba(220,38,38,.3); }
+
+/* Result panel */
+.result-panel {
+  background:var(--card-bg); border-radius:16px; padding:36px;
+  box-shadow:var(--shadow); text-align:center; margin-top:40px;
+  border-top:5px solid var(--primary); display:none;
+}
+.result-panel.show { display:block; }
+.result-emoji { font-size:3.5rem; margin-bottom:12px; }
+.result-title { font-size:1.5rem; font-weight:700; margin-bottom:8px; }
+.result-score { font-size:3rem; font-weight:700; color:var(--primary); margin-bottom:6px; }
+.result-sub { color:var(--text-sub); font-size:.95rem; margin-bottom:28px; }
+.result-msg { font-size:1rem; line-height:1.7; color:var(--text-sub); background:var(--bg); padding:16px 20px; border-radius:10px; margin-bottom:24px; }
+.retry-btn {
+  background:linear-gradient(135deg,#1e3a8a,#2563eb); color:white;
+  border:none; padding:12px 32px; border-radius:12px; cursor:pointer;
+  font-size:1rem; font-weight:600; transition:opacity .2s;
+}
+.retry-btn:hover { opacity:.88; }
+
+footer { text-align:center; padding:32px 20px; color:var(--text-sub); font-size:.83rem; border-top:1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">자료구조 · 1주차</div>
+  <h1>빅O 표기법 연습문제</h1>
+  <p>객관식 4문항 + 단답형 3문항 · 총 7문제</p>
+</header>
+
+<nav>
+  <div class="nav-left">📝 총 7문제</div>
+  <button class="theme-btn" onclick="toggleTheme()">🌙 야간모드</button>
+</nav>
+
+<div class="score-bar">
+  <div class="score-label">점수</div>
+  <div class="score-val" id="scoreVal">0</div>
+  <div class="score-total">/ 7</div>
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="score-label" id="answeredCount">0문제 완료</div>
+</div>
+
+<main>
+
+  <!-- 객관식 -->
+  <div class="section-label">객관식 (4문항)</div>
+
+  <!-- Q1 -->
+  <div class="quiz-card" id="card1">
+    <div class="q-header">
+      <div class="q-num">1</div>
+      <div class="q-text">다음 중 가장 빠른(효율적인) 복잡도는?</div>
+    </div>
+    <div class="options" id="opts1">
+      <label class="opt-label"><input type="radio" name="q1" value="a"> ① O(n²)</label>
+      <label class="opt-label"><input type="radio" name="q1" value="b"> ② O(n log n)</label>
+      <label class="opt-label"><input type="radio" name="q1" value="c"> ③ O(2ⁿ)</label>
+      <label class="opt-label"><input type="radio" name="q1" value="d"> ④ O(log n)</label>
+    </div>
+    <button class="check-btn" onclick="checkMC(1,'d','O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(2ⁿ) 순서입니다. O(log n)은 이진탐색처럼 매 단계마다 탐색 범위가 절반으로 줄어드는 경우에 해당합니다.')">정답 확인</button>
+    <div class="feedback" id="fb1"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-card" id="card2">
+    <div class="q-header">
+      <div class="q-num">2</div>
+      <div>
+        <div class="q-text">다음 복잡도를 빅O 표기법으로 올바르게 표현한 것은?</div>
+        <div class="q-sub">T(n) = 7n² + 3n + 100</div>
+      </div>
+    </div>
+    <div class="options" id="opts2">
+      <label class="opt-label"><input type="radio" name="q2" value="a"> ① O(7n²)</label>
+      <label class="opt-label"><input type="radio" name="q2" value="b"> ② O(n² + n)</label>
+      <label class="opt-label"><input type="radio" name="q2" value="c"> ③ O(n²)</label>
+      <label class="opt-label"><input type="radio" name="q2" value="d"> ④ O(n)</label>
+    </div>
+    <button class="check-btn" onclick="checkMC(2,'c','가장 큰 차수 항(7n²)만 남기고, 계수 7과 나머지 항(3n, 100)은 모두 무시합니다. → O(n²)')">정답 확인</button>
+    <div class="feedback" id="fb2"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-card" id="card3">
+    <div class="q-header">
+      <div class="q-num">3</div>
+      <div>
+        <div class="q-text">다음 코드의 시간복잡도는?</div>
+      </div>
+    </div>
+    <div class="code-block">
+<span class="ck">for</span> (<span class="ck">int</span> i = <span class="cn">0</span>; i &lt; n; i++) {
+    <span class="ck">for</span> (<span class="ck">int</span> j = <span class="cn">0</span>; j &lt; n; j++) {
+        System.out.println(i + j); <span class="cc">// 연산 1회</span>
+    }
+}</div>
+    <div class="options" id="opts3">
+      <label class="opt-label"><input type="radio" name="q3" value="a"> ① O(n)</label>
+      <label class="opt-label"><input type="radio" name="q3" value="b"> ② O(n log n)</label>
+      <label class="opt-label"><input type="radio" name="q3" value="c"> ③ O(n²)</label>
+      <label class="opt-label"><input type="radio" name="q3" value="d"> ④ O(2n)</label>
+    </div>
+    <button class="check-btn" onclick="checkMC(3,'c','바깥 반복문이 n번, 안쪽 반복문도 n번 → 총 n × n = n² 번 실행됩니다. 중첩 for문(이중 루프)의 시간복잡도는 O(n²)입니다.')">정답 확인</button>
+    <div class="feedback" id="fb3"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-card" id="card4">
+    <div class="q-header">
+      <div class="q-num">4</div>
+      <div class="q-text">배열에서 처음부터 끝까지 순서대로 값을 찾는 <strong>선형 탐색(Linear Search)</strong>의 최악의 경우 시간복잡도는?</div>
+    </div>
+    <div class="options" id="opts4">
+      <label class="opt-label"><input type="radio" name="q4" value="a"> ① O(1)</label>
+      <label class="opt-label"><input type="radio" name="q4" value="b"> ② O(log n)</label>
+      <label class="opt-label"><input type="radio" name="q4" value="c"> ③ O(n)</label>
+      <label class="opt-label"><input type="radio" name="q4" value="d"> ④ O(n²)</label>
+    </div>
+    <button class="check-btn" onclick="checkMC(4,'c','최악의 경우는 찾는 값이 맨 마지막에 있거나 없는 경우입니다. 배열의 n개 원소를 모두 확인해야 하므로 O(n)입니다.')">정답 확인</button>
+    <div class="feedback" id="fb4"></div>
+  </div>
+
+  <!-- 단답형 -->
+  <div class="section-label">단답형 (3문항)</div>
+
+  <!-- Q5 -->
+  <div class="quiz-card" id="card5" style="border-left-color:var(--purple)">
+    <div class="q-header">
+      <div class="q-num" style="background:var(--purple)">5</div>
+      <div>
+        <div class="q-text">T(n) = 5 (상수)일 때 빅O 표기법은?</div>
+        <div class="q-sub">입력 크기 n과 무관하게 항상 5번 연산하는 경우입니다.</div>
+      </div>
+    </div>
+    <div class="short-row">
+      <input type="text" class="short-input" id="i5" placeholder="O( ) 형태로 입력 (예: O(n²))">
+      <button class="check-btn" style="background:var(--purple)" onclick="checkShort(5,['O(1)'],'입력 크기와 상관없이 항상 일정한 횟수(상수)만 연산하면 O(1)입니다. 가장 이상적인 복잡도 클래스입니다.')">정답 확인</button>
+    </div>
+    <div class="feedback" id="fb5"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-card" id="card6" style="border-left-color:var(--teal)">
+    <div class="q-header">
+      <div class="q-num" style="background:var(--teal)">6</div>
+      <div>
+        <div class="q-text">아래 두 코드 중 n이 매우 클 때 더 빠른 것은 <strong>A 또는 B</strong>?<br>그 이유도 함께 적으세요.</div>
+      </div>
+    </div>
+    <div class="code-block">
+<span class="cc">// A</span>
+<span class="ck">for</span> (<span class="ck">int</span> i = <span class="cn">0</span>; i &lt; n; i++) { ... }       <span class="cc">// 단일 루프</span>
+
+<span class="cc">// B</span>
+<span class="ck">for</span> (<span class="ck">int</span> i = <span class="cn">0</span>; i &lt; n; i++)
+    <span class="ck">for</span> (<span class="ck">int</span> j = <span class="cn">0</span>; j &lt; n; j++) { ... }   <span class="cc">// 이중 루프</span></div>
+    <div class="short-row">
+      <input type="text" class="short-input" id="i6" placeholder="A 또는 B 입력">
+      <button class="check-btn" style="background:var(--teal)" onclick="checkShort(6,['A','a'],'A가 더 빠릅니다. A는 O(n), B는 O(n²)입니다. n=1000일 때 A는 1,000번, B는 1,000,000번 연산하므로 n이 커질수록 차이가 기하급수적으로 벌어집니다.')">정답 확인</button>
+    </div>
+    <div class="feedback" id="fb6"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-card" id="card7" style="border-left-color:var(--warning)">
+    <div class="q-header">
+      <div class="q-num" style="background:var(--warning)">7</div>
+      <div>
+        <div class="q-text">빅O 표기법에서 <strong>계수(상수 배율)를 무시하는 이유</strong>를 한 문장으로 설명하시오.</div>
+        <div class="q-sub">핵심 키워드: n이 충분히 클 때 / 영향 / 차수</div>
+      </div>
+    </div>
+    <div class="short-row" style="flex-direction:column; gap:10px">
+      <textarea class="short-input" id="i7" rows="3" placeholder="여기에 답을 적어주세요..." style="resize:vertical"></textarea>
+      <button class="check-btn" style="background:var(--warning); align-self:flex-start" onclick="checkEssay()">정답 확인</button>
+    </div>
+    <div class="feedback" id="fb7"></div>
+  </div>
+
+  <!-- Result Panel -->
+  <div class="result-panel" id="resultPanel">
+    <div class="result-emoji" id="resultEmoji">🎉</div>
+    <div class="result-title" id="resultTitle">채점 결과</div>
+    <div class="result-score" id="resultScore">0 / 7</div>
+    <div class="result-sub" id="resultSub"></div>
+    <div class="result-msg" id="resultMsg"></div>
+    <button class="retry-btn" onclick="resetAll()">🔄 다시 풀기</button>
+  </div>
+
+</main>
+
+<footer>
+  <p>자료구조 1주차 · 빅O 표기법 연습문제 · 한신대학교</p>
+</footer>
+
+<script>
+// Theme
+(function(){
+  const s = localStorage.getItem('ds-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', s);
+  updateBtn(s);
+})();
+function toggleTheme(){
+  const c = document.documentElement.getAttribute('data-theme');
+  const n = c === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', n);
+  localStorage.setItem('ds-theme', n);
+  updateBtn(n);
+}
+function updateBtn(t){
+  const b = document.querySelector('.theme-btn');
+  if(b) b.textContent = t === 'dark' ? '☀️ 라이트모드' : '🌙 야간모드';
+}
+
+// State
+let score = 0;
+let answered = 0;
+const total = 7;
+const results = {}; // {qNum: true/false}
+
+function updateScoreBar(){
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('answeredCount').textContent = answered + '문제 완료';
+  document.getElementById('progressFill').style.width = (answered / total * 100) + '%';
+}
+
+// Lock a card after answering
+function lockCard(num, isCorrect){
+  const card = document.getElementById('card' + num);
+  card.classList.add(isCorrect ? 'answered' : 'answered-wrong');
+  // disable all inputs in card
+  card.querySelectorAll('input, textarea').forEach(el => el.disabled = true);
+  card.querySelectorAll('.check-btn').forEach(el => el.disabled = true);
+  card.querySelectorAll('.opt-label').forEach(el => el.classList.add('disabled'));
+}
+
+function showFeedback(num, isCorrect, explanation){
+  const fb = document.getElementById('fb' + num);
+  fb.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = isCorrect
+    ? '✅ 정답입니다! ' + explanation
+    : '❌ 오답입니다. ' + explanation;
+}
+
+// MC check
+function checkMC(num, correct, explanation){
+  if(results[num] !== undefined) return;
+  const sel = document.querySelector(`input[name="q${num}"]:checked`);
+  if(!sel){ alert('선택지를 골라주세요!'); return; }
+
+  const isCorrect = sel.value === correct;
+  results[num] = isCorrect;
+  if(isCorrect) score++;
+  answered++;
+
+  // highlight options
+  document.querySelectorAll(`#opts${num} .opt-label`).forEach(label => {
+    const inp = label.querySelector('input');
+    if(inp.value === correct) label.classList.add('correct-ans');
+    else if(inp.checked && !isCorrect) label.classList.add('wrong-ans');
+  });
+
+  showFeedback(num, isCorrect, explanation);
+  lockCard(num, isCorrect);
+  updateScoreBar();
+  checkAllDone();
+}
+
+// Short answer check
+function checkShort(num, corrects, explanation){
+  if(results[num] !== undefined) return;
+  const input = document.getElementById('i' + num);
+  const val = input.value.trim().replace(/\s/g,'');
+  if(!val){ alert('답을 입력해주세요!'); return; }
+
+  const norm = corrects.map(c => c.replace(/\s/g,'').toLowerCase());
+  const isCorrect = norm.includes(val.toLowerCase());
+  results[num] = isCorrect;
+  if(isCorrect) score++;
+  answered++;
+
+  if(!isCorrect){
+    const exp = `정답: <strong>${corrects[0]}</strong>. ` + explanation;
+    showFeedback(num, false, exp);
+  } else {
+    showFeedback(num, true, explanation);
+  }
+  lockCard(num, isCorrect);
+  updateScoreBar();
+  checkAllDone();
+}
+
+// Essay (Q7) — keyword check
+function checkEssay(){
+  if(results[7] !== undefined) return;
+  const val = document.getElementById('i7').value.trim();
+  if(!val){ alert('답을 입력해주세요!'); return; }
+
+  const keywords = ['클 때','차수','무시','상수','계수','비율','비중','지배'];
+  const matched = keywords.filter(k => val.includes(k));
+  const isCorrect = matched.length >= 2;
+
+  results[7] = isCorrect;
+  if(isCorrect) score++;
+  answered++;
+
+  const model = 'n이 충분히 커질수록 <strong>차수가 가장 높은 항이 전체를 지배</strong>하기 때문에, 계수(상수 배율)의 차이는 성능에 미치는 영향이 미미해져 무시할 수 있습니다.';
+  showFeedback(7, isCorrect,
+    isCorrect
+      ? '핵심 개념을 잘 설명했습니다! 모범 답안: ' + model
+      : '모범 답안: ' + model
+  );
+  lockCard(7, isCorrect);
+  updateScoreBar();
+  checkAllDone();
+}
+
+function checkAllDone(){
+  if(answered < total) return;
+
+  // Show result panel
+  const panel = document.getElementById('resultPanel');
+  panel.classList.add('show');
+
+  let emoji, title, msg;
+  const pct = score / total;
+  if(pct === 1){
+    emoji = '🏆'; title = '완벽합니다!';
+    msg = '빅O 표기법을 완벽하게 이해했습니다. 다음 단계인 정렬 알고리즘 복잡도 분석도 도전해보세요!';
+  } else if(pct >= 0.7){
+    emoji = '🎉'; title = '잘 했어요!';
+    msg = '대부분의 개념을 잘 이해했습니다. 틀린 문제의 피드백을 다시 읽고 확실히 익혀두세요.';
+  } else if(pct >= 0.5){
+    emoji = '📚'; title = '조금 더 공부해봐요';
+    msg = '기초는 잡혀 있습니다. 빅O 계산 원칙(가장 큰 차수만, 계수 무시)을 다시 복습해보세요.';
+  } else {
+    emoji = '💪'; title = '다시 도전!';
+    msg = '1주차 학습자료로 빅O 표기법 개념을 먼저 복습한 뒤 다시 풀어보세요!';
+  }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultScore').textContent = score + ' / ' + total;
+  document.getElementById('resultSub').textContent = Math.round(pct*100) + '점 (' + score + '문제 정답)';
+  document.getElementById('resultMsg').innerHTML = msg;
+
+  panel.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function resetAll(){
+  score = 0; answered = 0;
+  Object.keys(results).forEach(k => delete results[k]);
+  updateScoreBar();
+
+  document.getElementById('resultPanel').classList.remove('show');
+
+  for(let i = 1; i <= total; i++){
+    const card = document.getElementById('card' + i);
+    card.classList.remove('answered','answered-wrong');
+
+    const fb = document.getElementById('fb' + i);
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+
+    card.querySelectorAll('input[type=radio]').forEach(el => { el.disabled=false; el.checked=false; });
+    card.querySelectorAll('input[type=text], textarea').forEach(el => { el.disabled=false; el.value=''; });
+    card.querySelectorAll('.check-btn').forEach(el => el.disabled=false);
+    card.querySelectorAll('.opt-label').forEach(el => {
+      el.classList.remove('disabled','correct-ans','wrong-ans');
+    });
+  }
+
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+</script>
+</body>
+</html>

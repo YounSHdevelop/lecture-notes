@@ -1,0 +1,5 @@
+# HTML 파일만 추적
+*
+!*/
+!*.html
+!.gitignore
