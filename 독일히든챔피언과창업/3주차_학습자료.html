@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3주차 — 한독문화교류의 발전 (예술·유학·현대관계) | 독일히든챔피언과창업</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb; --primary-dark: #1e3a8a;
+            --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+            --bg: #f3f4f6; --card-bg: #ffffff;
+            --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+            --nav-bg: rgba(255,255,255,0.95);
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
+        }
+        [data-theme="dark"] {
+            --bg: #0f172a; --card-bg: #1e293b;
+            --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+            --nav-bg: rgba(15,23,42,0.95);
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+            --shadow-hover: 0 8px 32px rgba(0,0,0,0.6);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; padding-top: 64px; }
+
+        /* NAV */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 60px;
+            background: var(--nav-bg); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; z-index: 1000; gap: 12px;
+        }
+        .nav-logo { font-weight: 700; font-size: 0.95rem; color: var(--primary); text-decoration: none; white-space: nowrap; }
+        .nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
+        .nav-links a { font-size: 0.78rem; color: var(--text-muted); text-decoration: none; padding: 4px 8px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; }
+        .nav-links a:hover { background: rgba(37,99,235,0.1); color: var(--primary); }
+        .nav-right { display: flex; align-items: center; gap: 8px; }
+        .nav-home { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; padding: 4px 10px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; }
+        .nav-home:hover { background: rgba(37,99,235,0.1); color: var(--primary); }
+        .btn-theme { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 1rem; color: var(--text); transition: all 0.2s; }
+        .btn-theme:hover { background: var(--border); }
+
+        /* HEADER */
+        .page-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            padding: 56px 24px 48px; text-align: center; color: #fff;
+        }
+        .week-badge {
+            display: inline-block; background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.3); border-radius: 20px;
+            padding: 4px 16px; font-size: 0.8rem; font-weight: 500;
+            letter-spacing: 0.05em; margin-bottom: 16px;
+        }
+        .page-header h1 { font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 900; margin-bottom: 12px; line-height: 1.3; }
+        .subtitle { font-size: 0.95rem; opacity: 0.85; font-weight: 300; }
+        .lecture-badges { display: flex; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+        .lecture-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; padding: 4px 14px; font-size: 0.78rem; }
+
+        /* MAIN */
+        main { max-width: 900px; margin: 0 auto; padding: 32px 16px 64px; display: flex; flex-direction: column; gap: 28px; }
+
+        /* SECTION CARD */
+        .section-card {
+            background: var(--card-bg); border-radius: 20px;
+            padding: 32px; box-shadow: var(--shadow);
+            transition: box-shadow 0.2s;
+        }
+        .section-card:hover { box-shadow: var(--shadow-hover); }
+
+        .section-title {
+            font-size: 1.25rem; font-weight: 700; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+
+        /* COLOR ACCENTS */
+        .blue   { border-top: 4px solid #2563eb; }
+        .purple { border-top: 4px solid #7c3aed; }
+        .cyan   { border-top: 4px solid #0891b2; }
+        .green  { border-top: 4px solid #16a34a; }
+        .orange { border-top: 4px solid #d97706; }
+        .rose   { border-top: 4px solid #e11d48; }
+        .teal   { border-top: 4px solid #0d9488; }
+
+        /* GOAL CARDS */
+        .goal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+        .goal-card {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border-radius: 12px; padding: 16px;
+        }
+        [data-theme="dark"] .goal-card { background: linear-gradient(135deg, #1e3a5f, #1e3a8a30); }
+        .goal-num { font-size: 1.4rem; font-weight: 900; color: var(--primary); margin-bottom: 6px; }
+        .goal-text { font-size: 0.88rem; line-height: 1.5; color: var(--text); }
+
+        /* GRID */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+
+        /* PERSON CARD */
+        .person-card { background: var(--bg); border-radius: 14px; padding: 16px; border: 1px solid var(--border); }
+        .person-role { font-size: 0.72rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+        .person-name { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+        .person-desc { font-size: 0.83rem; line-height: 1.6; color: var(--text-muted); }
+        .person-highlight { font-size: 0.78rem; background: rgba(37,99,235,0.1); color: var(--primary); border-radius: 6px; padding: 4px 8px; display: inline-block; margin-top: 8px; font-weight: 600; }
+
+        /* TIMELINE */
+        .timeline { display: flex; flex-direction: column; gap: 0; position: relative; }
+        .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+        .timeline-item { display: flex; gap: 20px; padding: 0 0 24px 0; position: relative; }
+        .timeline-dot { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 1; text-align: center; line-height: 1.2; }
+        .timeline-dot.alt { background: #7c3aed; }
+        .timeline-dot.green { background: #16a34a; }
+        .timeline-content { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; flex: 1; }
+        .timeline-year { font-size: 0.78rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .timeline-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+        .timeline-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* STAT GRID */
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+        .stat-card { background: var(--bg); border-radius: 14px; padding: 18px; text-align: center; border: 1px solid var(--border); }
+        .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--primary); line-height: 1; }
+        .stat-unit { font-size: 0.8rem; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; }
+
+        /* INFO LIST */
+        .info-list { display: flex; flex-direction: column; gap: 10px; }
+        .info-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; background: var(--bg); border-radius: 10px; border: 1px solid var(--border); }
+        .info-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+        .info-body { flex: 1; }
+        .info-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; }
+        .info-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* CATCH */
+        .catch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+        .catch-item {
+            border-radius: 12px; padding: 16px 18px;
+            border-left: 4px solid var(--primary); background: var(--bg);
+        }
+        .catch-item.red { border-left-color: #dc2626; }
+        .catch-item.green { border-left-color: #16a34a; }
+        .catch-item.orange { border-left-color: #d97706; }
+        .catch-item.purple { border-left-color: #7c3aed; }
+        .catch-label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+        .catch-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+        .catch-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+        /* KEYWORD */
+        .keyword-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+        .kw-card { background: var(--bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border); }
+        .kw-en { font-size: 0.72rem; font-weight: 700; color: var(--primary); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
+        .kw-ko { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+        .kw-def { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* QUIZ */
+        .quiz-list { display: flex; flex-direction: column; gap: 20px; }
+        .quiz-item { background: var(--bg); border-radius: 14px; padding: 20px; border: 1px solid var(--border); }
+        .quiz-q { font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; line-height: 1.5; }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-opt {
+            padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 0.88rem;
+            border: 1.5px solid var(--border); transition: all 0.18s;
+            background: var(--card-bg);
+        }
+        .quiz-opt:hover { border-color: var(--primary); background: rgba(37,99,235,0.05); }
+        .quiz-opt.correct { border-color: #16a34a; background: #f0fdf4; color: #15803d; font-weight: 600; }
+        .quiz-opt.wrong { border-color: #dc2626; background: #fef2f2; color: #dc2626; }
+        [data-theme="dark"] .quiz-opt.correct { background: rgba(22,163,74,0.15); color: #4ade80; }
+        [data-theme="dark"] .quiz-opt.wrong { background: rgba(220,38,38,0.15); color: #f87171; }
+        .quiz-feedback { margin-top: 10px; font-size: 0.85rem; padding: 10px 14px; border-radius: 8px; display: none; line-height: 1.6; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.ok { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+        .quiz-feedback.ng { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+        [data-theme="dark"] .quiz-feedback.ok { background: rgba(22,163,74,0.12); color: #4ade80; border-color: rgba(22,163,74,0.3); }
+        [data-theme="dark"] .quiz-feedback.ng { background: rgba(220,38,38,0.12); color: #f87171; border-color: rgba(220,38,38,0.3); }
+        .short-quiz { margin-top: 6px; }
+        .short-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.88rem; background: var(--card-bg); color: var(--text); outline: none; transition: border 0.2s; }
+        .short-input:focus { border-color: var(--primary); }
+        .quiz-submit { margin-top: 8px; padding: 8px 20px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: opacity 0.2s; }
+        .quiz-submit:hover { opacity: 0.88; }
+
+        /* TABLE */
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        th { background: var(--primary); color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; }
+        td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+        [data-theme="dark"] tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+        /* DIVIDER */
+        .sub-title { font-size: 1rem; font-weight: 700; color: var(--primary); margin: 20px 0 12px; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
+
+        @media (max-width: 600px) {
+            .card-grid, .goal-grid, .catch-grid, .keyword-grid, .stat-grid { grid-template-columns: 1fr; }
+            main { padding: 20px 12px 48px; }
+            .section-card { padding: 20px; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="index.html" class="nav-logo">독일히든챔피언과창업</a>
+    <div class="nav-links">
+        <a href="#goals">학습목표</a>
+        <a href="#art">예술분야</a>
+        <a href="#study">독일유학</a>
+        <a href="#modern">현대한독관계</a>
+        <a href="#community">재독한인</a>
+        <a href="#forum">한독포럼</a>
+        <a href="#keywords">키워드</a>
+        <a href="#quiz">연습문제</a>
+    </div>
+    <div class="nav-right">
+        <a href="index.html" class="nav-home">홈</a>
+        <button class="btn-theme" id="themeBtn">🌙</button>
+    </div>
+</nav>
+
+<header class="page-header">
+    <div class="week-badge">3주차</div>
+    <h1>한독문화교류의 발전<br>예술 · 독일유학 · 현대 한독관계</h1>
+    <p class="subtitle">예술분야 한독교류 / 독일유학 결산 / 정치·경제·문화교류 / 재독한인사회 / 한독포럼</p>
+    <div class="lecture-badges">
+        <span class="lecture-badge">1강 — 예술·유학·유공인사</span>
+        <span class="lecture-badge">2강 — 정치·경제·문화교류</span>
+        <span class="lecture-badge">3강 — 재독한인·한독포럼</span>
+    </div>
+</header>
+
+<main>
+
+    <!-- 학습 목표 -->
+    <section class="section-card blue" id="goals">
+        <h2 class="section-title">🎯 학습 목표</h2>
+        <div class="goal-grid">
+            <div class="goal-card">
+                <div class="goal-num">01</div>
+                <div class="goal-text">예술 분야(음악·미술)에서 한독교류를 이끈 대표 인물과 업적을 설명할 수 있다</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-num">02</div>
+                <div class="goal-text">독일 유학의 역사적 흐름과 학문 분야별 특징을 정리할 수 있다</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-num">03</div>
+                <div class="goal-text">90년대 이후 현대 한독관계(정치·경제·문화)의 핵심 사항을 파악할 수 있다</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-num">04</div>
+                <div class="goal-text">재독한인사회의 형성 배경과 주요 기관(상공회의소, 독일문화원)의 역할을 이해한다</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-num">05</div>
+                <div class="goal-text">한독포럼의 설립 배경, 운영 방식, 의의를 설명할 수 있다</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 예술 분야 한독관계 -->
+    <section class="section-card purple" id="art">
+        <h2 class="section-title">🎨 예술 분야에서의 한독관계 <small style="font-size:0.75rem;color:var(--text-muted)">(1강)</small></h2>
+
+        <p class="sub-title">음악 분야</p>
+        <div class="card-grid">
+            <div class="person-card">
+                <div class="person-role">바이올린 / 지휘</div>
+                <div class="person-name">개정식</div>
+                <div class="person-desc">1929년 베를린 음악학교 바이올린과 졸업. 해방 후 우리나라 최초의 교향악단 <strong>고려교향악단</strong> 주도. 1946년 서울교향악단 창단, 1955년까지 지휘자 활동. <strong>하이제 고정음 명창법</strong> 전파.</div>
+                <span class="person-highlight">한국 최초 교향악단 창설</span>
+            </div>
+            <div class="person-card">
+                <div class="person-role">작곡가</div>
+                <div class="person-name">윤이상</div>
+                <div class="person-desc">독일에서 활동하며 한국적 테마로 서양음악의 새 경지를 개척한 작곡가. 동서양을 아우르는 음악으로 세계적 명성. <strong>1972년 뮌헨올림픽</strong>에서 심청 공연으로 한국음악을 세계에 알림. 150여 편 작곡.</div>
+                <span class="person-highlight">1972 뮌헨올림픽 심청 공연</span>
+            </div>
+            <div class="person-card">
+                <div class="person-role">바이올리스트 / 작곡가</div>
+                <div class="person-name">최동선</div>
+                <div class="person-desc">독일 유학 후 바이올리스트·작곡가로 활동. 해방 후 관현악·합창 등 집단음악 활동에 집중하며 민족음악의 기틀 마련에 기여.</div>
+                <span class="person-highlight">해방 후 민족음악 기반 구축</span>
+            </div>
+        </div>
+
+        <p class="sub-title" style="margin-top:24px;">미술 분야</p>
+        <div class="card-grid">
+            <div class="person-card">
+                <div class="person-role">미술가 / 행위예술가</div>
+                <div class="person-name">백남준</div>
+                <div class="person-desc">1956년 음악 전공으로 독일 유학. WDR 독일 라디오방송국에서 오디오 테이프 콜라주 제작. TV 수백 대 설치예술로 <strong>비디오 아트(Video Art)</strong>라는 새 예술 장르 개척. 전위예술·아방가르드 미술 앞장.</div>
+                <span class="person-highlight">비디오 아트 장르 창시</span>
+            </div>
+            <div class="person-card">
+                <div class="person-role">미술가</div>
+                <div class="person-name">종이인형(딱종이) 작가</div>
+                <div class="person-desc">전통 딱종이 인형작품을 독일에 소개. 한국 전통을 현대적으로 재해석하여 동서양 문화의 교량 역할. 유럽에서 큰 각광을 받음.</div>
+                <span class="person-highlight">한국 전통 현대적 재해석</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 독일 유학 결산 -->
+    <section class="section-card cyan" id="study">
+        <h2 class="section-title">🎓 독일 유학의 결산 <small style="font-size:0.75rem;color:var(--text-muted)">(1강)</small></h2>
+
+        <div class="stat-grid" style="margin-bottom:24px;">
+            <div class="stat-card">
+                <div class="stat-num">2,331</div>
+                <div class="stat-label">독일어권 유학 명록 등재 총인원</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">1,607</div>
+                <div class="stat-label">독일 박사학위 취득자</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">40%</div>
+                <div class="stat-label">독어독문학 전공 비율</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">5,000</div>
+                <div class="stat-unit">여 명</div>
+                <div class="stat-label">현재 독일 유학생 수</div>
+            </div>
+        </div>
+
+        <p class="sub-title">최초 박사학위 취득자 연표</p>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot">1923</div>
+                <div class="timeline-content">
+                    <div class="timeline-year">1923년</div>
+                    <div class="timeline-title">김중세 — 최초 독일 박사학위</div>
+                    <div class="timeline-desc">베를린 대학 철학박사. 독일 유학 최초 학위 취득자.</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot alt">1924</div>
+                <div class="timeline-content">
+                    <div class="timeline-year">1924년</div>
+                    <div class="timeline-title">안창수 — 유학박사</div>
+                    <div class="timeline-desc">독일 대학에서 유학박사학위 취득.</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">1928</div>
+                <div class="timeline-content">
+                    <div class="timeline-year">1928년</div>
+                    <div class="timeline-title">김현준 — 신문학 박사</div>
+                    <div class="timeline-desc">라이프치히 대학에서 신문학 박사학위 취득.</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot alt">1929</div>
+                <div class="timeline-content">
+                    <div class="timeline-year">1929년</div>
+                    <div class="timeline-title">안호상 — 철학박사 / 안남규 — 의학박사</div>
+                    <div class="timeline-desc">안호상: 예나대학에서 철학박사. 안남규: 프라이부르크 대학에서 의학박사.</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot green">2004</div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2004년</div>
+                    <div class="timeline-title">최초 독일어권 유학 명록 발간</div>
+                    <div class="timeline-desc">독일 1,607명 / 오스트리아 62명 / 스위스 18명 수록.</div>
+                </div>
+            </div>
+        </div>
+
+        <p class="sub-title" style="margin-top:8px;">출신 대학별 한국인 수 (상위)</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>대학</th><th>인원</th><th>특징</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>베를린 자유대학</td><td>99명</td><td>가장 많음 (서독 시절 중심)</td></tr>
+                    <tr><td>뮌헨 대학</td><td>88명</td><td></td></tr>
+                    <tr><td>괴팅엔 대학</td><td>79명</td><td></td></tr>
+                    <tr><td>프라이부르크 대학</td><td>71명</td><td></td></tr>
+                    <tr><td>본 대학</td><td>65명</td><td></td></tr>
+                    <tr><td>프랑크푸르트 대학</td><td>64명</td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="sub-title" style="margin-top:20px;">분야별 특징</p>
+        <div class="info-list">
+            <div class="info-item">
+                <div class="info-icon">⚖️</div>
+                <div class="info-body">
+                    <div class="info-title">법학 — 한국 법학의 주류</div>
+                    <div class="info-desc">우리나라 법학의 주류는 독일에서 공부한 학자들. 약 233명 법학 박사학위 취득. 반면 경영학은 미국 유학파가 다수.</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">📚</div>
+                <div class="info-body">
+                    <div class="info-title">독문학 세부 전공 경향</div>
+                    <div class="info-desc">545명 독문학 / 177명 독어학. 고전문학보다 현대문학, 시·드라마보다 소설(서사문학) 전공자 다수.</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">🔬</div>
+                <div class="info-body">
+                    <div class="info-title">초기 vs 현재 경향</div>
+                    <div class="info-desc">초창기: 인문과학 중심 (독문학·철학·법학). 현재: IT·컴퓨터·자연과학 분야도 증가.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 현대 한독관계 -->
+    <section class="section-card green" id="modern">
+        <h2 class="section-title">🤝 최근의 한독관계 (90년대 이후) <small style="font-size:0.75rem;color:var(--text-muted)">(2강)</small></h2>
+
+        <p class="sub-title">① 정치관계</p>
+        <div class="info-list">
+            <div class="info-item">
+                <div class="info-icon">🇩🇪</div>
+                <div class="info-body">
+                    <div class="info-title">할슈타인 정책 (1960년대)</div>
+                    <div class="info-desc"><strong>"적의 친구는 적"</strong>이라는 원칙. 서독의 외교정책으로 한국이 적극 지지. 동독을 승인하는 나라와는 단교 원칙.</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">⛏️</div>
+                <div class="info-body">
+                    <div class="info-title">파독 광부·간호사</div>
+                    <div class="info-desc">광부 <strong>8,359명</strong>, 간호사 <strong>10,371명</strong> 파독. 이들의 임금이 한국 경제 기반을 닦는 데 큰 기여. 1967년 동베를린 사건으로 냉각기 → 1969년 프랑케 특사 방한으로 관계 정상화.</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">🇺🇳</div>
+                <div class="info-body">
+                    <div class="info-title">독일의 한국 외교 지지</div>
+                    <div class="info-desc">1991년 남북한 유엔 동시가입, 1996년 임시 안보리 비상임이사국 진출에 독일이 적극 지지. 1996년 북한 비무장지대 침범에 강력 경고성명 발표.</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">🛡️</div>
+                <div class="info-body">
+                    <div class="info-title">한독 국방교류 협정 (2011년)</div>
+                    <div class="info-desc">군비검증협력회의 매년 개최. 독일군비검증단 연수에 한국 인원 파견. 방위산업교육대상국 합의.</div>
+                </div>
+            </div>
+        </div>
+
+        <p class="sub-title" style="margin-top:24px;">② 경제통상관계</p>
+        <div class="stat-grid" style="margin-bottom:16px;">
+            <div class="stat-card">
+                <div class="stat-num">10%</div>
+                <div class="stat-label">1980년 이래 매년 교역 성장률</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">125억</div>
+                <div class="stat-unit">달러</div>
+                <div class="stat-label">1995년 총 교역량 (4대 교역대상국)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">30%</div>
+                <div class="stat-label">한국 유럽 총 수출 중 독일 비중 (1위)</div>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>구분</th><th>주요 품목</th></tr></thead>
+                <tbody>
+                    <tr><td>한국 → 독일 수출 (호조)</td><td>승용차, 컴퓨터, 무선전화기</td></tr>
+                    <tr><td>한국 → 독일 수출 (부진)</td><td>철강, 섬유, 석유화학제품</td></tr>
+                    <tr><td>독일 → 한국 수입</td><td>자동차·차량부품, 기계, 의약품, 의료기기</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="info-list" style="margin-top:16px;">
+            <div class="info-item">
+                <div class="info-icon">🔬</div>
+                <div class="info-body">
+                    <div class="info-title">과학기술협력 변화</div>
+                    <div class="info-desc">1966년 한독기술협력협정 체결 → 1993년 일방적 기술지원 종료(우리나라 수준 향상) → <strong>대등한 협력 관계</strong>로 전환. 삼성↔지멘스, 쌍용↔벤츠 등 기업 간 협력.</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">🏢</div>
+                <div class="info-body">
+                    <div class="info-title">독일 내 한국 기업 현황</div>
+                    <div class="info-desc">프랑크푸르트 56개, 뒤셀도르프 16개, 함부르크 12개(항구·물류), 베를린 3개, 공공기관 13개.</div>
+                </div>
+            </div>
+        </div>
+
+        <p class="sub-title" style="margin-top:24px;">③ 문화교류</p>
+        <div class="info-list">
+            <div class="info-item">
+                <div class="info-icon">🏛️</div>
+                <div class="info-body">
+                    <div class="info-title">독일문화원 (괴테 인스티투트) — 1968년 한국 개설</div>
+                    <div class="info-desc">독일 정부가 1958년부터 전 세계에 설립. 한국에는 1968년 남산에 개설. 독일어 교육, 문화·사회·정치 정보 제공, 도서관(신분증으로 대출 가능), 매년 10~11월 독일 영화 무료 상영.</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">🎓</div>
+                <div class="info-body">
+                    <div class="info-title">DAAD (독일학술교류처)</div>
+                    <div class="info-desc">단기 장학금, 박사과정, 박사후과정 장학금 대규모 지원. 현재 약 5,000명 독일 유학, 박사학위 취득자 약 3,000명.</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">🤝</div>
+                <div class="info-body">
+                    <div class="info-title">한독문화공동위원회 — 1975년 1차 회의</div>
+                    <div class="info-desc">서독 당시 수도 본에서 1차 회의 개최. 2~3년마다 계속 진행. 문화협력 강화와 우호증진 핵심 역할.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 재독한인사회 -->
+    <section class="section-card orange" id="community">
+        <h2 class="section-title">👥 재독한인사회 & 주요 기관 <small style="font-size:0.75rem;color:var(--text-muted)">(3강)</small></h2>
+
+        <div class="stat-grid" style="margin-bottom:20px;">
+            <div class="stat-card">
+                <div class="stat-num">3만</div>
+                <div class="stat-unit">여 명</div>
+                <div class="stat-label">현재 독일 거주 한인 수 (유럽 최대)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">8,359</div>
+                <div class="stat-label">파독 광부 (1978년 이후 중단)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">10,371</div>
+                <div class="stat-label">파독 간호사 (1978년 이후 중단)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">530</div>
+                <div class="stat-unit">여 개</div>
+                <div class="stat-label">한독상공회의소 회원사 수</div>
+            </div>
+        </div>
+
+        <div class="info-list">
+            <div class="info-item">
+                <div class="info-icon">🎵</div>
+                <div class="info-body">
+                    <div class="info-title">재독한인 여성합창단 — "고향의 노래"</div>
+                    <div class="info-desc">파독 간호사 출신들이 구성한 합창단. 독일 각지 순회공연 + 한국 공연. 최근 연극공연까지 진행. 동포 간 위안·격려의 장.</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">🏦</div>
+                <div class="info-body">
+                    <div class="info-title">한독상공회의소 — 1981년 창립</div>
+                    <div class="info-desc">무역·투자 정보 제공 및 자문. 양국 기업 간 무역 거래 주선·촉진. 시장조사, 세미나·심포지움·박람회 개최. 약 530개 회원사.</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">🏛️</div>
+                <div class="info-body">
+                    <div class="info-title">주한 독일문화원 (괴테 인스티투트) — 1968년 설립</div>
+                    <div class="info-desc">남산 위치. 독일어 전파가 주요 사업. 도서관 이용 가능(신분증 지참). 어학증명서는 전 세계 공인. <strong>한신대학교가 최초로 학술교류 협약 체결(2011년)</strong>.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 한독포럼 -->
+    <section class="section-card teal" id="forum">
+        <h2 class="section-title">🗣️ 한독포럼 <small style="font-size:0.75rem;color:var(--text-muted)">(3강)</small></h2>
+
+        <div class="info-list" style="margin-bottom:20px;">
+            <div class="info-item">
+                <div class="info-icon">📌</div>
+                <div class="info-body">
+                    <div class="info-title">한독포럼이란?</div>
+                    <div class="info-desc">한국과 독일의 정치·경제·문화·교육 분야 대표자들이 주요 의제를 함께 논의하는 포럼. 두 전문가의 토의 + 청중 참여 + 사회자의 견해 조율. 논의 결과는 <strong>양국 정상에게 발송</strong>되어 정책 수립에 반영.</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">🚀</div>
+                <div class="info-body">
+                    <div class="info-title">창립 및 운영 방식</div>
+                    <div class="info-desc"><strong>2002년</strong> 한독협회 주관. 독일 라우 대통령, 이한동 국무총리 참석으로 서울에서 1차 포럼 창립. 매년 한국↔독일 번갈아 개최.</div>
+                </div>
+            </div>
+        </div>
+
+        <p class="sub-title">주요 개최 기록</p>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot">2002</div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2002년 — 서울</div>
+                    <div class="timeline-title">제1차 한독포럼 창립</div>
+                    <div class="timeline-desc">라우 독일 대통령, 이한동 국무총리 참석.</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot alt">2003</div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2003년 — 베를린</div>
+                    <div class="timeline-title">제2차 한독포럼</div>
+                    <div class="timeline-desc">미국 9·11 테러, 이라크 전쟁 등 국제정세에 대한 양국 입장 교환.</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot green">2018</div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2018년 — 대전</div>
+                    <div class="timeline-title">제17차 한독포럼</div>
+                    <div class="timeline-desc">대전에서 개최. 기념사진 촬영.</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">2019</div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2019년 10월 18~21일 — 베를린</div>
+                    <div class="timeline-title">제18차 한독포럼</div>
+                    <div class="timeline-desc">베를린 개최. 환경기술, 통일정책, 교육 교류 등 논의.</div>
+                </div>
+            </div>
+        </div>
+
+        <p class="sub-title" style="margin-top:8px;">한독포럼의 주요 의제 분야</p>
+        <div class="catch-grid">
+            <div class="catch-item">
+                <div class="catch-label">정치</div>
+                <div class="catch-title">한반도 통일정책</div>
+                <div class="catch-desc">독일 통일 경험을 바탕으로 한반도 통일 준비 논의. 독일 측의 확고한 평화통일 지지.</div>
+            </div>
+            <div class="catch-item green">
+                <div class="catch-label">환경</div>
+                <div class="catch-title">환경·에너지 기술</div>
+                <div class="catch-desc">독일 원전 단계적 폐기 결정. 생태학적 기술 분야에서 독일이 한국보다 앞섬. 노하우 공유.</div>
+            </div>
+            <div class="catch-item orange">
+                <div class="catch-label">경제</div>
+                <div class="catch-title">무역·투자 협력</div>
+                <div class="catch-desc">독일은 유럽 내 한국 최대 교역 파트너. 4차 산업혁명·강소기업 분야 협력 모색.</div>
+            </div>
+            <div class="catch-item purple">
+                <div class="catch-label">교육</div>
+                <div class="catch-title">학술·교육 교류</div>
+                <div class="catch-desc">대학생·교수·학자 간 교류 확대. 독일 대학 입학허가 조건 개선으로 유학 문호 확대.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 핵심 캐치 -->
+    <section class="section-card rose">
+        <h2 class="section-title">⭐ 핵심 캐치 — 시험 포인트</h2>
+        <div class="catch-grid">
+            <div class="catch-item red">
+                <div class="catch-label">최초</div>
+                <div class="catch-title">독일 박사학위 최초 취득자</div>
+                <div class="catch-desc">김중세 박사 — 1923년 베를린 대학 철학박사.</div>
+            </div>
+            <div class="catch-item">
+                <div class="catch-label">숫자</div>
+                <div class="catch-title">파독 광부 & 간호사</div>
+                <div class="catch-desc">광부 8,359명 / 간호사 10,371명. 1978년 이후 파독 중단.</div>
+            </div>
+            <div class="catch-item green">
+                <div class="catch-label">최초</div>
+                <div class="catch-title">비디오 아트 창시</div>
+                <div class="catch-desc">백남준 — 독일에서 비디오 아트라는 새 예술 장르 개척.</div>
+            </div>
+            <div class="catch-item orange">
+                <div class="catch-label">숫자</div>
+                <div class="catch-title">베를린 자유대학이 최다</div>
+                <div class="catch-desc">99명으로 한국인이 가장 많이 공부한 독일 대학 1위.</div>
+            </div>
+            <div class="catch-item purple">
+                <div class="catch-label">연도</div>
+                <div class="catch-title">한독포럼 창립</div>
+                <div class="catch-desc">2002년 서울. 이후 매년 양국 번갈아 개최. 결과를 양국 정상에게 발송.</div>
+            </div>
+            <div class="catch-item">
+                <div class="catch-label">최초</div>
+                <div class="catch-title">독일문화원 학술교류 최초 협약</div>
+                <div class="catch-desc">한신대학교 — 2011년 주한독일문화원과 학술교류 협약 최초 체결.</div>
+            </div>
+            <div class="catch-item red">
+                <div class="catch-label">교역</div>
+                <div class="catch-title">독일 = 유럽 내 한국 최대 교역국</div>
+                <div class="catch-desc">한국 유럽 총 수출의 30%를 독일이 차지.</div>
+            </div>
+            <div class="catch-item green">
+                <div class="catch-label">전환점</div>
+                <div class="catch-title">기술협력 1993년 전환</div>
+                <div class="catch-desc">1993년 독일 일방적 기술지원 공식 종료 → 대등한 협력 관계로 변화.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 핵심 키워드 -->
+    <section class="section-card blue" id="keywords">
+        <h2 class="section-title">📖 핵심 키워드</h2>
+        <div class="keyword-grid">
+            <div class="kw-card">
+                <div class="kw-en">Hallstein Doctrine</div>
+                <div class="kw-ko">할슈타인 정책</div>
+                <div class="kw-def">"적의 친구는 적"이라는 원칙. 서독이 동독을 승인하는 국가와 단교하는 외교정책. 한국이 적극 지지.</div>
+            </div>
+            <div class="kw-card">
+                <div class="kw-en">Video Art</div>
+                <div class="kw-ko">비디오 아트</div>
+                <div class="kw-def">백남준이 독일에서 창시한 예술 장르. TV·비디오 매체를 활용한 설치·퍼포먼스 예술.</div>
+            </div>
+            <div class="kw-card">
+                <div class="kw-en">DAAD</div>
+                <div class="kw-ko">독일학술교류처</div>
+                <div class="kw-def">Deutscher Akademischer Austauschdienst. 단기·박사·박사후 장학금 지원 기관. 한국과학재단과 협력.</div>
+            </div>
+            <div class="kw-card">
+                <div class="kw-en">Goethe-Institut</div>
+                <div class="kw-ko">괴테 인스티투트 (독일문화원)</div>
+                <div class="kw-def">독일 대문호 괴테 이름을 딴 독일 정부 설립 문화기관. 1958년 시작, 한국에는 1968년 남산 개설.</div>
+            </div>
+            <div class="kw-card">
+                <div class="kw-en">Deutsch-Koreanisches Forum</div>
+                <div class="kw-ko">한독포럼</div>
+                <div class="kw-def">2002년 창립. 양국 정치·경제·문화·교육 대표자 논의. 결과를 양국 정상에게 발송하여 정책에 반영.</div>
+            </div>
+            <div class="kw-card">
+                <div class="kw-en">Korea-German Chamber of Commerce</div>
+                <div class="kw-ko">한독상공회의소</div>
+                <div class="kw-def">1981년 창립. 530개 회원사. 무역정보 제공, 기업 간 거래 주선·촉진 역할.</div>
+            </div>
+            <div class="kw-card">
+                <div class="kw-en">Avant-garde</div>
+                <div class="kw-ko">아방가르드</div>
+                <div class="kw-def">전위예술·실험예술. 기존 형식을 거부하고 새로운 표현을 추구. 백남준이 대표적 아방가르드 예술가.</div>
+            </div>
+            <div class="kw-card">
+                <div class="kw-en">Solidarity Tax (Soli)</div>
+                <div class="kw-ko">통일세 (연대세)</div>
+                <div class="kw-def">독일 통일 후 동독 재건 비용을 충당하기 위해 도입한 세금. 한국의 통일 재정 준비의 참고 사례.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 연습문제 -->
+    <section class="section-card purple" id="quiz">
+        <h2 class="section-title">✏️ 연습문제</h2>
+        <div class="quiz-list">
+
+            <!-- Q1 -->
+            <div class="quiz-item">
+                <div class="quiz-q">Q1. 1972년 뮌헨올림픽에서 심청 공연을 통해 한국음악을 세계에 알린 작곡가는?</div>
+                <div class="quiz-options">
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 개정식은 바이올리니스트이자 지휘자입니다.')">① 개정식</div>
+                    <div class="quiz-opt" onclick="checkMC(this,true,'정답! 윤이상은 1972년 뮌헨올림픽 심청 공연으로 세계에 한국음악을 알렸습니다.')">② 윤이상</div>
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 최동선은 관현악·합창 활동에 집중한 작곡가입니다.')">③ 최동선</div>
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 백남준은 비디오 아트를 개척한 미술가입니다.')">④ 백남준</div>
+                </div>
+                <div class="quiz-feedback" id="fb-mc-0"></div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-item">
+                <div class="quiz-q">Q2. 독일 유학 최초의 박사학위 취득자(1923년 베를린 대학 철학박사)는?</div>
+                <div class="quiz-options">
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 안호상은 1929년 예나대학에서 철학박사를 취득했습니다.')">① 안호상</div>
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 김현준은 1928년 라이프치히 대학에서 신문학 박사를 취득했습니다.')">② 김현준</div>
+                    <div class="quiz-opt" onclick="checkMC(this,true,'정답! 김중세는 1923년 베를린 대학에서 철학박사를 취득한 최초의 독일 유학 박사학위 취득자입니다.')">③ 김중세</div>
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 안창수는 1924년 독일에서 유학박사학위를 취득했습니다.')">④ 안창수</div>
+                </div>
+                <div class="quiz-feedback" id="fb-mc-1"></div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-item">
+                <div class="quiz-q">Q3. 파독 광부와 간호사의 정확한 인원으로 맞는 것은?</div>
+                <div class="quiz-options">
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 광부와 간호사의 수를 바꿔서 기억하기 쉽지만 틀렸습니다.')">① 광부 10,371명 / 간호사 8,359명</div>
+                    <div class="quiz-opt" onclick="checkMC(this,true,'정답! 광부 8,359명, 간호사 10,371명으로 간호사가 더 많았습니다.')">② 광부 8,359명 / 간호사 10,371명</div>
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 정확한 수치를 확인하세요.')">③ 광부 5,000명 / 간호사 15,000명</div>
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 정확한 수치를 확인하세요.')">④ 광부 9,000명 / 간호사 10,000명</div>
+                </div>
+                <div class="quiz-feedback" id="fb-mc-2"></div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-item">
+                <div class="quiz-q">Q4. 한독포럼에 대한 설명으로 옳지 않은 것은?</div>
+                <div class="quiz-options">
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 2002년 창립이 맞습니다.')">① 2002년 서울에서 제1차 포럼이 창립되었다</div>
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 한독협회가 주관하는 것이 맞습니다.')">② 한독협회가 주관한다</div>
+                    <div class="quiz-opt" onclick="checkMC(this,true,'정답! 틀린 설명입니다. 논의 결과는 양국 정상에게 발송되어 정책에 반영됩니다. 비공개 진행이 아닙니다.')">③ 논의 내용은 비공개로만 처리된다</div>
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답! 매년 양국 번갈아 개최가 맞습니다.')">④ 매년 한국과 독일에서 번갈아 개최된다</div>
+                </div>
+                <div class="quiz-feedback" id="fb-mc-3"></div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-item">
+                <div class="quiz-q">Q5. 비디오 아트(Video Art)라는 새 예술 장르를 개척하고, WDR 독일 라디오방송국에서 오디오 테이프 콜라주를 제작한 예술가는?</div>
+                <div class="quiz-options">
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답!')">① 윤이상</div>
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답!')">② 개정식</div>
+                    <div class="quiz-opt" onclick="checkMC(this,true,'정답! 백남준은 1956년 독일 유학 후 WDR 방송국에서 활동하며 비디오 아트를 창시했습니다.')">③ 백남준</div>
+                    <div class="quiz-opt" onclick="checkMC(this,false,'오답!')">④ 최동선</div>
+                </div>
+                <div class="quiz-feedback" id="fb-mc-4"></div>
+            </div>
+
+            <!-- Q6 단답형 -->
+            <div class="quiz-item">
+                <div class="quiz-q">Q6. (단답형) 독일 정부가 1958년부터 전 세계에 설립한 문화기관으로, 독일 대문호의 이름을 딴 이 기관의 명칭은? (한국어 또는 영어 이름)</div>
+                <div class="short-quiz">
+                    <input type="text" class="short-input" id="short-1" placeholder="예) 괴테 인스티투트 또는 Goethe-Institut">
+                    <button class="quiz-submit" onclick="checkShort('short-1','fb-sh-1',['괴테','goethe','독일문화원'])">확인</button>
+                    <div class="quiz-feedback" id="fb-sh-1"></div>
+                </div>
+            </div>
+
+            <!-- Q7 단답형 -->
+            <div class="quiz-item">
+                <div class="quiz-q">Q7. (단답형) "적의 친구는 적"이라는 원칙으로, 동독을 승인하는 나라와 단교하는 서독의 외교정책 이름은?</div>
+                <div class="short-quiz">
+                    <input type="text" class="short-input" id="short-2" placeholder="○○○○○ 정책">
+                    <button class="quiz-submit" onclick="checkShort('short-2','fb-sh-2',['할슈타인','hallstein'])">확인</button>
+                    <div class="quiz-feedback" id="fb-sh-2"></div>
+                </div>
+            </div>
+
+            <!-- Q8 단답형 -->
+            <div class="quiz-item">
+                <div class="quiz-q">Q8. (단답형) 독일 박사학위 취득자 중 한국인이 가장 많이 공부한 대학(99명)은?</div>
+                <div class="short-quiz">
+                    <input type="text" class="short-input" id="short-3" placeholder="○○○ ○○대학">
+                    <button class="quiz-submit" onclick="checkShort('short-3','fb-sh-3',['베를린 자유','자유대학','freie universität','freie'])">확인</button>
+                    <div class="quiz-feedback" id="fb-sh-3"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<script>
+    // Theme
+    const btn = document.getElementById('themeBtn');
+    const html = document.documentElement;
+    const saved = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', saved);
+    btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+    btn.addEventListener('click', () => {
+        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        btn.textContent = next === 'dark' ? '☀️' : '🌙';
+        localStorage.setItem('theme', next);
+    });
+
+    // MC Quiz
+    let mcUsed = {};
+    function checkMC(el, isCorrect, msg) {
+        const parent = el.closest('.quiz-item');
+        const fbId = parent.querySelector('.quiz-feedback').id;
+        if (mcUsed[fbId]) return;
+        mcUsed[fbId] = true;
+        const opts = parent.querySelectorAll('.quiz-opt');
+        opts.forEach(o => { o.style.pointerEvents = 'none'; });
+        el.classList.add(isCorrect ? 'correct' : 'wrong');
+        const fb = document.getElementById(fbId);
+        fb.textContent = (isCorrect ? '✅ ' : '❌ ') + msg;
+        fb.className = 'quiz-feedback show ' + (isCorrect ? 'ok' : 'ng');
+    }
+
+    // Short Quiz
+    function checkShort(inputId, fbId, keywords) {
+        const val = document.getElementById(inputId).value.trim().toLowerCase();
+        const fb = document.getElementById(fbId);
+        if (!val) { fb.textContent = '답을 입력해주세요.'; fb.className = 'quiz-feedback show ng'; return; }
+        const ok = keywords.some(k => val.includes(k.toLowerCase()));
+        if (ok) {
+            fb.textContent = '✅ 정답입니다!';
+            fb.className = 'quiz-feedback show ok';
+        } else {
+            fb.textContent = '❌ 다시 생각해보세요. 힌트: ' + keywords[0];
+            fb.className = 'quiz-feedback show ng';
+        }
+    }
+</script>
+</body>
+</html>

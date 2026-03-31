@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4주차 — 독일의 이해: 국가 소개와 역사 | 독일히든챔피언과창업</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb; --primary-dark: #1e3a8a;
+            --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+            --bg: #f3f4f6; --card-bg: #ffffff;
+            --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+            --nav-bg: rgba(255,255,255,0.95);
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
+        }
+        [data-theme="dark"] {
+            --bg: #0f172a; --card-bg: #1e293b;
+            --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+            --nav-bg: rgba(15,23,42,0.95);
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+            --shadow-hover: 0 8px 32px rgba(0,0,0,0.6);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; padding-top: 64px; }
+
+        /* NAV */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 60px;
+            background: var(--nav-bg); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; z-index: 1000; gap: 12px;
+        }
+        .nav-logo { font-weight: 700; font-size: 0.95rem; color: var(--primary); text-decoration: none; white-space: nowrap; }
+        .nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
+        .nav-links a { font-size: 0.78rem; color: var(--text-muted); text-decoration: none; padding: 4px 8px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; }
+        .nav-links a:hover { background: rgba(37,99,235,0.1); color: var(--primary); }
+        .nav-right { display: flex; align-items: center; gap: 8px; }
+        .nav-home { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; padding: 4px 10px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; }
+        .nav-home:hover { background: rgba(37,99,235,0.1); color: var(--primary); }
+        .btn-theme { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 1rem; color: var(--text); transition: all 0.2s; }
+        .btn-theme:hover { background: var(--border); }
+
+        /* HEADER */
+        .page-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            padding: 56px 24px 48px; text-align: center; color: #fff;
+        }
+        .week-badge {
+            display: inline-block; background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.3); border-radius: 20px;
+            padding: 4px 16px; font-size: 0.8rem; font-weight: 500;
+            letter-spacing: 0.05em; margin-bottom: 16px;
+        }
+        .page-header h1 { font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 900; margin-bottom: 12px; line-height: 1.3; }
+        .subtitle { font-size: 0.95rem; opacity: 0.85; font-weight: 300; }
+        .lecture-badges { display: flex; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+        .lecture-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; padding: 4px 14px; font-size: 0.78rem; }
+
+        /* MAIN */
+        main { max-width: 900px; margin: 0 auto; padding: 32px 16px 64px; display: flex; flex-direction: column; gap: 28px; }
+
+        /* SECTION CARD */
+        .section-card {
+            background: var(--card-bg); border-radius: 20px;
+            padding: 32px; box-shadow: var(--shadow);
+            transition: box-shadow 0.2s;
+        }
+        .section-card:hover { box-shadow: var(--shadow-hover); }
+        .section-title {
+            font-size: 1.25rem; font-weight: 700; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+
+        /* COLOR ACCENTS */
+        .blue   { border-top: 4px solid #2563eb; }
+        .green  { border-top: 4px solid #16a34a; }
+        .orange { border-top: 4px solid #d97706; }
+        .purple { border-top: 4px solid #7c3aed; }
+        .red    { border-top: 4px solid #dc2626; }
+        .teal   { border-top: 4px solid #0891b2; }
+
+        /* GOAL CARDS */
+        .goal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+        .goal-card {
+            background: linear-gradient(135deg, rgba(37,99,235,0.06), rgba(37,99,235,0.02));
+            border: 1px solid rgba(37,99,235,0.15); border-radius: 14px;
+            padding: 18px; display: flex; gap: 12px; align-items: flex-start;
+        }
+        .goal-num {
+            background: var(--primary); color: #fff; border-radius: 50%;
+            width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+        }
+        .goal-text { font-size: 0.88rem; line-height: 1.6; color: var(--text); }
+
+        /* SUMMARY GRID */
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+        .summary-card {
+            background: var(--bg); border-radius: 14px; padding: 18px;
+            border: 1px solid var(--border);
+        }
+        .summary-card h4 { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+        .summary-card p { font-size: 0.88rem; line-height: 1.6; font-weight: 500; }
+
+        /* TIMELINE */
+        .timeline { position: relative; padding-left: 28px; }
+        .timeline::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:2px; background: var(--border); border-radius:2px; }
+        .tl-item { position: relative; margin-bottom: 24px; }
+        .tl-item:last-child { margin-bottom: 0; }
+        .tl-dot {
+            position: absolute; left: -24px; top: 4px;
+            width: 14px; height: 14px; border-radius: 50%;
+            background: var(--primary); border: 2px solid var(--card-bg);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .tl-dot.red-dot { background: #dc2626; box-shadow: 0 0 0 2px #dc2626; }
+        .tl-dot.green-dot { background: #16a34a; box-shadow: 0 0 0 2px #16a34a; }
+        .tl-dot.orange-dot { background: #d97706; box-shadow: 0 0 0 2px #d97706; }
+        .tl-dot.purple-dot { background: #7c3aed; box-shadow: 0 0 0 2px #7c3aed; }
+        .tl-year { font-size: 0.78rem; font-weight: 700; color: var(--primary); margin-bottom: 2px; letter-spacing: 0.05em; }
+        .tl-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+        .tl-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* HIGHLIGHT BOX */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(124,58,237,0.06));
+            border: 1px solid rgba(37,99,235,0.2); border-radius: 14px;
+            padding: 20px; margin-bottom: 16px;
+        }
+        .highlight-box:last-child { margin-bottom: 0; }
+        .highlight-box h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; color: var(--primary); }
+        .highlight-box p { font-size: 0.87rem; line-height: 1.7; }
+
+        /* CATCH GRID */
+        .catch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+        .catch-card {
+            background: linear-gradient(135deg, rgba(220,38,38,0.06), rgba(220,38,38,0.02));
+            border: 1px solid rgba(220,38,38,0.18); border-radius: 14px; padding: 18px;
+        }
+        .catch-label {
+            display: inline-block; background: #dc2626; color: #fff;
+            font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 6px;
+            margin-bottom: 8px; letter-spacing: 0.04em;
+        }
+        .catch-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+        .catch-desc { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* KEYWORD GRID */
+        .keyword-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+        .keyword-card {
+            background: var(--bg); border-radius: 12px; padding: 16px;
+            border: 1px solid var(--border);
+        }
+        .kw-term { font-size: 0.88rem; font-weight: 700; margin-bottom: 2px; }
+        .kw-en { font-size: 0.75rem; color: var(--primary); margin-bottom: 6px; font-weight: 500; }
+        .kw-def { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* QUIZ */
+        .quiz-item { margin-bottom: 28px; }
+        .quiz-item:last-child { margin-bottom: 0; }
+        .quiz-q { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; line-height: 1.5; }
+        .quiz-q span { color: var(--primary); }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-opt {
+            background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+            padding: 10px 14px; cursor: pointer; font-size: 0.88rem;
+            transition: all 0.2s; text-align: left; color: var(--text);
+        }
+        .quiz-opt:hover { border-color: var(--primary); background: rgba(37,99,235,0.05); }
+        .quiz-opt.correct { background: rgba(22,163,74,0.1); border-color: #16a34a; color: #15803d; font-weight: 600; }
+        .quiz-opt.wrong { background: rgba(220,38,38,0.08); border-color: #dc2626; color: #b91c1c; }
+        .quiz-feedback { font-size: 0.84rem; margin-top: 8px; padding: 8px 12px; border-radius: 8px; display: none; line-height: 1.6; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.ok { background: rgba(22,163,74,0.1); color: #15803d; }
+        .quiz-feedback.ng { background: rgba(220,38,38,0.08); color: #b91c1c; }
+
+        .short-wrap { margin-bottom: 28px; }
+        .short-wrap:last-child { margin-bottom: 0; }
+        .short-q { font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; line-height: 1.5; }
+        .short-input {
+            width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+            border-radius: 10px; font-size: 0.9rem; background: var(--bg);
+            color: var(--text); transition: border 0.2s; font-family: inherit;
+        }
+        .short-input:focus { outline: none; border-color: var(--primary); }
+        .short-btn {
+            margin-top: 8px; padding: 8px 18px; background: var(--primary); color: #fff;
+            border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem;
+            font-weight: 600; transition: background 0.2s; font-family: inherit;
+        }
+        .short-btn:hover { background: var(--primary-dark); }
+        .short-fb { font-size: 0.84rem; margin-top: 8px; padding: 8px 12px; border-radius: 8px; display: none; line-height: 1.6; }
+        .short-fb.show { display: block; }
+        .short-fb.ok { background: rgba(22,163,74,0.1); color: #15803d; }
+        .short-fb.ng { background: rgba(220,38,38,0.08); color: #b91c1c; }
+
+        /* FLAG COLORS */
+        .flag-colors { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+        .flag-chip {
+            display: flex; align-items: center; gap: 6px; padding: 8px 14px;
+            border-radius: 10px; border: 1px solid var(--border); font-size: 0.85rem; font-weight: 600;
+        }
+        .flag-dot { width: 16px; height: 16px; border-radius: 4px; }
+
+        /* TWO COL */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media (max-width: 600px) {
+            .two-col { grid-template-columns: 1fr; }
+            .summary-grid, .goal-grid, .catch-grid, .keyword-grid { grid-template-columns: 1fr; }
+        }
+
+        p { font-size: 0.9rem; line-height: 1.7; }
+        ul, ol { padding-left: 1.3em; }
+        li { font-size: 0.88rem; line-height: 1.8; }
+        .tag { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .tag-blue { background: rgba(37,99,235,0.12); color: #1d4ed8; }
+        .tag-red { background: rgba(220,38,38,0.12); color: #b91c1c; }
+        .tag-green { background: rgba(22,163,74,0.12); color: #15803d; }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+    <a href="index.html" class="nav-logo">🇩🇪 독일히든챔피언과창업</a>
+    <div class="nav-links">
+        <a href="#goals">학습목표</a>
+        <a href="#summary">핵심요약</a>
+        <a href="#timeline">역사타임라인</a>
+        <a href="#catch">핵심캐치</a>
+        <a href="#keywords">키워드</a>
+        <a href="#quiz">연습문제</a>
+    </div>
+    <div class="nav-right">
+        <a href="index.html" class="nav-home">← 목차</a>
+        <button class="btn-theme" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    </div>
+</nav>
+
+<!-- HEADER -->
+<header class="page-header">
+    <div class="week-badge">4주차</div>
+    <h1>독일의 이해: 국가 소개와 역사</h1>
+    <p class="subtitle">독일의 상징 · 지리 · 기후 / 19세기 통일 ~ 현대까지의 역사</p>
+    <div class="lecture-badges">
+        <span class="lecture-badge">1강 — 독일 소개 (국기·국장·지리·기후)</span>
+        <span class="lecture-badge">2강 — 독일 역사 ①: 통일~2차대전</span>
+        <span class="lecture-badge">3강 — 독일 역사 ②: 전후 분단~재통일</span>
+    </div>
+</header>
+
+<main>
+
+    <!-- 1. 학습 목표 -->
+    <section class="section-card blue" id="goals">
+        <h2 class="section-title">🎯 학습 목표</h2>
+        <div class="goal-grid">
+            <div class="goal-card">
+                <div class="goal-num">1</div>
+                <div class="goal-text">독일 국기의 색깔 의미와 역사적 유래를 설명할 수 있다.</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-num">2</div>
+                <div class="goal-text">독일의 지리적 위치, 16개 주 구성, 기후 특성을 파악한다.</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-num">3</div>
+                <div class="goal-text">비스마르크 중심의 독일 통일(1871년) 과정을 이해한다.</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-num">4</div>
+                <div class="goal-text">1·2차 세계대전의 배경과 독일의 역할을 정리할 수 있다.</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-num">5</div>
+                <div class="goal-text">전후 동서독 분단 구조와 베를린 장벽의 의미를 설명한다.</div>
+            </div>
+            <div class="goal-card">
+                <div class="goal-num">6</div>
+                <div class="goal-text">독일 재통일(1990년) 과정과 유럽연합에서의 위상을 이해한다.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. 핵심 요약 -->
+    <section class="section-card green" id="summary">
+        <h2 class="section-title">📋 핵심 요약</h2>
+
+        <!-- 2-1 국기 -->
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px; color:var(--text-muted);">🚩 독일 국기 — 삼색기의 의미</h3>
+        <div class="flag-colors" style="margin-bottom:20px;">
+            <div class="flag-chip">
+                <div class="flag-dot" style="background:#1a1a1a; border:1px solid #aaa;"></div>
+                검정 = <strong>통일·일치</strong>
+            </div>
+            <div class="flag-chip">
+                <div class="flag-dot" style="background:#dc2626;"></div>
+                빨강 = <strong>정의</strong>
+            </div>
+            <div class="flag-chip">
+                <div class="flag-dot" style="background:#f59e0b;"></div>
+                금색(노랑) = <strong>자유</strong>
+            </div>
+        </div>
+        <div class="highlight-box" style="margin-bottom:20px;">
+            <h4>삼색기의 기원</h4>
+            <p>1817년 바르트부르크 축제에서 <strong>독일 대학생연합</strong>이 통일·자유를 상징하며 사용 시작 → 1848년 프랑크푸르트 국민의회에서 독일 연방기로 채택 → 1949년 <strong>독일연방공화국 기본법 제22조</strong>에 공식 규정.</p>
+        </div>
+
+        <!-- 2-2 지리 -->
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px; color:var(--text-muted);">🗺 독일 지리 & 기후</h3>
+        <div class="summary-grid" style="margin-bottom:20px;">
+            <div class="summary-card">
+                <h4>위치·면적</h4>
+                <p>유럽 중부 위치, 면적 유럽 7위 · 세계 63위</p>
+            </div>
+            <div class="summary-card">
+                <h4>행정구역</h4>
+                <p>16개 주(베를린·함부르크·브레멘은 도시주)</p>
+            </div>
+            <div class="summary-card">
+                <h4>주요 하천</h4>
+                <p>라인강, 엘베강, 베저강, 오데르강, 도나우강</p>
+            </div>
+            <div class="summary-card">
+                <h4>기후</h4>
+                <p>사계절 뚜렷, 연평균 기온 9°C, 여름 건조·쾌적</p>
+            </div>
+            <div class="summary-card">
+                <h4>인접국</h4>
+                <p>북: 덴마크 / 동: 폴란드·체코 / 남: 오스트리아·스위스 / 서: 프랑스·벨기에·네덜란드</p>
+            </div>
+            <div class="summary-card">
+                <h4>여행 가도</h4>
+                <p>로맨틱·고성·알프스·판타스틱 가도 등 테마 루트</p>
+            </div>
+        </div>
+
+        <!-- 2-3 역사 요약 -->
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px; color:var(--text-muted);">📜 독일 역사 한눈에</h3>
+        <div class="two-col">
+            <div class="highlight-box">
+                <h4>1871년 — 첫 번째 통일</h4>
+                <p>비스마르크가 오스트리아 전쟁·프랑스 전쟁 승리 후 프로이센 중심 25개 주 통일 제국 수립. 빌헬름 1세가 베르사유 궁전에서 황제 즉위.</p>
+            </div>
+            <div class="highlight-box">
+                <h4>1차 세계대전 (1914~1918)</h4>
+                <p>사라예보 사건 → 3국 동맹(독·오·이) vs 3국 협상(영·프·러) 대결 → 독일 패전 → 바이마르 공화국 수립(1919)</p>
+            </div>
+            <div class="highlight-box">
+                <h4>나치 독일 (1933~1945)</h4>
+                <p>히틀러 나치당 집권 → 2차 세계대전 → 1945년 5월 항복 → 미·영·프·소 4개국 분할 점령</p>
+            </div>
+            <div class="highlight-box">
+                <h4>1990년 — 재통일</h4>
+                <p>1989년 베를린 장벽 붕괴 → 동서독 화폐·경제 통합 조약 → 2+4 조약 → 10월 3일 공식 재통일</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 역사 타임라인 -->
+    <section class="section-card orange" id="timeline">
+        <h2 class="section-title">⏱ 독일 역사 타임라인</h2>
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-year">1817</div>
+                <div class="tl-title">바르트부르크 축제</div>
+                <div class="tl-desc">독일 대학생연합이 검정·빨강·금색 삼색기 사용 — 통일과 자유의 상징</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-year">1848</div>
+                <div class="tl-title">프랑크푸르트 국민의회</div>
+                <div class="tl-desc">독일 최초 전국민 투표 구성 의회. 삼색기를 독일 연방기로 사용.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-year">1862</div>
+                <div class="tl-title">비스마르크 프로이센 총리 취임</div>
+                <div class="tl-desc">오스트리아 제외 프로이센 중심 독일 통일 주장. 이른바 "철혈 정책" 추진.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-year">1871</div>
+                <div class="tl-title">독일 제국 수립 — 첫 번째 통일</div>
+                <div class="tl-desc">프랑스 전쟁 승리 후 베르사유 궁전에서 빌헬름 1세 황제 즉위. 25개 주 통일 제국.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot orange-dot"></div>
+                <div class="tl-year">1914~1918</div>
+                <div class="tl-title">제1차 세계대전</div>
+                <div class="tl-desc">사라예보 사건(1914.6.28) 발단. 3국 동맹(독·오·이) vs 3국 협상(영·프·러). 독일 패전.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-year">1919</div>
+                <div class="tl-title">바이마르 공화국 수립</div>
+                <div class="tl-desc">군주제 → 공화제 전환. 바이마르 헌법 제정. 초대 대통령 프리드리히 에베르트(사민당).</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot red-dot"></div>
+                <div class="tl-year">1933</div>
+                <div class="tl-title">히틀러 집권 — 제3제국</div>
+                <div class="tl-desc">나치당 선거 승리(43%), 히틀러 총통 취임. 바이마르 공화국 해체, 유대인 탄압·영토 팽창 시작.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot red-dot"></div>
+                <div class="tl-year">1939~1945</div>
+                <div class="tl-title">제2차 세계대전</div>
+                <div class="tl-desc">폴란드 침공(1939.9.1) → 영·프 선전포고 → 1944 노르망디 상륙작전 → 1945.5 항복.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot orange-dot"></div>
+                <div class="tl-year">1949</div>
+                <div class="tl-title">동서독 분단 확정</div>
+                <div class="tl-desc">서독(독일연방공화국) 5월 수립, 동독(독일민주공화국) 10월 수립. 냉전의 최전선.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot orange-dot"></div>
+                <div class="tl-year">1961</div>
+                <div class="tl-title">베를린 장벽 건설</div>
+                <div class="tl-desc">동독이 서베를린을 차단하기 위해 하루아침에 장벽 축조. 동·서베를린 완전 분리.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-year">1969</div>
+                <div class="tl-title">빌리 브란트 동방정책</div>
+                <div class="tl-desc">사민당 총리 취임. 동독·소련과 관계 개선 추진. 1971년 동서독 기본조약, 1973년 유엔 동시 가입.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot green-dot"></div>
+                <div class="tl-year">1989.11</div>
+                <div class="tl-title">베를린 장벽 붕괴</div>
+                <div class="tl-desc">통일 열망 속에 장벽 개방 선언. 동·서베를린 시민이 장벽 위에서 포옹. 통일 무드 시작.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot green-dot"></div>
+                <div class="tl-year">1990.10.3</div>
+                <div class="tl-title">독일 재통일 — 통일의 날</div>
+                <div class="tl-desc">2+4 조약(미·영·프·소 서명) → 동서독 공식 재통일. 매년 10월 3일 통일의 날 축제.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 핵심 캐치 -->
+    <section class="section-card red" id="catch">
+        <h2 class="section-title">🔥 핵심 캐치 — 시험 포인트</h2>
+        <div class="catch-grid">
+            <div class="catch-card">
+                <div class="catch-label">국기 색깔</div>
+                <div class="catch-title">검정·빨강·금색의 뜻</div>
+                <div class="catch-desc">검정=통일, 빨강=정의, 금색=자유. 1817년 바르트부르크 → 1848년 프랑크푸르트 → 1949년 기본법으로 공식화.</div>
+            </div>
+            <div class="catch-card">
+                <div class="catch-label">첫 통일</div>
+                <div class="catch-title">비스마르크 & 1871년</div>
+                <div class="catch-desc">프로이센 중심 통일(오스트리아 제외). 오스트리아 전쟁 + 프랑스 전쟁 승리 후 베르사유에서 선포.</div>
+            </div>
+            <div class="catch-card">
+                <div class="catch-label">1차 세계대전</div>
+                <div class="catch-title">사라예보 사건 (1914.6.28)</div>
+                <div class="catch-desc">오스트리아 황태자 페르디난드 암살 사건이 전쟁 발발의 직접 원인. 3국 동맹 vs 3국 협상.</div>
+            </div>
+            <div class="catch-card">
+                <div class="catch-label">나치 집권</div>
+                <div class="catch-title">히틀러 1933년 합법적 선거 승리</div>
+                <div class="catch-desc">나치당 43% 득표. 대공황의 경제 혼란을 배경으로 급부상. 제3제국 수립 후 반인권 정책 추진.</div>
+            </div>
+            <div class="catch-card">
+                <div class="catch-label">전환점</div>
+                <div class="catch-title">노르망디 상륙작전 (1944)</div>
+                <div class="catch-desc">연합군의 대반격 시작점. 이후 독일은 1945년 5월 항복. 미·영·프·소 4개국 분할 점령.</div>
+            </div>
+            <div class="catch-card">
+                <div class="catch-label">동방정책</div>
+                <div class="catch-title">빌리 브란트 vs 불승인 정책</div>
+                <div class="catch-desc">1969년 이전: 동독 불승인. 브란트 집권 후 관계개선 → 1973년 유엔 동시 가입으로 공식 인정.</div>
+            </div>
+            <div class="catch-card">
+                <div class="catch-label">2+4 조약</div>
+                <div class="catch-title">재통일의 국제법적 근거</div>
+                <div class="catch-desc">동독+서독 + 미국·영국·프랑스·소련 4개국이 서명. 1990년 9월 12일 체결 → 10월 3일 재통일.</div>
+            </div>
+            <div class="catch-card">
+                <div class="catch-label">경제 규모</div>
+                <div class="catch-title">EU 핵심 = 독일</div>
+                <div class="catch-desc">유럽연합 5대 경제국(독·프·영·이·스)이 EU GDP의 68% 차지. 그중 독일이 가장 핵심.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 핵심 키워드 -->
+    <section class="section-card purple" id="keywords">
+        <h2 class="section-title">📚 핵심 키워드</h2>
+        <div class="keyword-grid">
+            <div class="keyword-card">
+                <div class="kw-term">삼색기</div>
+                <div class="kw-en">Tricolore / Bundesflagge</div>
+                <div class="kw-def">검정·빨강·금색 독일 국기. 통일·정의·자유를 상징.</div>
+            </div>
+            <div class="keyword-card">
+                <div class="kw-term">국장(연방 문장)</div>
+                <div class="kw-en">Bundeswappen</div>
+                <div class="kw-def">황금 방패 위 검은 독수리. 1950년 초대 대통령 호이스가 확정.</div>
+            </div>
+            <div class="keyword-card">
+                <div class="kw-term">비스마르크</div>
+                <div class="kw-en">Otto von Bismarck</div>
+                <div class="kw-def">1862년 프로이센 총리. 철혈 정책으로 1871년 독일 통일 주도.</div>
+            </div>
+            <div class="keyword-card">
+                <div class="kw-term">바이마르 공화국</div>
+                <div class="kw-en">Weimarer Republik</div>
+                <div class="kw-def">1919~1933년 독일 공화정. 세계 최초 민주주의 헌법(바이마르 헌법) 제정.</div>
+            </div>
+            <div class="keyword-card">
+                <div class="kw-term">나치즘</div>
+                <div class="kw-en">Nationalsozialismus</div>
+                <div class="kw-def">히틀러 주도의 민족사회주의 이데올로기. 대공황을 토양으로 성장.</div>
+            </div>
+            <div class="keyword-card">
+                <div class="kw-term">베를린 장벽</div>
+                <div class="kw-en">Berliner Mauer</div>
+                <div class="kw-def">1961년 동독 건설. 1989년 붕괴. 분단과 통일의 가장 강렬한 상징.</div>
+            </div>
+            <div class="keyword-card">
+                <div class="kw-term">동방정책</div>
+                <div class="kw-en">Ostpolitik</div>
+                <div class="kw-def">빌리 브란트 총리(1969~)의 동독·소련 관계개선 정책. 통일의 초석.</div>
+            </div>
+            <div class="keyword-card">
+                <div class="kw-term">라인강의 기적</div>
+                <div class="kw-en">Wirtschaftswunder</div>
+                <div class="kw-def">2차 대전 후 미국 경제원조+사회적 시장경제로 서독이 이룬 급속 경제성장.</div>
+            </div>
+            <div class="keyword-card">
+                <div class="kw-term">2+4 조약</div>
+                <div class="kw-en">Two Plus Four Agreement</div>
+                <div class="kw-def">동서독 2국 + 미·영·프·소 4국이 서명한 독일 통일 국제법적 근거 조약(1990.9.12).</div>
+            </div>
+            <div class="keyword-card">
+                <div class="kw-term">유럽연합</div>
+                <div class="kw-en">European Union (EU)</div>
+                <div class="kw-def">현 28개국 회원. GDP 17.6조 달러. 독일이 주도적 역할.</div>
+            </div>
+            <div class="keyword-card">
+                <div class="kw-term">3국 동맹</div>
+                <div class="kw-en">Triple Alliance</div>
+                <div class="kw-def">1차 세계대전 당시 독일·오스트리아·이탈리아 동맹. 프랑스 고립 목적.</div>
+            </div>
+            <div class="keyword-card">
+                <div class="kw-term">3국 협상</div>
+                <div class="kw-en">Triple Entente</div>
+                <div class="kw-def">1차 세계대전 당시 영국·프랑스·러시아 동맹. 독일 팽창 저지 목적.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. 연습문제 -->
+    <section class="section-card teal" id="quiz">
+        <h2 class="section-title">✏️ 연습문제</h2>
+
+        <!-- 객관식 -->
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:18px; color:var(--text-muted);">객관식</h3>
+
+        <div class="quiz-item">
+            <div class="quiz-q"><span>Q1.</span> 독일 국기에서 금색(노랑)이 상징하는 의미는?</div>
+            <div class="quiz-options">
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">통일</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">정의</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, true)">자유</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">평화</button>
+            </div>
+            <div class="quiz-feedback">금색(노랑)은 <strong>자유</strong>를 뜻합니다. 검정=통일, 빨강=정의, 금색=자유로 기억하세요.</div>
+        </div>
+
+        <div class="quiz-item">
+            <div class="quiz-q"><span>Q2.</span> 독일을 처음으로 통일한 인물은?</div>
+            <div class="quiz-options">
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">빌헬름 2세</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, true)">비스마르크</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">히틀러</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">빌리 브란트</button>
+            </div>
+            <div class="quiz-feedback"><strong>비스마르크</strong>가 1871년 프로이센 중심으로 독일 최초 통일 제국을 수립했습니다.</div>
+        </div>
+
+        <div class="quiz-item">
+            <div class="quiz-q"><span>Q3.</span> 제1차 세계대전의 직접적 발단이 된 사건은?</div>
+            <div class="quiz-options">
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">베를린 장벽 건설</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">폴란드 침공</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, true)">사라예보 사건 (오스트리아 황태자 암살)</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">노르망디 상륙작전</button>
+            </div>
+            <div class="quiz-feedback">1914년 6월 28일 <strong>사라예보 사건</strong>—세르비아인이 오스트리아 황태자 페르디난드를 암살한 사건이 직접적 원인입니다.</div>
+        </div>
+
+        <div class="quiz-item">
+            <div class="quiz-q"><span>Q4.</span> 독일 재통일이 공식적으로 이루어진 날짜는?</div>
+            <div class="quiz-options">
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">1989년 11월 9일</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">1990년 5월 18일</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">1990년 9월 12일</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, true)">1990년 10월 3일</button>
+            </div>
+            <div class="quiz-feedback"><strong>1990년 10월 3일</strong>이 독일 재통일의 날입니다. 매년 이날 '통일의 날' 축제가 열립니다. (11월 9일은 베를린 장벽 붕괴일)</div>
+        </div>
+
+        <div class="quiz-item">
+            <div class="quiz-q"><span>Q5.</span> 2차 세계대전 후 서독이 이룬 급속한 경제성장을 일컫는 말은?</div>
+            <div class="quiz-options">
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">한강의 기적</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, true)">라인강의 기적</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">동방정책</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">바르트부르크 선언</button>
+            </div>
+            <div class="quiz-feedback"><strong>라인강의 기적</strong>(Wirtschaftswunder). 미국의 경제원조와 사회적 시장경제 정책을 통해 달성했습니다.</div>
+        </div>
+
+        <div class="quiz-item">
+            <div class="quiz-q"><span>Q6.</span> 빌리 브란트의 동방정책으로 동서독이 동시 가입한 국제기구는?</div>
+            <div class="quiz-options">
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">NATO</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">유럽연합(EU)</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, true)">유엔(UN)</button>
+                <button class="quiz-opt" onclick="checkQuiz(this, false)">바르샤바 조약기구</button>
+            </div>
+            <div class="quiz-feedback">1973년 9월 동서독은 <strong>유엔(UN)</strong>에 동시 가입하여 서로를 국가로 공식 인정하게 되었습니다.</div>
+        </div>
+
+        <!-- 단답형 -->
+        <h3 style="font-size:1rem; font-weight:700; margin: 28px 0 18px; color:var(--text-muted);">단답형</h3>
+
+        <div class="short-wrap">
+            <div class="short-q">Q7. 독일의 삼색기가 1817년 처음 사용된 축제 이름은?</div>
+            <input class="short-input" type="text" id="sq1" placeholder="답을 입력하세요">
+            <button class="short-btn" onclick="checkShort('sq1', ['바르트부르크', '바르트부르크 축제'], 'sfb1')">확인</button>
+            <div class="short-fb" id="sfb1"></div>
+        </div>
+
+        <div class="short-wrap">
+            <div class="short-q">Q8. 독일은 총 몇 개의 주로 구성되어 있는가?</div>
+            <input class="short-input" type="text" id="sq2" placeholder="답을 입력하세요">
+            <button class="short-btn" onclick="checkShort('sq2', ['16', '16개', '16개 주'], 'sfb2')">확인</button>
+            <div class="short-fb" id="sfb2"></div>
+        </div>
+
+        <div class="short-wrap">
+            <div class="short-q">Q9. 독일 재통일의 국제법적 근거가 된 조약 이름은? (형식: _ + _ 조약)</div>
+            <input class="short-input" type="text" id="sq3" placeholder="답을 입력하세요">
+            <button class="short-btn" onclick="checkShort('sq3', ['2+4', '2플러스4', '두플러스포', '2+4 조약'], 'sfb3')">확인</button>
+            <div class="short-fb" id="sfb3"></div>
+        </div>
+
+        <div class="short-wrap">
+            <div class="short-q">Q10. 바이마르 공화국의 초대 대통령 이름은?</div>
+            <input class="short-input" type="text" id="sq4" placeholder="답을 입력하세요">
+            <button class="short-btn" onclick="checkShort('sq4', ['에베르트', '프리드리히 에베르트', '에버트', '프리드릭 에버트'], 'sfb4')">확인</button>
+            <div class="short-fb" id="sfb4"></div>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    // Theme toggle
+    (function() {
+        const saved = localStorage.getItem('theme-german4');
+        if (saved) {
+            document.documentElement.setAttribute('data-theme', saved);
+            document.getElementById('themeBtn').textContent = saved === 'dark' ? '☀️' : '🌙';
+        }
+    })();
+    function toggleTheme() {
+        const html = document.documentElement;
+        const cur = html.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme-german4', next);
+        document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+    }
+
+    // Multiple choice quiz
+    function checkQuiz(btn, isCorrect) {
+        const item = btn.closest('.quiz-item');
+        if (item.dataset.answered) return;
+        item.dataset.answered = '1';
+        const opts = item.querySelectorAll('.quiz-opt');
+        opts.forEach(o => { o.style.pointerEvents = 'none'; });
+        const fb = item.querySelector('.quiz-feedback');
+        if (isCorrect) {
+            btn.classList.add('correct');
+            fb.classList.add('show', 'ok');
+            fb.innerHTML = '✅ 정답! ' + fb.innerHTML;
+        } else {
+            btn.classList.add('wrong');
+            fb.classList.add('show', 'ng');
+            fb.innerHTML = '❌ 오답. ' + fb.innerHTML;
+            opts.forEach(o => {
+                if (o.onclick && o.onclick.toString().includes('true')) o.classList.add('correct');
+            });
+        }
+    }
+
+    // Short answer quiz
+    function checkShort(inputId, answers, fbId) {
+        const val = document.getElementById(inputId).value.trim();
+        const fb = document.getElementById(fbId);
+        if (!val) { fb.textContent = '답을 입력해주세요.'; fb.className = 'short-fb show ng'; return; }
+        const ok = answers.some(a => val.replace(/\s/g,'').toLowerCase().includes(a.replace(/\s/g,'').toLowerCase()));
+        fb.classList.add('show');
+        if (ok) {
+            fb.className = 'short-fb show ok';
+            fb.innerHTML = '✅ 정답! 모범 답: <strong>' + answers[0] + '</strong>';
+        } else {
+            fb.className = 'short-fb show ng';
+            fb.innerHTML = '❌ 오답. 정답은 <strong>' + answers[0] + '</strong> 입니다.';
+        }
+    }
+</script>
+</body>
+</html>

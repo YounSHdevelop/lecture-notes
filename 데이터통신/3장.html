@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>데이터통신 3장 — OSI 참조 모델</title>
+<title>데이터통신 3장 — 신호</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -149,66 +149,73 @@
   }
   .goal-card p { font-size: 14px; line-height: 1.6; }
 
-  /* ── OSI LAYER TABLE ── */
-  .layer-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--card-bg);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    font-size: 14px;
-  }
-  .layer-table th {
-    background: linear-gradient(135deg, #1e3a8a, #2563eb);
-    color: white; padding: 12px 16px; text-align: left;
-  }
-  .layer-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
-  .layer-table tr:last-child td { border-bottom: none; }
-  .layer-table tr:hover td { background: var(--primary-light); }
-  .layer-num {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 26px; height: 26px; border-radius: 50%;
-    font-weight: 700; font-size: 13px; color: white;
-    flex-shrink: 0;
-  }
-  .l1 { background: #6b7280; }
-  .l2 { background: #0d9488; }
-  .l3 { background: #2563eb; }
-  .l4 { background: #16a34a; }
-  .l5 { background: #d97706; }
-  .l6 { background: #7c3aed; }
-  .l7 { background: #dc2626; }
-
-  /* ── COMPARISON TABLE ── */
-  .compare-wrap {
+  /* ── FORMULA BOX ── */
+  .formula-box {
     background: var(--card-bg);
     border-radius: 12px;
     padding: 24px;
     box-shadow: var(--shadow);
+    margin-bottom: 16px;
   }
-  .compare-grid {
+  .formula-box h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+  .formula {
+    background: var(--primary-light);
+    border-radius: 8px;
+    padding: 14px 20px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .formula-note { font-size: 13px; color: var(--text-sub); line-height: 1.8; }
+  .formula-note span { display: block; }
+
+  /* ── SIGNAL COMPARE ── */
+  .signal-compare {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .signal-compare h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+  .signal-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 16px;
   }
-  .compare-col h4 {
-    font-size: 15px; font-weight: 700;
-    margin-bottom: 14px;
-    padding: 8px 14px;
-    border-radius: 8px;
-    text-align: center;
+  .signal-col {
+    border-radius: 10px;
+    padding: 16px;
   }
-  .compare-col.osi h4 { background: var(--primary-light); color: var(--primary); }
-  .compare-col.tcpip h4 { background: var(--success-light); color: var(--success); }
-  .layer-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 12px;
-    margin-bottom: 6px;
-    border-radius: 8px;
-    background: var(--bg);
-    font-size: 14px; font-weight: 500;
+  .signal-col.analog { background: var(--primary-light); }
+  .signal-col.digital { background: var(--success-light); }
+  .signal-col h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .signal-col.analog h4 { color: var(--primary); }
+  .signal-col.digital h4 { color: var(--success); }
+  .signal-col li { font-size: 13px; color: var(--text-sub); line-height: 1.8; list-style: none; padding-left: 0; }
+  .signal-col li::before { content: "• "; }
+
+  /* ── NOISE TABLE ── */
+  .noise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
   }
+  .noise-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--danger);
+  }
+  .noise-card.orange { border-left-color: var(--warning); }
+  .noise-card.purple { border-left-color: var(--purple); }
+  .noise-card.teal { border-left-color: var(--teal); }
+  .noise-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .noise-card p { font-size: 13px; color: var(--text-sub); line-height: 1.65; }
 
   /* ── CATCH BOXES ── */
   .catch-box {
@@ -222,7 +229,8 @@
     font-weight: 700; font-size: 14px;
     color: var(--warning); margin-bottom: 6px;
   }
-  .catch-box p { font-size: 14px; line-height: 1.7; }
+  .catch-box p, .catch-box li { font-size: 14px; line-height: 1.7; }
+  .catch-box ul { padding-left: 18px; }
 
   .exam-box {
     background: var(--danger-light);
@@ -317,44 +325,48 @@
   }
   .check-btn:hover { opacity: 0.85; }
 
-  /* ── CAPSULE DIAGRAM ── */
-  .capsule-diagram {
+  /* ── EXAMPLE BOX ── */
+  .example-box {
     background: var(--card-bg);
     border-radius: 12px;
-    padding: 24px;
+    padding: 20px 24px;
     box-shadow: var(--shadow);
+    border-left: 4px solid var(--purple);
+    margin-bottom: 16px;
   }
-  .capsule-row {
-    display: flex; align-items: center; gap: 8px;
-    margin-bottom: 6px;
+  .example-box .ex-title {
+    font-size: 14px; font-weight: 700;
+    color: var(--purple); margin-bottom: 12px;
   }
-  .capsule-label {
-    font-size: 12px; font-weight: 700; color: white;
-    padding: 4px 10px; border-radius: 4px;
-    min-width: 70px; text-align: center;
+  .example-box .ex-given {
+    background: var(--bg); border-radius: 8px; padding: 12px;
+    font-size: 13px; color: var(--text-sub); line-height: 1.9;
+    margin-bottom: 10px;
   }
-  .capsule-data {
-    font-size: 12px; padding: 4px 10px; border-radius: 4px;
-    background: var(--bg); border: 1px solid var(--border);
-    color: var(--text-sub);
+  .example-box .ex-answer {
+    background: var(--purple-light); border-radius: 8px; padding: 12px;
+    font-size: 14px; color: var(--purple); line-height: 1.8;
   }
-  .capsule-arrow { color: var(--text-sub); font-size: 18px; }
+  .example-box .ex-answer strong { font-size: 16px; }
 
   @media (max-width: 640px) {
-    .card-grid, .goal-grid, .keyword-grid { grid-template-columns: 1fr; }
-    .compare-grid { grid-template-columns: 1fr; }
-    .layer-table { font-size: 13px; }
+    .card-grid, .goal-grid, .keyword-grid, .noise-grid { grid-template-columns: 1fr; }
+    .signal-grid { grid-template-columns: 1fr; }
+    .formula { font-size: 15px; }
   }
 </style>
 </head>
 <body>
 
 <nav>
+  <a href="./index.html" style="border:1px solid var(--border);color:var(--text-sub);">← 목록</a>
   <a href="#goals">학습목표</a>
   <a href="#summary">핵심요약</a>
-  <a href="#layers">계층구조</a>
-  <a href="#functions">계층기능</a>
-  <a href="#concepts">주요개념</a>
+  <a href="#analog">아날로그신호</a>
+  <a href="#digital">디지털신호</a>
+  <a href="#capacity">채널용량</a>
+  <a href="#noise">전송손상</a>
+  <a href="#examples">예제풀이</a>
   <a href="#catch">핵심캐치</a>
   <a href="#keywords">키워드</a>
   <a href="#quiz">연습문제</a>
@@ -364,8 +376,8 @@
 
 <header>
   <div class="badge">데이터통신 · 3장</div>
-  <h1>OSI 참조 모델</h1>
-  <p>네트워크 통신의 국제 표준 — 7계층 구조와 핵심 개념</p>
+  <h1>신호 (Signal)</h1>
+  <p>아날로그·디지털 신호의 특성과 채널 용량, 전송 손상</p>
 </header>
 
 <main>
@@ -376,23 +388,23 @@
     <div class="goal-grid">
       <div class="goal-card">
         <div class="goal-num">1</div>
-        <p>OSI 참조 모델의 등장 배경과 목적을 설명할 수 있다.</p>
+        <p>신호의 종류와 형태에 대해 설명할 수 있다.</p>
       </div>
       <div class="goal-card">
         <div class="goal-num">2</div>
-        <p>OSI 7계층의 이름과 순서를 암기하고 각 계층의 역할을 설명할 수 있다.</p>
+        <p>아날로그 신호의 진폭, 주파수, 위상, 주기 및 대역폭에 대해 설명할 수 있다.</p>
       </div>
       <div class="goal-card">
         <div class="goal-num">3</div>
-        <p>OSI 7계층과 TCP/IP 5계층을 비교하여 설명할 수 있다.</p>
+        <p>디지털 신호의 개념 및 특징에 대해 설명할 수 있다.</p>
       </div>
       <div class="goal-card">
         <div class="goal-num">4</div>
-        <p>캡슐화·역캡슐화, SDU, PDU 개념을 이해하고 설명할 수 있다.</p>
+        <p>채널 용량을 이해하고 계산할 수 있다.</p>
       </div>
       <div class="goal-card">
         <div class="goal-num">5</div>
-        <p>프로토콜, 인터페이스, 서비스 프리미티브의 차이를 설명할 수 있다.</p>
+        <p>전송 도중 오류를 발생시키는 전송 손상에 대해 설명할 수 있다.</p>
       </div>
     </div>
   </section>
@@ -400,238 +412,492 @@
   <!-- ── 핵심 요약 ── -->
   <section id="summary">
     <div class="section-title"><span class="icon">📌</span> 핵심 요약</div>
+    <div class="signal-compare">
+      <h3>데이터 vs 신호 — 아날로그 vs 디지털</h3>
+      <div class="signal-grid">
+        <div class="signal-col analog">
+          <h4>아날로그(Analog)</h4>
+          <ul>
+            <li><strong>데이터:</strong> 연속적인 값 (음성, 화상, 음향, 영상)</li>
+            <li><strong>신호:</strong> 연속적인 파형, 시간에 따라 연속 변화</li>
+            <li>주로 <strong>무선</strong> 전송에 사용</li>
+            <li>잡음 증폭 문제 → <strong>증폭기(Amplifier)</strong> 사용</li>
+          </ul>
+        </div>
+        <div class="signal-col digital">
+          <h4>디지털(Digital)</h4>
+          <ul>
+            <li><strong>데이터:</strong> 이산적인 값 (0과 1)</li>
+            <li><strong>신호:</strong> 이산적인 파형, 순간적으로 변화</li>
+            <li>주로 <strong>유선</strong> 전송에 사용</li>
+            <li>신호 재생 → <strong>리피터(Repeater)</strong> 사용</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <div class="card-grid">
       <div class="card">
-        <h3>OSI 참조 모델이란?</h3>
-        <p>1984년 <strong>ISO</strong>에서 이기종 컴퓨터 간 통신을 가능하게 하기 위해 개발한 통신 프로토콜 표준 모델. 통신의 전 과정을 <strong>7개 계층</strong>으로 분리하여 정의한다.</p>
+        <h3>주기적 신호 vs 비주기적 신호</h3>
+        <ul>
+          <li><strong>주기적:</strong> 특정 패턴이 주기(Period) T 동안 반복. 완성된 하나의 패턴 = 사이클(Cycle)</li>
+          <li><strong>비주기적:</strong> 반복 패턴 없이 불규칙하게 변화하는 신호</li>
+        </ul>
+        <p style="margin-top:8px;font-size:13px;">데이터 통신: <strong>주기적 아날로그 신호</strong> 또는 <strong>비주기적 디지털 신호</strong> 사용</p>
       </div>
       <div class="card green">
-        <h3>참조 모델 vs 실제 표준</h3>
-        <p>OSI는 실제 사용되는 프로토콜로 개발되지 못하였지만, 통신 프로토콜을 <strong>이해하고 설명하는 기준 모델</strong>로 사용된다. 실제적인 표준은 <strong>TCP/IP</strong>이다.</p>
+        <h3>T와 f의 관계</h3>
+        <p style="font-size:18px;font-weight:700;text-align:center;padding:12px 0;color:var(--success);">T = 1/f &nbsp;&nbsp; f = 1/T</p>
+        <ul>
+          <li><strong>주기 T</strong>: 한 사이클 완성에 걸리는 시간 (단위: 초)</li>
+          <li><strong>주파수 f</strong>: 초당 반복되는 사이클 수 (단위: Hz)</li>
+        </ul>
       </div>
       <div class="card orange">
-        <h3>계층화의 개념</h3>
-        <p>하나의 일을 수행하기 위해 관련 기능들을 모아 그룹화한 구조. 각 계층은 인접한 <strong>하위 계층의 서비스를 이용</strong>하고, 바로 위 계층에 서비스를 제공한다.</p>
+        <h3>대역폭 (Bandwidth)</h3>
+        <p>신호가 가지고 있는 주파수 성분들의 범위.</p>
+        <p style="margin-top:8px;"><strong>대역폭 = 최고 주파수 − 최저 주파수</strong></p>
+        <p style="margin-top:8px;font-size:13px;">아날로그: <strong>Hz</strong> 단위 / 디지털: <strong>bps</strong> 단위로 표현</p>
       </div>
       <div class="card purple">
-        <h3>중간 노드의 동작 범위</h3>
-        <p>중간 노드(라우터 등)들은 <strong>3계층(네트워크 계층)까지</strong>만 동작하며, 종단 간 연결을 위한 상위 계층은 종단 시스템에서만 동작한다.</p>
+        <h3>채널 용량 공식 2가지</h3>
+        <ul>
+          <li><strong>나이퀴스트:</strong> 무잡음 채널 → C = 2W log₂L</li>
+          <li><strong>섀넌:</strong> 잡음 있는 채널 → C = W log₂(1+S/N)</li>
+        </ul>
       </div>
       <div class="card teal">
-        <h3>캡슐화 (Encapsulation)</h3>
-        <p>전송 데이터에 각 계층의 제어 정보(헤더)를 추가하여 다음 계층으로 전달하는 과정. <strong>2계층</strong>에서는 오류 제어를 위한 <strong>트레일러</strong>도 추가한다.</p>
+        <h3>전송 손상 3가지</h3>
+        <ul>
+          <li><strong>감쇠(Attenuation):</strong> 신호 크기가 거리에 따라 감소</li>
+          <li><strong>왜곡(Distortion):</strong> 신호의 모양/형태 변형</li>
+          <li><strong>잡음(Noise):</strong> 원하지 않는 신호 발생</li>
+        </ul>
       </div>
       <div class="card red">
-        <h3>데이터 단위</h3>
+        <h3>증폭기 vs 리피터</h3>
         <ul>
-          <li><strong>SDU</strong>: 상·하위 계층 간 인터페이스를 통해 전달되는 실제 정보</li>
-          <li><strong>PDU</strong>: 동일 계층 간에 운반(교환)되는 데이터<br><em>(PDU = SDU + 헤더)</em></li>
+          <li><strong>증폭기(Amplifier):</strong> 아날로그 신호 증폭 → 잡음도 함께 증폭</li>
+          <li><strong>리피터(Repeater):</strong> 디지털 신호 재생 → 비트 오류 발생 가능</li>
         </ul>
       </div>
     </div>
   </section>
 
-  <!-- ── OSI / TCP-IP 계층 비교 ── -->
-  <section id="layers">
-    <div class="section-title"><span class="icon">🔢</span> OSI 7계층 vs TCP/IP 5계층</div>
-    <div class="compare-wrap">
-      <div class="compare-grid">
-        <div class="compare-col osi">
-          <h4>OSI 7계층 (참조 모델)</h4>
-          <div class="layer-item"><span class="layer-num l7">7</span> 응용 계층 (Application)</div>
-          <div class="layer-item"><span class="layer-num l6">6</span> 표현 계층 (Presentation)</div>
-          <div class="layer-item"><span class="layer-num l5">5</span> 세션 계층 (Session)</div>
-          <div class="layer-item"><span class="layer-num l4">4</span> 전송 계층 (Transport)</div>
-          <div class="layer-item"><span class="layer-num l3">3</span> 네트워크 계층 (Network)</div>
-          <div class="layer-item"><span class="layer-num l2">2</span> 데이터링크 계층 (Data Link)</div>
-          <div class="layer-item"><span class="layer-num l1">1</span> 물리 계층 (Physical)</div>
-        </div>
-        <div class="compare-col tcpip">
-          <h4>TCP/IP 5계층 (실제 표준)</h4>
-          <div class="layer-item"><span class="layer-num l7">5</span> 응용 계층 (Application)</div>
-          <div class="layer-item" style="background:var(--bg);opacity:0.3;font-size:12px;padding:4px 12px;">↑ OSI 표현·세션 계층 포함 ↑</div>
-          <div class="layer-item" style="background:var(--bg);opacity:0.3;font-size:12px;padding:4px 12px;margin-bottom:6px;"></div>
-          <div class="layer-item"><span class="layer-num l4">4</span> 전송 계층 (Transport)</div>
-          <div class="layer-item"><span class="layer-num l3">3</span> 인터넷 계층 (Internet)</div>
-          <div class="layer-item"><span class="layer-num l2">2</span> 데이터 계층 (Data Link)</div>
-          <div class="layer-item"><span class="layer-num l1">1</span> 물리 계층 (Physical)</div>
-        </div>
-      </div>
-      <p style="margin-top:18px;font-size:13px;color:var(--text-sub);text-align:center;">
-        ⚠️ <strong>계층의 순서는 무조건 외워야 함!</strong> — 강의 강조 사항
-      </p>
-    </div>
-  </section>
+  <!-- ── 아날로그 신호 ── -->
+  <section id="analog">
+    <div class="section-title"><span class="icon">〰️</span> 아날로그 신호</div>
 
-  <!-- ── 각 계층 주요 기능 ── -->
-  <section id="functions">
-    <div class="section-title"><span class="icon">⚙️</span> 각 계층의 주요 기능</div>
-    <table class="layer-table">
-      <thead>
-        <tr>
-          <th>계층</th>
-          <th>이름</th>
-          <th>주요 기능</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="layer-num l7" style="display:inline-flex;">7</span></td>
-          <td><strong>응용 계층</strong><br><small style="color:var(--text-sub)">Application</small></td>
-          <td>사용자가 네트워크에 접속하는 것을 가능하게 하고, 사용자 인터페이스를 제공. 파일 전송·이메일 같은 종단 사용자 서비스 제공</td>
-        </tr>
-        <tr>
-          <td><span class="layer-num l6" style="display:inline-flex;">6</span></td>
-          <td><strong>표현 계층</strong><br><small style="color:var(--text-sub)">Presentation</small></td>
-          <td>데이터의 표현을 공통된 형식으로 변환, <strong>압축</strong>, <strong>암호화</strong> 기능 수행</td>
-        </tr>
-        <tr>
-          <td><span class="layer-num l5" style="display:inline-flex;">5</span></td>
-          <td><strong>세션 계층</strong><br><small style="color:var(--text-sub)">Session</small></td>
-          <td>특정 프로세스 간에 세션이라는 연결을 확립하고 유지. 응용 프로그램 간 데이터 동기화, 데이터 오류 검사 및 복구</td>
-        </tr>
-        <tr>
-          <td><span class="layer-num l4" style="display:inline-flex;">4</span></td>
-          <td><strong>전송 계층</strong><br><small style="color:var(--text-sub)">Transport</small></td>
-          <td><strong>종단 간 신뢰성 있는 데이터 전송</strong>. 종단 간 오류 제어, 흐름 제어</td>
-        </tr>
-        <tr>
-          <td><span class="layer-num l3" style="display:inline-flex;">3</span></td>
-          <td><strong>네트워크 계층</strong><br><small style="color:var(--text-sub)">Network</small></td>
-          <td>호스트 간의 데이터 전송 기능. <strong>데이터의 전송 경로 설정</strong> (라우팅)</td>
-        </tr>
-        <tr>
-          <td><span class="layer-num l2" style="display:inline-flex;">2</span></td>
-          <td><strong>데이터링크 계층</strong><br><small style="color:var(--text-sub)">Data Link</small></td>
-          <td><strong>인접 노드 사이</strong>의 데이터 전송 기능 수행. 인접 노드 사이의 오류 제어, 흐름 제어, 전송 제어. <strong>트레일러</strong> 추가</td>
-        </tr>
-        <tr>
-          <td><span class="layer-num l1" style="display:inline-flex;">1</span></td>
-          <td><strong>물리 계층</strong><br><small style="color:var(--text-sub)">Physical</small></td>
-          <td>물리적인 전송로를 제공. 전송 방식: 신호 형태, 케이블 형태 등 물리적인 전송 매체를 통해 데이터를 목적지까지 전송하기 위해 필요한 기능들을 제어</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- ── 주요 개념 ── -->
-  <section id="concepts">
-    <div class="section-title"><span class="icon">💡</span> 주요 개념</div>
-    <div class="card-grid">
+    <div class="card-grid" style="margin-bottom:20px;">
       <div class="card">
-        <h3>프로토콜 (Protocol)</h3>
-        <p>각 계층의 프로토콜은 <strong>동일 계층 사이(peer-to-peer)</strong>에 존재한다. 같은 계층끼리 약속된 규칙으로 통신한다.</p>
+        <h3>정현파 (Sine Wave)</h3>
+        <p>단순 아날로그 신호의 기본 형태. 복합 아날로그 신호는 여러 정현파의 합.</p>
+        <p style="margin-top:8px;font-size:13px;font-weight:700;text-align:center;padding:8px;background:var(--primary-light);border-radius:6px;color:var(--primary);">y(t) = A · sin(2πft + φ)</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--text-sub);">A: 진폭 · f: 주파수 · φ: 위상</p>
       </div>
       <div class="card green">
-        <h3>인터페이스 (Interface)</h3>
-        <p><strong>동일한 장치 내에서</strong> 다른 계층과 상호작용하는 것. 같은 장치 안의 인접 계층 간 연결 방식.</p>
+        <h3>진폭 (Amplitude)</h3>
+        <p>파형의 높이를 나타낸 것. 물리적으로는 <strong>신호의 세기</strong>를 의미한다.</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--text-sub);">단위: 볼트(V), 진폭이 클수록 신호가 강하다.</p>
       </div>
       <div class="card orange">
-        <h3>서비스 프리미티브<br>(Service Primitive)</h3>
-        <p>인터페이스를 통해 이루어지는 계층 간 상호 작용을 추상화하여 단순한 모습으로 제공하기 위한 <strong>서비스 단위</strong>.</p>
-      </div>
-      <div class="card purple">
-        <h3>SDU vs PDU</h3>
+        <h3>주파수와 주기</h3>
         <ul>
-          <li><strong>SDU</strong> (Service Data Unit): 상·하위 계층 간 인터페이스를 통해 전달되는 실제 정보</li>
-          <li><strong>PDU</strong> (Protocol Data Unit): 동일 계층 간에 운반되는 데이터<br><code>PDU = SDU + 헤더</code></li>
+          <li><strong>주기(Period) T</strong>: 신호가 한 사이클을 완성하는 데 걸리는 시간 (단위: 초)</li>
+          <li><strong>주파수(Frequency) f</strong>: 초당 반복되는 사이클의 수 (단위: Hz)</li>
+          <li style="margin-top:6px;font-weight:700;">T = 1/f</li>
         </ul>
       </div>
-      <div class="card teal">
-        <h3>캡슐화 (Encapsulation)</h3>
-        <p>전송 데이터에 각 계층의 요구 조건과 처리 정보를 포함하는 <strong>헤더</strong>를 추가하며 하위 계층으로 전달. 2계층은 <strong>트레일러</strong>도 추가.</p>
-      </div>
-      <div class="card red">
-        <h3>역캡슐화 (Decapsulation)</h3>
-        <p>수신 측에서 각 계층이 자신의 헤더를 제거하며 상위 계층으로 데이터를 전달하는 과정. 캡슐화의 반대 과정.</p>
+      <div class="card purple">
+        <h3>위상 (Phase)</h3>
+        <p>시각 0시에 대한 파형의 <strong>상대적인 위치</strong>.</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--text-sub);">단위: 도(Degree) 또는 라디안(Radian)으로 측정.</p>
+        <p style="margin-top:6px;font-size:13px;color:var(--text-sub);">예: 위상이 90° 차이나면 파형이 1/4주기 앞서거나 뒤처짐.</p>
       </div>
     </div>
 
-    <!-- 캡슐화 다이어그램 -->
-    <div class="capsule-diagram" style="margin-top:20px;">
-      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px;">캡슐화 과정 (송신 측)</h3>
-      <div class="capsule-row">
-        <span class="capsule-label l7" style="background:#dc2626;">7 응용</span>
-        <span class="capsule-data">데이터</span>
-        <span style="font-size:13px;color:var(--text-sub);">← 사용자 데이터 생성</span>
+    <div class="formula-box">
+      <h3>대역폭과 주파수 스펙트럼</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <p style="font-size:14px;font-weight:700;margin-bottom:8px;">복합 신호</p>
+          <p style="font-size:13px;color:var(--text-sub);line-height:1.8;">데이터 통신에서는 주파수가 다른 다수의 정현파가 합쳐진 <strong>복합 신호</strong>를 사용한다. (전화, 팩스, 모뎀 등)<br>
+          파형만으로는 주파수 성분 파악이 어려우므로 <strong>푸리에 해석(Fourier Analysis)</strong>을 이용해 주파수 영역으로 표현한다.</p>
+        </div>
+        <div>
+          <p style="font-size:14px;font-weight:700;margin-bottom:8px;">대역폭 계산</p>
+          <div class="formula" style="font-size:15px;">대역폭 = f<sub>최고</sub> − f<sub>최저</sub></div>
+          <p style="font-size:13px;color:var(--text-sub);">예: 주파수 성분이 1000~5000Hz라면<br>→ 대역폭 = 5000 − 1000 = <strong>4000 Hz</strong></p>
+          <p style="margin-top:10px;font-size:13px;color:var(--text-sub);"><strong>유효 대역폭(Effective Bandwidth):</strong> 무시해도 무방한 범위 밖 신호 성분을 제외한 실질적 대역폭. 예) 사람 음성: 300~3300Hz → 유효 대역폭 3000Hz</p>
+        </div>
       </div>
-      <div class="capsule-row">
-        <span class="capsule-label l6" style="background:#7c3aed;">6 표현</span>
-        <span class="capsule-data" style="background:var(--purple-light);">H6</span>
-        <span class="capsule-data">데이터</span>
-      </div>
-      <div class="capsule-row">
-        <span class="capsule-label l5" style="background:#d97706;">5 세션</span>
-        <span class="capsule-data" style="background:var(--warning-light);">H5</span>
-        <span class="capsule-data" style="background:var(--purple-light);">H6</span>
-        <span class="capsule-data">데이터</span>
-      </div>
-      <div class="capsule-row">
-        <span class="capsule-label l4" style="background:#16a34a;">4 전송</span>
-        <span class="capsule-data" style="background:var(--success-light);">H4</span>
-        <span class="capsule-data">…</span>
-        <span style="font-size:13px;color:var(--text-sub);">→ 세그먼트 (Segment)</span>
-      </div>
-      <div class="capsule-row">
-        <span class="capsule-label l3" style="background:#2563eb;">3 네트워크</span>
-        <span class="capsule-data" style="background:var(--primary-light);">H3</span>
-        <span class="capsule-data">…</span>
-        <span style="font-size:13px;color:var(--text-sub);">→ 패킷 (Packet)</span>
-      </div>
-      <div class="capsule-row">
-        <span class="capsule-label l2" style="background:#0d9488;">2 데이터링크</span>
-        <span class="capsule-data" style="background:var(--teal-light);">H2</span>
-        <span class="capsule-data">…</span>
-        <span class="capsule-data" style="background:var(--teal-light);">T2</span>
-        <span style="font-size:13px;color:var(--text-sub);">→ 프레임 (Frame) + 트레일러</span>
-      </div>
-      <div class="capsule-row">
-        <span class="capsule-label l1" style="background:#6b7280;">1 물리</span>
-        <span class="capsule-data">비트(Bit) 스트림으로 전송</span>
+      <div style="margin-top:16px;background:var(--warning-light);border-radius:8px;padding:12px;">
+        <p style="font-size:13px;"><strong>전송 매체의 대역폭:</strong> 전송 매체는 무한대의 대역폭을 갖지 않으므로 모든 주파수 성분을 통과시키지 못한다. 신호의 대역폭과 전송 매체의 대역폭을 구분해서 이해해야 한다.</p>
       </div>
     </div>
+  </section>
+
+  <!-- ── 디지털 신호 ── -->
+  <section id="digital">
+    <div class="section-title"><span class="icon">📶</span> 디지털 신호</div>
+
+    <div class="card-grid" style="margin-bottom:20px;">
+      <div class="card">
+        <h3>비주기적 특성</h3>
+        <p>대부분의 디지털 신호는 <strong>비주기적</strong>이므로 주기나 주파수를 사용할 수 없다.</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--text-sub);">대신 <strong>비트 간격</strong>과 <strong>비트율</strong>을 사용하여 표현한다.</p>
+      </div>
+      <div class="card green">
+        <h3>비트 간격 (Bit Interval)</h3>
+        <p>비트 하나를 전송하는 데 필요한 시간.</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--text-sub);">주기(Period)에 대응하는 디지털 신호의 개념.</p>
+        <p style="margin-top:6px;font-size:13px;font-weight:700;">비트 간격 = 1 / 비트율</p>
+      </div>
+      <div class="card orange">
+        <h3>비트율 (Bit Rate)</h3>
+        <p>1초 동안 전송된 비트 수를 의미하는 속도 측정.</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--text-sub);">주파수(Frequency)에 대응하는 개념. 단위: <strong>bps</strong> (bits per second)</p>
+        <p style="margin-top:6px;font-size:13px;">예) 비트율 8bps → 비트 간격 = 1/8 = 0.125초</p>
+      </div>
+      <div class="card purple">
+        <h3>Hz vs bps</h3>
+        <p>전송 매체의 <strong>동일한 성질</strong>을 서로 다른 척도로 나타낸 것.</p>
+        <ul style="margin-top:8px;">
+          <li>아날로그 신호 전송 → <strong>Hz</strong> (아날로그 대역폭)</li>
+          <li>디지털 신호 전송 → <strong>bps</strong> (디지털 대역폭)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="background:var(--card-bg);">
+      <h3>푸리에 해석과 디지털 신호</h3>
+      <p style="font-size:14px;color:var(--text-sub);line-height:1.8;">비주기 신호는 주파수 영역에서 <strong>무한 개의 주파수 성분</strong>을 더해야만 만들 수 있다 (푸리에 해석). 즉, 디지털 신호를 완벽하게 전송하려면 이론상 무한한 대역폭이 필요하지만, 실제 전송 매체는 대역폭이 제한되어 있다.</p>
+    </div>
+  </section>
+
+  <!-- ── 채널 용량 ── -->
+  <section id="capacity">
+    <div class="section-title"><span class="icon">📊</span> 채널 용량 (Channel Capacity)</div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <h3>채널 용량이란?</h3>
+      <p>전송 매체가 전송할 수 있는 <strong>최대 비트율</strong>. 다음 3가지 요소에 의해 결정된다.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px;">
+        <div style="background:var(--primary-light);border-radius:8px;padding:12px;">
+          <strong style="font-size:13px;color:var(--primary);">① 대역폭</strong>
+          <p style="font-size:13px;color:var(--text-sub);margin-top:4px;">아날로그: Hz, 디지털: bps</p>
+        </div>
+        <div style="background:var(--success-light);border-radius:8px;padding:12px;">
+          <strong style="font-size:13px;color:var(--success);">② 신호 준위 수 (L)</strong>
+          <p style="font-size:13px;color:var(--text-sub);margin-top:4px;">부호화 방법에 따른 신호 레벨 수</p>
+          <p style="font-size:13px;font-weight:700;color:var(--success);margin-top:6px;">2ⁿ = L &nbsp;→&nbsp; n = log₂L</p>
+          <p style="font-size:12px;color:var(--text-sub);margin-top:2px;">n: 비트 수, L: 신호 레벨 수</p>
+        </div>
+        <div style="background:var(--danger-light);border-radius:8px;padding:12px;">
+          <strong style="font-size:13px;color:var(--danger);">③ 채널 품질</strong>
+          <p style="font-size:13px;color:var(--text-sub);margin-top:4px;">잡음의 정도 (S/N비)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="formula-box">
+      <h3>① 나이퀴스트 비트율 (무잡음 채널)</h3>
+      <div class="formula">C = 2W × log₂L</div>
+      <div class="formula-note">
+        <span><strong>C</strong>: 채널 용량 (bps)</span>
+        <span><strong>W</strong>: 채널의 대역폭 (Hz)</span>
+        <span><strong>L</strong>: 신호 레벨 수 (부호화 방법)</span>
+      </div>
+      <p style="margin-top:12px;font-size:13px;color:var(--text-sub);">나이퀴스트 비트율은 이론적인 <strong>최대 전송율</strong>을 정의한다. 무잡음 채널을 가정한 공식이다.</p>
+    </div>
+
+    <div class="formula-box">
+      <h3>② 섀넌 용량 (잡음이 있는 채널)</h3>
+      <div class="formula">C = W × log₂(1 + S/N)</div>
+      <div class="formula-note">
+        <span><strong>C</strong>: 채널 용량 (bps)</span>
+        <span><strong>W</strong>: 채널의 대역폭 (Hz)</span>
+        <span><strong>S/N</strong>: 신호 대 잡음비 (Signal-to-Noise Ratio, SNR)</span>
+      </div>
+      <div style="margin-top:16px;background:var(--warning-light);border-radius:8px;padding:14px;">
+        <p style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--warning);">데시벨(dB) 공식</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:12px;">
+          <div style="background:var(--card-bg);border-radius:8px;padding:10px;text-align:center;">
+            <p style="font-size:11px;color:var(--text-sub);margin-bottom:4px;">전력비</p>
+            <p style="font-size:14px;font-weight:700;color:var(--warning);">dB = 10 × log₁₀(P₂/P₁)</p>
+          </div>
+          <div style="background:var(--card-bg);border-radius:8px;padding:10px;text-align:center;">
+            <p style="font-size:11px;color:var(--text-sub);margin-bottom:4px;">전압비</p>
+            <p style="font-size:14px;font-weight:700;color:var(--warning);">dB = 20 × log₁₀(V₂/V₁)</p>
+          </div>
+          <div style="background:var(--card-bg);border-radius:8px;padding:10px;text-align:center;">
+            <p style="font-size:11px;color:var(--text-sub);margin-bottom:4px;">전류비</p>
+            <p style="font-size:14px;font-weight:700;color:var(--warning);">dB = 20 × log₁₀(I₂/I₁)</p>
+          </div>
+        </div>
+        <div style="background:var(--card-bg);border-radius:8px;padding:10px;font-size:13px;color:var(--text-sub);">
+          <strong style="color:var(--warning);">SNR dB 변환:</strong> SNR<sub>dB</sub> = 10 × log₁₀(S/N)<br>
+          <span style="margin-left:4px;">• 10dB → S/N = 10 &nbsp;|&nbsp; 20dB → S/N = 100 &nbsp;|&nbsp; 30dB → S/N = 1000</span><br>
+          <span style="margin-left:4px;">• 예) P₁=10W, P₂=100W → 10×log₁₀(100/10) = <strong>10dB</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card teal">
+      <h3>채널 용량을 향상시키는 방법</h3>
+      <ul>
+        <li>대역폭(W)을 늘린다.</li>
+        <li>신호 크기(S)를 크게 한다.</li>
+        <li>잡음 크기(N)를 작게 한다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── 전송 손상 ── -->
+  <section id="noise">
+    <div class="section-title"><span class="icon">⚡</span> 전송 손상 (Transmission Impairment)</div>
+
+    <p style="font-size:14px;color:var(--text-sub);margin-bottom:20px;">신호가 목적지로 전달되는 과정에서 여러 가지 이유로 인해 신호에 손상이 발생한다.</p>
+
+    <!-- 감쇠 -->
+    <div class="card" style="margin-bottom:16px;">
+      <h3>① 감쇠 (Attenuation)</h3>
+      <p>신호의 크기가 <strong>거리에 따라 작아지는 현상</strong>.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div style="background:var(--bg);border-radius:8px;padding:12px;">
+          <strong style="font-size:13px;">유선 매체</strong>
+          <p style="font-size:13px;color:var(--text-sub);margin-top:4px;">신호의 세기가 거리에 따라 처음에는 급격하게, 점차 완만하게 감소</p>
+        </div>
+        <div style="background:var(--bg);border-radius:8px;padding:12px;">
+          <strong style="font-size:13px;">무선 매체</strong>
+          <p style="font-size:13px;color:var(--text-sub);margin-top:4px;">거리와 주변 대기 환경에도 영향을 받음. 자유공간에서 손실 L은 <strong>거리의 제곱에 비례</strong></p>
+        </div>
+        <div style="background:var(--primary-light);border-radius:8px;padding:12px;">
+          <strong style="font-size:13px;color:var(--primary);">증폭기 (Amplifier)</strong>
+          <p style="font-size:13px;color:var(--text-sub);margin-top:4px;">아날로그 신호 증폭 → <strong>잡음도 함께 증폭</strong></p>
+        </div>
+        <div style="background:var(--success-light);border-radius:8px;padding:12px;">
+          <strong style="font-size:13px;color:var(--success);">리피터 (Repeater)</strong>
+          <p style="font-size:13px;color:var(--text-sub);margin-top:4px;">디지털 신호 재생 → <strong>비트 오류 발생 가능</strong></p>
+        </div>
+      </div>
+      <div style="margin-top:12px;background:var(--bg);border-radius:8px;padding:12px;">
+        <strong style="font-size:13px;">감쇠량 dB 표현</strong>
+        <p style="font-size:13px;font-weight:700;text-align:center;padding:8px;margin-top:6px;color:var(--primary);">dB = 10 × log₁₀(P₂/P₁)</p>
+        <p style="font-size:12px;color:var(--text-sub);">P₁: 송신 전력, P₂: 수신 전력 (P₂ &lt; P₁ → dB 값은 음수)</p>
+        <p style="font-size:12px;color:var(--text-sub);margin-top:4px;">예) 전력이 절반으로 감소 → 10×log₁₀(0.5) = <strong>−3dB</strong></p>
+      </div>
+    </div>
+
+    <!-- 왜곡 -->
+    <div class="card orange" style="margin-bottom:16px;">
+      <h3>② 왜곡 (Distortion)</h3>
+      <p>신호의 모양이나 형태가 <strong>변형되는 것</strong>.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div style="background:var(--bg);border-radius:8px;padding:12px;">
+          <strong style="font-size:13px;">감쇠 왜곡</strong>
+          <p style="font-size:13px;color:var(--text-sub);margin-top:4px;">주파수 스펙트럼에 따라 감쇠의 정도가 균일하지 못해 발생. <strong>디지털보다 아날로그에서 심각</strong>.<br>등화기(Equalizer)로 보완.</p>
+        </div>
+        <div style="background:var(--bg);border-radius:8px;padding:12px;">
+          <strong style="font-size:13px;">지연 왜곡</strong>
+          <p style="font-size:13px;color:var(--text-sub);margin-top:4px;">신호의 전달속도가 주파수에 따라 변하는 현상. <strong>디지털 신호에서 심각</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 잡음 -->
+    <div class="card red" style="margin-bottom:20px;">
+      <h3>③ 잡음 (Noise)</h3>
+      <p>신호를 전송하는 과정에서 발생하는 <strong>원하지 않는 신호</strong>. 4가지 종류가 있다.</p>
+    </div>
+
+    <div class="noise-grid">
+      <div class="noise-card">
+        <h3>열잡음 (Thermal Noise)</h3>
+        <p>전도체 내부의 전자들이 <strong>열에 의해 불규칙하게 움직이면서</strong> 나타나는 잡음. 모든 주파수 범위에 균일한 전력 스펙트럼을 가지며, <strong>제거될 수 없다.</strong></p>
+        <p style="margin-top:8px;font-size:12px;font-weight:700;color:var(--danger);">= 백색잡음(White Noise)</p>
+        <div style="margin-top:10px;background:var(--danger-light);border-radius:6px;padding:8px;text-align:center;">
+          <p style="font-size:13px;font-weight:700;color:var(--danger);">N = K × T × W</p>
+          <p style="font-size:11px;color:var(--text-sub);margin-top:4px;">K: 볼츠만 상수 · T: 절대온도(K) · W: 대역폭(Hz)</p>
+        </div>
+      </div>
+      <div class="noise-card orange">
+        <h3>상호 변조 잡음<br>(Inter-modulation Noise)</h3>
+        <p>동일한 전송 매체에서 서로 다른 주파수들이 전송될 때 주파수의 합·차·배수에 해당하는 <strong>새로운 주파수가 생성</strong>되어 발생하는 잡음. 통신 시스템의 선형성이 불완전하기 때문에 발생.</p>
+      </div>
+      <div class="noise-card purple">
+        <h3>누화 (Crosstalk)</h3>
+        <p>서로 다른 신호 채널의 전자기파가 <strong>서로 영향을 주어 발생</strong>하는 현상. 전화 통화 중 다른 사람의 말이 약하게 들리는 <strong>혼선</strong>과 같은 현상.</p>
+      </div>
+      <div class="noise-card teal">
+        <h3>충격 잡음 (Impulse Noise)</h3>
+        <p>번개, 기계적 충격 등 <strong>예측할 수 없는 외부 요인</strong>에 의해 발생하는 돌발적인 잡음. 순간적이지만 크기가 크다. <strong>디지털 전송에서 다수 비트의 집단적 오류</strong>를 일으킬 수 있다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 예제 풀이 ── -->
+  <section id="examples">
+    <div class="section-title"><span class="icon">📝</span> 예제 풀이</div>
+
+    <!-- 예제 3-1 -->
+    <div class="example-box">
+      <div class="ex-title">예제 3-1 &nbsp;|&nbsp; 정현파의 진폭·주파수·위상 구하기</div>
+      <div class="ex-given">
+        다음 조건의 파형에 대한 신호 식을 써보시오.<br>
+        ① A=3, f=5Hz, φ=0°&nbsp;&nbsp; ② A=6, f=10Hz, φ=0°&nbsp;&nbsp; ③ A=4, f=3Hz, φ=180°
+      </div>
+      <div class="ex-answer">
+        ① s(t) = 3 sin(2π·5·t + 0°) = <strong>3 sin(10πt)</strong><br>
+        ② s(t) = 6 sin(2π·10·t + 0°) = <strong>6 sin(20πt)</strong><br>
+        ③ s(t) = 4 sin(2π·3·t + 180°) = <strong>4 sin(6πt + 180°)</strong>
+      </div>
+    </div>
+
+    <!-- 예제 3-2 -->
+    <div class="example-box">
+      <div class="ex-title">예제 3-2 &nbsp;|&nbsp; 주파수 영역에서 대역폭 계산</div>
+      <div class="ex-given">
+        어떤 신호의 주파수 성분이 1Hz ~ 11Hz 범위에 존재할 때, 대역폭을 구하시오.
+      </div>
+      <div class="ex-answer">
+        대역폭 = 최고 주파수 − 최저 주파수<br>
+        = 11 − 1 = <strong>10 Hz</strong>
+      </div>
+    </div>
+
+    <!-- 예제 3-3 -->
+    <div class="example-box">
+      <div class="ex-title">예제 3-3 &nbsp;|&nbsp; 비트율로 비트 간격 계산</div>
+      <div class="ex-given">
+        디지털 신호의 비트율이 2,000 bps일 때 비트 간격을 계산하시오.
+      </div>
+      <div class="ex-answer">
+        비트 간격 = 1 / 비트율 = 1 / 2,000 = 0.0005초<br>
+        = <strong>500 μs</strong>
+      </div>
+    </div>
+
+    <!-- 예제 3-4 -->
+    <div class="example-box">
+      <div class="ex-title">예제 3-4 &nbsp;|&nbsp; 나이퀴스트 비트율 계산</div>
+      <div class="ex-given">
+        디지털 신호 레벨 수 L = 8이고, 채널 대역폭이 1 KHz일 때 이론적 최대 전송율을 계산하시오.
+      </div>
+      <div class="ex-answer">
+        C = 2W log₂L = 2 × 1,000 × log₂8 = 2 × 1,000 × 3<br>
+        = <strong>6,000 bps = 6 Kbps</strong>
+      </div>
+    </div>
+
+    <!-- 예제 3-5 -->
+    <div class="example-box">
+      <div class="ex-title">예제 3-5 &nbsp;|&nbsp; 나이퀴스트 — 신호 레벨 수 역산</div>
+      <div class="ex-given">
+        채널 대역폭이 400 Hz이고 원하는 전송율이 3,200 bps일 때 필요한 신호 레벨 수 L을 구하시오.<br>
+        (단, 잡음의 영향은 없다고 가정)
+      </div>
+      <div class="ex-answer">
+        C = 2W log₂L &nbsp;→&nbsp; 3,200 = 2 × 400 × log₂L<br>
+        3,200 = 800 × log₂L &nbsp;→&nbsp; log₂L = 4 &nbsp;→&nbsp; L = 2⁴ = <strong>16</strong>
+      </div>
+    </div>
+
+    <!-- 예제 3-6 -->
+    <div class="example-box">
+      <div class="ex-title">예제 3-6 &nbsp;|&nbsp; 섀넌 용량 계산</div>
+      <div class="ex-given">
+        대역폭 3 KHz, SNR = 30 dB인 음성급 채널의 채널 용량을 계산하시오.
+      </div>
+      <div class="ex-answer">
+        ① SNR 변환: 30 = 10 × log₁₀(S/N) → S/N = 10³ = 1,000<br>
+        ② C = W log₂(1 + S/N) = 3,000 × log₂(1,001)<br>
+        &nbsp;&nbsp;&nbsp;= 3,000 × 9.967 ≈ <strong>29,901 bps ≈ 29.9 Kbps</strong>
+      </div>
+    </div>
+
+    <!-- 예제 3-7 -->
+    <div class="example-box">
+      <div class="ex-title">예제 3-7 &nbsp;|&nbsp; 감쇠량 dB 계산</div>
+      <div class="ex-given">
+        신호가 전송 매체를 통해 목적지에 도착했을 때 전력이 절반으로 감소하였다. 신호 감쇠를 계산하라.
+      </div>
+      <div class="ex-answer">
+        P₂ = 0.5 × P₁ 이므로<br>
+        dB = 10 × log₁₀(P₂/P₁) = 10 × log₁₀(0.5)<br>
+        = 10 × (−0.301) = <strong>−3 dB</strong><br>
+        <span style="font-size:12px;">(음수 = 신호 손실, 전력이 절반 감소 시 항상 약 −3 dB)</span>
+      </div>
+    </div>
+
   </section>
 
   <!-- ── 핵심 캐치 ── -->
   <section id="catch">
     <div class="section-title"><span class="icon">🔥</span> 핵심 캐치 & 시험 포인트</div>
 
-    <div class="exam-box">
-      <div class="exam-title">📝 중간고사 예상 문제 (강의 직접 언급)</div>
+    <div class="catch-box">
+      <div class="catch-title">⭐ 나이퀴스트 vs 섀넌 — 구분법</div>
       <ul>
-        <li>OSI 7계층을 순서대로 나열하시오.</li>
-        <li>OSI 7계층을 나열하고 <strong>3개 계층(임의 선택)</strong>을 설명하라.</li>
+        <li><strong>나이퀴스트:</strong> <u>무잡음 채널</u>, L(신호 레벨 수)가 변수 → C = 2W log₂L</li>
+        <li><strong>섀넌:</strong> <u>잡음 있는 채널</u>, S/N비가 변수 → C = W log₂(1 + S/N)</li>
+        <li>실제 채널 용량 = min(나이퀴스트, 섀넌)</li>
       </ul>
     </div>
 
     <div class="catch-box">
-      <div class="catch-title">⭐ 계층 순서 암기법</div>
-      <p>물 → 데 → 네 → 전 → 세 → 표 → 응<br>
-      <strong>물데네전세표응</strong> (아래→위 순서)<br>
-      1물리 · 2데이터링크 · 3네트워크 · 4전송 · 5세션 · 6표현 · 7응용</p>
+      <div class="catch-title">⭐ dB 변환 공식</div>
+      <p>SNR<sub>dB</sub> = 10 × log₁₀(S/N)</p>
+      <ul style="margin-top:8px;">
+        <li>10dB → S/N = 10</li>
+        <li>20dB → S/N = 100</li>
+        <li>30dB → S/N = 1000</li>
+      </ul>
     </div>
 
     <div class="catch-box">
-      <div class="catch-title">⭐ OSI vs TCP/IP 핵심 차이</div>
-      <p>OSI는 <strong>참조 모델</strong>(이해·설명 기준), TCP/IP는 <strong>실제 표준</strong>. OSI가 1984년 ISO에서 먼저 나왔으나, 실제 인터넷은 TCP/IP 기반으로 동작한다.</p>
+      <div class="catch-title">⭐ 아날로그 신호 3요소 (정현파)</div>
+      <p>진폭(Amplitude) · 주파수(Frequency) · 위상(Phase)<br>
+      → 이 3가지로 정현파를 완전히 정의할 수 있다.</p>
     </div>
 
     <div class="catch-box">
-      <div class="catch-title">⭐ 오류 제어 범위 구분</div>
-      <p>
-        • <strong>데이터링크 계층(2)</strong>: <u>인접 노드 사이</u>의 오류 제어, 흐름 제어<br>
-        • <strong>전송 계층(4)</strong>: <u>종단 간(end-to-end)</u>의 오류 제어, 흐름 제어
-      </p>
+      <div class="catch-title">⭐ 열잡음의 특징</div>
+      <p>모든 주파수 범위에서 균일 → <strong>백색잡음(White Noise)</strong> 불림.<br>
+      <strong>제거 불가능</strong>하다는 점이 핵심!</p>
     </div>
 
     <div class="catch-box">
-      <div class="catch-title">⭐ 트레일러는 2계층(데이터링크)에서만!</div>
-      <p>헤더는 모든 계층에서 추가하지만, <strong>트레일러(오류 제어용)</strong>는 2계층 데이터링크 계층에서만 추가한다.</p>
+      <div class="catch-title">⭐ 감쇠 왜곡 vs 지연 왜곡 — 어디서 심각한가?</div>
+      <p>• <strong>감쇠 왜곡:</strong> <u>아날로그 신호</u>에서 더 심각<br>
+      • <strong>지연 왜곡:</strong> <u>디지털 신호</u>에서 더 심각</p>
     </div>
 
     <div class="catch-box">
-      <div class="catch-title">⭐ 중간 노드는 3계층까지만 동작</div>
-      <p>라우터 같은 중간 노드는 <strong>1~3계층</strong>(물리·데이터링크·네트워크)까지만 처리한다. 4~7계층은 종단 시스템(호스트)에서만 동작한다.</p>
+      <div class="catch-title">⭐ 증폭기 vs 리피터 비교</div>
+      <p>• <strong>증폭기(Amplifier):</strong> 아날로그 신호 처리, <u>잡음도 함께 증폭</u><br>
+      • <strong>리피터(Repeater):</strong> 디지털 신호 처리, <u>신호를 재생(재생성)</u>, 비트 오류 가능</p>
+    </div>
+
+    <div class="catch-box">
+      <div class="catch-title">⭐ 감쇠 −3dB의 의미</div>
+      <p>전력이 <strong>절반으로 감소</strong>하면 항상 약 <strong>−3 dB</strong>이다.<br>
+      10 × log₁₀(0.5) = 10 × (−0.301) ≈ −3 dB<br>
+      → dB 값이 음수면 신호 손실, 양수면 신호 증폭</p>
+    </div>
+
+    <div class="catch-box">
+      <div class="catch-title">⭐ 신호 준위 수 L과 비트 수 n의 관계</div>
+      <p>2ⁿ = L &nbsp;→&nbsp; n = log₂L<br>
+      예) L=8 (8가지 신호 레벨) → n = log₂8 = 3비트<br>
+      예) L=16 → n = 4비트 &nbsp;|&nbsp; L=2 → n = 1비트</p>
+    </div>
+
+    <div class="catch-box">
+      <div class="catch-title">⭐ 나이퀴스트로 L 역산하는 법</div>
+      <p>C = 2W log₂L 에서 L을 구하려면:<br>
+      log₂L = C / (2W) → L = 2^(C/2W)<br>
+      예) C=3200bps, W=400Hz → log₂L = 4 → <strong>L = 16</strong></p>
     </div>
   </section>
 
@@ -640,44 +906,79 @@
     <div class="section-title"><span class="icon">📚</span> 핵심 키워드</div>
     <div class="keyword-grid">
       <div class="keyword-card">
-        <div class="kw-en">OSI Reference Model</div>
-        <div class="kw-ko">OSI 참조 모델</div>
-        <div class="kw-def">1984년 ISO에서 이기종 컴퓨터 간 통신 표준화를 위해 개발한 7계층 네트워크 구조 모델. 실제 프로토콜은 아니며 참조·이해용 기준 모델.</div>
+        <div class="kw-en">Analog Signal</div>
+        <div class="kw-ko">아날로그 신호</div>
+        <div class="kw-def">연속적인 파형으로 시간에 따라 연속적으로 변화하는 신호. 주기적 아날로그 신호의 기본 형태는 정현파(Sine Wave).</div>
       </div>
       <div class="keyword-card green">
-        <div class="kw-en">Protocol</div>
-        <div class="kw-ko">프로토콜</div>
-        <div class="kw-def">동일 계층(peer-to-peer) 사이에 존재하는 통신 규약. 서로 다른 시스템 간에 데이터를 교환하기 위한 규칙의 집합.</div>
-      </div>
-      <div class="keyword-card purple">
-        <div class="kw-en">Interface</div>
-        <div class="kw-ko">인터페이스</div>
-        <div class="kw-def">동일한 장치 내에서 인접한 계층들이 상호 작용하는 방식. 같은 기계 안에서 계층 간 통신 방법.</div>
-      </div>
-      <div class="keyword-card teal">
-        <div class="kw-en">Service Primitive</div>
-        <div class="kw-ko">서비스 프리미티브</div>
-        <div class="kw-def">인터페이스를 통한 계층 간 상호 작용을 추상화한 서비스 단위. 계층 간 교환되는 기본적인 서비스 요청/응답 형식.</div>
+        <div class="kw-en">Digital Signal</div>
+        <div class="kw-ko">디지털 신호</div>
+        <div class="kw-def">이산적인 파형으로 순간적으로 변화하는 신호. 대부분 비주기적이며 비트 간격과 비트율로 표현한다.</div>
       </div>
       <div class="keyword-card orange">
-        <div class="kw-en">Encapsulation / Decapsulation</div>
-        <div class="kw-ko">캡슐화 / 역캡슐화</div>
-        <div class="kw-def">캡슐화: 송신 시 각 계층이 헤더(+트레일러)를 추가하는 과정. 역캡슐화: 수신 시 각 계층이 자신의 헤더를 제거하는 과정.</div>
+        <div class="kw-en">Amplitude</div>
+        <div class="kw-ko">진폭</div>
+        <div class="kw-def">파형의 높이. 신호의 세기를 의미한다. 정현파를 정의하는 3요소 중 하나(진폭·주파수·위상).</div>
+      </div>
+      <div class="keyword-card purple">
+        <div class="kw-en">Frequency / Period</div>
+        <div class="kw-ko">주파수 / 주기</div>
+        <div class="kw-def">주파수(f): 초당 반복되는 사이클 수(Hz). 주기(T): 한 사이클 완성에 걸리는 시간(초). T = 1/f.</div>
+      </div>
+      <div class="keyword-card teal">
+        <div class="kw-en">Phase</div>
+        <div class="kw-ko">위상</div>
+        <div class="kw-def">시각 0시에 대한 파형의 상대적인 위치. 도(°) 또는 라디안(rad)으로 측정.</div>
       </div>
       <div class="keyword-card red">
-        <div class="kw-en">SDU (Service Data Unit)</div>
-        <div class="kw-ko">서비스 데이터 단위</div>
-        <div class="kw-def">상위 계층과 하위 계층 간의 인터페이스를 통해 전달되는 실제 정보(페이로드).</div>
+        <div class="kw-en">Bandwidth</div>
+        <div class="kw-ko">대역폭</div>
+        <div class="kw-def">신호가 가진 주파수 성분의 범위(최고 - 최저 주파수). 아날로그: Hz, 디지털: bps로 표현.</div>
       </div>
       <div class="keyword-card">
-        <div class="kw-en">PDU (Protocol Data Unit)</div>
-        <div class="kw-ko">프로토콜 데이터 단위</div>
-        <div class="kw-def">동일 계층 간에 운반(교환)되는 데이터. PDU = SDU + 헤더. 계층마다 다른 이름(패킷, 프레임, 비트 등)으로 불린다.</div>
+        <div class="kw-en">Bit Rate / Bit Interval</div>
+        <div class="kw-ko">비트율 / 비트 간격</div>
+        <div class="kw-def">비트율: 1초간 전송된 비트 수(bps). 비트 간격: 비트 1개 전송 시간. 디지털에서 주파수·주기에 대응하는 개념.</div>
       </div>
       <div class="keyword-card green">
-        <div class="kw-en">Header / Trailer</div>
-        <div class="kw-ko">헤더 / 트레일러</div>
-        <div class="kw-def">헤더: 각 계층이 캡슐화 시 추가하는 제어 정보. 트레일러: 2계층(데이터링크)에서 오류 제어를 위해 데이터 뒤에 추가하는 정보.</div>
+        <div class="kw-en">Nyquist Bit Rate</div>
+        <div class="kw-ko">나이퀴스트 비트율</div>
+        <div class="kw-def">무잡음 채널의 이론적 최대 전송율. C = 2W log₂L. W: 대역폭(Hz), L: 신호 레벨 수.</div>
+      </div>
+      <div class="keyword-card orange">
+        <div class="kw-en">Shannon Capacity</div>
+        <div class="kw-ko">섀넌 용량</div>
+        <div class="kw-def">잡음이 있는 채널의 최대 전송율. C = W log₂(1+S/N). SNR이 높을수록 용량이 커진다.</div>
+      </div>
+      <div class="keyword-card purple">
+        <div class="kw-en">SNR (Signal-to-Noise Ratio)</div>
+        <div class="kw-ko">신호 대 잡음비</div>
+        <div class="kw-def">신호 크기와 잡음 크기의 비율. dB 단위: SNR_dB = 10×log₁₀(S/N). 20dB → SNR = 100.</div>
+      </div>
+      <div class="keyword-card teal">
+        <div class="kw-en">Attenuation</div>
+        <div class="kw-ko">감쇠</div>
+        <div class="kw-def">신호의 크기가 거리에 따라 작아지는 현상. 증폭기(아날로그)나 리피터(디지털)로 보상한다.</div>
+      </div>
+      <div class="keyword-card red">
+        <div class="kw-en">Thermal Noise (White Noise)</div>
+        <div class="kw-ko">열잡음 (백색잡음)</div>
+        <div class="kw-def">전도체 내 전자의 열운동으로 발생. 모든 주파수에서 균일한 스펙트럼. 제거 불가능.</div>
+      </div>
+      <div class="keyword-card">
+        <div class="kw-en">Crosstalk</div>
+        <div class="kw-ko">누화</div>
+        <div class="kw-def">서로 다른 신호 채널의 전자기파가 서로 영향을 주어 발생하는 현상. 전화 혼선이 대표적 예.</div>
+      </div>
+      <div class="keyword-card green">
+        <div class="kw-en">Impulse Noise</div>
+        <div class="kw-ko">충격 잡음</div>
+        <div class="kw-def">번개·기계 충격 등 예측 불가 외부 요인으로 발생하는 돌발적 잡음. 디지털 전송에서 집단 비트 오류 유발.</div>
+      </div>
+      <div class="keyword-card orange">
+        <div class="kw-en">Fourier Analysis</div>
+        <div class="kw-ko">푸리에 해석</div>
+        <div class="kw-def">복합 신호를 주파수 영역으로 분해하는 수학적 기법. 조제프 푸리에가 정립. 신호의 주파수 스펙트럼 표현에 사용.</div>
       </div>
     </div>
   </section>
@@ -688,98 +989,142 @@
 
     <!-- Q1 -->
     <div class="quiz-item">
-      <div class="quiz-q"><span class="q-num">Q1.</span> OSI 참조 모델은 몇 년에 누가 개발했는가?</div>
+      <div class="quiz-q"><span class="q-num">Q1.</span> 아날로그 신호의 3가지 특성이 아닌 것은?</div>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A1')">① 1974년, ITU</button>
-        <button class="quiz-opt" onclick="answerMC(this, true, 'A1')">② 1984년, ISO</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A1')">③ 1990년, IEEE</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A1')">④ 1969년, ARPA</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A1')">① 진폭 (Amplitude)</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A1')">② 주파수 (Frequency)</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A1')">③ 위상 (Phase)</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A1')">④ 비트율 (Bit Rate)</button>
       </div>
-      <div class="quiz-feedback" id="A1"></div>
+      <div class="quiz-feedback" id="A1">비트율은 디지털 신호의 특성입니다. 정현파(아날로그 신호)는 진폭, 주파수, 위상으로 정의됩니다.</div>
     </div>
 
     <!-- Q2 -->
     <div class="quiz-item">
-      <div class="quiz-q"><span class="q-num">Q2.</span> OSI 7계층을 하위(1계층)에서 상위(7계층) 순서로 올바르게 나열한 것은?</div>
+      <div class="quiz-q"><span class="q-num">Q2.</span> 주기 T와 주파수 f의 관계로 옳은 것은?</div>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A2')">① 응용 → 표현 → 세션 → 전송 → 네트워크 → 데이터링크 → 물리</button>
-        <button class="quiz-opt" onclick="answerMC(this, true, 'A2')">② 물리 → 데이터링크 → 네트워크 → 전송 → 세션 → 표현 → 응용</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A2')">③ 물리 → 네트워크 → 데이터링크 → 전송 → 세션 → 표현 → 응용</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A2')">④ 물리 → 데이터링크 → 전송 → 네트워크 → 세션 → 표현 → 응용</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A2')">① T = f</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A2')">② T = 1/f</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A2')">③ T = f²</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A2')">④ T = 2f</button>
       </div>
       <div class="quiz-feedback" id="A2"></div>
     </div>
 
     <!-- Q3 -->
     <div class="quiz-item">
-      <div class="quiz-q"><span class="q-num">Q3.</span> 다음 중 <strong>종단 간(end-to-end) 신뢰성 있는 데이터 전송</strong>을 담당하는 계층은?</div>
+      <div class="quiz-q"><span class="q-num">Q3.</span> 나이퀴스트 비트율 공식으로 옳은 것은?</div>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A3')">① 데이터링크 계층</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A3')">② 네트워크 계층</button>
-        <button class="quiz-opt" onclick="answerMC(this, true, 'A3')">③ 전송 계층</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A3')">④ 세션 계층</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A3')">① C = W log₂(1 + S/N)</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A3')">② C = 2W log₂L</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A3')">③ C = W / log₂L</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A3')">④ C = 2W × S/N</button>
       </div>
-      <div class="quiz-feedback" id="A3"></div>
+      <div class="quiz-feedback" id="A3">나이퀴스트(무잡음): C = 2W log₂L, 섀넌(잡음 있음): C = W log₂(1+S/N)</div>
     </div>
 
     <!-- Q4 -->
     <div class="quiz-item">
-      <div class="quiz-q"><span class="q-num">Q4.</span> 캡슐화 과정에서 <strong>트레일러(Trailer)</strong>를 추가하는 계층은?</div>
+      <div class="quiz-q"><span class="q-num">Q4.</span> S/N비가 30dB일 때, 실제 S/N 비율은?</div>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A4')">① 물리 계층</button>
-        <button class="quiz-opt" onclick="answerMC(this, true, 'A4')">② 데이터링크 계층</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A4')">③ 네트워크 계층</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A4')">④ 전송 계층</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A4')">① 30</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A4')">② 100</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A4')">③ 1000</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A4')">④ 10000</button>
       </div>
-      <div class="quiz-feedback" id="A4"></div>
+      <div class="quiz-feedback" id="A4">30dB = 10×log₁₀(S/N) → log₁₀(S/N) = 3 → S/N = 10³ = 1000</div>
     </div>
 
     <!-- Q5 -->
     <div class="quiz-item">
-      <div class="quiz-q"><span class="q-num">Q5.</span> OSI와 TCP/IP에 대한 설명으로 옳은 것은?</div>
+      <div class="quiz-q"><span class="q-num">Q5.</span> 다음 잡음 중 제거가 <strong>불가능</strong>하며 '백색잡음'이라고도 불리는 것은?</div>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A5')">① OSI는 실제 인터넷 표준으로 널리 사용된다.</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A5')">② TCP/IP는 OSI보다 계층 수가 더 많다.</button>
-        <button class="quiz-opt" onclick="answerMC(this, true, 'A5')">③ OSI는 참조 모델로 사용되고, 실제 표준은 TCP/IP이다.</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A5')">④ OSI는 4계층으로 구성된다.</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A5')">① 열잡음 (Thermal Noise)</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A5')">② 충격 잡음 (Impulse Noise)</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A5')">③ 누화 (Crosstalk)</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A5')">④ 상호 변조 잡음</button>
       </div>
-      <div class="quiz-feedback" id="A5"></div>
+      <div class="quiz-feedback" id="A5">열잡음은 전도체 내 전자의 열운동으로 항상 발생하며 제거 불가능합니다. 모든 주파수에서 균일한 전력 스펙트럼을 가져 백색잡음이라고 합니다.</div>
     </div>
 
     <!-- Q6 -->
     <div class="quiz-item">
-      <div class="quiz-q"><span class="q-num">Q6.</span> PDU(Protocol Data Unit)의 구성으로 옳은 것은?</div>
+      <div class="quiz-q"><span class="q-num">Q6.</span> 다음 중 <strong>왜곡(Distortion)</strong>의 종류에 해당하지 않는 것은?</div>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A6')">① PDU = SDU + 트레일러</button>
-        <button class="quiz-opt" onclick="answerMC(this, true, 'A6')">② PDU = SDU + 헤더</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A6')">③ PDU = SDU × 헤더</button>
-        <button class="quiz-opt" onclick="answerMC(this, false, 'A6')">④ PDU = 헤더만으로 구성</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A6')">① 감쇠 왜곡</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A6')">② 지연 왜곡</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A6')">③ 충격 왜곡</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A6')">④ 선택지 ③이 해당하지 않음</button>
       </div>
-      <div class="quiz-feedback" id="A6"></div>
+      <div class="quiz-feedback" id="A6">왜곡의 종류는 감쇠 왜곡과 지연 왜곡 2가지입니다. '충격 잡음'은 왜곡이 아닌 잡음(Noise)의 종류입니다.</div>
     </div>
 
     <!-- Q7 단답형 -->
     <div class="quiz-item">
-      <div class="quiz-q"><span class="q-num">Q7.</span> [단답형] 라우터 등 중간 노드가 처리하는 OSI 계층은 몇 계층까지인가? (숫자로 입력)</div>
-      <input type="text" class="short-input" id="S7" placeholder="숫자를 입력하세요 (예: 3)">
-      <button class="check-btn" onclick="checkShort('S7', ['3'], 'FA7', '중간 노드(라우터 등)는 1~3계층(물리·데이터링크·네트워크)까지만 동작합니다.')">확인</button>
+      <div class="quiz-q"><span class="q-num">Q7.</span> [단답형] 아날로그 신호를 증폭할 때 사용하는 장치의 이름은? (한글로 입력)</div>
+      <input type="text" class="short-input" id="S7" placeholder="장치 이름을 입력하세요">
+      <button class="check-btn" onclick="checkShort('S7', ['증폭기', 'amplifier'], 'FA7', '증폭기(Amplifier)입니다. 단, 증폭기는 잡음도 함께 증폭한다는 단점이 있습니다.')">확인</button>
       <div class="quiz-feedback" id="FA7"></div>
     </div>
 
     <!-- Q8 단답형 -->
     <div class="quiz-item">
-      <div class="quiz-q"><span class="q-num">Q8.</span> [단답형] 데이터의 압축과 암호화 기능을 수행하는 OSI 계층의 이름은?</div>
-      <input type="text" class="short-input" id="S8" placeholder="계층 이름을 입력하세요">
-      <button class="check-btn" onclick="checkShort('S8', ['표현계층','표현 계층','presentation'], 'FA8', '표현 계층(Presentation Layer)입니다. 데이터 형식 변환, 압축, 암호화를 담당합니다.')">확인</button>
+      <div class="quiz-q"><span class="q-num">Q8.</span> [단답형] 전화 통화 중 다른 사람의 말이 약하게 들리는 혼선 현상은 어떤 잡음인가?</div>
+      <input type="text" class="short-input" id="S8" placeholder="잡음 종류를 입력하세요">
+      <button class="check-btn" onclick="checkShort('S8', ['누화', 'crosstalk'], 'FA8', '누화(Crosstalk)입니다. 서로 다른 채널의 전자기파가 서로 영향을 주어 발생합니다.')">확인</button>
       <div class="quiz-feedback" id="FA8"></div>
     </div>
 
     <!-- Q9 단답형 -->
     <div class="quiz-item">
-      <div class="quiz-q"><span class="q-num">Q9.</span> [단답형] 동일 계층 간에 존재하는 통신 규약을 무엇이라 하는가?</div>
-      <input type="text" class="short-input" id="S9" placeholder="용어를 입력하세요">
-      <button class="check-btn" onclick="checkShort('S9', ['프로토콜','protocol'], 'FA9', '프로토콜(Protocol)입니다. 동일 계층(peer-to-peer) 사이의 통신 규칙입니다.')">확인</button>
+      <div class="quiz-q"><span class="q-num">Q9.</span> [단답형] 복합 신호의 주파수 성분을 분석하는 데 사용하는 수학적 기법의 이름은?</div>
+      <input type="text" class="short-input" id="S9" placeholder="기법 이름을 입력하세요">
+      <button class="check-btn" onclick="checkShort('S9', ['푸리에해석', '푸리에 해석', 'fourier', '푸리에'], 'FA9', '푸리에 해석(Fourier Analysis)입니다. 복합 신호를 주파수 영역의 성분으로 분해할 때 사용합니다.')">확인</button>
       <div class="quiz-feedback" id="FA9"></div>
+    </div>
+
+    <!-- Q10 계산 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q10.</span> [계산] 채널 대역폭 W=2KHz, 신호 레벨 수 L=4일 때 나이퀴스트 비트율 C는?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A10')">① 4 Kbps</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A10')">② 8 Kbps</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A10')">③ 16 Kbps</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A10')">④ 32 Kbps</button>
+      </div>
+      <div class="quiz-feedback" id="A10">C = 2W log₂L = 2 × 2,000 × log₂4 = 4,000 × 2 = 8,000 bps = 8 Kbps (log₂4 = 2)</div>
+    </div>
+
+    <!-- Q11 계산 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q11.</span> [계산] SNR이 30dB일 때, 실제 S/N 비율은?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A11')">① 30</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A11')">② 300</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A11')">③ 1,000</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A11')">④ 10,000</button>
+      </div>
+      <div class="quiz-feedback" id="A11">30dB = 10 × log₁₀(S/N) → log₁₀(S/N) = 3 → S/N = 10³ = 1,000</div>
+    </div>
+
+    <!-- Q12 계산 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q12.</span> [계산] 비트율이 4,000 bps일 때 비트 간격은?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A12')">① 100 μs</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A12')">② 200 μs</button>
+        <button class="quiz-opt" onclick="answerMC(this, true, 'A12')">③ 250 μs</button>
+        <button class="quiz-opt" onclick="answerMC(this, false, 'A12')">④ 500 μs</button>
+      </div>
+      <div class="quiz-feedback" id="A12">비트 간격 = 1 / 4,000 = 0.00025초 = 250 μs</div>
+    </div>
+
+    <!-- Q13 단답형 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="q-num">Q13.</span> [단답형] 신호 전력이 절반으로 감소했을 때 감쇠량은 몇 dB인가? (정수로 입력)</div>
+      <input type="text" class="short-input" id="S13" placeholder="예: -3">
+      <button class="check-btn" onclick="checkShort('S13', ['-3', '−3'], 'FA13', '−3 dB입니다. 10×log₁₀(0.5) = 10×(−0.301) ≈ −3dB. 전력이 절반 감소 = 항상 약 −3dB.')">확인</button>
+      <div class="quiz-feedback" id="FA13"></div>
     </div>
 
   </section>
@@ -809,11 +1154,12 @@
     const fb = document.getElementById(feedbackId);
     if (correct) {
       btn.classList.add('correct');
-      fb.textContent = '✅ 정답입니다!';
+      fb.textContent = '✅ 정답입니다! ' + (fb.textContent || '');
       fb.className = 'quiz-feedback show ok';
     } else {
       btn.classList.add('wrong');
-      fb.textContent = '❌ 오답입니다. 다시 생각해 보세요.';
+      const hint = fb.textContent ? ' 힌트: ' + fb.textContent : '';
+      fb.textContent = '❌ 오답입니다.' + hint;
       fb.className = 'quiz-feedback show no';
     }
   }

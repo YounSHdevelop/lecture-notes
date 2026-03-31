@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터통신 4장 — 신호 변환</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3f4f6; --card-bg: #ffffff; --text: #1e293b; --text-sub: #64748b;
+    --border: #e2e8f0; --primary: #2563eb; --primary-light: #dbeafe;
+    --success: #16a34a; --success-light: #dcfce7;
+    --danger: #dc2626; --danger-light: #fee2e2;
+    --warning: #d97706; --warning-light: #fef3c7;
+    --purple: #7c3aed; --purple-light: #ede9fe;
+    --teal: #0d9488; --teal-light: #ccfbf1;
+    --nav-bg: rgba(255,255,255,0.95); --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] {
+    --bg: #0f172a; --card-bg: #1e293b; --text: #f1f5f9; --text-sub: #94a3b8;
+    --border: #334155; --primary-light: #1e3a8a; --success-light: #14532d;
+    --danger-light: #7f1d1d; --warning-light: #78350f;
+    --purple-light: #3b0764; --teal-light: #134e4a;
+    --nav-bg: rgba(15,23,42,0.97); --shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.7; transition: background 0.3s, color 0.3s;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--nav-bg); border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow); backdrop-filter: blur(8px);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; flex-wrap: wrap;
+    gap: 4px 8px; padding: 8px 16px;
+  }
+  .nav-inner a {
+    font-size: 0.78rem; font-weight: 500; color: var(--text-sub);
+    text-decoration: none; padding: 4px 8px; border-radius: 6px;
+    transition: background 0.2s, color 0.2s; white-space: nowrap;
+  }
+  .nav-inner a:hover { background: var(--primary-light); color: var(--primary); }
+  .nav-inner a.back { color: var(--primary); font-weight: 700; }
+  .nav-sep { color: var(--border); font-size: 0.9rem; }
+  #darkToggle {
+    margin-left: auto; background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 12px; cursor: pointer;
+    font-size: 0.82rem; color: var(--text); transition: background 0.2s;
+  }
+  #darkToggle:hover { background: var(--primary-light); }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white; text-align: center;
+    padding: 80px 16px 48px;
+  }
+  .badge {
+    display: inline-block; background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 20px; padding: 4px 16px;
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+  header h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; margin-bottom: 10px; }
+  header p { font-size: 1rem; opacity: 0.85; }
+
+  /* LAYOUT */
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 16px 80px; }
+  section { margin-bottom: 56px; }
+  section h2 {
+    font-size: 1.3rem; font-weight: 700; color: var(--text);
+    border-left: 4px solid var(--primary); padding-left: 12px;
+    margin-bottom: 24px;
+  }
+
+  /* CARD GRID */
+  .card-grid {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media(max-width:640px){ .card-grid { grid-template-columns: 1fr; } }
+  .card-grid-3 {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media(max-width:768px){ .card-grid-3 { grid-template-columns: repeat(2,1fr); } }
+  @media(max-width:480px){ .card-grid-3 { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px;
+    box-shadow: var(--shadow); transition: transform 0.2s;
+  }
+  .card:hover { transform: translateY(-2px); }
+  .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .card p, .card li { font-size: 0.9rem; color: var(--text-sub); }
+  .card ul { padding-left: 18px; }
+  .card ul li { margin-bottom: 4px; }
+
+  .c-blue   { border-top: 4px solid #2563eb; }
+  .c-green  { border-top: 4px solid #16a34a; }
+  .c-red    { border-top: 4px solid #dc2626; }
+  .c-purple { border-top: 4px solid #7c3aed; }
+  .c-teal   { border-top: 4px solid #0d9488; }
+  .c-orange { border-top: 4px solid #d97706; }
+  .c-pink   { border-top: 4px solid #db2777; }
+  .c-sky    { border-top: 4px solid #0284c7; }
+
+  /* GOAL CARDS */
+  .goal-list { display: flex; flex-direction: column; gap: 12px; }
+  .goal-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 20px; box-shadow: var(--shadow);
+  }
+  .goal-num {
+    min-width: 32px; height: 32px; border-radius: 50%;
+    background: var(--primary); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
+  }
+  .goal-item p { font-size: 0.92rem; color: var(--text); }
+
+  /* FORMULA BOX */
+  .formula-box {
+    background: var(--primary-light); border: 1px solid #bfdbfe;
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;
+    color: var(--primary); text-align: center; font-weight: 600;
+  }
+  [data-theme="dark"] .formula-box { border-color: #1e40af; }
+
+  /* EXAMPLE BOX */
+  .example-box {
+    background: var(--primary-light); border-left: 4px solid var(--primary);
+    border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 16px 0;
+  }
+  .example-box .ex-title {
+    font-weight: 700; font-size: 0.9rem; color: var(--primary);
+    margin-bottom: 8px;
+  }
+  .example-box p, .example-box li { font-size: 0.88rem; color: var(--text); }
+  .example-box ul { padding-left: 18px; }
+  .example-box .ex-ans {
+    margin-top: 10px; padding: 10px 14px;
+    background: var(--success-light); border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.88rem;
+    color: var(--success);
+  }
+
+  /* PROCESS STEPS */
+  .process-steps {
+    display: flex; flex-wrap: wrap; gap: 0; align-items: stretch;
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; box-shadow: var(--shadow);
+  }
+  .proc-step {
+    flex: 1; min-width: 160px; padding: 20px 16px;
+    text-align: center; position: relative;
+    border-right: 1px solid var(--border);
+  }
+  .proc-step:last-child { border-right: none; }
+  .proc-icon { font-size: 2rem; margin-bottom: 8px; }
+  .proc-num {
+    font-size: 0.7rem; font-weight: 700; color: var(--primary);
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;
+  }
+  .proc-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+  .proc-desc { font-size: 0.8rem; color: var(--text-sub); }
+  @media(max-width:640px){ .process-steps { flex-direction: column; } .proc-step { border-right: none; border-bottom: 1px solid var(--border); } }
+
+  /* CATCH */
+  .catch-grid { display: grid; gap: 14px; grid-template-columns: repeat(2,1fr); }
+  @media(max-width:600px){ .catch-grid { grid-template-columns: 1fr; } }
+  .catch-item {
+    background: var(--warning-light); border: 1px solid #fcd34d;
+    border-radius: 10px; padding: 14px 18px;
+  }
+  [data-theme="dark"] .catch-item { border-color: #92400e; }
+  .catch-item .catch-icon { font-size: 1.2rem; margin-bottom: 6px; }
+  .catch-item h4 { font-size: 0.92rem; font-weight: 700; color: var(--warning); margin-bottom: 4px; }
+  .catch-item p { font-size: 0.85rem; color: var(--text); }
+
+  /* KEYWORD */
+  .kw-grid { display: grid; gap: 12px; grid-template-columns: repeat(2,1fr); }
+  @media(max-width:600px){ .kw-grid { grid-template-columns: 1fr; } }
+  .kw-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow);
+  }
+  .kw-card .kw-en { font-size: 0.78rem; color: var(--primary); font-weight: 600; margin-bottom: 2px; }
+  .kw-card .kw-ko { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+  .kw-card .kw-def { font-size: 0.83rem; color: var(--text-sub); }
+
+  /* TABLE */
+  .lc-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .lc-table th {
+    background: var(--primary); color: white;
+    padding: 10px 12px; text-align: left; font-weight: 600;
+  }
+  .lc-table td {
+    padding: 10px 12px; border-bottom: 1px solid var(--border);
+    color: var(--text); vertical-align: top;
+  }
+  .lc-table tr:hover td { background: var(--primary-light); }
+  .lc-wrap { overflow-x: auto; border-radius: 10px; box-shadow: var(--shadow); }
+
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .cmp-table th {
+    background: var(--purple); color: white;
+    padding: 10px 12px; text-align: center; font-weight: 600;
+  }
+  .cmp-table td {
+    padding: 10px 12px; border-bottom: 1px solid var(--border);
+    text-align: center; color: var(--text);
+  }
+  .cmp-table tr:hover td { background: var(--purple-light); }
+  .cmp-wrap { overflow-x: auto; border-radius: 10px; box-shadow: var(--shadow); }
+
+  /* TAG */
+  .tag {
+    display: inline-block; font-size: 0.72rem; font-weight: 700;
+    padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle;
+  }
+  .tag-blue { background: var(--primary-light); color: var(--primary); }
+  .tag-green { background: var(--success-light); color: var(--success); }
+  .tag-red { background: var(--danger-light); color: var(--danger); }
+  .tag-purple { background: var(--purple-light); color: var(--purple); }
+  .tag-orange { background: var(--warning-light); color: var(--warning); }
+
+  /* SUB SECTION */
+  .sub-section { margin-bottom: 28px; }
+  .sub-section h3 {
+    font-size: 1.05rem; font-weight: 700; color: var(--text);
+    border-bottom: 2px solid var(--border); padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+
+  /* SIGNAL DIAGRAM */
+  .signal-diagram {
+    background: #1e293b; color: #7dd3fc;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; line-height: 1.6;
+    border-radius: 10px; padding: 16px; overflow-x: auto;
+    margin: 12px 0;
+  }
+
+  /* QUIZ */
+  .quiz-section { margin-bottom: 32px; }
+  .quiz-section h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+  .q-item {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px; margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .q-stem { font-size: 0.92rem; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+  .q-opts { display: flex; flex-direction: column; gap: 8px; }
+  .q-opts button {
+    text-align: left; padding: 10px 14px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--bg);
+    cursor: pointer; font-size: 0.87rem; color: var(--text);
+    transition: background 0.2s, color 0.2s;
+  }
+  .q-opts button:hover:not(:disabled) { background: var(--primary-light); color: var(--primary); }
+  .q-feedback { display: none; font-size: 0.88rem; font-weight: 600; margin-top: 10px; }
+
+  .short-q { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+  .short-q input {
+    flex: 1; min-width: 180px; padding: 8px 12px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg); color: var(--text); font-size: 0.88rem;
+  }
+  .short-q button {
+    padding: 8px 18px; background: var(--primary); color: white;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 0.87rem; white-space: nowrap;
+  }
+  .short-q button:hover { background: #1d4ed8; }
+
+  /* SCROLL TOP */
+  #scrollTop {
+    position: fixed; bottom: 24px; right: 20px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--primary); color: white; border: none;
+    font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: none; align-items: center; justify-content: center; z-index: 99;
+  }
+  #scrollTop.visible { display: flex; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="./index.html" class="back">← 목록</a>
+    <span class="nav-sep">|</span>
+    <a href="#goals">학습목표</a>
+    <a href="#summary">핵심요약</a>
+    <a href="#line-coding">회선부호화</a>
+    <a href="#d2a">디지털→아날로그</a>
+    <a href="#a2d">아날로그→디지털</a>
+    <a href="#a2a">아날로그→아날로그</a>
+    <a href="#catch">핵심캐치</a>
+    <a href="#keywords">키워드</a>
+    <a href="#examples">예제풀이</a>
+    <a href="#quiz">연습문제</a>
+    <button id="darkToggle">🌙 야간모드</button>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header>
+  <div class="badge">제4장 · 신호 변환</div>
+  <h1>데이터통신 4장 — 신호 변환</h1>
+  <p>Signal Conversion · 디지털/아날로그 신호의 변환과 변조 기법</p>
+</header>
+
+<main>
+
+<!-- 1. 학습 목표 -->
+<section id="goals">
+  <h2>🎯 학습 목표</h2>
+  <div class="goal-list">
+    <div class="goal-item">
+      <div class="goal-num">1</div>
+      <p>디지털 전송(기저대역)과 아날로그 전송(광대역)의 개념을 구분하고 각각의 특성을 설명할 수 있다.</p>
+    </div>
+    <div class="goal-item">
+      <div class="goal-num">2</div>
+      <p>회선 부호화의 다양한 방식(단극형, 극형, 양극형, 블록코드형, 멀티레벨형)을 이해하고, 각 방식의 특징과 파형을 설명할 수 있다.</p>
+    </div>
+    <div class="goal-item">
+      <div class="goal-num">3</div>
+      <p>디지털 데이터를 아날로그 신호로 변조(ASK, FSK, PSK, QAM)하는 방법을 설명하고, 비트율과 보오율 관계를 계산할 수 있다.</p>
+    </div>
+    <div class="goal-item">
+      <div class="goal-num">4</div>
+      <p>아날로그 신호를 디지털로 변환하는 PCM 과정(표본화 → 양자화 → 부호화)과 관련 공식을 이해하고 적용할 수 있다.</p>
+    </div>
+    <div class="goal-item">
+      <div class="goal-num">5</div>
+      <p>아날로그-아날로그 변조(AM, FM, PM)의 원리와 특성을 설명할 수 있다.</p>
+    </div>
+    <div class="goal-item">
+      <div class="goal-num">6</div>
+      <p>각 신호 변환 기법에 관련된 수식 및 예제 문제를 해결할 수 있다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. 핵심 요약 -->
+<section id="summary">
+  <h2>📌 핵심 요약</h2>
+
+  <div class="card-grid" style="margin-bottom:20px;">
+    <div class="card c-blue">
+      <h3>디지털 전송 (Baseband / 기저대역)</h3>
+      <ul>
+        <li>디지털 신호를 <strong>변조 없이</strong> 직접 전송</li>
+        <li>저역 대역폭 사용 (0 Hz부터 시작)</li>
+        <li>회선 부호화(Line Coding) 사용</li>
+        <li>근거리 통신(LAN)에 적합</li>
+        <li>예: 이더넷 케이블 전송</li>
+      </ul>
+    </div>
+    <div class="card c-green">
+      <h3>아날로그 전송 (Broadband / 광대역)</h3>
+      <ul>
+        <li>디지털 신호를 <strong>아날로그 반송파에 실어</strong> 전송</li>
+        <li>고주파 대역 사용 (대역 이동/분리 가능)</li>
+        <li>변조(Modulation) 기술 사용</li>
+        <li>원거리 통신, 무선에 적합</li>
+        <li>예: AM/FM 라디오, 모뎀</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-grid-3">
+    <div class="card c-blue">
+      <h3>비트율 vs 보오율</h3>
+      <p style="margin-bottom:8px; font-size:0.88rem;">비트율(Bit Rate): 초당 전송 비트 수 [bps]</p>
+      <p style="margin-bottom:8px; font-size:0.88rem;">보오율(Baud Rate): 초당 신호 변화 수 [baud]</p>
+      <div class="formula-box" style="font-size:0.88rem;">
+        비트율 = n × 보오율<br>
+        <small>n = log₂L (L = 신호 레벨 수)</small>
+      </div>
+    </div>
+    <div class="card c-purple">
+      <h3>4가지 신호 변환 유형</h3>
+      <ul>
+        <li><strong>디지털 → 디지털</strong>: 회선 부호화</li>
+        <li><strong>디지털 → 아날로그</strong>: ASK / FSK / PSK / QAM</li>
+        <li><strong>아날로그 → 디지털</strong>: PCM, 델타변조</li>
+        <li><strong>아날로그 → 아날로그</strong>: AM / FM / PM</li>
+      </ul>
+    </div>
+    <div class="card c-teal">
+      <h3>PCM 핵심 공식 모음</h3>
+      <div class="formula-box" style="font-size:0.8rem; text-align:left; padding:12px 14px;">
+        표본화 정리: f<sub>s</sub> ≥ 2f<sub>m</sub><br>
+        양자화 레벨: L = 2<sup>n</sup><br>
+        PCM 비트율: f<sub>s</sub> × n<sub>b</sub> bps<br>
+        SNR<sub>dB</sub> = 6.02n<sub>b</sub> + 1.76
+      </div>
+    </div>
+    <div class="card c-red">
+      <h3>회선 부호화 분류</h3>
+      <ul>
+        <li><strong>단극형</strong>: Unipolar NRZ</li>
+        <li><strong>극형</strong>: NRZ-L, NRZ-I, RZ, 맨체스터, 차등맨체스터</li>
+        <li><strong>양극형</strong>: AMI, B8ZS, HDB3</li>
+        <li><strong>블록코드형</strong>: 4B/5B, 8B/10B</li>
+        <li><strong>멀티레벨형</strong>: 2B1Q</li>
+      </ul>
+    </div>
+    <div class="card c-orange">
+      <h3>변조 방식 요약</h3>
+      <ul>
+        <li><strong>ASK</strong>: 진폭으로 데이터 구분</li>
+        <li><strong>FSK</strong>: 주파수로 데이터 구분</li>
+        <li><strong>PSK</strong>: 위상으로 데이터 구분</li>
+        <li><strong>QAM</strong>: 진폭 + 위상 동시 변조 (가장 효율적)</li>
+      </ul>
+    </div>
+    <div class="card c-pink">
+      <h3>아날로그 변조 요약</h3>
+      <ul>
+        <li><strong>AM</strong>: 반송파 진폭 변화, B = 2f<sub>m</sub></li>
+        <li><strong>FM</strong>: 반송파 주파수 변화, 고품질</li>
+        <li><strong>PM</strong>: 반송파 위상 변화, FM과 수학적 연관</li>
+      </ul>
+      <p style="margin-top:8px; font-size:0.83rem; color:var(--text-sub);">FM/PM은 서로 밀접히 연관됨</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. 회선 부호화 -->
+<section id="line-coding">
+  <h2>💻 회선 부호화 (Line Coding)</h2>
+  <p style="font-size:0.9rem; color:var(--text-sub); margin-bottom:20px;">
+    디지털 데이터를 디지털 신호로 변환하는 과정. 송신측에서 비트열을 전기적 파형으로 변환하고 수신측에서 복원한다.
+  </p>
+
+  <div class="sub-section">
+    <h3>회선 부호화의 주요 특성</h3>
+    <div class="card-grid">
+      <div class="card c-blue">
+        <h3>기저대역 대역폭</h3>
+        <p>비트율 N이 주어질 때, NRZ 신호의 최소 대역폭은 N/2 Hz. 대역폭이 클수록 더 높은 비트율 지원 가능하다.</p>
+      </div>
+      <div class="card c-green">
+        <h3>DC 성분</h3>
+        <p>직류(DC) 성분이 없어야 한다. DC 성분이 있으면 변압기를 통과하지 못하고 전력 소비가 증가한다.</p>
+      </div>
+      <div class="card c-purple">
+        <h3>자기 동기화 (Self-Synchronization)</h3>
+        <p>수신측이 별도 채널 없이 데이터에서 클록을 추출할 수 있어야 한다. 맨체스터 방식이 대표적이다.</p>
+      </div>
+      <div class="card c-orange">
+        <h3>오류 감지 능력</h3>
+        <p>일부 방식은 전송 중 오류를 내장 감지할 수 있다. 예: AMI에서 동일 극성 연속 출현 = 오류.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 단극형 -->
+  <div class="sub-section">
+    <h3>1. 단극형 (Unipolar) — NRZ <span class="tag tag-red">DC 성분 문제</span></h3>
+    <div class="card c-red">
+      <h3>Unipolar NRZ (Non-Return-to-Zero)</h3>
+      <ul>
+        <li>양전압 하나만 사용 (0V = 0, +V = 1)</li>
+        <li>구현 단순하지만 DC 성분 문제 심각</li>
+        <li>연속 0 또는 1일 때 클록 동기화 불가</li>
+        <li>실용성 낮아 현재 거의 사용하지 않음</li>
+      </ul>
+      <div class="signal-diagram">
+비트열: 1   1   0   0   1   0   1
+       ┌───┐   ┌───┐       ┌───┐
++V     │   │   │   │       │   │
+ 0 ────┘   └───┘   └───────┘   └───</div>
+    </div>
+  </div>
+
+  <!-- 극형 -->
+  <div class="sub-section">
+    <h3>2. 극형 (Polar) — 양/음 전압 사용 <span class="tag tag-blue">DC 성분 감소</span></h3>
+    <div class="lc-wrap" style="margin-bottom:16px;">
+      <table class="lc-table">
+        <thead>
+          <tr>
+            <th style="min-width:140px;">방식</th>
+            <th>원리</th>
+            <th>특징</th>
+            <th>장단점</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>NRZ-L</strong><br><small>Non-Return-to-Zero Level</small></td>
+            <td>0 = +V, 1 = −V<br>(또는 반대)</td>
+            <td>신호 레벨로 비트 결정</td>
+            <td>구현 간단. DC 성분 존재. 클록 동기 어려움.</td>
+          </tr>
+          <tr>
+            <td><strong>NRZ-I</strong><br><small>Non-Return-to-Zero Inversion</small></td>
+            <td>1이 나타날 때 신호 반전<br>0이면 현재 레벨 유지</td>
+            <td>신호 변화로 비트 결정</td>
+            <td>연속 1에 강함. 연속 0에는 취약.</td>
+          </tr>
+          <tr>
+            <td><strong>RZ</strong><br><small>Return-to-Zero</small></td>
+            <td>1 = +V → 0 (중간 복귀)<br>0 = −V → 0 (중간 복귀)</td>
+            <td>매 비트 중간에 0으로 복귀</td>
+            <td>자기 동기화 가능. NRZ의 2배 대역폭 필요.</td>
+          </tr>
+          <tr>
+            <td><strong>맨체스터</strong><br><small>Manchester</small></td>
+            <td>0 = 양→음 전이<br>1 = 음→양 전이<br>(비트 중앙에서 전이)</td>
+            <td>매 비트 중앙에 반드시 전이</td>
+            <td>자기 동기화 우수. 이더넷(10BASE-T) 사용. RZ의 두 배 대역폭.</td>
+          </tr>
+          <tr>
+            <td><strong>차등 맨체스터</strong><br><small>Differential Manchester</small></td>
+            <td>0 = 비트 시작 추가 전이<br>1 = 비트 시작 전이 없음<br>(중간 전이는 항상 존재)</td>
+            <td>비트 시작점 전이 유무로 판단</td>
+            <td>자기 동기화, 노이즈에 강함. 토큰링(Token Ring) 사용.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="signal-diagram">
+비트열:  1      0      1      1      0      0      1
+
+NRZ-L (1=−V, 0=+V):
+        ┌──────┐      ┌─────────────┐
++V      │      │      │             │
+−V ─────┘      └──────┘             └──────
+
+NRZ-I (초기=+V, 1마다 반전):
+        ┌──────┐      ┌─────────────┐      ┌
++V      │      │      │             │      │
+−V ─────┘      └──────┘             └──────┘
+
+맨체스터 (0=↓, 1=↑, 중앙에서 전이):
+        ┌──┐   ┌┐  ┌──┐  ┌──┐   ┌┐   ┌┐  ┌
+        │  │   ││  │  │  │  │   ││   ││  │
+────────┘  └───┘└──┘  └──┘  └───┘└───┘└──┘</div>
+  </div>
+
+  <!-- 양극형 -->
+  <div class="sub-section">
+    <h3>3. 양극형 (Bipolar) — 3전압 레벨 <span class="tag tag-green">오류 감지 가능</span></h3>
+    <div class="card-grid">
+      <div class="card c-teal">
+        <h3>AMI (Alternate Mark Inversion)</h3>
+        <ul>
+          <li>0 = 0V (전압 없음)</li>
+          <li>1 = 교대로 +V, −V</li>
+          <li>연속된 1은 반드시 극성 교대</li>
+          <li>DC 성분 없음 → 장거리 전송 유리</li>
+          <li>오류 감지: 같은 극성 연속 출현 = 오류</li>
+          <li><strong>약점</strong>: 연속 0일 때 동기화 어려움</li>
+        </ul>
+        <div class="signal-diagram">
+비트열: 1   0   1   1   0   0   1
+┌──────┐           ┌──────┐       ┌
++V │   │           │      │       │
+ 0 ────┘   ───     ┘      └───────┘
+   (−V 부분: 다음 1에서 −V로 교대)</div>
+      </div>
+      <div class="card c-green">
+        <h3>B8ZS (Bipolar 8-Zero Substitution)</h3>
+        <ul>
+          <li>AMI 기반, <strong>8개의 연속 0 대체</strong></li>
+          <li>북미 T-캐리어(T1)에 사용</li>
+          <li>이전 펄스 +면: 000+−0−+ 패턴으로 대체</li>
+          <li>이전 펄스 −면: 000−+0+− 패턴으로 대체</li>
+          <li>의도적 AMI 규칙 위반으로 수신측이 감지</li>
+        </ul>
+      </div>
+      <div class="card c-blue">
+        <h3>HDB3 (High-Density Bipolar 3)</h3>
+        <ul>
+          <li>AMI 기반, <strong>4개의 연속 0 대체</strong></li>
+          <li>유럽 E-캐리어(E1)에 사용</li>
+          <li>4개 0 → 000V 또는 B00V 패턴으로 대체</li>
+          <li>V = 위반 펄스, B = 정상 펄스</li>
+          <li>이전 위반 이후 1의 개수에 따라 패턴 선택</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 블록코드형 -->
+  <div class="sub-section">
+    <h3>4. 블록코드형 (Block Coding) <span class="tag tag-purple">중복성 추가</span></h3>
+    <div class="card-grid">
+      <div class="card c-purple">
+        <h3>4B/5B</h3>
+        <ul>
+          <li>4비트 데이터 → 5비트 코드로 변환</li>
+          <li>연속 0이 3개 이상 없는 코드만 사용 (32개 중 16개 선택)</li>
+          <li>대역폭 25% 증가 (5/4배)</li>
+          <li>동기화 문제 해결</li>
+          <li>FDDI, Fast Ethernet(100BASE-TX)에서 NRZ-I와 함께 사용</li>
+        </ul>
+        <div class="formula-box" style="font-size:0.82rem;">효율 = 4/5 = 80%</div>
+      </div>
+      <div class="card c-pink">
+        <h3>8B/10B</h3>
+        <ul>
+          <li>8비트 → 10비트로 변환 (5B/6B + 3B/4B 두 단계)</li>
+          <li>기가비트 이더넷(1000BASE-T), USB에 사용</li>
+          <li>DC 균형 유지 (0과 1의 개수 균등)</li>
+          <li>오류 감지 능력 강화</li>
+        </ul>
+        <div class="formula-box" style="font-size:0.82rem;">효율 = 8/10 = 80%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 멀티레벨 -->
+  <div class="sub-section">
+    <h3>5. 멀티레벨형 (Multilevel) — 2B1Q <span class="tag tag-orange">4레벨 신호</span></h3>
+    <div class="card c-orange">
+      <h3>2B1Q (Two Binary, One Quaternary)</h3>
+      <p style="margin-bottom:10px; font-size:0.9rem;">2비트를 4레벨 신호 1개로 변환. DSL(디지털 가입자 회선)에 사용.</p>
+      <div class="cmp-wrap">
+        <table class="cmp-table">
+          <thead><tr><th>2비트 조합</th><th>신호 레벨</th><th>전압</th></tr></thead>
+          <tbody>
+            <tr><td>00</td><td>−3</td><td>−3V</td></tr>
+            <tr><td>01</td><td>−1</td><td>−1V</td></tr>
+            <tr><td>11</td><td>+1</td><td>+1V</td></tr>
+            <tr><td>10</td><td>+3</td><td>+3V</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="formula-box" style="margin-top:12px; font-size:0.88rem;">
+        n = log₂4 = 2  →  비트율 = 2 × 보오율
+      </div>
+    </div>
+  </div>
+
+  <!-- 비트율 vs 보오율 정리 -->
+  <div class="sub-section">
+    <h3>비트율 vs 보오율 관계 정리</h3>
+    <div class="card-grid">
+      <div class="card c-blue">
+        <h3>핵심 공식</h3>
+        <div class="formula-box">
+          비트율 = log₂(L) × 보오율<br>
+          <small>L = 신호 레벨 수</small>
+        </div>
+        <ul style="margin-top:12px;">
+          <li>L=2 (2레벨, NRZ): 비트율 = 보오율</li>
+          <li>L=4 (4레벨, 2B1Q): 비트율 = 2 × 보오율</li>
+          <li>L=8 (8레벨): 비트율 = 3 × 보오율</li>
+        </ul>
+      </div>
+      <div class="card c-green">
+        <h3>방식별 최소 대역폭 비교</h3>
+        <ul>
+          <li><strong>NRZ</strong>: B<sub>min</sub> = N/2 Hz</li>
+          <li><strong>RZ / 맨체스터</strong>: B<sub>min</sub> = N Hz (NRZ의 2배)</li>
+        </ul>
+        <p style="margin-top:8px; color:var(--text-sub); font-size:0.83rem;">
+          맨체스터는 대역폭이 넓지만 자기동기화 우수 → 이더넷 선호
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. 디지털 → 아날로그 -->
+<section id="d2a">
+  <h2>📡 디지털→아날로그 변조 (Digital-to-Analog)</h2>
+  <p style="font-size:0.9rem; color:var(--text-sub); margin-bottom:20px;">
+    디지털 신호를 고주파 아날로그 반송파(carrier wave)에 실어 전송하는 변조 방식.
+    반송파 s(t) = A·cos(2πft + φ)에서 A(진폭), f(주파수), φ(위상) 중 하나 이상을 변화시킨다.
+  </p>
+
+  <div class="card-grid-3" style="margin-bottom:24px;">
+    <div class="card c-blue">
+      <h3>ASK <span class="tag tag-blue">진폭편이변조</span></h3>
+      <p style="font-size:0.8rem; color:var(--primary); margin-bottom:8px;">Amplitude Shift Keying</p>
+      <ul>
+        <li>반송파 <strong>진폭(A)</strong>을 변화시켜 데이터 표현</li>
+        <li>0 = 낮은 진폭(또는 0), 1 = 높은 진폭</li>
+        <li>노이즈에 취약 (진폭 변화에 민감)</li>
+        <li>광섬유 전송에 주로 사용</li>
+        <li>OOK(On-Off Keying): 0 = 반송파 없음</li>
+      </ul>
+    </div>
+    <div class="card c-green">
+      <h3>FSK <span class="tag tag-green">주파수편이변조</span></h3>
+      <p style="font-size:0.8rem; color:var(--success); margin-bottom:8px;">Frequency Shift Keying</p>
+      <ul>
+        <li>반송파 <strong>주파수(f)</strong>를 변화시켜 데이터 표현</li>
+        <li>0 = 낮은 주파수 f₁, 1 = 높은 주파수 f₂</li>
+        <li>ASK보다 노이즈에 강함</li>
+        <li>구현 간단, 고속에는 부적합</li>
+        <li>초기 모뎀, VHF 라디오에 사용</li>
+      </ul>
+    </div>
+    <div class="card c-purple">
+      <h3>PSK <span class="tag tag-purple">위상편이변조</span></h3>
+      <p style="font-size:0.8rem; color:var(--purple); margin-bottom:8px;">Phase Shift Keying</p>
+      <ul>
+        <li>반송파 <strong>위상(φ)</strong>을 변화시켜 데이터 표현</li>
+        <li><strong>BPSK</strong>: 2위상 (0°,180°) — 1비트/신호</li>
+        <li><strong>QPSK</strong>: 4위상 (0°,90°,180°,270°) — 2비트/신호</li>
+        <li><strong>8-PSK</strong>: 8위상 — 3비트/신호</li>
+        <li>노이즈에 강하고 대역폭 효율적</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>QAM (Quadrature Amplitude Modulation) <span class="tag tag-orange">진폭+위상 동시 변조</span></h3>
+    <div class="card-grid">
+      <div class="card c-orange">
+        <h3>QAM 원리</h3>
+        <ul>
+          <li>진폭(A)과 위상(φ) <strong>동시에 변조</strong> = ASK + PSK 결합</li>
+          <li><strong>4-QAM</strong>: 2비트/신호 (= QPSK)</li>
+          <li><strong>16-QAM</strong>: 4비트/신호</li>
+          <li><strong>64-QAM</strong>: 6비트/신호</li>
+          <li><strong>256-QAM</strong>: 8비트/신호</li>
+          <li>케이블 TV, ADSL, LTE, 5G에 사용</li>
+        </ul>
+      </div>
+      <div class="card c-red">
+        <h3>비트율–보오율 관계 (변조)</h3>
+        <div class="formula-box" style="font-size:0.88rem;">
+          비트율 = n × 보오율<br>
+          <small>n = log₂(신호 상태 수)</small>
+        </div>
+        <ul style="margin-top:10px;">
+          <li>QPSK: n=2, 비트율 = 2 × 보오율</li>
+          <li>8-PSK: n=3, 비트율 = 3 × 보오율</li>
+          <li>16-QAM: n=4, 비트율 = 4 × 보오율</li>
+          <li>64-QAM: n=6, 비트율 = 6 × 보오율</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>성상도 (Constellation Diagram)</h3>
+    <div class="card c-teal">
+      <h3>성상도 읽는 법</h3>
+      <p style="margin-bottom:10px; font-size:0.9rem;">X축 = 동위상 성분(I), Y축 = 직교 성분(Q). 각 점 = 하나의 신호 상태(보오).</p>
+      <div class="signal-diagram">
+BPSK (2점):        QPSK (4점):         16-QAM (16점):
+     Q                  Q                    Q
+     |                01× ×00              × × × ×
+     |                   |                × × × ×
+×───────×I        ───────┼───────I     ───┼───────I
+  (180°, 0°)             |                × × × ×
+                    11× ×10              × × × ×
+
+1비트/보오          2비트/보오           4비트/보오
+점이 많을수록 → 더 많은 비트/보오 → 더 좁은 간격 → 노이즈에 취약</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. 아날로그 → 디지털 -->
+<section id="a2d">
+  <h2>🎙️ 아날로그→디지털 변환 (PCM)</h2>
+  <p style="font-size:0.9rem; color:var(--text-sub); margin-bottom:20px;">
+    아날로그 신호를 디지털로 변환하는 표준 기법 — PCM(Pulse Code Modulation, 펄스 부호 변조).
+    전화망(T1/E1), CD 오디오 등에 광범위하게 사용된다.
+  </p>
+
+  <div class="process-steps" style="margin-bottom:28px;">
+    <div class="proc-step">
+      <div class="proc-icon">📊</div>
+      <div class="proc-num">Step 1</div>
+      <div class="proc-title">표본화 (Sampling)</div>
+      <div class="proc-desc">일정 주기마다 아날로그 신호값 추출<br>PAM 신호 생성</div>
+    </div>
+    <div class="proc-step">
+      <div class="proc-icon">🔢</div>
+      <div class="proc-num">Step 2</div>
+      <div class="proc-title">양자화 (Quantization)</div>
+      <div class="proc-desc">연속 값을 L개 이산 레벨로 근사화<br>양자화 오류 발생</div>
+    </div>
+    <div class="proc-step">
+      <div class="proc-icon">💾</div>
+      <div class="proc-num">Step 3</div>
+      <div class="proc-title">부호화 (Encoding)</div>
+      <div class="proc-desc">양자화값을 n비트 이진 코드로 변환<br>L = 2ⁿ</div>
+    </div>
+    <div class="proc-step">
+      <div class="proc-icon">📡</div>
+      <div class="proc-num">Step 4</div>
+      <div class="proc-title">전송 &amp; 복원</div>
+      <div class="proc-desc">디지털 비트열 전송<br>수신측에서 역과정으로 복원</div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>1. 표본화 (Sampling) — 나이퀴스트 정리</h3>
+    <div class="card-grid">
+      <div class="card c-blue">
+        <h3>표본화 정리 (Nyquist Sampling Theorem)</h3>
+        <div class="formula-box">
+          f<sub>s</sub> ≥ 2f<sub>m</sub><br>
+          <small>f<sub>s</sub> = 표본화 주파수, f<sub>m</sub> = 원 신호 최고 주파수</small>
+        </div>
+        <ul style="margin-top:10px;">
+          <li>나이퀴스트율(Nyquist rate) = 2f<sub>m</sub> (최소값)</li>
+          <li>전화 음성(최대 4kHz) → 표본화: <strong>8,000 Hz</strong></li>
+          <li>CD 오디오(최대 22kHz) → 표본화: <strong>44,100 Hz</strong></li>
+        </ul>
+      </div>
+      <div class="card c-red">
+        <h3>에일리어싱 (Aliasing)</h3>
+        <ul>
+          <li>f<sub>s</sub> &lt; 2f<sub>m</sub> 이면 원 신호 복원 불가</li>
+          <li>복원 신호에 저주파 왜곡 발생</li>
+          <li>해결: 표본화 전 저역통과 필터(Anti-aliasing filter) 적용</li>
+          <li>고속으로 변하는 성분이 느리게 보이는 현상</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>2. 양자화 (Quantization)</h3>
+    <div class="card-grid">
+      <div class="card c-green">
+        <h3>양자화 과정</h3>
+        <ul>
+          <li>신호 범위를 L개의 구간으로 균등 분할</li>
+          <li>각 표본값을 가장 가까운 레벨로 근사</li>
+          <li>L = 2ⁿ, n = 비트 수</li>
+          <li>n↑ → 정밀도↑, 비트율↑</li>
+        </ul>
+        <div class="formula-box" style="font-size:0.85rem;">
+          양자화 레벨 수: L = 2<sup>n</sup><br>
+          비트 수: n = log₂L
+        </div>
+      </div>
+      <div class="card c-orange">
+        <h3>SNR (신호 대 잡음비)</h3>
+        <div class="formula-box" style="font-size:0.85rem;">
+          SNR<sub>dB</sub> = 6.02 · n<sub>b</sub> + 1.76<br>
+          <small>n<sub>b</sub> = 비트 수</small>
+        </div>
+        <ul style="margin-top:10px;">
+          <li>비트 수 1 증가 → SNR 약 <strong>6 dB 향상</strong></li>
+          <li>8비트: SNR ≈ 49.9 dB</li>
+          <li>16비트: SNR ≈ 98.1 dB (CD 품질)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>3. PCM 비트율 계산</h3>
+    <div class="card c-purple">
+      <h3>PCM 비트율 공식</h3>
+      <div class="formula-box">
+        비트율 = f<sub>s</sub> × n<sub>b</sub> [bps]<br>
+        <small>f<sub>s</sub> = 표본화 주파수 [Hz], n<sub>b</sub> = 샘플당 비트 수</small>
+      </div>
+      <ul style="margin-top:12px;">
+        <li>전화 음성 (8kHz, 8비트): 8,000 × 8 = <strong>64 kbps</strong> (DS0)</li>
+        <li>CD 오디오 (44.1kHz, 16비트, 스테레오): 44,100 × 16 × 2 = <strong>1.41 Mbps</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>4. 델타 변조 (Delta Modulation)</h3>
+    <div class="card-grid">
+      <div class="card c-teal">
+        <h3>델타 변조 원리</h3>
+        <ul>
+          <li>PCM의 단순화된 형태</li>
+          <li>이전 값보다 크면 1, 작으면 0만 전송 (1비트)</li>
+          <li>계단 근사(staircase approximation)로 신호 추적</li>
+          <li>구현 매우 간단</li>
+          <li>변화가 빠른 신호에는 <strong>경사 과부하</strong> 발생</li>
+        </ul>
+      </div>
+      <div class="card c-red">
+        <h3>델타 변조 문제점</h3>
+        <ul>
+          <li><strong>경사 과부하(Slope Overload)</strong>: 신호 변화가 너무 빠를 때 추적 불가</li>
+          <li><strong>입도 잡음(Granular Noise)</strong>: 신호가 일정할 때 1과 0을 번갈아 출력</li>
+          <li><strong>해결</strong>: 적응형 델타 변조(ADM) — 스텝 크기를 신호에 맞게 동적 조정</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. 아날로그 → 아날로그 -->
+<section id="a2a">
+  <h2>📻 아날로그→아날로그 변조 (Analog-to-Analog)</h2>
+  <p style="font-size:0.9rem; color:var(--text-sub); margin-bottom:20px;">
+    아날로그 정보 신호를 더 높은 주파수의 반송파(carrier)에 실어 전송.
+    반송파: s(t) = A·cos(2πf<sub>c</sub>t + φ). A, f<sub>c</sub>, φ 중 하나를 정보 신호로 변화시킨다.
+  </p>
+
+  <div class="card-grid-3" style="margin-bottom:20px;">
+    <div class="card c-blue">
+      <h3>AM (진폭 변조)</h3>
+      <p style="font-size:0.8rem; color:var(--primary); margin-bottom:8px;">Amplitude Modulation</p>
+      <ul>
+        <li>반송파의 <strong>진폭(A)</strong>을 정보 신호에 비례하여 변화</li>
+        <li>주파수와 위상은 일정 유지</li>
+        <li>필요 대역폭 = 2f<sub>m</sub></li>
+        <li>구현 간단, 노이즈에 취약</li>
+        <li>AM 라디오(530~1700 kHz) 사용</li>
+      </ul>
+      <div class="formula-box" style="font-size:0.88rem;">B<sub>AM</sub> = 2f<sub>m</sub></div>
+    </div>
+    <div class="card c-green">
+      <h3>FM (주파수 변조)</h3>
+      <p style="font-size:0.8rem; color:var(--success); margin-bottom:8px;">Frequency Modulation</p>
+      <ul>
+        <li>반송파의 <strong>주파수(f)</strong>를 정보 신호에 비례하여 변화</li>
+        <li>진폭과 위상은 일정 유지</li>
+        <li>필요 대역폭 = 2(1+β)f<sub>m</sub></li>
+        <li>AM보다 노이즈에 훨씬 강함</li>
+        <li>FM 라디오(88~108 MHz), 무선 통신에 사용</li>
+      </ul>
+      <div class="formula-box" style="font-size:0.88rem;">B<sub>FM</sub> = 2(1+β)f<sub>m</sub></div>
+    </div>
+    <div class="card c-purple">
+      <h3>PM (위상 변조)</h3>
+      <p style="font-size:0.8rem; color:var(--purple); margin-bottom:8px;">Phase Modulation</p>
+      <ul>
+        <li>반송파의 <strong>위상(φ)</strong>을 정보 신호에 비례하여 변화</li>
+        <li>진폭과 주파수는 일정 유지</li>
+        <li>FM과 수학적으로 밀접히 연관</li>
+        <li>PM: 위상 변화량 ∝ 신호값</li>
+        <li>FM: 위상 변화량 ∝ 신호의 적분값</li>
+        <li>위성 통신, 일부 모뎀에 사용</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card c-teal">
+    <h3>AM / FM / PM 비교표</h3>
+    <div class="cmp-wrap" style="margin-top:12px;">
+      <table class="cmp-table">
+        <thead>
+          <tr><th>구분</th><th>AM</th><th>FM</th><th>PM</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>변화 파라미터</td><td>진폭(A)</td><td>주파수(f)</td><td>위상(φ)</td></tr>
+          <tr><td>노이즈 내성</td><td>낮음</td><td>높음</td><td>높음</td></tr>
+          <tr><td>대역폭</td><td>좁음 (2f<sub>m</sub>)</td><td>넓음 (2(1+β)f<sub>m</sub>)</td><td>넓음</td></tr>
+          <tr><td>구현 복잡도</td><td>단순</td><td>복잡</td><td>복잡</td></tr>
+          <tr><td>사용 예</td><td>AM 라디오</td><td>FM 라디오</td><td>위성, 모뎀</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 7. 핵심 캐치 -->
+<section id="catch">
+  <h2>⚡ 핵심 캐치 — 시험 포인트</h2>
+  <div class="catch-grid">
+    <div class="catch-item">
+      <div class="catch-icon">📐</div>
+      <h4>표본화 정리 공식</h4>
+      <p>f<sub>s</sub> ≥ 2f<sub>m</sub>. 최고 주파수의 <strong>2배 이상</strong> 표본화해야 원 신호 완벽 복원 가능. 이 최소값이 나이퀴스트율.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">🎯</div>
+      <h4>SNR 공식 (자주 출제)</h4>
+      <p>SNR<sub>dB</sub> = 6.02n<sub>b</sub> + 1.76. 비트 수 1 증가 → SNR 약 <strong>6 dB 향상</strong>. 계산 문제 자주 출제!</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">⚡</div>
+      <h4>비트율 vs 보오율</h4>
+      <p>비트율 = n × 보오율 (n = log₂L). QAM이 PSK보다 대역폭 효율이 좋은 이유 — 더 많은 비트를 한 신호에 담음.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">🔄</div>
+      <h4>맨체스터 vs 차등 맨체스터</h4>
+      <p>맨체스터: 비트 <strong>중앙</strong>에서 전이(0=↓, 1=↑). 차등 맨체스터: 0=시작점에 추가 전이, 1=시작점 전이 없음. 중간 전이는 항상 존재.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">🌊</div>
+      <h4>AMI의 특징 3가지</h4>
+      <p>① 1 → 교대 +/−V ② DC 성분 없음 ③ 오류 감지 가능(동일 극성 연속 = 오류). 단, <strong>연속 0에 취약</strong>.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">📦</div>
+      <h4>B8ZS vs HDB3</h4>
+      <p>B8ZS: <strong>8개 연속 0</strong> 대체 (북미 T1). HDB3: <strong>4개 연속 0</strong> 대체 (유럽 E1). AMI의 연속 0 동기화 문제 해결.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">🔢</div>
+      <h4>4B/5B와 8B/10B 효율 동일</h4>
+      <p>두 방식 모두 효율 <strong>80%</strong>. 4B/5B = FDDI, Fast Ethernet. 8B/10B = 기가비트 이더넷, USB. 차이: 8B/10B가 DC 균형까지 보장.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">📡</div>
+      <h4>QAM이 PSK보다 유리</h4>
+      <p>PSK는 위상만 변조 → 레벨 수 제한(위상 간격 문제). QAM은 진폭+위상 동시 변조 → 더 많은 비트/보오 가능 → 대역폭 효율 우수.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">🎵</div>
+      <h4>전화 음성 PCM 표준 (DS0)</h4>
+      <p>음성 0~4kHz → 표본화 8kHz, 8비트 양자화 → 비트율 = <strong>64 kbps</strong>. T1 = 24채널 × 64k = 1.544 Mbps.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">📻</div>
+      <h4>AM vs FM 대역폭 차이</h4>
+      <p>AM = 2f<sub>m</sub> (좁음). FM = 2(1+β)f<sub>m</sub> (넓음 → 더 높은 음질). FM이 AM보다 노이즈에 강한 이유 = 더 넓은 대역폭 활용.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 8. 핵심 키워드 -->
+<section id="keywords">
+  <h2>📚 핵심 키워드</h2>
+  <div class="kw-grid">
+    <div class="kw-card">
+      <div class="kw-en">Line Coding</div>
+      <div class="kw-ko">회선 부호화</div>
+      <div class="kw-def">디지털 데이터를 디지털 신호로 변환하는 과정. 비트열을 전기 파형으로 표현.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Baseband / Broadband</div>
+      <div class="kw-ko">기저대역 / 광대역</div>
+      <div class="kw-def">기저대역: 변조 없이 직접 전송. 광대역: 반송파에 실어 전송. 기저대역 = 디지털 전송.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Baud Rate</div>
+      <div class="kw-ko">보오율</div>
+      <div class="kw-def">초당 신호 변화 수 [baud]. 비트율 = log₂L × 보오율 (L = 신호 레벨 수).</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">NRZ-L / NRZ-I</div>
+      <div class="kw-ko">비복귀 레벨형 / 비복귀 반전형</div>
+      <div class="kw-def">NRZ-L: 신호 레벨로 비트 결정. NRZ-I: 1이 나타날 때마다 신호 반전.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Manchester / Differential Manchester</div>
+      <div class="kw-ko">맨체스터 / 차등 맨체스터</div>
+      <div class="kw-def">맨체스터: 비트 중앙 전이로 비트 구분(자기동기화). 차등 맨체스터: 시작점 전이 유무로 판단.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">AMI (Alternate Mark Inversion)</div>
+      <div class="kw-ko">교대 표시 반전</div>
+      <div class="kw-def">1을 교대로 +V, −V로 표현. DC 성분 없음. 오류 감지 가능. 연속 0에 동기화 취약.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">B8ZS / HDB3</div>
+      <div class="kw-ko">8비트 영 대체 / 고밀도 양극형 3</div>
+      <div class="kw-def">AMI의 연속 0 문제 해결. B8ZS = 8개 0 대체(북미). HDB3 = 4개 0 대체(유럽).</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">4B/5B / 8B/10B</div>
+      <div class="kw-ko">블록 코딩</div>
+      <div class="kw-def">연속 0 방지 재부호화. 효율 80%. 4B/5B = FDDI/Fast Ethernet. 8B/10B = 기가비트 이더넷.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">ASK / FSK / PSK / QAM</div>
+      <div class="kw-ko">디지털-아날로그 변조</div>
+      <div class="kw-def">ASK: 진폭 변조. FSK: 주파수 변조. PSK: 위상 변조. QAM: 진폭+위상 동시 변조(가장 효율적).</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">PCM (Pulse Code Modulation)</div>
+      <div class="kw-ko">펄스 부호 변조</div>
+      <div class="kw-def">아날로그→디지털 변환. 표본화 → 양자화 → 부호화. 전화망(DS0=64kbps), CD의 표준 방식.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Nyquist Sampling Theorem</div>
+      <div class="kw-ko">나이퀴스트 표본화 정리</div>
+      <div class="kw-def">f<sub>s</sub> ≥ 2f<sub>m</sub>. 원 신호 최고 주파수의 2배 이상으로 표본화해야 완벽 복원 가능.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Quantization</div>
+      <div class="kw-ko">양자화</div>
+      <div class="kw-def">표본값을 L=2ⁿ개 이산 레벨로 근사. SNR<sub>dB</sub>=6.02n+1.76. n↑ → 품질↑ → 비트율↑.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Delta Modulation</div>
+      <div class="kw-ko">델타 변조</div>
+      <div class="kw-def">1비트로 증가/감소만 표현. 구현 간단. 경사 과부하(slope overload)와 입도 잡음(granular noise) 문제 존재.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">AM / FM / PM</div>
+      <div class="kw-ko">진폭 / 주파수 / 위상 변조</div>
+      <div class="kw-def">아날로그-아날로그 변조. AM = 진폭 변화. FM = 주파수 변화(고품질). PM = 위상 변화. FM과 PM은 수학적으로 연관.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Constellation Diagram</div>
+      <div class="kw-ko">성상도</div>
+      <div class="kw-def">I(동위상)-Q(직교) 2차원 평면에 신호 상태를 점으로 표현. QAM, PSK 분석에 활용.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-en">Aliasing</div>
+      <div class="kw-ko">에일리어싱</div>
+      <div class="kw-def">표본화 부족(f<sub>s</sub> &lt; 2f<sub>m</sub>) 시 발생. 원 신호 복원 불가, 왜곡. Anti-aliasing 필터로 방지.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. 예제 풀이 -->
+<section id="examples">
+  <h2>📝 예제 풀이</h2>
+
+  <div class="example-box">
+    <div class="ex-title">예제 4-1 | 표본화율(나이퀴스트율) 계산</div>
+    <p>아날로그 신호의 최고 주파수가 4 kHz일 때, 원 신호를 완벽히 복원할 수 있는 최소 표본화율을 구하라.</p>
+    <div class="ex-ans">
+      f<sub>s</sub> ≥ 2 × f<sub>m</sub> = 2 × 4,000 = 8,000 Hz<br>
+      ∴ 나이퀴스트율 = 8,000 samples/sec = 8 kHz
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 4-2 | PCM 비트율 계산 (전화 음성)</div>
+    <p>음성 신호(최고 주파수 4 kHz)를 PCM으로 변환, 8비트 양자화를 사용할 때 비트율을 구하라.</p>
+    <div class="ex-ans">
+      표본화율 f<sub>s</sub> = 2 × 4,000 = 8,000 samples/sec<br>
+      비트율 = f<sub>s</sub> × n<sub>b</sub> = 8,000 × 8 = 64,000 bps = 64 kbps
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 4-3 | 양자화 레벨 수와 SNR</div>
+    <p>8비트 양자화를 사용할 때 양자화 레벨 수와 SNR(dB)을 구하라.</p>
+    <div class="ex-ans">
+      양자화 레벨 수: L = 2<sup>n</sup> = 2<sup>8</sup> = 256 레벨<br>
+      SNR<sub>dB</sub> = 6.02 × 8 + 1.76 = 48.16 + 1.76 = 49.92 dB ≈ 49.9 dB
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 4-4 | 비트율과 보오율 관계 (QPSK)</div>
+    <p>보오율이 2,000 baud인 시스템에서 QPSK(4위상)를 사용할 때 비트율은?</p>
+    <div class="ex-ans">
+      QPSK: 신호 상태 L = 4  →  n = log₂(4) = 2 비트/신호<br>
+      비트율 = n × 보오율 = 2 × 2,000 = 4,000 bps = 4 kbps
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 4-5 | 16-QAM 비트율</div>
+    <p>보오율이 1,000 baud인 시스템에서 16-QAM을 사용한다면 비트율은?</p>
+    <div class="ex-ans">
+      16-QAM: L = 16  →  n = log₂(16) = 4 비트/신호<br>
+      비트율 = 4 × 1,000 = 4,000 bps = 4 kbps
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 4-6 | 비트율에서 보오율 역산</div>
+    <p>64-QAM을 사용하는 시스템의 비트율이 12 Mbps일 때 보오율은?</p>
+    <div class="ex-ans">
+      64-QAM: L = 64  →  n = log₂(64) = 6 비트/신호<br>
+      보오율 = 비트율 / n = 12,000,000 / 6 = 2,000,000 baud = 2 Mbaud
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 4-7 | PCM 전송 시 필요 대역폭 (맨체스터)</div>
+    <p>표본화율 8 kHz, 8비트 양자화의 PCM 신호를 맨체스터 부호화로 전송할 때 최소 대역폭은?</p>
+    <div class="ex-ans">
+      비트율 = 8,000 × 8 = 64,000 bps<br>
+      맨체스터 최소 대역폭 = 비트율 × 1 = 64,000 Hz = 64 kHz<br>
+      (NRZ는 32 kHz, 맨체스터는 NRZ의 2배 대역폭 필요)
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 4-8 | AM 대역폭</div>
+    <p>최고 주파수 5 kHz인 아날로그 신호를 AM 변조할 때 필요한 대역폭은?</p>
+    <div class="ex-ans">
+      B<sub>AM</sub> = 2 × f<sub>m</sub> = 2 × 5,000 = 10,000 Hz = 10 kHz
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 4-9 | 4B/5B 실제 회선 비트율</div>
+    <p>데이터 비트율 100 Mbps인 FDDI에서 4B/5B 부호화를 사용할 때 실제 회선 비트율은?</p>
+    <div class="ex-ans">
+      4B/5B: 4비트 데이터 → 5비트 코드 전송 (25% 오버헤드)<br>
+      실제 회선 비트율 = 100 Mbps × (5/4) = 125 Mbps
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 4-10 | 2B1Q 비트율 계산</div>
+    <p>2B1Q 부호화를 사용하는 DSL 시스템에서 보오율이 80,000 baud일 때 비트율은?</p>
+    <div class="ex-ans">
+      2B1Q: 2비트 → 4레벨 신호 1개  →  n = log₂(4) = 2<br>
+      비트율 = n × 보오율 = 2 × 80,000 = 160,000 bps = 160 kbps
+    </div>
+  </div>
+</section>
+
+<!-- 10. 연습문제 -->
+<section id="quiz">
+  <h2>✏️ 연습문제</h2>
+
+  <!-- 객관식 -->
+  <div class="quiz-section">
+    <h3>객관식 문제</h3>
+
+    <div class="q-item">
+      <div class="q-stem">Q1. 최고 주파수 4 kHz인 음성 신호를 완벽히 복원하기 위한 최소 표본화 주파수는?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb1')">① 2 kHz</button>
+        <button onclick="answerMC(this, false, 'fb1')">② 4 kHz</button>
+        <button onclick="answerMC(this, true, 'fb1')">③ 8 kHz</button>
+        <button onclick="answerMC(this, false, 'fb1')">④ 16 kHz</button>
+      </div>
+      <div class="q-feedback" id="fb1"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q2. 8비트 양자화 시 SNR(dB) 값은? (SNR = 6.02n + 1.76)</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb2')">① 약 40.0 dB</button>
+        <button onclick="answerMC(this, true, 'fb2')">② 약 49.9 dB</button>
+        <button onclick="answerMC(this, false, 'fb2')">③ 약 56.0 dB</button>
+        <button onclick="answerMC(this, false, 'fb2')">④ 약 65.0 dB</button>
+      </div>
+      <div class="q-feedback" id="fb2"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q3. 다음 중 자기 동기화(Self-Synchronization) 능력이 가장 우수한 회선 부호화 방식은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb3')">① NRZ-L</button>
+        <button onclick="answerMC(this, false, 'fb3')">② NRZ-I</button>
+        <button onclick="answerMC(this, true, 'fb3')">③ 맨체스터(Manchester)</button>
+        <button onclick="answerMC(this, false, 'fb3')">④ Unipolar NRZ</button>
+      </div>
+      <div class="q-feedback" id="fb3"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q4. 보오율 2,000 baud, QPSK(4위상) 사용 시 비트율은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb4')">① 1,000 bps</button>
+        <button onclick="answerMC(this, false, 'fb4')">② 2,000 bps</button>
+        <button onclick="answerMC(this, true, 'fb4')">③ 4,000 bps</button>
+        <button onclick="answerMC(this, false, 'fb4')">④ 8,000 bps</button>
+      </div>
+      <div class="q-feedback" id="fb4"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q5. AMI(Alternate Mark Inversion) 부호화에 대한 설명으로 <strong>틀린</strong> 것은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb5')">① 1을 교대로 +V와 −V로 표현한다</button>
+        <button onclick="answerMC(this, false, 'fb5')">② DC 성분이 없다</button>
+        <button onclick="answerMC(this, true, 'fb5')">③ 연속 0에 강해 동기화가 잘 된다</button>
+        <button onclick="answerMC(this, false, 'fb5')">④ 오류 감지 능력이 있다</button>
+      </div>
+      <div class="q-feedback" id="fb5"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q6. 진폭과 위상을 동시에 변화시켜 가장 높은 대역폭 효율을 제공하는 변조 방식은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb6')">① ASK</button>
+        <button onclick="answerMC(this, false, 'fb6')">② FSK</button>
+        <button onclick="answerMC(this, false, 'fb6')">③ BPSK</button>
+        <button onclick="answerMC(this, true, 'fb6')">④ 64-QAM</button>
+      </div>
+      <div class="q-feedback" id="fb6"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q7. B8ZS와 HDB3에 대한 설명으로 옳은 것은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb7')">① B8ZS는 4개, HDB3는 8개의 연속 0을 대체한다</button>
+        <button onclick="answerMC(this, true, 'fb7')">② B8ZS는 8개, HDB3는 4개의 연속 0을 대체한다</button>
+        <button onclick="answerMC(this, false, 'fb7')">③ 둘 다 8개의 연속 0을 대체한다</button>
+        <button onclick="answerMC(this, false, 'fb7')">④ 둘 다 4개의 연속 0을 대체한다</button>
+      </div>
+      <div class="q-feedback" id="fb7"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q8. 64-QAM에서 하나의 보오(신호 상태)가 나타내는 비트 수는?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb8')">① 4 비트</button>
+        <button onclick="answerMC(this, false, 'fb8')">② 5 비트</button>
+        <button onclick="answerMC(this, true, 'fb8')">③ 6 비트</button>
+        <button onclick="answerMC(this, false, 'fb8')">④ 8 비트</button>
+      </div>
+      <div class="q-feedback" id="fb8"></div>
+    </div>
+  </div>
+
+  <!-- 단답형 -->
+  <div class="quiz-section">
+    <h3>단답형 문제</h3>
+
+    <div class="q-item">
+      <div class="q-stem">Q9. 최고 주파수 3,400 Hz인 전화 음성 신호를 PCM으로 변환할 때 나이퀴스트 표본화율(Hz)을 구하시오.</div>
+      <div class="short-q">
+        <input type="text" id="sq1" placeholder="답 입력 (단위: Hz)">
+        <button onclick="checkShort('sq1', ['6800', '6,800', '6.8kHz', '6.8 kHz'], 'sfb1', '2 × 3,400 = 6,800 Hz (나이퀴스트율)')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb1"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q10. 16비트 양자화를 사용할 때 SNR(dB)은 약 얼마인가? (공식: SNR = 6.02n + 1.76)</div>
+      <div class="short-q">
+        <input type="text" id="sq2" placeholder="답 입력 (단위: dB)">
+        <button onclick="checkShort('sq2', ['98.1', '98', '약 98', '98.08'], 'sfb2', '6.02 × 16 + 1.76 = 96.32 + 1.76 = 98.08 ≈ 98.1 dB')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb2"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q11. 표본화율 44,100 Hz, 16비트 양자화, 스테레오(2채널) CD 오디오의 비트율(bps)을 구하시오.</div>
+      <div class="short-q">
+        <input type="text" id="sq3" placeholder="답 입력 (bps)">
+        <button onclick="checkShort('sq3', ['1411200', '1,411,200', '1.41Mbps', '1.41 Mbps', '약 1.41'], 'sfb3', '44,100 × 16 × 2 = 1,411,200 bps = 약 1.41 Mbps')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb3"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q12. 2B1Q 부호화를 사용하는 시스템에서 비트율이 160 kbps라면 보오율(baud)은?</div>
+      <div class="short-q">
+        <input type="text" id="sq4" placeholder="답 입력 (baud)">
+        <button onclick="checkShort('sq4', ['80000', '80,000', '80kbaud', '80 kbaud'], 'sfb4', '2B1Q: n=2, 보오율 = 160,000 / 2 = 80,000 baud')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb4"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q13. 맨체스터(Manchester) 부호화에서 비트 0과 비트 1을 어떻게 표현하는지 설명하시오. (전이 방향 포함)</div>
+      <div class="short-q">
+        <input type="text" id="sq5" placeholder="답 입력">
+        <button onclick="checkShort('sq5', ['중앙', '전이', '비트 중간', '↓', '↑', '양→음', '음→양'], 'sfb5', '비트 중앙에서 전이: 0 = 양→음(↓), 1 = 음→양(↑). 자기동기화 가능.')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb5"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- SCROLL TOP -->
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Dark Mode
+const toggle = document.getElementById('darkToggle');
+const html = document.documentElement;
+
+function applyTheme(theme) {
+  html.setAttribute('data-theme', theme);
+  toggle.textContent = theme === 'dark' ? '☀️ 라이트모드' : '🌙 야간모드';
+}
+
+const saved = localStorage.getItem('theme') || 'light';
+applyTheme(saved);
+
+toggle.addEventListener('click', function() {
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', next);
+  applyTheme(next);
+});
+
+// Scroll Top
+const scrollBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', function() {
+  scrollBtn.classList.toggle('visible', window.scrollY > 400);
+});
+
+// Quiz Functions
+function answerMC(btn, correct, feedbackId) {
+  const fb = document.getElementById(feedbackId);
+  if (correct) {
+    btn.style.background = '#dcfce7';
+    btn.style.color = '#16a34a';
+    btn.style.borderColor = '#16a34a';
+    fb.textContent = '✓ 정답!';
+    fb.style.color = '#16a34a';
+  } else {
+    btn.style.background = '#fee2e2';
+    btn.style.color = '#dc2626';
+    btn.style.borderColor = '#dc2626';
+    fb.textContent = '✗ 오답. 다시 생각해보세요.';
+    fb.style.color = '#dc2626';
+  }
+  fb.style.display = 'block';
+  btn.parentElement.querySelectorAll('button').forEach(function(b) { b.disabled = true; });
+}
+
+function checkShort(inputId, answers, feedbackId, explanation) {
+  var val = document.getElementById(inputId).value.trim();
+  var fb = document.getElementById(feedbackId);
+  var correct = answers.some(function(a) { return val.includes(a); });
+  if (correct) {
+    fb.textContent = '✓ 정답! ' + explanation;
+    fb.style.color = '#16a34a';
+  } else {
+    fb.textContent = '✗ 다시 생각해보세요. 정답: ' + answers[0] + ' | ' + explanation;
+    fb.style.color = '#dc2626';
+  }
+  fb.style.display = 'block';
+}
+</script>
+</body>
+</html>

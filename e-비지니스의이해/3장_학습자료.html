@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>제3장 조직간 전자상거래 - e-비즈니스의 이해</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e3a8a;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warning: #f59e0b;
+  --info: #0ea5e9;
+  --purple: #7c3aed;
+  --pink: #ec4899;
+  --bg: #f3f4f6;
+  --card-bg: #ffffff;
+  --text: #1f2937;
+  --text-secondary: #6b7280;
+  --border: #e5e7eb;
+  --nav-bg: rgba(255,255,255,0.95);
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card-bg: #1e293b;
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --border: #334155;
+  --nav-bg: rgba(15,23,42,0.95);
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -4px rgba(0,0,0,0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+  padding: 60px 20px 40px;
+  text-align: center;
+}
+.header h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 8px; }
+.header p { font-size: 1.1rem; opacity: 0.9; }
+.header .badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-top: 12px;
+}
+
+/* Navigation */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--nav-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: background 0.3s;
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  overflow-x: auto;
+}
+.nav a {
+  display: inline-block;
+  padding: 14px 16px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+.nav a:hover, .nav a.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+.theme-toggle {
+  margin-left: auto;
+  background: none;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--text);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { border-color: var(--primary); }
+
+/* Main */
+.container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+
+/* Section titles */
+.section-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title .icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+section { margin-bottom: 50px; scroll-margin-top: 70px; }
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+/* Grid */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+@media (max-width: 768px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .header h1 { font-size: 1.6rem; }
+  .nav a { padding: 12px 10px; font-size: 0.8rem; }
+}
+
+/* Section 1: 핵심요약 */
+.keyword-card {
+  border-top: 4px solid var(--primary);
+}
+.keyword-card .kw-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+.keyword-card .kw-eng {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.keyword-card .kw-desc {
+  font-size: 0.92rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* Section 2: 개념비교 */
+.compare-card { border-top: 4px solid var(--purple); }
+.compare-card h3 { font-size: 1.1rem; margin-bottom: 16px; font-weight: 700; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-side {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 14px;
+  transition: background 0.3s;
+}
+.compare-side h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--border);
+}
+.compare-side.left h4 { color: var(--primary); border-bottom-color: var(--primary); }
+.compare-side.right h4 { color: var(--danger); border-bottom-color: var(--danger); }
+.compare-side ul { list-style: none; padding: 0; }
+.compare-side li { font-size: 0.88rem; padding: 3px 0; }
+.compare-side li::before { content: "• "; color: var(--text-secondary); }
+
+/* Table card */
+.table-card { border-top: 4px solid var(--purple); overflow-x: auto; }
+.table-card h3 { font-size: 1.1rem; margin-bottom: 16px; font-weight: 700; }
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.data-table th {
+  background: var(--primary);
+  color: white;
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+}
+.data-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.data-table tr:hover td { background: rgba(37,99,235,0.05); }
+[data-theme="dark"] .data-table tr:hover td { background: rgba(37,99,235,0.15); }
+
+/* Section 3: 다이어그램 */
+.diagram-card { border-top: 4px solid var(--info); }
+.diagram-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; }
+.diagram-box {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 24px;
+  text-align: center;
+  transition: background 0.3s;
+}
+.d-node {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 4px;
+}
+.d-node.main { background: var(--primary); color: white; font-size: 1rem; }
+.d-node.sub { background: var(--info); color: white; }
+.d-node.leaf { background: var(--card-bg); border: 2px solid var(--info); color: var(--text); }
+.d-node.green { background: var(--success); color: white; }
+.d-node.purple { background: var(--purple); color: white; }
+.d-node.pink { background: var(--pink); color: white; }
+.d-arrow {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+  margin: 6px 0;
+}
+.d-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 6px 0; }
+.d-connector { font-size: 0.8rem; color: var(--text-secondary); margin: 4px 0; display: block; }
+
+/* Section 4: 타임라인/실생활예시 */
+.example-card { border-top: 4px solid var(--success); }
+.example-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+.example-card .ex-category {
+  display: inline-block;
+  background: var(--success);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+.example-card .ex-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Section 5: 퀴즈 */
+.quiz-card { border-top: 4px solid var(--warning); margin-bottom: 20px; }
+.quiz-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; }
+.quiz-card .q-num {
+  display: inline-block;
+  background: var(--warning);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.quiz-options { list-style: none; padding: 0; margin-top: 10px; }
+.quiz-options li {
+  padding: 10px 14px;
+  margin: 6px 0;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.quiz-options li:hover { border-color: var(--primary); background: rgba(37,99,235,0.05); }
+.quiz-options li.correct { border-color: var(--success); background: rgba(22,163,74,0.1); }
+.quiz-options li.wrong { border-color: var(--danger); background: rgba(220,38,38,0.1); }
+.quiz-options li.disabled { pointer-events: none; }
+.quiz-feedback {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.success { background: rgba(22,163,74,0.1); color: var(--success); }
+.quiz-feedback.error { background: rgba(220,38,38,0.1); color: var(--danger); }
+
+/* Score */
+.score-box {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  margin-top: 30px;
+}
+.score-box .score-num { font-size: 2.5rem; font-weight: 900; }
+.score-box .score-label { font-size: 0.95rem; opacity: 0.9; }
+
+/* Utility */
+.mt-20 { margin-top: 20px; }
+.tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-right: 4px;
+}
+.tag-blue { background: rgba(37,99,235,0.1); color: var(--primary); }
+.tag-green { background: rgba(22,163,74,0.1); color: var(--success); }
+.tag-purple { background: rgba(124,58,237,0.1); color: var(--purple); }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>제3장 조직간 전자상거래</h1>
+  <p>B2B, B2G, EDI, e-마켓플레이스, 전자무역</p>
+  <div class="badge">e-비즈니스의 이해 | 5개 핵심 주제</div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="./index.html">← 목록</a>
+    <a href="#summary">핵심요약</a>
+    <a href="#compare">개념비교</a>
+    <a href="#diagram">관계다이어그램</a>
+    <a href="#examples">실생활예시</a>
+    <a href="#quiz">셀프체크퀴즈</a>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="테마 전환">🌙</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ===== Section 1: 핵심 요약 ===== -->
+<section id="summary">
+  <div class="section-title">
+    <span class="icon" style="background:var(--primary);">📋</span>
+    핵심 요약 (30초 정리)
+  </div>
+
+  <div class="grid-3">
+    <!-- B2B -->
+    <div class="card keyword-card">
+      <div class="kw-title">B2B</div>
+      <div class="kw-eng">Business-to-Business</div>
+      <div class="kw-desc">기업간 전자상거래. EDI를 통한 문서/정보 교환 및 인터넷 기반 기업간 거래</div>
+    </div>
+    <!-- B2B 비즈니스 모델 -->
+    <div class="card keyword-card">
+      <div class="kw-title">B2B 비즈니스 모델</div>
+      <div class="kw-eng">B2B Business Models</div>
+      <div class="kw-desc">카탈로그 모델, 경매 모델, 교환 모델, 물물거래 모델 — 4가지 핵심 모델</div>
+    </div>
+    <!-- B2B 효과 -->
+    <div class="card keyword-card">
+      <div class="kw-title">B2B 효과</div>
+      <div class="kw-eng">B2B Benefits</div>
+      <div class="kw-desc">업무처리 시간 단축, 구매비용 절감, 적정 재고관리, 고객서비스 개선</div>
+    </div>
+    <!-- MRO -->
+    <div class="card keyword-card">
+      <div class="kw-title">MRO</div>
+      <div class="kw-eng">Maintenance, Repair, Operation</div>
+      <div class="kw-desc">소모성 자재. 기업 운영에 필요한 유지보수, 수리, 운영 관련 물품</div>
+    </div>
+    <!-- B2G -->
+    <div class="card keyword-card">
+      <div class="kw-title">B2G</div>
+      <div class="kw-eng">Business-to-Government</div>
+      <div class="kw-desc">기업과 정부간 전자상거래. 대표 사례: 조달청 나라장터</div>
+    </div>
+    <!-- 나라장터 -->
+    <div class="card keyword-card">
+      <div class="kw-title">나라장터 (KONEPS)</div>
+      <div class="kw-eng">Korea ON-line E-Procurement System</div>
+      <div class="kw-desc">국가종합전자조달시스템. 2024년 거래총액 225조 1,000억원</div>
+    </div>
+    <!-- EDI -->
+    <div class="card keyword-card">
+      <div class="kw-title">EDI</div>
+      <div class="kw-eng">Electronic Data Interchange</div>
+      <div class="kw-desc">표준전자문서를 컴퓨터간 교환하는 시스템</div>
+    </div>
+    <!-- EDI 구성요소 -->
+    <div class="card keyword-card">
+      <div class="kw-title">EDI 구성요소</div>
+      <div class="kw-eng">EDI Components</div>
+      <div class="kw-desc">서비스 제공자(VAN), 서비스 이용자, EDI 표준, EDI 시스템</div>
+    </div>
+    <!-- EDI 효과 -->
+    <div class="card keyword-card">
+      <div class="kw-title">EDI 효과</div>
+      <div class="kw-eng">EDI Benefits</div>
+      <div class="kw-desc">직접적(문서시간 단축), 간접적(재고감소), 전략적(경쟁우위)</div>
+    </div>
+    <!-- 웹 EDI -->
+    <div class="card keyword-card">
+      <div class="kw-title">웹 EDI</div>
+      <div class="kw-eng">Web-based EDI</div>
+      <div class="kw-desc">인터넷 기반 EDI. 사용자/장소 제한 없음, 비용 저렴</div>
+    </div>
+    <!-- e-마켓플레이스 -->
+    <div class="card keyword-card">
+      <div class="kw-title">e-마켓플레이스</div>
+      <div class="kw-eng">e-Marketplace</div>
+      <div class="kw-desc">다수 공급자-구매자간 온라인 거래 시장. N:N 거래 구조</div>
+    </div>
+    <!-- 수직적 e-마켓플레이스 -->
+    <div class="card keyword-card">
+      <div class="kw-title">수직적 e-마켓플레이스</div>
+      <div class="kw-eng">Vertical e-Marketplace</div>
+      <div class="kw-desc">특정 산업별 구축 (신발, 섬유, 기계 등)</div>
+    </div>
+    <!-- 수평적 e-마켓플레이스 -->
+    <div class="card keyword-card">
+      <div class="kw-title">수평적 e-마켓플레이스</div>
+      <div class="kw-eng">Horizontal e-Marketplace</div>
+      <div class="kw-desc">다양한 산업의 공통 기능/프로세스 제공</div>
+    </div>
+    <!-- 전자무역 -->
+    <div class="card keyword-card">
+      <div class="kw-title">전자무역</div>
+      <div class="kw-eng">e-Trade</div>
+      <div class="kw-desc">무역의 전부 또는 일부를 정보통신망으로 처리</div>
+    </div>
+    <!-- 전자무역 특징 -->
+    <div class="card keyword-card">
+      <div class="kw-title">전자무역 특징</div>
+      <div class="kw-eng">e-Trade Characteristics</div>
+      <div class="kw-desc">혁신성, 조직간 정보시스템, 전자적 연결, 공공성</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 2: 개념 비교 ===== -->
+<section id="compare">
+  <div class="section-title">
+    <span class="icon" style="background:var(--purple);">⚖️</span>
+    개념 비교 카드
+  </div>
+
+  <div class="grid-2">
+    <!-- B2B vs B2G -->
+    <div class="card compare-card">
+      <h3>B2B vs B2G</h3>
+      <div class="compare-grid">
+        <div class="compare-side left">
+          <h4>B2B</h4>
+          <ul>
+            <li>기업 ↔ 기업 간 거래</li>
+            <li>EDI / e-마켓플레이스 활용</li>
+            <li>민간 시장 중심</li>
+            <li>가격 협상 자유</li>
+          </ul>
+        </div>
+        <div class="compare-side right">
+          <h4>B2G</h4>
+          <ul>
+            <li>기업 ↔ 정부 간 거래</li>
+            <li>공공 조달 (나라장터)</li>
+            <li>공공 시장 중심</li>
+            <li>입찰 경쟁 방식</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 전통 EDI vs 웹 EDI -->
+    <div class="card compare-card">
+      <h3>전통적 EDI vs 웹 EDI</h3>
+      <div class="compare-grid">
+        <div class="compare-side left">
+          <h4>전통적 EDI</h4>
+          <ul>
+            <li>VAN 사업자 이용</li>
+            <li>비용 높음</li>
+            <li>사용자/장소 제한</li>
+            <li>폐쇄적 네트워크</li>
+          </ul>
+        </div>
+        <div class="compare-side right">
+          <h4>웹 EDI</h4>
+          <ul>
+            <li>인터넷 기반</li>
+            <li>비용 저렴</li>
+            <li>사용자/장소 제한 없음</li>
+            <li>처리업무 연계 용이</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 수직적 vs 수평적 -->
+    <div class="card compare-card">
+      <h3>수직적 vs 수평적 e-마켓플레이스</h3>
+      <div class="compare-grid">
+        <div class="compare-side left">
+          <h4>수직적</h4>
+          <ul>
+            <li>특정 산업별 구축</li>
+            <li>신발, 섬유, 기계, 화학</li>
+            <li>산업 전문성 높음</li>
+            <li>깊이 있는 서비스</li>
+          </ul>
+        </div>
+        <div class="compare-side right">
+          <h4>수평적</h4>
+          <ul>
+            <li>다양한 산업 대상</li>
+            <li>공통 기능/프로세스 제공</li>
+            <li>범용성 높음</li>
+            <li>넓은 서비스 범위</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 전자무역 vs 일반무역 -->
+    <div class="card compare-card">
+      <h3>전자무역 vs 일반무역</h3>
+      <div class="compare-grid">
+        <div class="compare-side left">
+          <h4>전자무역</h4>
+          <ul>
+            <li>온라인 정보교환</li>
+            <li>시간 단축</li>
+            <li>비용 절감</li>
+            <li>글로벌 마케팅 가능</li>
+          </ul>
+        </div>
+        <div class="compare-side right">
+          <h4>일반무역</h4>
+          <ul>
+            <li>오프라인 처리</li>
+            <li>서류 기반</li>
+            <li>시간/비용 많음</li>
+            <li>지역적 한계</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B2B 비즈니스 모델 4가지 -->
+  <div class="mt-20">
+    <div class="card compare-card">
+      <h3>B2B 비즈니스 모델 4가지 비교</h3>
+      <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:12px;">
+        <div class="compare-side left" style="border-left:3px solid var(--primary);">
+          <h4 style="color:var(--primary); border-bottom-color:var(--primary);">카탈로그 모델</h4>
+          <ul>
+            <li>전자 카탈로그 기반</li>
+            <li>사전 결정 가격</li>
+            <li>고정 가격 거래</li>
+          </ul>
+        </div>
+        <div class="compare-side left" style="border-left:3px solid var(--success);">
+          <h4 style="color:var(--success); border-bottom-color:var(--success);">경매 모델</h4>
+          <ul>
+            <li>거래과정에서 가격 결정</li>
+            <li>입찰 경쟁</li>
+            <li>동적 가격 책정</li>
+          </ul>
+        </div>
+        <div class="compare-side left" style="border-left:3px solid var(--purple);">
+          <h4 style="color:var(--purple); border-bottom-color:var(--purple);">교환 모델</h4>
+          <ul>
+            <li>수요-공급 일시 조정</li>
+            <li>주식거래와 유사</li>
+            <li>실시간 매칭</li>
+          </ul>
+        </div>
+        <div class="compare-side left" style="border-left:3px solid var(--warning);">
+          <h4 style="color:var(--warning); border-bottom-color:var(--warning);">물물거래 모델</h4>
+          <ul>
+            <li>상호 이익 자산 교환</li>
+            <li>현금 없는 거래</li>
+            <li>잉여 자원 활용</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDI 효과 테이블 -->
+  <div class="mt-20">
+    <div class="card table-card">
+      <h3>EDI 효과 3가지 비교</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>직접적 효과</th>
+            <th>간접적 효과</th>
+            <th>전략적 효과</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;">핵심 내용</td>
+            <td>문서거래시간 단축</td>
+            <td>재고 감소</td>
+            <td>거래관계 개선</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">세부 항목</td>
+            <td>자료 재입력 방지<br>오류 감소<br>비용 감소</td>
+            <td>인력 활용<br>관리 효율<br>고객서비스<br>자금관리</td>
+            <td>전략적 정보시스템<br>신사업 기회<br>경영혁신<br>경쟁우위 확보</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">시간 범위</td>
+            <td>단기적</td>
+            <td>중기적</td>
+            <td>장기적</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 3: 관계 다이어그램 ===== -->
+<section id="diagram">
+  <div class="section-title">
+    <span class="icon" style="background:var(--info);">🔗</span>
+    관계 다이어그램
+  </div>
+
+  <div class="grid-2">
+    <!-- 조직간 전자상거래 분류 -->
+    <div class="card diagram-card">
+      <h3>조직간 전자상거래 분류</h3>
+      <div class="diagram-box">
+        <div class="d-node main">조직간 전자상거래</div>
+        <span class="d-arrow">↓</span>
+        <div class="d-row">
+          <div class="d-node sub">B2B (기업간)</div>
+          <div class="d-node green">B2G (기업-정부)</div>
+        </div>
+        <span class="d-connector">B2B 수행 수단 ↓</span>
+        <div class="d-row">
+          <div class="d-node leaf">EDI</div>
+          <div class="d-node leaf">e-마켓플레이스</div>
+          <div class="d-node leaf">전자무역</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDI 구성요소 -->
+    <div class="card diagram-card">
+      <h3>EDI 구성요소 다이어그램</h3>
+      <div class="diagram-box">
+        <div class="d-row">
+          <div class="d-node sub">EDI 서비스 제공자<br><small>(VAN 사업자)</small></div>
+          <span style="font-size:1.5rem; align-self:center; color:var(--text-secondary);">⟷</span>
+          <div class="d-node green">EDI 서비스 이용자</div>
+        </div>
+        <span class="d-arrow">↕</span>
+        <div class="d-row">
+          <div class="d-node purple">EDI 표준<br><small>양식표준 + 통신표준</small></div>
+          <div class="d-node pink">EDI 시스템<br><small>소프트웨어</small></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- e-마켓플레이스 거래 구조 -->
+    <div class="card diagram-card">
+      <h3>e-마켓플레이스 거래 구조</h3>
+      <div class="diagram-box">
+        <div style="margin-bottom:20px;">
+          <div class="d-connector" style="font-weight:600;">전통적 B2B: 1:1 또는 1:N</div>
+          <div class="d-row">
+            <div class="d-node leaf">공급자 A</div>
+            <span style="align-self:center; color:var(--text-secondary);">→</span>
+            <div class="d-node leaf">구매자 A</div>
+          </div>
+        </div>
+        <div style="border-top:2px dashed var(--border); padding-top:16px;">
+          <div class="d-connector" style="font-weight:600;">e-마켓플레이스: N:N</div>
+          <div class="d-row">
+            <div style="text-align:center;">
+              <div class="d-node leaf" style="display:block; margin:4px auto;">공급자 A</div>
+              <div class="d-node leaf" style="display:block; margin:4px auto;">공급자 B</div>
+              <div class="d-node leaf" style="display:block; margin:4px auto;">공급자 C</div>
+            </div>
+            <div style="align-self:center;">
+              <span style="font-size:1.2rem; color:var(--text-secondary);">⟷</span>
+              <div class="d-node main" style="display:block; margin:8px 0;">e-마켓<br>플레이스</div>
+              <span style="font-size:1.2rem; color:var(--text-secondary);">⟷</span>
+            </div>
+            <div style="text-align:center;">
+              <div class="d-node leaf" style="display:block; margin:4px auto;">구매자 A</div>
+              <div class="d-node leaf" style="display:block; margin:4px auto;">구매자 B</div>
+              <div class="d-node leaf" style="display:block; margin:4px auto;">구매자 C</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 전자무역 특징 -->
+    <div class="card diagram-card">
+      <h3>전자무역 4대 특징</h3>
+      <div class="diagram-box">
+        <div class="d-node main">전자무역</div>
+        <span class="d-arrow">↓</span>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:400px; margin:0 auto;">
+          <div class="d-node sub" style="text-align:center;">혁신성<br><small style="opacity:0.8;">기존 무역 방식 혁신</small></div>
+          <div class="d-node green" style="text-align:center;">조직간<br>정보시스템<br><small style="opacity:0.8;">기업간 데이터 연결</small></div>
+          <div class="d-node purple" style="text-align:center;">전자적 연결<br><small style="opacity:0.8;">네트워크 기반 처리</small></div>
+          <div class="d-node pink" style="text-align:center;">공공성<br><small style="opacity:0.8;">국가 차원 지원</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 4: 실생활 예시 ===== -->
+<section id="examples">
+  <div class="section-title">
+    <span class="icon" style="background:var(--success);">🏢</span>
+    실생활 예시 카드
+  </div>
+
+  <div class="grid-3">
+    <div class="card example-card">
+      <span class="ex-category" style="background:var(--primary);">B2B</span>
+      <h3>아이마켓코리아</h3>
+      <div class="ex-desc">MRO 구매대행 전문 기업. 삼성그룹 계열사로, 기업간 소모성 자재(MRO)를 효율적으로 조달하는 B2B 플랫폼 운영</div>
+    </div>
+    <div class="card example-card">
+      <span class="ex-category" style="background:var(--primary);">B2B</span>
+      <h3>온라인 뱅킹</h3>
+      <div class="ex-desc">B2B 전자지불 수단. 기업간 거래 대금을 온라인으로 안전하고 빠르게 결제</div>
+    </div>
+    <div class="card example-card">
+      <span class="ex-category" style="background:var(--primary);">B2B</span>
+      <h3>기업 여행 서비스</h3>
+      <div class="ex-desc">기업 출장을 자체적으로 계획하는 B2B 여행 서비스. 비용 절감 및 효율적 출장 관리</div>
+    </div>
+    <div class="card example-card">
+      <span class="ex-category" style="background:var(--success);">B2G</span>
+      <h3>나라장터 (KONEPS)</h3>
+      <div class="ex-desc">5만 5천 공공기관, 53만 조달업체가 참여하는 국가종합전자조달시스템. 2024년 거래총액 225조 1,000억원</div>
+    </div>
+    <div class="card example-card">
+      <span class="ex-category" style="background:var(--success);">B2G</span>
+      <h3>홈택스 (국세청)</h3>
+      <div class="ex-desc">기업의 세무 신고/납부를 온라인으로 처리하는 B2G 서비스</div>
+    </div>
+    <div class="card example-card">
+      <span class="ex-category" style="background:var(--purple);">EDI</span>
+      <h3>국민연금 웹 EDI / 의료 EDI</h3>
+      <div class="ex-desc">국민연금 신고, 의료비 청구 등을 웹 EDI로 처리. 표준전자문서를 온라인으로 교환</div>
+    </div>
+    <div class="card example-card">
+      <span class="ex-category" style="background:var(--info);">e-마켓플레이스</span>
+      <h3>알리바바 / 아마존 비즈니스</h3>
+      <div class="ex-desc">알리바바: 세계 최대 B2B e-마켓플레이스 (시장점유율 39%). 아마존 비즈니스: 글로벌 B2B 거래 플랫폼</div>
+    </div>
+    <div class="card example-card">
+      <span class="ex-category" style="background:var(--info);">e-마켓플레이스</span>
+      <h3>한국농수산식품유통공사(aT)</h3>
+      <div class="ex-desc">사이버거래소 운영. 농수산식품 분야의 국내 e-마켓플레이스</div>
+    </div>
+    <div class="card example-card">
+      <span class="ex-category" style="background:var(--pink);">전자무역</span>
+      <h3>KTNET 국가전자무역서비스</h3>
+      <div class="ex-desc">utradehub.or.kr — 무역 절차의 전부/일부를 온라인으로 처리하는 국가 전자무역 플랫폼</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 5: 셀프 체크 퀴즈 ===== -->
+<section id="quiz">
+  <div class="section-title">
+    <span class="icon" style="background:var(--warning);">✏️</span>
+    셀프 체크 퀴즈
+  </div>
+
+  <div id="quizContainer">
+    <!-- Q1 -->
+    <div class="card quiz-card" data-answer="2">
+      <h4><span class="q-num">1</span>B2B 전자상거래의 정의로 가장 적절한 것은?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">소비자와 기업 간 온라인 거래</li>
+        <li onclick="checkAnswer(this, 2)">기업간 인터넷을 통한 문서/정보 교환 거래</li>
+        <li onclick="checkAnswer(this, 3)">정부와 국민 간 전자적 거래</li>
+        <li onclick="checkAnswer(this, 4)">개인간 중고물품 거래</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="card quiz-card" data-answer="1">
+      <h4><span class="q-num">2</span>B2B 비즈니스 모델 중 사전 결정된 가격으로 거래하는 모델은?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">카탈로그 모델</li>
+        <li onclick="checkAnswer(this, 2)">경매 모델</li>
+        <li onclick="checkAnswer(this, 3)">교환 모델</li>
+        <li onclick="checkAnswer(this, 4)">물물거래 모델</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="card quiz-card" data-answer="3">
+      <h4><span class="q-num">3</span>MRO의 올바른 의미는?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">Marketing, Research, Operation</li>
+        <li onclick="checkAnswer(this, 2)">Management, Repair, Outsourcing</li>
+        <li onclick="checkAnswer(this, 3)">Maintenance, Repair, Operation (소모성 자재)</li>
+        <li onclick="checkAnswer(this, 4)">Manufacturing, Retail, Online</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="card quiz-card" data-answer="2">
+      <h4><span class="q-num">4</span>아이마켓코리아의 주요 사업 분야는?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">B2C 온라인 쇼핑몰</li>
+        <li onclick="checkAnswer(this, 2)">MRO 구매대행</li>
+        <li onclick="checkAnswer(this, 3)">전자무역 플랫폼</li>
+        <li onclick="checkAnswer(this, 4)">공공 조달 시스템</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="card quiz-card" data-answer="4">
+      <h4><span class="q-num">5</span>다음 중 B2B의 효과가 <strong>아닌</strong> 것은?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">업무처리 시간 단축</li>
+        <li onclick="checkAnswer(this, 2)">구매비용 절감</li>
+        <li onclick="checkAnswer(this, 3)">적정 재고관리</li>
+        <li onclick="checkAnswer(this, 4)">오프라인 매장 확대</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="card quiz-card" data-answer="3">
+      <h4><span class="q-num">6</span>나라장터(KONEPS)의 2024년 거래총액은?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">100조 5,000억원</li>
+        <li onclick="checkAnswer(this, 2)">180조 3,000억원</li>
+        <li onclick="checkAnswer(this, 3)">225조 1,000억원</li>
+        <li onclick="checkAnswer(this, 4)">300조 2,000억원</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="card quiz-card" data-answer="1">
+      <h4><span class="q-num">7</span>B2G의 대표적인 사례는?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">조달청 나라장터</li>
+        <li onclick="checkAnswer(this, 2)">알리바바</li>
+        <li onclick="checkAnswer(this, 3)">아이마켓코리아</li>
+        <li onclick="checkAnswer(this, 4)">쿠팡</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="card quiz-card" data-answer="2">
+      <h4><span class="q-num">8</span>EDI의 정의로 가장 적절한 것은?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">이메일을 통한 기업간 커뮤니케이션</li>
+        <li onclick="checkAnswer(this, 2)">표준전자문서를 컴퓨터간 교환하는 시스템</li>
+        <li onclick="checkAnswer(this, 3)">기업 내부 전산화 시스템</li>
+        <li onclick="checkAnswer(this, 4)">온라인 쇼핑몰 운영 시스템</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="card quiz-card" data-answer="3">
+      <h4><span class="q-num">9</span>EDI 서비스 제공자는 무엇인가?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">ISP (인터넷서비스제공자)</li>
+        <li onclick="checkAnswer(this, 2)">SaaS 플랫폼</li>
+        <li onclick="checkAnswer(this, 3)">VAN (부가가치통신망) 사업자</li>
+        <li onclick="checkAnswer(this, 4)">CDN (콘텐츠전송네트워크)</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="card quiz-card" data-answer="2">
+      <h4><span class="q-num">10</span>다음 중 EDI의 <strong>전략적</strong> 효과가 아닌 것은?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">거래관계 개선</li>
+        <li onclick="checkAnswer(this, 2)">문서거래시간 단축</li>
+        <li onclick="checkAnswer(this, 3)">경쟁우위 확보</li>
+        <li onclick="checkAnswer(this, 4)">경영혁신</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="card quiz-card" data-answer="4">
+      <h4><span class="q-num">11</span>다음 중 웹 EDI의 장점이 <strong>아닌</strong> 것은?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">비용이 저렴하다</li>
+        <li onclick="checkAnswer(this, 2)">사용자/장소 제한이 없다</li>
+        <li onclick="checkAnswer(this, 3)">처리업무 연계가 용이하다</li>
+        <li onclick="checkAnswer(this, 4)">VAN 사업자를 반드시 이용해야 한다</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="card quiz-card" data-answer="1">
+      <h4><span class="q-num">12</span>세계 최대 B2B e-마켓플레이스는?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">알리바바 (시장점유율 39%)</li>
+        <li onclick="checkAnswer(this, 2)">아마존 비즈니스</li>
+        <li onclick="checkAnswer(this, 3)">이베이 비즈니스</li>
+        <li onclick="checkAnswer(this, 4)">쿠팡 비즈니스</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="card quiz-card" data-answer="3">
+      <h4><span class="q-num">13</span>수직적 e-마켓플레이스의 특징은?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">다양한 산업의 공통 기능 제공</li>
+        <li onclick="checkAnswer(this, 2)">모든 산업에 범용적으로 적용</li>
+        <li onclick="checkAnswer(this, 3)">특정 산업별로 구축 (신발, 섬유, 기계 등)</li>
+        <li onclick="checkAnswer(this, 4)">소비자 대상 온라인 쇼핑</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="card quiz-card" data-answer="4">
+      <h4><span class="q-num">14</span>다음 중 전자무역의 특징이 <strong>아닌</strong> 것은?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">혁신성</li>
+        <li onclick="checkAnswer(this, 2)">조직간 정보시스템</li>
+        <li onclick="checkAnswer(this, 3)">공공성</li>
+        <li onclick="checkAnswer(this, 4)">폐쇄성</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="card quiz-card" data-answer="3">
+      <h4><span class="q-num">15</span>다음 중 전자무역의 장점이 <strong>아닌</strong> 것은?</h4>
+      <ul class="quiz-options">
+        <li onclick="checkAnswer(this, 1)">시간 단축</li>
+        <li onclick="checkAnswer(this, 2)">비용 절감</li>
+        <li onclick="checkAnswer(this, 3)">대면 상담 강화</li>
+        <li onclick="checkAnswer(this, 4)">글로벌 마케팅</li>
+      </ul>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+
+  <!-- Score -->
+  <div class="score-box" id="scoreBox" style="display:none;">
+    <div class="score-label">최종 점수</div>
+    <div class="score-num" id="scoreNum">0 / 15</div>
+    <div class="score-label" id="scoreMsg" style="margin-top:8px;"></div>
+  </div>
+</section>
+
+</div>
+
+<script>
+// Theme toggle
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.querySelector('.theme-toggle');
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.setAttribute('data-theme', 'light');
+    btn.textContent = '🌙';
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀️';
+    localStorage.setItem('theme', 'dark');
+  }
+}
+
+// Load saved theme
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.querySelector('.theme-toggle').textContent = '☀️';
+  }
+})();
+
+// Quiz logic
+let totalAnswered = 0;
+let totalCorrect = 0;
+
+function checkAnswer(li, selected) {
+  const card = li.closest('.quiz-card');
+  const correct = parseInt(card.getAttribute('data-answer'));
+  const options = card.querySelectorAll('.quiz-options li');
+  const feedback = card.querySelector('.quiz-feedback');
+
+  // Prevent re-answering
+  if (card.classList.contains('answered')) return;
+  card.classList.add('answered');
+  totalAnswered++;
+
+  options.forEach((opt, idx) => {
+    opt.classList.add('disabled');
+    if (idx + 1 === correct) {
+      opt.classList.add('correct');
+    }
+  });
+
+  if (selected === correct) {
+    totalCorrect++;
+    feedback.textContent = '✅ 정답입니다!';
+    feedback.className = 'quiz-feedback show success';
+  } else {
+    li.classList.add('wrong');
+    feedback.textContent = '❌ 오답입니다. 정답을 확인하세요.';
+    feedback.className = 'quiz-feedback show error';
+  }
+
+  // Show score when all answered
+  if (totalAnswered === 15) {
+    const scoreBox = document.getElementById('scoreBox');
+    scoreBox.style.display = 'block';
+    document.getElementById('scoreNum').textContent = totalCorrect + ' / 15';
+    const pct = Math.round((totalCorrect / 15) * 100);
+    let msg = '';
+    if (pct >= 90) msg = '🎉 훌륭합니다! 완벽에 가까운 점수!';
+    else if (pct >= 70) msg = '👍 잘했습니다! 조금만 더 복습하세요.';
+    else if (pct >= 50) msg = '📖 보통입니다. 핵심 개념을 다시 정리해보세요.';
+    else msg = '💪 좀 더 공부가 필요합니다. 핵심요약부터 다시 읽어보세요.';
+    document.getElementById('scoreMsg').textContent = msg;
+    scoreBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+// Active nav highlight on scroll
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('.nav a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop - 100;
+    if (window.scrollY >= top) current = section.getAttribute('id');
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>

@@ -3,3 +3,6 @@
 !*/
 !*.html
 !.gitignore
+
+# 중첩 git 저장소 제외
+AIoT설계입문/project/
