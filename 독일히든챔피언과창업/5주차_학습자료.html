@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5주차 — 독일 산업경제와 스타트업 | 독일히든챔피언과창업</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb; --primary-dark: #1e3a8a;
+            --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+            --bg: #f3f4f6; --card-bg: #ffffff;
+            --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+            --nav-bg: rgba(255,255,255,0.95);
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
+        }
+        [data-theme="dark"] {
+            --bg: #0f172a; --card-bg: #1e293b;
+            --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+            --nav-bg: rgba(15,23,42,0.95);
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+            --shadow-hover: 0 8px 32px rgba(0,0,0,0.6);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; padding-top: 64px; }
+
+        /* NAV */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 60px;
+            background: var(--nav-bg); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; z-index: 1000; gap: 12px;
+        }
+        .nav-logo { font-weight: 700; font-size: 0.95rem; color: var(--primary); text-decoration: none; white-space: nowrap; }
+        .nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
+        .nav-links a { font-size: 0.78rem; color: var(--text-muted); text-decoration: none; padding: 4px 8px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; }
+        .nav-links a:hover { background: rgba(37,99,235,0.1); color: var(--primary); }
+        .nav-right { display: flex; align-items: center; gap: 8px; }
+        .nav-home { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; padding: 4px 10px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; }
+        .nav-home:hover { background: rgba(37,99,235,0.1); color: var(--primary); }
+        .btn-theme { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 1rem; color: var(--text); transition: all 0.2s; }
+        .btn-theme:hover { background: var(--border); }
+
+        /* HEADER */
+        .page-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            padding: 56px 24px 48px; text-align: center; color: #fff;
+        }
+        .week-badge {
+            display: inline-block; background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.3); border-radius: 20px;
+            padding: 4px 16px; font-size: 0.8rem; font-weight: 500;
+            letter-spacing: 0.05em; margin-bottom: 16px;
+        }
+        .page-header h1 { font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 900; margin-bottom: 12px; line-height: 1.3; }
+        .subtitle { font-size: 0.95rem; opacity: 0.85; font-weight: 300; }
+        .lecture-badges { display: flex; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+        .lecture-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; padding: 4px 14px; font-size: 0.78rem; }
+
+        /* MAIN */
+        main { max-width: 900px; margin: 0 auto; padding: 32px 16px 64px; display: flex; flex-direction: column; gap: 28px; }
+
+        /* SECTION CARD */
+        .section-card {
+            background: var(--card-bg); border-radius: 20px;
+            padding: 32px; box-shadow: var(--shadow);
+            transition: box-shadow 0.2s;
+        }
+        .section-card:hover { box-shadow: var(--shadow-hover); }
+        .section-title {
+            font-size: 1.25rem; font-weight: 700; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+
+        /* COLOR ACCENTS */
+        .blue   { border-top: 4px solid #2563eb; }
+        .green  { border-top: 4px solid #16a34a; }
+        .orange { border-top: 4px solid #d97706; }
+        .purple { border-top: 4px solid #7c3aed; }
+        .red    { border-top: 4px solid #dc2626; }
+        .teal   { border-top: 4px solid #0891b2; }
+        .amber  { border-top: 4px solid #d97706; }
+        .cyan   { border-top: 4px solid #0891b2; }
+
+        /* GOAL CARDS */
+        .goal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+        .goal-card {
+            background: linear-gradient(135deg, rgba(37,99,235,0.06), rgba(37,99,235,0.02));
+            border: 1px solid rgba(37,99,235,0.15); border-radius: 14px;
+            padding: 18px; display: flex; gap: 12px; align-items: flex-start;
+        }
+        .goal-num {
+            background: var(--primary); color: #fff; border-radius: 50%;
+            width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+        }
+        .goal-text { font-size: 0.88rem; line-height: 1.6; color: var(--text); }
+
+        /* KEYWORD BOX */
+        .keyword-box {
+            background: rgba(37,99,235,0.06); border-left: 4px solid #2563eb;
+            border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 14px;
+        }
+        .keyword-box:last-child { margin-bottom: 0; }
+        .keyword-box .term { font-weight: 700; font-size: 0.92rem; margin-bottom: 4px; color: var(--primary); }
+        .keyword-box .def { font-size: 0.87rem; line-height: 1.75; color: var(--text); }
+
+        /* SUMMARY GRID */
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+        .summary-card {
+            background: var(--bg); border-radius: 14px; padding: 18px;
+            border: 1px solid var(--border);
+        }
+        .summary-card h4 { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+        .summary-card p { font-size: 0.88rem; line-height: 1.6; font-weight: 500; }
+
+        /* COMPARE */
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .compare-card {
+            background: var(--bg); border-radius: 14px; padding: 20px;
+            border: 1px solid var(--border);
+        }
+        .compare-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+        .compare-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 20px;
+            font-size: 0.72rem; font-weight: 600; margin-bottom: 10px;
+        }
+        .compare-card p { font-size: 0.85rem; line-height: 1.7; margin-bottom: 10px; }
+        .compare-examples .label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+        .compare-examples ul { padding-left: 1.2em; }
+        .compare-examples li { font-size: 0.84rem; line-height: 1.7; }
+
+        /* DIAGRAM */
+        .diagram-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+        .diagram-center {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb); color: #fff;
+            border-radius: 50%; width: 140px; height: 140px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.95rem; text-align: center;
+            box-shadow: 0 4px 20px rgba(37,99,235,0.3);
+        }
+        .diagram-ring { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 600px; }
+        .diagram-node {
+            background: var(--bg); border: 2px solid var(--border); border-radius: 12px;
+            padding: 12px 18px; font-size: 0.84rem; font-weight: 600; text-align: center;
+            min-width: 120px; transition: all 0.2s;
+        }
+        .diagram-node:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .diagram-arrow { font-size: 1.2rem; color: var(--text-muted); display: flex; align-items: center; }
+
+        /* FLOW DIAGRAM */
+        .flow-row { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+        .flow-box {
+            background: var(--bg); border: 2px solid var(--primary); border-radius: 12px;
+            padding: 14px 18px; font-size: 0.84rem; font-weight: 600; text-align: center;
+            min-width: 100px;
+        }
+        .flow-box.highlight { background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(37,99,235,0.05)); }
+        .flow-arrow { font-size: 1.4rem; color: var(--primary); font-weight: 700; }
+
+        /* TIMELINE */
+        .timeline { position: relative; padding-left: 28px; }
+        .timeline::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:2px; background: linear-gradient(180deg, #d97706, #f59e0b, #fbbf24); border-radius:2px; }
+        .tl-item { position: relative; margin-bottom: 24px; }
+        .tl-item:last-child { margin-bottom: 0; }
+        .tl-dot {
+            position: absolute; left: -24px; top: 4px;
+            width: 14px; height: 14px; border-radius: 50%;
+            background: #d97706; border: 2px solid var(--card-bg);
+            box-shadow: 0 0 0 2px #d97706;
+        }
+        .tl-dot.blue-dot { background: var(--primary); box-shadow: 0 0 0 2px var(--primary); }
+        .tl-dot.green-dot { background: #16a34a; box-shadow: 0 0 0 2px #16a34a; }
+        .tl-dot.red-dot { background: #dc2626; box-shadow: 0 0 0 2px #dc2626; }
+        .tl-dot.purple-dot { background: #7c3aed; box-shadow: 0 0 0 2px #7c3aed; }
+        .tl-year { font-size: 0.78rem; font-weight: 700; color: #d97706; margin-bottom: 2px; letter-spacing: 0.05em; }
+        .tl-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+        .tl-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+        .tl-highlight {
+            margin-top: 6px; padding: 8px 12px; border-radius: 8px;
+            background: rgba(217,119,6,0.08); border: 1px solid rgba(217,119,6,0.2);
+            font-size: 0.82rem; line-height: 1.5; color: var(--text);
+        }
+
+        /* EXAMPLE GRID */
+        .example-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .example-card {
+            background: var(--bg); border-radius: 14px; padding: 18px;
+            border: 1px solid var(--border);
+        }
+        .example-card .company { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+        .example-card .category {
+            display: inline-block; padding: 2px 10px; border-radius: 20px;
+            font-size: 0.72rem; font-weight: 600; margin-bottom: 8px;
+        }
+        .example-card .desc { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* CATCH GRID */
+        .catch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+        .catch-card {
+            background: linear-gradient(135deg, rgba(220,38,38,0.06), rgba(220,38,38,0.02));
+            border: 1px solid rgba(220,38,38,0.18); border-radius: 14px; padding: 18px;
+        }
+        .catch-label {
+            display: inline-block; background: #dc2626; color: #fff;
+            font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 6px;
+            margin-bottom: 8px; letter-spacing: 0.04em;
+        }
+        .catch-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+        .catch-desc { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* KEYWORD GRID */
+        .kw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+        .kw-card {
+            background: var(--bg); border-radius: 12px; padding: 16px;
+            border: 1px solid var(--border);
+        }
+        .kw-term { font-size: 0.88rem; font-weight: 700; margin-bottom: 2px; }
+        .kw-en { font-size: 0.75rem; color: var(--primary); margin-bottom: 6px; font-weight: 500; }
+        .kw-def { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* QUIZ */
+        .quiz-item { margin-bottom: 28px; }
+        .quiz-item:last-child { margin-bottom: 0; }
+        .quiz-q { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; line-height: 1.5; }
+        .quiz-q span { color: var(--primary); }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-opt {
+            background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+            padding: 10px 14px; cursor: pointer; font-size: 0.88rem;
+            transition: all 0.2s; text-align: left; color: var(--text);
+        }
+        .quiz-opt:hover { border-color: var(--primary); background: rgba(37,99,235,0.05); }
+        .quiz-opt.correct { background: rgba(22,163,74,0.1); border-color: #16a34a; color: #15803d; font-weight: 600; }
+        .quiz-opt.wrong { background: rgba(220,38,38,0.08); border-color: #dc2626; color: #b91c1c; }
+        .quiz-feedback { font-size: 0.84rem; margin-top: 8px; padding: 8px 12px; border-radius: 8px; display: none; line-height: 1.6; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.ok { background: rgba(22,163,74,0.1); color: #15803d; }
+        .quiz-feedback.ng { background: rgba(220,38,38,0.08); color: #b91c1c; }
+
+        .short-wrap { margin-bottom: 28px; }
+        .short-wrap:last-child { margin-bottom: 0; }
+        .short-q { font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; line-height: 1.5; }
+        .short-input {
+            width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+            border-radius: 10px; font-size: 0.9rem; background: var(--bg);
+            color: var(--text); transition: border 0.2s; font-family: inherit;
+        }
+        .short-input:focus { outline: none; border-color: var(--primary); }
+        .short-btn {
+            margin-top: 8px; padding: 8px 18px; background: var(--primary); color: #fff;
+            border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem;
+            font-weight: 600; transition: background 0.2s; font-family: inherit;
+        }
+        .short-btn:hover { background: var(--primary-dark); }
+        .short-fb { font-size: 0.84rem; margin-top: 8px; padding: 8px 12px; border-radius: 8px; display: none; line-height: 1.6; }
+        .short-fb.show { display: block; }
+        .short-fb.ok { background: rgba(22,163,74,0.1); color: #15803d; }
+        .short-fb.ng { background: rgba(220,38,38,0.08); color: #b91c1c; }
+
+        /* STAT ROW */
+        .stat-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
+        .stat-box {
+            background: var(--bg); border-radius: 12px; padding: 16px; text-align: center;
+            border: 1px solid var(--border);
+        }
+        .stat-num { font-size: 1.3rem; font-weight: 900; color: var(--primary); margin-bottom: 4px; }
+        .stat-label { font-size: 0.78rem; color: var(--text-muted); }
+
+        p { font-size: 0.9rem; line-height: 1.7; }
+        ul, ol { padding-left: 1.3em; }
+        li { font-size: 0.88rem; line-height: 1.8; }
+        .tag { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .tag-blue { background: rgba(37,99,235,0.12); color: #1d4ed8; }
+        .tag-red { background: rgba(220,38,38,0.12); color: #b91c1c; }
+        .tag-green { background: rgba(22,163,74,0.12); color: #15803d; }
+        .tag-purple { background: rgba(124,58,237,0.12); color: #6d28d9; }
+        .tag-orange { background: rgba(217,119,6,0.12); color: #b45309; }
+
+        @media (max-width: 680px) {
+            .compare-grid, .example-grid { grid-template-columns: 1fr; }
+            .summary-grid, .goal-grid, .catch-grid, .kw-grid, .stat-row { grid-template-columns: 1fr; }
+            .flow-row { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+    <a href="index.html" class="nav-logo">🇩🇪 독일히든챔피언과창업</a>
+    <div class="nav-links">
+        <a href="#summary">📋 핵심요약</a>
+        <a href="#compare">⚖️ 개념비교</a>
+        <a href="#diagram">🔗 관계도</a>
+        <a href="#timeline">📅 타임라인</a>
+        <a href="#examples">💡 실생활예시</a>
+        <a href="#quiz">✏️ 퀴즈</a>
+    </div>
+    <div class="nav-right">
+        <a href="index.html" class="nav-home">← 목차</a>
+        <button class="btn-theme" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    </div>
+</nav>
+
+<!-- HEADER -->
+<header class="page-header">
+    <div class="week-badge">5주차</div>
+    <h1>독일 산업경제와 스타트업 생태계</h1>
+    <p class="subtitle">독일 산업경제 전반 · 경쟁력 높은 경제 입지 · 혁신적 스타트업 기업</p>
+    <div class="lecture-badges">
+        <span class="lecture-badge">1강 독일 산업경제 전반</span>
+        <span class="lecture-badge">2강 경쟁력 높은 경제 입지</span>
+        <span class="lecture-badge">3강 혁신적 스타트업 기업</span>
+    </div>
+</header>
+
+<main>
+
+<!-- ===== 1. 핵심 요약 ===== -->
+<section class="section-card blue" id="summary">
+    <h2 class="section-title">📋 핵심 요약 <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">— 30초 정리</span></h2>
+
+    <div class="stat-row">
+        <div class="stat-box"><div class="stat-num">4위</div><div class="stat-label">세계 GDP 순위</div></div>
+        <div class="stat-box"><div class="stat-num">3.65조$</div><div class="stat-label">GDP 규모 (2017)</div></div>
+        <div class="stat-box"><div class="stat-num">~8천만</div><div class="stat-label">인구 (세계 19위)</div></div>
+        <div class="stat-box"><div class="stat-num">99%+</div><div class="stat-label">전체 기업 중 중소기업</div></div>
+    </div>
+
+    <div class="keyword-box">
+        <div class="term">독일 경제의 핵심 = 중소기업</div>
+        <div class="def">독일은 EU 최대 경제대국이자 세계 4위. 그러나 경제의 근간은 대기업이 아니라 <strong>중소기업</strong>이다. 전체 고용의 65~70%가 중소기업에서 이루어지며, 전체 기업의 99% 이상이 중소기업이다. 대기업을 오히려 중소기업이 보완·지탱하는 구조라는 점에서 한국의 대기업 하청 구조와 크게 다르다.</div>
+    </div>
+    <div class="keyword-box">
+        <div class="term">경쟁력의 원천: 혁신력 + 수출</div>
+        <div class="def">독일 경제의 경쟁력은 <strong>탁월한 혁신력</strong>과 <strong>높은 수출 비중</strong>에 기반한다. 자동차, 기계, 화학, 의료기술 등 주요 산업의 매출 절반 이상이 수출로 창출된다. 연간 R&D 투자는 약 <strong>800억 유로</strong>에 달하며, 산업 4.0 시대를 향해 매진 중이다.</div>
+    </div>
+    <div class="keyword-box">
+        <div class="term">사회적 시장경제 모델</div>
+        <div class="def">1949년 이래 독일 경제정책의 토대. 자유로운 기업 활동을 보장하면서도 사회적 정의를 추구하는 모델이다. 루드비히 에르하르트 연방총리가 전후 발전시킨 개념으로, 수익이 특정 기업·개인에 집중되지 않고 모두에게 공정한 기회를 제공하는 것이 핵심이다.</div>
+    </div>
+    <div class="keyword-box">
+        <div class="term">스타트업 생태계</div>
+        <div class="def">독일에는 약 <strong>6,000개</strong>의 스타트업 기업이 있으며, 2012년 이후 약 <strong>8만 개</strong> 일자리를 창출했다. 수도 베를린은 <strong>유럽 창업 수도</strong>로, 2015년 벤처 투자 <strong>21억 유로</strong>가 베를린에 유입되어 런던(17억)을 넘어섰다.</div>
+    </div>
+</section>
+
+<!-- ===== 2. 개념 비교 ===== -->
+<section class="section-card purple" id="compare">
+    <h2 class="section-title">⚖️ 개념 비교</h2>
+    <div class="compare-grid">
+        <div class="compare-card" style="border-top: 3px solid #2563eb;">
+            <h3>🇩🇪 독일 경제 구조</h3>
+            <span class="compare-tag" style="background:rgba(37,99,235,0.12);color:#1d4ed8;">중소기업 중심</span>
+            <p>전체 기업의 99%+ 가 중소기업. 고용의 65~70%가 중소기업에서 이루어진다. 튼튼한 중소기업들이 대기업을 보완·지탱하는 구조.</p>
+            <div class="compare-examples">
+                <div class="label">특징</div>
+                <ul>
+                    <li>세계 시장 선도적 입지의 중소기업 다수</li>
+                    <li>중소기업이 혁신·고용의 핵심 동력</li>
+                    <li>히든챔피언이 수출 경쟁력 견인</li>
+                </ul>
+            </div>
+        </div>
+        <div class="compare-card" style="border-top: 3px solid #dc2626;">
+            <h3>🇰🇷 한국 경제 구조</h3>
+            <span class="compare-tag" style="background:rgba(220,38,38,0.12);color:#b91c1c;">대기업 중심</span>
+            <p>대기업 중심 하청 구조. 중소기업이 대기업 아래 하청업자로 위치하며, 수직적 관계가 형성되어 있다.</p>
+            <div class="compare-examples">
+                <div class="label">특징</div>
+                <ul>
+                    <li>GDP 1조 5,297억 달러 (세계 11위)</li>
+                    <li>대기업 중심의 경제 구조</li>
+                    <li>독일의 약 40% 수준 경제 규모</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;"></div>
+    <div class="compare-grid">
+        <div class="compare-card" style="border-top: 3px solid #16a34a;">
+            <h3>이원제 직업교육</h3>
+            <span class="compare-tag" style="background:rgba(22,163,74,0.12);color:#15803d;">독일식 교육</span>
+            <p>이론과 실습을 병행하는 직업교육 시스템. 학교에서 이론 + 기업 현장에서 실습을 동시 수행한다.</p>
+            <div class="compare-examples">
+                <div class="label">성과</div>
+                <ul>
+                    <li>EU 회원국 중 <strong>고용률 최고</strong></li>
+                    <li><strong>청년 실업률 최저</strong></li>
+                    <li>교육 시스템 자체가 수출 품목</li>
+                </ul>
+            </div>
+        </div>
+        <div class="compare-card" style="border-top: 3px solid #7c3aed;">
+            <h3>독일식 시험 문화</h3>
+            <span class="compare-tag" style="background:rgba(124,58,237,0.12);color:#6d28d9;">교육 철학</span>
+            <p>시험은 자신이 부족한 부분을 확인하기 위한 도구. 경쟁이 아닌 자기 보완이 목적이다.</p>
+            <div class="compare-examples">
+                <div class="label">한국과 차이</div>
+                <ul>
+                    <li>한국: 1등~꼴등 서열화</li>
+                    <li>독일: 개인별 부족한 점 파악·보완</li>
+                    <li>경쟁이 아닌 성장 중심</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 3. 관계 다이어그램 ===== -->
+<section class="section-card cyan" id="diagram">
+    <h2 class="section-title">🔗 독일 경제 경쟁력 구조</h2>
+
+    <div class="diagram-wrap">
+        <div class="diagram-center" style="width:160px;height:160px;">독일 경제<br>세계 4위</div>
+        <div style="font-size:1.2rem;color:var(--text-muted);">▼</div>
+        <div class="diagram-ring">
+            <div class="diagram-node" style="border-color:#2563eb;">🏭 중소기업<br><small style="color:var(--text-muted);">고용 65~70%</small></div>
+            <div class="diagram-node" style="border-color:#16a34a;">🎓 이원제 직업교육<br><small style="color:var(--text-muted);">전문인력 확보</small></div>
+            <div class="diagram-node" style="border-color:#d97706;">🛤️ 인프라<br><small style="color:var(--text-muted);">철도 4.1만km</small></div>
+            <div class="diagram-node" style="border-color:#dc2626;">💡 R&D 투자<br><small style="color:var(--text-muted);">연 800억 유로</small></div>
+            <div class="diagram-node" style="border-color:#7c3aed;">⚖️ 사회적 시장경제<br><small style="color:var(--text-muted);">공정한 기회</small></div>
+            <div class="diagram-node" style="border-color:#0891b2;">📦 수출 경쟁력<br><small style="color:var(--text-muted);">세계 3위 수출국</small></div>
+        </div>
+    </div>
+
+    <div style="margin-top: 28px;">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:14px;">🚀 스타트업 지원 생태계 흐름</h3>
+        <div class="flow-row">
+            <div class="flow-box">연방정부<br><small>디지털 어젠다 2020</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">경제에너지부<br><small>하이테크 창업기금</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box highlight">스타트업 기업<br><small>~6,000개</small></div>
+        </div>
+        <div class="flow-row">
+            <div class="flow-box">대학·연구기관<br><small>프라운호퍼·막스플랑크</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">벤처투자기업<br><small>로켓인터넷 등</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box highlight">일자리 창출<br><small>~8만 개</small></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 4. 타임라인 ===== -->
+<section class="section-card amber" id="timeline">
+    <h2 class="section-title">📅 독일 경제 발전사 타임라인</h2>
+    <div class="timeline">
+        <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1949년</div>
+            <div class="tl-title">사회적 시장경제 모델 도입</div>
+            <div class="tl-desc">루드비히 에르하르트 총리가 전후 발전시킨 경제 모델. 자유로운 기업 활동 + 사회적 정의를 동시에 추구하는 독일 경제정책의 토대가 된다.</div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-dot blue-dot"></div>
+            <div class="tl-year">1955년</div>
+            <div class="tl-title">폭스바겐 비틀 100만 번째 생산</div>
+            <div class="tl-desc">볼프스부르크 공장에서 8월 5일 출고. 전후 폐망에서 회복한 <strong>독일 경제 기적의 상징</strong>이자 절대적 베스트셀러.</div>
+            <div class="tl-highlight">이 시기를 기점으로 독일 경제가 수직 상승하기 시작</div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-dot green-dot"></div>
+            <div class="tl-year">1969년</div>
+            <div class="tl-title">에어버스 콘소시엄 설립</div>
+            <div class="tl-desc">툴루즈에서 독일-프랑스 공동 프로젝트로 출발. 오늘날 세계 2위 항공기 생산업체로 성장.</div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-dot purple-dot"></div>
+            <div class="tl-year">1989년</div>
+            <div class="tl-title">우편개혁 — 연방우체국 민영화</div>
+            <div class="tl-desc">독일 연방우체국이라는 거대 공기업을 민간에 이양. 독일 경제사에서 가장 큰 개혁 중 하나로 간주.</div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-dot red-dot"></div>
+            <div class="tl-year">1990년</div>
+            <div class="tl-title">독일 통일 — 동독 경제 전환</div>
+            <div class="tl-desc">신탁청이 수천 개의 인민소유기업을 시장경제로 전환하는 임무를 수행. 낙후된 동독 시스템을 선진화.</div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">1999년</div>
+            <div class="tl-title">유로화 도입 국가 편입</div>
+            <div class="tl-desc">독일은 유로화를 도입한 최초 12개국 중 하나. EU 국기의 별 12개가 이를 상징.</div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-dot blue-dot"></div>
+            <div class="tl-year">2002년</div>
+            <div class="tl-title">독일 마르크화 → 유로화 대체</div>
+            <div class="tl-desc">1월 1일부터 11개 EU국과 동일 화폐 사용 시작. 1948년부터 사용하던 마르크화 퇴장. 경제공동체화의 획기적 전환점.</div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-dot green-dot"></div>
+            <div class="tl-year">2008년</div>
+            <div class="tl-title">글로벌 금융위기 대응</div>
+            <div class="tl-desc">유로존 전체가 타격을 받았으나, 독일은 이중전략(중소기업 고용 확대 + EU 연합 부채 억제)으로 대응.</div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-dot purple-dot"></div>
+            <div class="tl-year">2014~2015년</div>
+            <div class="tl-title">1969년 이후 최초 균형재정 달성</div>
+            <div class="tl-desc">혁신력 강화 조치를 통해 유로존 위기 속에서도 균형재정(흑자·적자 없는 균형)을 달성. 다른 EU 국가들의 모범 사례.</div>
+            <div class="tl-highlight">닥스(DAX) 지수 사상 최초 만 포인트 돌파 (2014)</div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 5. 실생활 예시 ===== -->
+<section class="section-card orange" id="examples">
+    <h2 class="section-title">💡 독일 주요 기업·기관 사례</h2>
+    <div class="example-grid">
+        <div class="example-card" style="border-top:3px solid #2563eb;">
+            <div class="company">폭스바겐 (Volkswagen)</div>
+            <span class="category" style="background:rgba(37,99,235,0.1);color:#1d4ed8;">자동차</span>
+            <div class="desc">독일 매출 규모 1위 기업. 비틀은 전후 경제 기적의 상징. 볼프스부르크에 본사.</div>
+        </div>
+        <div class="example-card" style="border-top:3px solid #dc2626;">
+            <div class="company">로켓인터넷 (Rocket Internet)</div>
+            <span class="category" style="background:rgba(220,38,38,0.1);color:#b91c1c;">벤처투자</span>
+            <div class="desc">베를린 소재 독일 대표 벤처투자기업. 삼베르 삼형제가 공동 창업. 6개 대륙 110개국 스타트업에 투자, 직원 약 3만 명(2016).</div>
+        </div>
+        <div class="example-card" style="border-top:3px solid #16a34a;">
+            <div class="company">프라운호퍼 / 막스플랑크 협회</div>
+            <span class="category" style="background:rgba(22,163,74,0.1);color:#15803d;">연구기관</span>
+            <div class="desc">독일 대표 대형 연구기관. 혁신 기술·특허를 디지털 비즈니스 모델로 전환하는 데 적극 지원. 스타트업 기술 이전의 핵심 파트너.</div>
+        </div>
+        <div class="example-card" style="border-top:3px solid #d97706;">
+            <div class="company">저먼스타트업그룹 (German Startups Group)</div>
+            <span class="category" style="background:rgba(217,119,6,0.1);color:#b45309;">벤처투자</span>
+            <div class="desc">독일 2위 벤처투자기업. 고성장·수익성 기대 40개+ 창업 초기 기업에 소수지분을 보유하고 지원.</div>
+        </div>
+        <div class="example-card" style="border-top:3px solid #7c3aed;">
+            <div class="company">지멘스 / 아디다스 / 밀레</div>
+            <span class="category" style="background:rgba(124,58,237,0.1);color:#6d28d9;">글로벌 브랜드</span>
+            <div class="desc">"메이드 인 저머니"의 상징. 독일 각 지역에 분포한 세계적 기업들로, 높은 품질과 기술 우위를 바탕으로 글로벌 경쟁력 확보.</div>
+        </div>
+        <div class="example-card" style="border-top:3px solid #0891b2;">
+            <div class="company">프랑크푸르트 증권거래소</div>
+            <span class="category" style="background:rgba(8,145,178,0.1);color:#0e7490;">금융</span>
+            <div class="desc">유럽 대표 금융기관. 독일 30대 기업의 주가지수 DAX(닥스)를 운영. 유럽중앙은행(ECB)도 프랑크푸르트에 소재.</div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 6. 셀프 체크 퀴즈 ===== -->
+<section class="section-card green" id="quiz">
+    <h2 class="section-title">✏️ 셀프 체크 퀴즈</h2>
+
+    <!-- Q1 -->
+    <div class="quiz-item" id="q1">
+        <p class="quiz-q"><span>Q1.</span> 독일의 GDP는 세계 몇 위이며, 독일 경제의 근간을 이루는 것은?</p>
+        <div class="quiz-options">
+            <button class="quiz-opt" onclick="checkQuiz('q1',0,2,'독일은 미국·중국·일본에 이어 세계 4위이며, 전체 기업의 99% 이상, 고용의 65~70%가 중소기업입니다.')">① 세계 2위, 대기업</button>
+            <button class="quiz-opt" onclick="checkQuiz('q1',1,2,'독일은 미국·중국·일본에 이어 세계 4위이며, 전체 기업의 99% 이상, 고용의 65~70%가 중소기업입니다.')">② 세계 3위, 수출 대기업</button>
+            <button class="quiz-opt" onclick="checkQuiz('q1',2,2,'독일은 미국·중국·일본에 이어 세계 4위이며, 전체 기업의 99% 이상, 고용의 65~70%가 중소기업입니다.')">③ 세계 4위, 중소기업</button>
+            <button class="quiz-opt" onclick="checkQuiz('q1',3,2,'독일은 미국·중국·일본에 이어 세계 4위이며, 전체 기업의 99% 이상, 고용의 65~70%가 중소기업입니다.')">④ 세계 5위, 자동차 산업</button>
+        </div>
+        <div class="quiz-feedback" id="q1-fb"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-item" id="q2">
+        <p class="quiz-q"><span>Q2.</span> 독일의 전체 고용 중 중소기업이 차지하는 비율은 대략?</p>
+        <div class="quiz-options">
+            <button class="quiz-opt" onclick="checkQuiz('q2',0,1,'강의에 따르면 전체 고용의 65~70%가 중소기업에서 이루어지고 있습니다.')">① 약 40~50%</button>
+            <button class="quiz-opt" onclick="checkQuiz('q2',1,1,'강의에 따르면 전체 고용의 65~70%가 중소기업에서 이루어지고 있습니다.')">② 약 65~70%</button>
+            <button class="quiz-opt" onclick="checkQuiz('q2',2,1,'강의에 따르면 전체 고용의 65~70%가 중소기업에서 이루어지고 있습니다.')">③ 약 80~85%</button>
+            <button class="quiz-opt" onclick="checkQuiz('q2',3,1,'강의에 따르면 전체 고용의 65~70%가 중소기업에서 이루어지고 있습니다.')">④ 약 90~95%</button>
+        </div>
+        <div class="quiz-feedback" id="q2-fb"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-item" id="q3">
+        <p class="quiz-q"><span>Q3.</span> 1955년 폭스바겐 비틀 100만 번째 생산이 가지는 의미는?</p>
+        <div class="quiz-options">
+            <button class="quiz-opt" onclick="checkQuiz('q3',0,0,'비틀은 전후 폐망에서 회복한 독일 경제 기적의 상징이자 베스트셀러로, 이 시기를 기점으로 독일 경제가 수직 상승합니다.')">① 독일 경제 기적의 상징, 전후 경제 회복의 기점</button>
+            <button class="quiz-opt" onclick="checkQuiz('q3',1,0,'비틀은 전후 폐망에서 회복한 독일 경제 기적의 상징이자 베스트셀러로, 이 시기를 기점으로 독일 경제가 수직 상승합니다.')">② 자동차 수출 세계 1위 달성의 계기</button>
+            <button class="quiz-opt" onclick="checkQuiz('q3',2,0,'비틀은 전후 폐망에서 회복한 독일 경제 기적의 상징이자 베스트셀러로, 이 시기를 기점으로 독일 경제가 수직 상승합니다.')">③ 독일 통일의 경제적 토대 마련</button>
+            <button class="quiz-opt" onclick="checkQuiz('q3',3,0,'비틀은 전후 폐망에서 회복한 독일 경제 기적의 상징이자 베스트셀러로, 이 시기를 기점으로 독일 경제가 수직 상승합니다.')">④ EU 경제 공동체 출범의 상징</button>
+        </div>
+        <div class="quiz-feedback" id="q3-fb"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-item" id="q4">
+        <p class="quiz-q"><span>Q4.</span> "사회적 시장경제"의 핵심 원칙은 무엇인가?</p>
+        <div class="quiz-options">
+            <button class="quiz-opt" onclick="checkQuiz('q4',0,2,'사회적 시장경제는 자유 기업활동을 보장하면서 수익이 모두에게 공정하게 돌아가는 사회적 정의를 추구하는 모델입니다.')">① 국가가 모든 산업을 통제</button>
+            <button class="quiz-opt" onclick="checkQuiz('q4',1,2,'사회적 시장경제는 자유 기업활동을 보장하면서 수익이 모두에게 공정하게 돌아가는 사회적 정의를 추구하는 모델입니다.')">② 완전한 자유시장, 정부 불간섭</button>
+            <button class="quiz-opt" onclick="checkQuiz('q4',2,2,'사회적 시장경제는 자유 기업활동을 보장하면서 수익이 모두에게 공정하게 돌아가는 사회적 정의를 추구하는 모델입니다.')">③ 자유로운 기업활동 + 사회적 정의 동시 추구</button>
+            <button class="quiz-opt" onclick="checkQuiz('q4',3,2,'사회적 시장경제는 자유 기업활동을 보장하면서 수익이 모두에게 공정하게 돌아가는 사회적 정의를 추구하는 모델입니다.')">④ 대기업 위주의 수출 극대화</button>
+        </div>
+        <div class="quiz-feedback" id="q4-fb"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-item" id="q5">
+        <p class="quiz-q"><span>Q5.</span> 독일 이원제 직업교육의 특징으로 올바른 것은?</p>
+        <div class="quiz-options">
+            <button class="quiz-opt" onclick="checkQuiz('q5',0,1,'이원제 직업교육은 학교에서 이론 + 기업 현장에서 실습을 병행하는 제도로, EU 중 고용률 최고·청년 실업률 최저를 달성하는 성과를 냈습니다.')">① 대학교에서만 이론 수업 진행</button>
+            <button class="quiz-opt" onclick="checkQuiz('q5',1,1,'이원제 직업교육은 학교에서 이론 + 기업 현장에서 실습을 병행하는 제도로, EU 중 고용률 최고·청년 실업률 최저를 달성하는 성과를 냈습니다.')">② 학교 이론 + 기업 현장 실습 병행</button>
+            <button class="quiz-opt" onclick="checkQuiz('q5',2,1,'이원제 직업교육은 학교에서 이론 + 기업 현장에서 실습을 병행하는 제도로, EU 중 고용률 최고·청년 실업률 최저를 달성하는 성과를 냈습니다.')">③ 기업에서만 실무 교육 진행</button>
+            <button class="quiz-opt" onclick="checkQuiz('q5',3,1,'이원제 직업교육은 학교에서 이론 + 기업 현장에서 실습을 병행하는 제도로, EU 중 고용률 최고·청년 실업률 최저를 달성하는 성과를 냈습니다.')">④ 온라인 원격 교육 중심</button>
+        </div>
+        <div class="quiz-feedback" id="q5-fb"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-item" id="q6">
+        <p class="quiz-q"><span>Q6.</span> 스타트업 기업의 일반적인 정의에 해당하는 것은?</p>
+        <div class="quiz-options">
+            <button class="quiz-opt" onclick="checkQuiz('q6',0,2,'스타트업은 일반적으로 설립된 지 5년 이하의 디지털 기반 신생 기업을 말합니다.')">① 매출 1억 이상의 중견기업</button>
+            <button class="quiz-opt" onclick="checkQuiz('q6',1,2,'스타트업은 일반적으로 설립된 지 5년 이하의 디지털 기반 신생 기업을 말합니다.')">② 설립 10년 이하의 제조업 기업</button>
+            <button class="quiz-opt" onclick="checkQuiz('q6',2,2,'스타트업은 일반적으로 설립된 지 5년 이하의 디지털 기반 신생 기업을 말합니다.')">③ 설립 5년 이하의 디지털 기반 신생 기업</button>
+            <button class="quiz-opt" onclick="checkQuiz('q6',3,2,'스타트업은 일반적으로 설립된 지 5년 이하의 디지털 기반 신생 기업을 말합니다.')">④ 정부 지원을 받는 모든 기업</button>
+        </div>
+        <div class="quiz-feedback" id="q6-fb"></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="quiz-item" id="q7">
+        <p class="quiz-q"><span>Q7.</span> 유럽의 창업 수도로 불리며, 2015년 벤처 투자 21억 유로가 유입된 독일 도시는?</p>
+        <div class="quiz-options">
+            <button class="quiz-opt" onclick="checkQuiz('q7',0,0,'베를린은 독일 스타트업의 16%(1/5)가 모여 있으며, 런던(17억 유로)을 넘어서 유럽 벤처투자 1위를 기록했습니다.')">① 베를린</button>
+            <button class="quiz-opt" onclick="checkQuiz('q7',1,0,'베를린은 독일 스타트업의 16%(1/5)가 모여 있으며, 런던(17억 유로)을 넘어서 유럽 벤처투자 1위를 기록했습니다.')">② 뮌헨</button>
+            <button class="quiz-opt" onclick="checkQuiz('q7',2,0,'베를린은 독일 스타트업의 16%(1/5)가 모여 있으며, 런던(17억 유로)을 넘어서 유럽 벤처투자 1위를 기록했습니다.')">③ 프랑크푸르트</button>
+            <button class="quiz-opt" onclick="checkQuiz('q7',3,0,'베를린은 독일 스타트업의 16%(1/5)가 모여 있으며, 런던(17억 유로)을 넘어서 유럽 벤처투자 1위를 기록했습니다.')">④ 함부르크</button>
+        </div>
+        <div class="quiz-feedback" id="q7-fb"></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="quiz-item" id="q8">
+        <p class="quiz-q"><span>Q8.</span> 독일 대표 물류 항구가 위치한 도시는?</p>
+        <div class="quiz-options">
+            <button class="quiz-opt" onclick="checkQuiz('q8',0,2,'강의에서 독일의 대표적인 물류 항구는 함부르크라고 설명했습니다.')">① 베를린</button>
+            <button class="quiz-opt" onclick="checkQuiz('q8',1,2,'강의에서 독일의 대표적인 물류 항구는 함부르크라고 설명했습니다.')">② 뮌헨</button>
+            <button class="quiz-opt" onclick="checkQuiz('q8',2,2,'강의에서 독일의 대표적인 물류 항구는 함부르크라고 설명했습니다.')">③ 함부르크</button>
+            <button class="quiz-opt" onclick="checkQuiz('q8',3,2,'강의에서 독일의 대표적인 물류 항구는 함부르크라고 설명했습니다.')">④ 프랑크푸르트</button>
+        </div>
+        <div class="quiz-feedback" id="q8-fb"></div>
+    </div>
+
+    <!-- SHORT ANSWER -->
+    <div style="margin-top: 32px; border-top: 1px solid var(--border); padding-top: 24px;">
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 16px;">📝 단답형 문제</h3>
+
+        <div class="short-wrap" id="s1">
+            <p class="short-q"><span style="color:var(--primary);">S1.</span> 독일 경제정책의 토대가 되는 경제 모델의 이름은?</p>
+            <input class="short-input" id="s1-input" placeholder="답을 입력하세요">
+            <button class="short-btn" onclick="checkShort('s1',['사회적 시장경제','사회적 시장 경제','사회적시장경제'],'루드비히 에르하르트가 전후 발전시킨 모델로, 자유 기업활동과 사회적 정의를 동시에 추구합니다.')">확인</button>
+            <div class="short-fb" id="s1-fb"></div>
+        </div>
+
+        <div class="short-wrap" id="s2">
+            <p class="short-q"><span style="color:var(--primary);">S2.</span> 독일 30대 기업의 주가를 반영하는 독일 주가지수의 이름은?</p>
+            <input class="short-input" id="s2-input" placeholder="답을 입력하세요">
+            <button class="short-btn" onclick="checkShort('s2',['닥스','DAX','dax','Dax'],'DAX(닥스)는 프랑크푸르트 증권거래소의 독일 30대 기업 주가지수로, 2014년 사상 처음 만 포인트를 돌파했습니다.')">확인</button>
+            <div class="short-fb" id="s2-fb"></div>
+        </div>
+
+        <div class="short-wrap" id="s3">
+            <p class="short-q"><span style="color:var(--primary);">S3.</span> 베를린 소재의 독일 대표 벤처투자기업으로, 삼베르 삼형제가 창업한 회사는?</p>
+            <input class="short-input" id="s3-input" placeholder="답을 입력하세요">
+            <button class="short-btn" onclick="checkShort('s3',['로켓인터넷','로켓 인터넷','Rocket Internet','rocket internet'],'로켓인터넷은 6대륙 110개국 스타트업에 투자하며, 2016년 기준 직원 약 3만 명 규모의 주식상장 인터넷 기업입니다.')">확인</button>
+            <div class="short-fb" id="s3-fb"></div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer style="text-align:center; padding:32px 16px; color:var(--text-muted); font-size:0.8rem; border-top:1px solid var(--border);">
+    독일히든챔피언과창업 · 5주차 학습자료
+</footer>
+
+<script>
+// Dark Mode
+function toggleTheme(){
+    const html=document.documentElement, btn=document.getElementById('themeBtn');
+    const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
+    html.setAttribute('data-theme',next);
+    btn.textContent=next==='dark'?'☀️':'🌙';
+    localStorage.setItem('theme',next);
+}
+(function(){
+    const s=localStorage.getItem('theme')||'light';
+    document.documentElement.setAttribute('data-theme',s);
+    document.getElementById('themeBtn').textContent=s==='dark'?'☀️':'🌙';
+})();
+
+// Quiz
+function checkQuiz(qId,sel,cor,expl){
+    const item=document.getElementById(qId);
+    const btns=item.querySelectorAll('.quiz-opt');
+    btns.forEach(b=>b.disabled=true);
+    btns[sel].classList.add(sel===cor?'correct':'wrong');
+    if(sel!==cor) btns[cor].classList.add('correct');
+    const fb=document.getElementById(qId+'-fb');
+    fb.classList.add('show');
+    if(sel===cor){fb.classList.add('ok');fb.innerHTML='✅ <strong>정답!</strong> '+expl;}
+    else{fb.classList.add('ng');fb.innerHTML='❌ <strong>오답.</strong> 정답은 <strong>'+(cor+1)+'번</strong>입니다. '+expl;}
+}
+
+// Short Answer
+function checkShort(sId,answers,expl){
+    const input=document.getElementById(sId+'-input');
+    const fb=document.getElementById(sId+'-fb');
+    const v=input.value.trim();
+    fb.classList.add('show');
+    if(answers.some(a=>v===a)){
+        fb.classList.add('ok');fb.innerHTML='✅ <strong>정답!</strong> '+expl;
+    } else {
+        fb.classList.add('ng');fb.innerHTML='❌ <strong>오답.</strong> 정답: <strong>'+answers[0]+'</strong>. '+expl;
+    }
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+        e.preventDefault();
+        const t=document.querySelector(a.getAttribute('href'));
+        if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+});
+</script>
+</body>
+</html>

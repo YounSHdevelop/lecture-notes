@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터사이언스입문 — 4주차: 확률과 통계 기초</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e3a8a;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warning: #d97706;
+  --purple: #7c3aed;
+  --teal: #0d9488;
+  --indigo: #4f46e5;
+  --pink: #db2777;
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --text: #1f2937;
+  --text-sub: #6b7280;
+  --border: #e5e7eb;
+  --code-bg: #1e293b;
+  --code-text: #e2e8f0;
+  --nav-bg: rgba(255,255,255,0.95);
+  --tag-bg: #eff6ff;
+  --tag-text: #1d4ed8;
+}
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --text-sub: #94a3b8;
+  --border: #334155;
+  --nav-bg: rgba(15,23,42,0.97);
+  --tag-bg: #1e3a8a;
+  --tag-text: #93c5fd;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; line-height: 1.7; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--nav-bg); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem; height: 52px; gap: 0.5rem;
+}
+.nav-links { display: flex; gap: 0.25rem; flex-wrap: wrap; overflow-x: auto; }
+.nav-links a {
+  font-size: 0.75rem; padding: 0.3rem 0.55rem; border-radius: 6px;
+  color: var(--text); text-decoration: none; transition: background 0.2s; white-space: nowrap;
+}
+.nav-links a:hover { background: var(--border); }
+#themeBtn {
+  background: none; border: 1px solid var(--border); border-radius: 8px;
+  padding: 0.3rem 0.7rem; cursor: pointer; font-size: 1rem;
+  color: var(--text); transition: background 0.2s; white-space: nowrap; flex-shrink: 0;
+}
+#themeBtn:hover { background: var(--border); }
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white; text-align: center; padding: 5rem 2rem 3rem;
+  margin-top: 52px;
+}
+header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+header p { font-size: 1rem; opacity: 0.85; }
+.header-badges { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+.badge { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 0.25rem 0.9rem; font-size: 0.8rem; }
+
+/* SECTIONS */
+section { max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem; }
+.section-title {
+  font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.section-title .icon { font-size: 1.6rem; }
+
+/* CARDS */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
+.card-grid.three { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.4rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-top: 4px solid var(--primary);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+.card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.card p, .card li { font-size: 0.88rem; color: var(--text-sub); line-height: 1.7; }
+.card ul { padding-left: 1.1rem; }
+.card.blue { border-top-color: var(--primary); }
+.card.green { border-top-color: var(--success); }
+.card.red { border-top-color: var(--danger); }
+.card.purple { border-top-color: var(--purple); }
+.card.teal { border-top-color: var(--teal); }
+.card.orange { border-top-color: var(--warning); }
+.card.indigo { border-top-color: var(--indigo); }
+.card.pink { border-top-color: var(--pink); }
+
+/* GOAL CARDS */
+.goal-card {
+  background: var(--card); border-radius: 12px; padding: 1rem 1.4rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  display: flex; align-items: center; gap: 1rem;
+  border-left: 4px solid var(--primary);
+  margin-bottom: 0.8rem;
+}
+.goal-num {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white; width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1rem; flex-shrink: 0;
+}
+.goal-card p { font-size: 0.92rem; }
+
+/* TIMELINE */
+.timeline { position: relative; padding-left: 2.5rem; }
+.timeline::before {
+  content: ''; position: absolute; left: 14px; top: 0; bottom: 0;
+  width: 3px; background: linear-gradient(to bottom, var(--primary), var(--purple), var(--teal));
+  border-radius: 2px;
+}
+.tl-item { position: relative; margin-bottom: 1.5rem; }
+.tl-item::before {
+  content: ''; position: absolute; left: -2.5rem; top: 0.5rem;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--primary); border: 3px solid var(--bg);
+}
+.tl-item h3 { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 0.2rem; }
+.tl-item p { font-size: 0.85rem; color: var(--text-sub); }
+.tl-item .tl-card {
+  background: var(--card); border-radius: 10px; padding: 1rem 1.2rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* CATCH */
+.catch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.catch-card {
+  background: var(--card); border-radius: 12px; padding: 1.2rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  border-left: 5px solid var(--danger);
+}
+.catch-card h4 { font-size: 0.95rem; font-weight: 700; color: var(--danger); margin-bottom: 0.4rem; }
+.catch-card p { font-size: 0.85rem; color: var(--text-sub); line-height: 1.6; }
+
+/* KEYWORD */
+.kw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.kw-card {
+  background: var(--card); border-radius: 10px; padding: 1rem 1.2rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border-top: 3px solid var(--teal);
+}
+.kw-card .kw-term { font-weight: 700; font-size: 0.92rem; margin-bottom: 0.2rem; }
+.kw-card .kw-en { font-size: 0.78rem; color: var(--primary); margin-bottom: 0.3rem; }
+.kw-card .kw-def { font-size: 0.83rem; color: var(--text-sub); line-height: 1.6; }
+
+/* FORMULA */
+.formula-box {
+  background: var(--card); border-radius: 10px; padding: 1rem 1.3rem;
+  border-left: 4px solid var(--indigo); margin-bottom: 0.8rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.formula-box .formula-label { font-size: 0.82rem; font-weight: 700; color: var(--indigo); margin-bottom: 0.3rem; }
+.formula-box .formula-math { font-size: 1.05rem; font-family: 'Cambria Math', 'Times New Roman', serif; color: var(--text); margin-bottom: 0.2rem; }
+.formula-box .formula-desc { font-size: 0.82rem; color: var(--text-sub); }
+
+/* CODE */
+.code-block {
+  background: var(--code-bg); color: var(--code-text); border-radius: 10px;
+  padding: 1rem 1.2rem; font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.82rem; overflow-x: auto; margin: 0.8rem 0; line-height: 1.6;
+  white-space: pre;
+}
+
+/* QUIZ */
+.quiz-item {
+  background: var(--card); border-radius: 12px; padding: 1.4rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 1.2rem;
+  border-top: 4px solid var(--purple);
+}
+.quiz-item .q-num {
+  display: inline-block; background: var(--purple); color: white;
+  border-radius: 6px; padding: 0.15rem 0.6rem; font-size: 0.78rem;
+  font-weight: 700; margin-bottom: 0.6rem;
+}
+.quiz-item .q-text { font-size: 0.92rem; font-weight: 600; margin-bottom: 0.8rem; }
+.quiz-item label {
+  display: block; padding: 0.5rem 0.8rem; margin-bottom: 0.3rem;
+  border-radius: 8px; cursor: pointer; font-size: 0.87rem; transition: background 0.2s;
+}
+.quiz-item label:hover { background: var(--border); }
+.quiz-item input[type="radio"],
+.quiz-item input[type="text"] { margin-right: 0.5rem; }
+.quiz-item input[type="text"] {
+  padding: 0.45rem 0.8rem; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg); color: var(--text); font-size: 0.88rem; width: 160px;
+}
+.quiz-btn {
+  margin-top: 0.6rem; padding: 0.45rem 1.2rem; border: none;
+  border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s;
+}
+.quiz-btn.check { background: var(--primary); color: white; }
+.quiz-btn.check:hover { background: var(--primary-dark); }
+.quiz-feedback {
+  margin-top: 0.5rem; padding: 0.5rem 0.8rem; border-radius: 8px;
+  font-size: 0.85rem; display: none;
+}
+.quiz-feedback.correct { display: block; background: #dcfce7; color: #166534; }
+.quiz-feedback.wrong { display: block; background: #fee2e2; color: #991b1b; }
+[data-theme="dark"] .quiz-feedback.correct { background: #14532d; color: #86efac; }
+[data-theme="dark"] .quiz-feedback.wrong { background: #7f1d1d; color: #fca5a5; }
+
+/* SUBSECTION */
+.sub-section {
+  background: var(--card); border-radius: 12px; padding: 1.4rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 1.2rem;
+  border-top: 4px solid var(--primary);
+}
+.sub-section h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.8rem; color: var(--text); }
+.sub-section h4 { font-size: 0.95rem; font-weight: 700; margin: 0.8rem 0 0.4rem; color: var(--primary); }
+.sub-section p, .sub-section li { font-size: 0.88rem; color: var(--text-sub); line-height: 1.7; }
+.sub-section ul, .sub-section ol { padding-left: 1.2rem; margin-bottom: 0.5rem; }
+
+/* TAG */
+.tag { display: inline-block; background: var(--tag-bg); color: var(--tag-text); border-radius: 6px; padding: 0.15rem 0.5rem; font-size: 0.75rem; font-weight: 600; margin: 0.15rem; }
+
+/* TABLE */
+.data-table {
+  width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 0.85rem;
+}
+.data-table th, .data-table td {
+  padding: 0.6rem 0.8rem; border: 1px solid var(--border); text-align: left;
+}
+.data-table th { background: var(--primary); color: white; font-weight: 600; }
+.data-table td { background: var(--card); color: var(--text-sub); }
+
+/* TAB */
+.tab-container { margin: 1rem 0; }
+.tab-buttons { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-bottom: 0; }
+.tab-btn {
+  padding: 0.4rem 1rem; border: 1px solid var(--border); border-bottom: none;
+  border-radius: 8px 8px 0 0; cursor: pointer; font-size: 0.82rem;
+  background: var(--bg); color: var(--text-sub); transition: all 0.2s;
+}
+.tab-btn.active { background: var(--card); color: var(--primary); font-weight: 700; border-bottom: 2px solid var(--card); }
+.tab-panel { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 0 8px 8px 8px; padding: 1.2rem; }
+.tab-panel.active { display: block; }
+
+/* SCORE */
+.score-box {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white; border-radius: 12px; padding: 1.5rem; text-align: center;
+  margin-top: 1.5rem;
+}
+.score-box .score-num { font-size: 2.5rem; font-weight: 800; }
+.score-box .score-label { font-size: 0.9rem; opacity: 0.85; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { padding: 0 0.8rem; }
+  .nav-links a { font-size: 0.7rem; padding: 0.25rem 0.4rem; }
+  header { padding: 4rem 1rem 2rem; }
+  header h1 { font-size: 1.5rem; }
+  section { padding: 2rem 1rem; }
+  .card-grid, .catch-grid, .kw-grid { grid-template-columns: 1fr; }
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-links">
+    <a href="#goals">학습목표</a>
+    <a href="#summary">핵심요약</a>
+    <a href="#timeline">타임라인</a>
+    <a href="#catch">핵심캐치</a>
+    <a href="#keywords">키워드</a>
+    <a href="#quiz">연습문제</a>
+  </div>
+  <button id="themeBtn" onclick="toggleTheme()">🌙</button>
+</nav>
+
+<!-- HEADER -->
+<header>
+  <p style="font-size:0.85rem; opacity:0.7;">데이터사이언스입문</p>
+  <h1>4주차 — 확률과 통계 기초</h1>
+  <p>Probability &amp; Statistics Fundamentals</p>
+  <div class="header-badges">
+    <span class="badge">Chapter 4</span>
+    <span class="badge">확률 이론</span>
+    <span class="badge">확률 분포</span>
+    <span class="badge">추론 통계</span>
+    <span class="badge">가설 검정</span>
+  </div>
+</header>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: 학습 목표 -->
+<!-- ============================================================ -->
+<section id="goals">
+  <div class="section-title"><span class="icon">🎯</span> 학습 목표</div>
+  <div class="goal-card">
+    <div class="goal-num">1</div>
+    <p>기초적인 <strong>확률과 통계</strong>에 대해 이해하고 <strong>계산 방법</strong>을 습득한다.</p>
+  </div>
+  <div class="goal-card">
+    <div class="goal-num">2</div>
+    <p>확률과 통계에 대한 기초적인 <strong>개념</strong>과 <strong>계산 방법</strong>을 이해하는 데 집중한다.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: 핵심 요약 -->
+<!-- ============================================================ -->
+<section id="summary">
+  <div class="section-title"><span class="icon">📋</span> 핵심 요약</div>
+
+  <!-- CH0: 개요 -->
+  <div class="sub-section" style="border-top-color: var(--primary);">
+    <h3>0. 확률과 통계 기초 개요</h3>
+    <div class="card-grid" style="margin-bottom:1rem;">
+      <div class="card blue">
+        <h3>확률 = 가능성의 언어</h3>
+        <ul>
+          <li>사건 → 확률 → 변수 → 분포 구조</li>
+          <li>확률(가능성) → 분포 → 추정/검정 흐름</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>통계 = 데이터로 판단</h3>
+        <ul>
+          <li>통계적 추론: 표본으로 모집단의 모수를 추정</li>
+          <li>점 추정 &amp; 구간 추정</li>
+        </ul>
+      </div>
+      <div class="card purple">
+        <h3>3대 확률 이론</h3>
+        <ul>
+          <li>대수의 법칙</li>
+          <li>중심극한정리</li>
+          <li>대편차 원리</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:0.88rem; color:var(--text-sub);">
+      <strong>가설 검정:</strong> 귀무(null) 가설 vs 대립(alternative) 가설을 세우고 데이터로 판정
+    </p>
+  </div>
+
+  <!-- CH0: 확률 기초 표기법 -->
+  <div class="sub-section" style="border-top-color: var(--teal);">
+    <h3>0-1. 확률 기초 — 표기법</h3>
+    <table class="data-table">
+      <thead><tr><th>기호</th><th>의미</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td>Pr(&middot;)</td><td>확률 함수</td><td>사건(event)이 파라미터</td></tr>
+        <tr><td>P(&middot;)</td><td>확률질량함수 (PMF)</td><td>이산확률변수가 파라미터</td></tr>
+        <tr><td>p(&middot;)</td><td>확률밀도함수 (PDF)</td><td>연속확률변수가 파라미터</td></tr>
+        <tr><td>A, B</td><td>사건 (Event)</td><td>대문자로 표기</td></tr>
+        <tr><td>x, y</td><td>확률변수</td><td>소문자로 표기</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.85rem; color:var(--text-sub); margin-top:0.5rem;">
+      측도론에서 확률은 전체집합 U에 대하여 &mu;(U)=1로 정규화된 측도이다.
+    </p>
+  </div>
+
+  <!-- CH0: 확률이란? -->
+  <div class="sub-section" style="border-top-color: var(--warning);">
+    <h3>0-2. 확률이란?</h3>
+    <div class="card-grid">
+      <div class="card orange">
+        <h3>확률의 정의</h3>
+        <ul>
+          <li>어떤 일이 <strong>얼마나 자주</strong> 일어나는지를 <strong>숫자(0~1)</strong>로 표현</li>
+          <li>전체 확률의 합 = 1</li>
+        </ul>
+      </div>
+      <div class="card blue">
+        <h3>핵심 용어</h3>
+        <ul>
+          <li><strong>실험</strong> = 결과를 모르는 행동</li>
+          <li><strong>표본공간(&Omega;)</strong> = 가능한 모든 결과</li>
+          <li><strong>사건</strong> = 표본공간의 부분집합</li>
+          <li><strong>확률</strong> = (사건) / (전체)</li>
+        </ul>
+      </div>
+      <div class="card teal">
+        <h3>확률공간 (&Omega;, F, Pr)</h3>
+        <ul>
+          <li>&Omega;: 전체 결과 (표본공간)</li>
+          <li>F: 사건들의 모음 (시그마 대수)</li>
+          <li>Pr(&middot;): 확률 함수, 0~1 사이</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH0: 확률의 공리 -->
+  <div class="sub-section" style="border-top-color: var(--danger);">
+    <h3>0-3. 확률의 공리 (Probability Axioms)</h3>
+    <p style="font-size:0.88rem; color:var(--text-sub); margin-bottom:0.8rem;">공리 = 증명 없이 참으로 받아들이는 사실</p>
+    <div class="formula-box">
+      <div class="formula-label">공리 1 — 비음수성</div>
+      <div class="formula-math">Pr(A) &ge; 0 &nbsp; (모든 사건 A에 대해)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">공리 2 — 정규성</div>
+      <div class="formula-math">Pr(&Omega;) = 1 &nbsp; (전체 확률은 1)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">공리 3 — 가법성 (서로소)</div>
+      <div class="formula-math">A &cap; B = &empty; &rArr; Pr(A &cup; B) = Pr(A) + Pr(B)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">추가</div>
+      <div class="formula-math">Pr(&empty;) = 0 &nbsp; (불가능한 사건의 확률 = 0)</div>
+    </div>
+  </div>
+
+  <!-- CH0: 확률변수 -->
+  <div class="sub-section" style="border-top-color: var(--purple);">
+    <h3>0-4. 확률변수 (Random Variable)</h3>
+    <ul>
+      <li><strong>확률변수</strong>: 결과를 <strong>숫자로 바꿔주는 함수</strong></li>
+      <li><strong>표본공간</strong>: 모든 가능한 결과. &Omega; = {1,2,3,4,5,6}</li>
+      <li><strong>확률변수</strong>: X: &Omega; &rarr; &reals; (결과를 숫자로 매핑)</li>
+      <li><strong>실현값(realization)</strong>: 특정 결과가 나왔을 때의 실제 값</li>
+    </ul>
+  </div>
+
+  <!-- CH0: 확률분포 -->
+  <div class="sub-section" style="border-top-color: var(--indigo);">
+    <h3>0-5. 확률 분포 (Probability Distributions)</h3>
+    <div class="card-grid">
+      <div class="card indigo">
+        <h3>이산형 (Discrete)</h3>
+        <p>값이 딱딱 끊어지는 경우<br>예: 주사위 {1,2,3,4,5,6}</p>
+      </div>
+      <div class="card pink">
+        <h3>연속형 (Continuous)</h3>
+        <p>값이 부드럽게 이어지는 경우<br>예: 키, 온도, 시간</p>
+      </div>
+    </div>
+    <div class="formula-box" style="margin-top:1rem;">
+      <div class="formula-label">분포의 확장 흐름</div>
+      <div class="formula-math">균등분포 &rarr; 베르누이 &rarr; 이항분포 &rarr; 푸아송분포 &rarr; 정규분포</div>
+    </div>
+  </div>
+
+  <!-- CH0: 3가지 확률 이론 -->
+  <div class="sub-section" style="border-top-color: var(--success);">
+    <h3>0-6. 3가지 확률 이론</h3>
+    <div class="card-grid three">
+      <div class="card green">
+        <h3>대수의 법칙</h3>
+        <p><strong>평균이 진짜 값으로 간다</strong></p>
+        <p>많이 반복하면 표본평균이 기댓값에 수렴</p>
+      </div>
+      <div class="card blue">
+        <h3>중심극한정리</h3>
+        <p><strong>분포 모양이 정규분포가 된다</strong></p>
+        <p>데이터가 많아지면 표본평균의 분포가 종 모양(bell curve)</p>
+      </div>
+      <div class="card purple">
+        <h3>대편차 원리</h3>
+        <p><strong>평균에서 크게 벗어날 확률이 빠르게 줄어듦</strong></p>
+        <p>극단값의 확률이 지수적으로 감소</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH1: 사전 준비 -->
+  <div class="sub-section" style="border-top-color: var(--teal);">
+    <h3>1. 학습을 위한 사전 준비</h3>
+    <div style="margin-bottom:0.6rem;">
+      <span class="tag">numpy</span>
+      <span class="tag">scipy</span>
+      <span class="tag">pandas</span>
+      <span class="tag">matplotlib</span>
+      <span class="tag">seaborn</span>
+      <span class="tag">랜덤시드</span>
+    </div>
+    <div class="code-block">import numpy as np
+import scipy as sp
+import pandas as pd
+from pandas import Series, DataFrame
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+import seaborn as sns
+%matplotlib inline
+%precision 3
+np.random.seed(0)  # 재현성 보장</div>
+  </div>
+
+  <!-- CH2: 확률 -->
+  <div class="sub-section" style="border-top-color: var(--primary);">
+    <h3>2. 확률 (Probability)</h3>
+    <div style="margin-bottom:0.6rem;">
+      <span class="tag">시행</span><span class="tag">근원사건</span><span class="tag">표본공간</span>
+      <span class="tag">조건부 확률</span><span class="tag">베이즈 정리</span><span class="tag">독립/종속</span>
+    </div>
+
+    <h4>2-1. 수학적 확률 &amp; 사건</h4>
+    <table class="data-table">
+      <thead><tr><th>용어</th><th>설명</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td>시행(trial)</td><td>무작위로 하나를 추출하는 행위</td><td>주사위 던지기</td></tr>
+        <tr><td>근원사건</td><td>각 시행의 결과</td><td>1, 2, 3, 4, 5, 6</td></tr>
+        <tr><td>표본공간(S)</td><td>모든 근원사건의 집합</td><td>S = {1,2,3,4,5,6}</td></tr>
+        <tr><td>사건(event)</td><td>표본공간의 부분집합</td><td>짝수 = {2,4,6}</td></tr>
+      </tbody>
+    </table>
+
+    <h4>2-2. 사건의 종류</h4>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>전사건 &amp; 공사건</h3>
+        <ul>
+          <li><strong>전사건</strong>: 확실히 일어남. P(S) = 1</li>
+          <li><strong>공사건</strong>: 불가능. P(&empty;) = 0</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>여사건 &amp; 배반사건</h3>
+        <ul>
+          <li><strong>여사건(E<sup>c</sup>)</strong>: E에 속하지 않는 결과</li>
+          <li><strong>배반사건</strong>: A &cap; B = &empty;</li>
+          <li>여사건 &rArr; 배반 (역은 성립 안 함!)</li>
+        </ul>
+      </div>
+      <div class="card orange">
+        <h3>곱사건 &amp; 합사건</h3>
+        <ul>
+          <li><strong>곱사건</strong>: A &cap; B (교집합)</li>
+          <li><strong>합사건</strong>: A &cup; B (합집합)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>2-3. 확률 계산 예시</h4>
+    <p style="font-size:0.88rem; color:var(--text-sub); margin-bottom:0.5rem;">A = {1,2,3}, B = {1,3,4,5}, S = {1,2,3,4,5,6}</p>
+    <div class="formula-box">
+      <div class="formula-label">교집합 &amp; 합집합</div>
+      <div class="formula-math">P(A &cap; B) = |{1,3}| / 6 = 1/3 &nbsp;&nbsp;&nbsp; P(A &cup; B) = |{1,2,3,4,5}| / 6 = 5/6</div>
+    </div>
+
+    <h4>2-4. 통계적 확률</h4>
+    <p style="font-size:0.88rem; color:var(--text-sub);">주사위를 1000번 던지면 각 숫자 확률이 1/6 &approx; 0.167에 근접</p>
+    <div class="code-block">calc_steps = 1000
+dice_data = np.array([1, 2, 3, 4, 5, 6])
+dice_rolls = np.random.choice(dice_data, calc_steps)
+for i in range(1, 7):
+    p = len(dice_rolls[dice_rolls==i]) / calc_steps
+    print(i, '가 나올 확률', p)</div>
+
+    <h4>2-5. 조건부 확률과 곱셈 공식</h4>
+    <div class="formula-box">
+      <div class="formula-label">조건부 확률</div>
+      <div class="formula-math">P(B|A) = P(A &cap; B) / P(A)</div>
+      <div class="formula-desc">A가 일어난 상태에서 B가 일어날 확률</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">곱셈 공식</div>
+      <div class="formula-math">P(A &cap; B) = P(B|A) &middot; P(A)</div>
+      <div class="formula-desc">동시에 일어날 확률 = 순서대로 곱하기</div>
+    </div>
+    <p style="font-size:0.85rem; color:var(--text-sub); margin-top:0.5rem;">
+      예: A={2,4,6}(짝수), B={4,5,6}(4이상) &rarr; A&cap;B={4,6} &rarr; P(B|A) = (2/6)/(3/6) = <strong>2/3</strong>
+    </p>
+
+    <h4>2-6. 독립과 종속</h4>
+    <div class="card-grid">
+      <div class="card green">
+        <h3>독립 (Independent)</h3>
+        <ul>
+          <li>P(A|B) = P(A) &rarr; B가 A에 영향 없음</li>
+          <li>P(A &cap; B) = P(A) &middot; P(B)</li>
+        </ul>
+      </div>
+      <div class="card red">
+        <h3>종속 (Dependent)</h3>
+        <ul>
+          <li>P(A &cap; B) &ne; P(A) &middot; P(B)</li>
+          <li>예: A={2,4,6}, B={4,5,6}</li>
+          <li>1/3 &ne; 1/4 &rarr; <strong>종속!</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>2-7. 베이즈 정리 (Bayes' Theorem)</h4>
+    <p style="font-size:0.88rem; color:var(--text-sub); margin-bottom:0.5rem;"><strong>결과를 보고 원인을 거꾸로 추론</strong></p>
+    <div class="formula-box">
+      <div class="formula-label">베이즈 정리</div>
+      <div class="formula-math">P(B|A) = P(A|B) &middot; P(B) / [P(A|B) &middot; P(B) + P(A|B<sup>c</sup>) &middot; P(B<sup>c</sup>)]</div>
+    </div>
+    <table class="data-table" style="margin-top:0.8rem;">
+      <thead><tr><th>구성요소</th><th>기호</th><th>의미</th></tr></thead>
+      <tbody>
+        <tr><td>사전확률</td><td>P(B)</td><td>사건 A 전 B가 발생할 확률 (과거 경험)</td></tr>
+        <tr><td>가능도</td><td>P(A|B)</td><td>B가 주어졌을 때 A 발생 확률</td></tr>
+        <tr><td>증거</td><td>P(A)</td><td>사건 A가 일어날 전체 확률</td></tr>
+        <tr><td>사후확률</td><td>P(B|A)</td><td>A가 일어난 후 B가 발생할 확률 (추론)</td></tr>
+      </tbody>
+    </table>
+    <div class="formula-box" style="margin-top:0.5rem;">
+      <div class="formula-label">복수 원인 (일반형)</div>
+      <div class="formula-math">P(B<sub>i</sub>|A) = P(A|B<sub>i</sub>) &middot; P(B<sub>i</sub>) / &Sigma;<sub>j</sub> P(A|B<sub>j</sub>) &middot; P(B<sub>j</sub>)</div>
+    </div>
+  </div>
+
+  <!-- CH3: 확률변수와 확률분포 -->
+  <div class="sub-section" style="border-top-color: var(--purple);">
+    <h3>3. 확률변수와 확률분포</h3>
+    <div style="margin-bottom:0.6rem;">
+      <span class="tag">PMF</span><span class="tag">CDF</span><span class="tag">PDF</span>
+      <span class="tag">기댓값</span><span class="tag">균등분포</span><span class="tag">베르누이</span>
+      <span class="tag">이항분포</span><span class="tag">푸아송</span><span class="tag">정규분포</span>
+    </div>
+
+    <h4>3-1. 확률변수의 분류</h4>
+    <div class="card-grid">
+      <div class="card purple">
+        <h3>이산확률변수</h3>
+        <p>실현값을 <strong>셀 수 있는</strong> 경우<br>예: 주사위 1~6<br>확률질량함수(PMF): &Sigma;p(x<sub>i</sub>) = 1</p>
+      </div>
+      <div class="card indigo">
+        <h3>연속확률변수</h3>
+        <p>셀 수 없는 <strong>연속적</strong> 값<br>예: 키, 무게, 시간<br>확률밀도함수(PDF)로 표현</p>
+      </div>
+    </div>
+
+    <h4>3-2. 분포함수 (CDF) &amp; 확률밀도함수 (PDF)</h4>
+    <div class="formula-box">
+      <div class="formula-label">누적분포함수 (CDF)</div>
+      <div class="formula-math">F(x) = P(X &le; x) = &Sigma; p(x<sub>i</sub>) &nbsp; (x<sub>i</sub> &le; x)</div>
+      <div class="formula-desc">지금까지 누적된 확률</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">확률밀도함수 (PDF)</div>
+      <div class="formula-math">f(x) = dF(x)/dx</div>
+      <div class="formula-desc">확률이 얼마나 빠르게 쌓이는지 (밀도)</div>
+    </div>
+
+    <h4>3-3. 기댓값 (Expected Value)</h4>
+    <div class="formula-box">
+      <div class="formula-label">기댓값 공식</div>
+      <div class="formula-math">E(X) = &Sigma; x &middot; f(x)</div>
+      <div class="formula-desc">확률을 고려한 평균 = "중심 위치" 또는 "균형점"</div>
+    </div>
+    <p style="font-size:0.88rem; color:var(--text-sub);">
+      주사위: E(X) = 1&times;(1/6) + 2&times;(1/6) + &hellip; + 6&times;(1/6) = <strong>3.5</strong>
+    </p>
+
+    <h4>3-4. 주요 확률분포</h4>
+
+    <!-- Tabs for distributions -->
+    <div class="tab-container">
+      <div class="tab-buttons">
+        <button class="tab-btn active" onclick="openTab(event,'tab-uniform')">균등분포</button>
+        <button class="tab-btn" onclick="openTab(event,'tab-bernoulli')">베르누이</button>
+        <button class="tab-btn" onclick="openTab(event,'tab-binomial')">이항분포</button>
+        <button class="tab-btn" onclick="openTab(event,'tab-poisson')">푸아송</button>
+        <button class="tab-btn" onclick="openTab(event,'tab-normal')">정규분포</button>
+        <button class="tab-btn" onclick="openTab(event,'tab-lognormal')">로그정규</button>
+      </div>
+
+      <div id="tab-uniform" class="tab-panel active">
+        <h4 style="margin-top:0;">균등분포 (Uniform Distribution)</h4>
+        <p>모든 사건이 발생할 확률이 <strong>동일</strong>. 예: 주사위 각 면 1/6</p>
+        <div class="code-block">calc_steps = 1000
+dice_data = np.array([1, 2, 3, 4, 5, 6])
+dice_rolls = np.random.choice(dice_data, calc_steps)
+prob_data = np.array([])
+for i in range(1, 7):
+    p = len(dice_rolls[dice_rolls==i]) / calc_steps
+    prob_data = np.append(prob_data, p)
+plt.bar(dice_data, prob_data)</div>
+      </div>
+
+      <div id="tab-bernoulli" class="tab-panel">
+        <h4 style="margin-top:0;">베르누이 분포 (Bernoulli Distribution)</h4>
+        <p>결과가 <strong>성공(1) 또는 실패(0)</strong> 두 가지뿐인 시행</p>
+        <div class="code-block">coin_data = np.array([0, 0, 0, 0, 0, 1, 1, 1])
+for i in np.unique(coin_data):
+    p = len(coin_data[coin_data==i]) / len(coin_data)
+    print(i, '가 나올 확률', p)
+# 0이 나올 확률 0.625, 1이 나올 확률 0.375</div>
+      </div>
+
+      <div id="tab-binomial" class="tab-panel">
+        <h4 style="margin-top:0;">이항분포 (Binomial Distribution)</h4>
+        <p>독립적인 <strong>베르누이 시행을 n회 반복</strong>했을 때의 성공 횟수 분포</p>
+        <div class="code-block">x = np.random.binomial(30, 0.5, 1000)
+# n=30회, 성공확률 p=0.5, 1000개 샘플</div>
+      </div>
+
+      <div id="tab-poisson" class="tab-panel">
+        <h4 style="margin-top:0;">푸아송 분포 (Poisson Distribution)</h4>
+        <p>발생 가능성이 <strong>작은 사건</strong>의 확률분포. 일정 시간/면적에서 사건 발생 횟수.</p>
+        <div class="code-block">x = np.random.poisson(lam=5, size=1000)
+# lambda=5, 1000개 샘플</div>
+      </div>
+
+      <div id="tab-normal" class="tab-panel">
+        <h4 style="margin-top:0;">정규분포 (Normal / Gaussian Distribution)</h4>
+        <p>대표적인 <strong>연속확률분포</strong>. 종 모양(bell curve). 가우스 분포라고도 함.</p>
+        <div class="code-block">x = np.random.normal(5, 10, 10000)
+# 평균=5, 표준편차=10, 10000개 샘플</div>
+      </div>
+
+      <div id="tab-lognormal" class="tab-panel">
+        <h4 style="margin-top:0;">로그 정규분포 (Log Normal Distribution)</h4>
+        <p>log(x)가 <strong>정규분포를 따르는</strong> 분포. 양수값만 취하고 오른쪽 꼬리가 김.</p>
+        <div class="code-block">x = np.random.lognormal(mean=0, sigma=1, size=10000)</div>
+      </div>
+    </div>
+
+    <h4>3-5. 커널 밀도함수 (Kernel Density Function)</h4>
+    <p style="font-size:0.88rem; color:var(--text-sub);">데이터를 이용해 밀도함수를 추정. <code style="background:var(--code-bg); color:var(--code-text); padding:0.1rem 0.4rem; border-radius:4px;">kind='kde'</code>로 지정.</p>
+    <div class="code-block">student_data_math.absences.plot(kind='kde', style='k--')</div>
+  </div>
+
+  <!-- CH4: 다차원확률분포 -->
+  <div class="sub-section" style="border-top-color: var(--pink);">
+    <h3>4. 심화학습 — 다차원확률분포</h3>
+    <div style="margin-bottom:0.6rem;">
+      <span class="tag">결합확률분포</span><span class="tag">주변확률분포</span>
+      <span class="tag">조건부확률분포</span><span class="tag">공분산행렬</span>
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-label">결합확률질량함수 (Joint PMF)</div>
+      <div class="formula-math">P(X=x<sub>i</sub>, Y=y<sub>j</sub>) = p<sub>X,Y</sub>(x<sub>i</sub>, y<sub>j</sub>)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">주변확률질량함수 (Marginal PMF)</div>
+      <div class="formula-math">p<sub>X</sub>(x<sub>i</sub>) = &Sigma;<sub>j</sub> p<sub>X,Y</sub>(x<sub>i</sub>, y<sub>j</sub>)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">조건부확률질량함수 (Conditional PMF)</div>
+      <div class="formula-math">p<sub>Y|X</sub>(y<sub>j</sub>|x<sub>i</sub>) = p<sub>X,Y</sub>(x<sub>i</sub>, y<sub>j</sub>) / p<sub>X</sub>(x<sub>i</sub>)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">조건부 기댓값</div>
+      <div class="formula-math">E[Y|X=x<sub>i</sub>] = &Sigma;<sub>j</sub> y<sub>j</sub> &middot; p<sub>Y|X</sub>(y<sub>j</sub>|x<sub>i</sub>)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">독립 조건</div>
+      <div class="formula-math">p<sub>X,Y</sub>(x<sub>i</sub>, y<sub>j</sub>) = p<sub>X</sub>(x<sub>i</sub>) &middot; p<sub>Y</sub>(y<sub>j</sub>)</div>
+    </div>
+
+    <h4>2차원 정규분포 시각화</h4>
+    <div class="code-block">from scipy.stats import multivariate_normal
+from mpl_toolkits.mplot3d import Axes3D
+
+x, y = np.mgrid[10:100:2, 10:100:2]
+pos = np.dstack((x, y))
+rv = multivariate_normal([50, 50], [[100, 0], [0, 100]])
+z = rv.pdf(pos)
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.plot_surface(x, y, z, cmap='viridis')</div>
+  </div>
+
+  <!-- CH5: 추론통계학 -->
+  <div class="sub-section" style="border-top-color: var(--success);">
+    <h3>5. 추론통계학 (Inferential Statistics)</h3>
+    <div style="margin-bottom:0.6rem;">
+      <span class="tag">표본</span><span class="tag">모집단</span><span class="tag">모수</span>
+      <span class="tag">대수의 법칙</span><span class="tag">중심극한정리</span>
+      <span class="tag">t분포</span><span class="tag">카이제곱</span><span class="tag">F분포</span>
+    </div>
+
+    <p style="font-size:0.88rem; color:var(--text-sub); margin-bottom:0.8rem;">
+      <strong>추론통계학</strong>: 표본(sample)을 이용해 모집단(population)에 대해 통계적으로 분석하고 추측하는 학문.
+      실제 수집된 데이터는 n개의 확률변수의 실현값이며, n은 표본의 크기.
+    </p>
+
+    <h4>5-1. 대수의 법칙 (Law of Large Numbers)</h4>
+    <p style="font-size:0.88rem; color:var(--text-sub);">시행 횟수 N을 크게 만들면 평균이 기댓값(3.5)에 근접</p>
+    <div class="code-block">calc_times = 1000
+sample_array = np.array([1, 2, 3, 4, 5, 6])
+number_cnt = np.arange(1, calc_times + 1)
+for i in range(4):
+    p = np.random.choice(sample_array, calc_times).cumsum()
+    plt.plot(p / number_cnt)</div>
+
+    <h4>5-2. 중심극한정리 (Central Limit Theorem)</h4>
+    <div class="card-grid three">
+      <div class="card orange">
+        <h3>N = 3</h3>
+        <p>균등분포에 가까움</p>
+      </div>
+      <div class="card blue">
+        <h3>N = 6</h3>
+        <p>정규분포 형태가 보이기 시작</p>
+      </div>
+      <div class="card green">
+        <h3>N = 1000</h3>
+        <p>완전한 정규분포!</p>
+      </div>
+    </div>
+
+    <h4>5-3. 주요 분포 — 카이제곱, t, F</h4>
+    <div class="card-grid three">
+      <div class="card red">
+        <h3>카이제곱분포 (&chi;&sup2;)</h3>
+        <p>m개의 표준정규분포 확률변수의 제곱합</p>
+        <p style="font-family:serif; font-size:0.95rem;"><strong>W = &Sigma; Z<sub>i</sub>&sup2;</strong> (자유도 m)</p>
+        <div class="code-block" style="margin-top:0.5rem;">np.random.chisquare(df, size)</div>
+      </div>
+      <div class="card purple">
+        <h3>스튜던트 t분포</h3>
+        <p>Z(표준정규)와 W(카이제곱)가 독립일 때</p>
+        <p style="font-family:serif; font-size:0.95rem;"><strong>T = Z / &radic;(W/m)</strong></p>
+        <div class="code-block" style="margin-top:0.5rem;">np.random.standard_t(df, size)</div>
+      </div>
+      <div class="card teal">
+        <h3>F 분포</h3>
+        <p>두 카이제곱분포의 비율</p>
+        <p style="font-family:serif; font-size:0.95rem;"><strong>F = (W<sub>1</sub>/m<sub>1</sub>) / (W<sub>2</sub>/m<sub>2</sub>)</strong></p>
+        <div class="code-block" style="margin-top:0.5rem;">np.random.f(dfnum, dfden, size)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH6: 통계적 추정 -->
+  <div class="sub-section" style="border-top-color: var(--indigo);">
+    <h3>6. 통계적 추정 (Statistical Estimation)</h3>
+    <div style="margin-bottom:0.6rem;">
+      <span class="tag">점추정</span><span class="tag">구간추정</span>
+      <span class="tag">불편성</span><span class="tag">일치성</span>
+      <span class="tag">MLE</span><span class="tag">베이즈</span>
+    </div>
+
+    <h4>6-1. 추정량과 점추정</h4>
+    <div class="formula-box">
+      <div class="formula-label">표본평균</div>
+      <div class="formula-math">X&#772; = (1/n) &Sigma; X<sub>i</sub></div>
+      <div class="formula-desc">추정량 = 확률변수의 함수 T(X<sub>1</sub>,...,X<sub>n</sub>)</div>
+    </div>
+
+    <h4>6-2. 불편성 &amp; 일치성</h4>
+    <div class="card-grid">
+      <div class="card indigo">
+        <h3>불편성 (Unbiasedness)</h3>
+        <p>E[T(X<sub>1</sub>,...,X<sub>n</sub>)] = &theta;<br>편향(bias)이 없음. 기대값이 참값과 동일.</p>
+      </div>
+      <div class="card teal">
+        <h3>일치성 (Consistency)</h3>
+        <p>n이 커짐에 따라 &theta;에 수렴<br>표본을 많이 모을수록 정확해짐.</p>
+      </div>
+    </div>
+
+    <h4>6-3. 구간추정 (Interval Estimation)</h4>
+    <div class="formula-box">
+      <div class="formula-label">신뢰구간 (Confidence Interval)</div>
+      <div class="formula-math">[X&#772; - z<sub>&alpha;/2</sub>/&radic;n, &nbsp; X&#772; + z<sub>&alpha;/2</sub>/&radic;n]</div>
+      <div class="formula-desc">신뢰수준: 1-&alpha; (보통 95% 또는 99%)</div>
+    </div>
+
+    <h4>6-4. 최대가능도법 (MLE)</h4>
+    <div class="formula-box">
+      <div class="formula-label">가능도함수</div>
+      <div class="formula-math">L(&theta;; X) = &Pi; f(x<sub>i</sub>; &theta;)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">로그가능도함수</div>
+      <div class="formula-math">log L(&theta;; x) = &Sigma; log f(x<sub>i</sub>; &theta;)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">MLE 해</div>
+      <div class="formula-math">d/d&theta; log L(&theta;, x) = 0 &nbsp; &rarr; &nbsp; &theta;&#770;</div>
+    </div>
+
+    <h4>6-5. 베이즈 추정</h4>
+    <div class="formula-box">
+      <div class="formula-label">사후확률분포 (Posterior)</div>
+      <div class="formula-math">&pi;(&theta;|x) = p(x|&theta;) &middot; &pi;(&theta;) / &int; p(x|&theta;) &middot; &pi;(&theta;) d&theta;</div>
+      <div class="formula-desc">사전확률(prior) &times; 가능도(likelihood) / 증거(evidence)</div>
+    </div>
+  </div>
+
+  <!-- CH7: 통계적 검정 -->
+  <div class="sub-section" style="border-top-color: var(--danger);">
+    <h3>7. 통계적 검정 (Hypothesis Testing)</h3>
+    <div style="margin-bottom:0.6rem;">
+      <span class="tag">귀무가설</span><span class="tag">대립가설</span>
+      <span class="tag">p값</span><span class="tag">유의수준</span>
+      <span class="tag">제1종 오류</span><span class="tag">제2종 오류</span><span class="tag">검정력</span>
+    </div>
+
+    <h4>7-1. 가설 검정 기본</h4>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>귀무가설 H<sub>0</sub></h3>
+        <p>"차이가 없다" (현재 상태 유지)<br>예: &mu;<sub>math</sub> = &mu;<sub>por</sub></p>
+      </div>
+      <div class="card red">
+        <h3>대립가설 H<sub>1</sub></h3>
+        <p>"차이가 있다" (변화 주장)<br>예: &mu;<sub>math</sub> &ne; &mu;<sub>por</sub></p>
+      </div>
+    </div>
+    <p style="font-size:0.88rem; color:var(--text-sub); margin-top:0.8rem;">
+      <strong>p값</strong>: 귀무가설이 옳다고 가정할 때 통계량이 산출될 확률. <strong>p값이 작을수록 귀무가설 기각</strong>.
+      유의수준 &alpha;: 보통 5% 또는 1%.
+    </p>
+
+    <div class="code-block">from scipy import stats
+t, p = stats.ttest_rel(student_data_merge.G1_math, student_data_merge.G1_por)
+print('p값 = ', p)  # 결과: 1.65e-16 → 귀무가설 기각!</div>
+
+    <h4>7-2. 제1종 오류 &amp; 제2종 오류</h4>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>H<sub>0</sub> 참 (차이 없음)</th><th>H<sub>0</sub> 거짓 (차이 있음)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700;">H<sub>0</sub> 기각</td>
+          <td style="background:#fee2e2; color:#991b1b;"><strong>제1종 오류 (&alpha;)</strong><br>무죄인 사람에게 유죄</td>
+          <td style="background:#dcfce7; color:#166534;"><strong>올바른 결정</strong><br>검정력 = 1 - &beta;</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">H<sub>0</sub> 채택</td>
+          <td style="background:#dcfce7; color:#166534;"><strong>올바른 결정</strong></td>
+          <td style="background:#fef3c7; color:#92400e;"><strong>제2종 오류 (&beta;)</strong><br>유죄인 범죄자에게 무죄</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="card-grid" style="margin-top:1rem;">
+      <div class="card orange">
+        <h3>핵심 포인트</h3>
+        <ul>
+          <li>&alpha;와 &beta;는 <strong>트레이드오프</strong> 관계</li>
+          <li>검정력(power) = 1 - &beta; &ge; <strong>0.8</strong> 이상 필요</li>
+        </ul>
+      </div>
+      <div class="card red">
+        <h3>빅데이터 주의</h3>
+        <ul>
+          <li>표본이 크면 미묘한 차이도 유의하게 나옴</li>
+          <li>p값이 매우 작아짐 &rarr; <strong>신뢰구간</strong> 활용 권장</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: 타임라인 -->
+<!-- ============================================================ -->
+<section id="timeline">
+  <div class="section-title"><span class="icon">📈</span> 확률 &rarr; 통계 학습 흐름 타임라인</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-card">
+        <h3>Step 1: 확률 기초</h3>
+        <p>표본공간, 사건, 확률의 공리, 확률공간 (&Omega;, F, Pr)</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-card">
+        <h3>Step 2: 조건부 확률 &amp; 베이즈</h3>
+        <p>조건부 확률, 독립/종속, 베이즈 정리 (원인 추론)</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-card">
+        <h3>Step 3: 확률변수 &amp; 분포</h3>
+        <p>이산/연속 확률변수, PMF, PDF, CDF, 기댓값</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-card">
+        <h3>Step 4: 주요 확률분포</h3>
+        <p>균등 &rarr; 베르누이 &rarr; 이항 &rarr; 푸아송 &rarr; 정규분포</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-card">
+        <h3>Step 5: 다차원 확률분포</h3>
+        <p>결합/주변/조건부 분포, 공분산행렬, 다변량 정규분포</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-card">
+        <h3>Step 6: 추론통계학</h3>
+        <p>대수의 법칙, 중심극한정리, 카이제곱/t/F 분포</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-card">
+        <h3>Step 7: 통계적 추정</h3>
+        <p>점추정, 구간추정, MLE, 베이즈 추정</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-card">
+        <h3>Step 8: 통계적 검정</h3>
+        <p>가설 검정, p값, 유의수준, 제1종/2종 오류, 검정력</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: 핵심 캐치 -->
+<!-- ============================================================ -->
+<section id="catch">
+  <div class="section-title"><span class="icon">🔥</span> 핵심 캐치 — 시험 빈출 포인트</div>
+  <div class="catch-grid">
+    <div class="catch-card">
+      <h4>확률의 공리 3가지</h4>
+      <p>비음수성 Pr(A)&ge;0, 정규성 Pr(&Omega;)=1, 가법성(서로소 &rarr; 합 = 각 확률의 합). 이 세 가지만 기억!</p>
+    </div>
+    <div class="catch-card">
+      <h4>여사건 &ne; 배반사건</h4>
+      <p><strong>여사건은 반드시 배반</strong>이지만, 배반이라고 반드시 여사건인 것은 <strong>아님</strong>! 자주 출제.</p>
+    </div>
+    <div class="catch-card">
+      <h4>독립 판별법</h4>
+      <p>P(A&cap;B) = P(A)&middot;P(B)이면 독립. 아니면 종속. 계산으로 확인!</p>
+    </div>
+    <div class="catch-card">
+      <h4>베이즈 정리 = 역추론</h4>
+      <p>"결과를 보고 원인을 거꾸로 추론." 사전확률 &times; 가능도 / 증거 = 사후확률</p>
+    </div>
+    <div class="catch-card">
+      <h4>기댓값 &ne; 실제 결과</h4>
+      <p>주사위 기댓값 3.5는 <strong>실제로 나올 수 없는 값</strong>. "평균"이라는 의미!</p>
+    </div>
+    <div class="catch-card">
+      <h4>분포 흐름 암기</h4>
+      <p>균등 &rarr; 베르누이 &rarr; 이항 &rarr; 푸아송 &rarr; 정규. 간단 &rarr; 복잡 순서.</p>
+    </div>
+    <div class="catch-card">
+      <h4>중심극한정리 핵심</h4>
+      <p>모집단이 어떤 분포든 <strong>표본 크기가 커지면</strong> 표본평균은 <strong>정규분포</strong>!</p>
+    </div>
+    <div class="catch-card">
+      <h4>제1종 vs 제2종 오류</h4>
+      <p>제1종(&alpha;): 무죄→유죄 (귀무가설 맞는데 기각). 제2종(&beta;): 유죄→무죄. 트레이드오프!</p>
+    </div>
+    <div class="catch-card">
+      <h4>검정력 &ge; 0.8</h4>
+      <p>검정력 = 1-&beta;. 대립가설이 참일 때 올바르게 기각할 확률. <strong>0.8 이상</strong> 필요.</p>
+    </div>
+    <div class="catch-card">
+      <h4>MLE 풀이 순서</h4>
+      <p>가능도함수 L &rarr; 로그 취하기 &rarr; 미분 = 0 &rarr; &theta;&#770; 구하기. 시험 계산문제 필수!</p>
+    </div>
+    <div class="catch-card">
+      <h4>불편추정량 증명</h4>
+      <p>E[X&#772;] = E[(1/n)&Sigma;X<sub>i</sub>] = (1/n)&middot;n&mu; = &mu;. 표본평균은 불편추정량!</p>
+    </div>
+    <div class="catch-card">
+      <h4>빅데이터에서 p값 주의</h4>
+      <p>표본이 크면 미묘한 차이도 유의. p값만 보지 말고 <strong>신뢰구간</strong>도 확인!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 5: 핵심 키워드 -->
+<!-- ============================================================ -->
+<section id="keywords">
+  <div class="section-title"><span class="icon">📖</span> 핵심 키워드 34선</div>
+  <div class="kw-grid">
+    <div class="kw-card">
+      <div class="kw-term">확률</div>
+      <div class="kw-en">Probability</div>
+      <div class="kw-def">어떤 일이 일어날 가능성을 0~1 사이 숫자로 표현한 것</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">표본공간</div>
+      <div class="kw-en">Sample Space, &Omega;</div>
+      <div class="kw-def">실험에서 나올 수 있는 모든 결과의 집합</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">확률변수</div>
+      <div class="kw-en">Random Variable</div>
+      <div class="kw-def">표본공간의 결과를 숫자로 바꿔주는 함수</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">확률분포</div>
+      <div class="kw-en">Probability Distribution</div>
+      <div class="kw-def">각 결과에 대한 확률을 정리한 것</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">확률질량함수</div>
+      <div class="kw-en">PMF (Probability Mass Function)</div>
+      <div class="kw-def">이산확률변수의 각 값에 대한 확률</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">확률밀도함수</div>
+      <div class="kw-en">PDF (Probability Density Function)</div>
+      <div class="kw-def">연속확률변수의 확률 밀도</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">누적분포함수</div>
+      <div class="kw-en">CDF (Cumulative Distribution Function)</div>
+      <div class="kw-def">x까지의 누적 확률 F(x) = P(X &le; x)</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">기댓값</div>
+      <div class="kw-en">Expected Value, E(X)</div>
+      <div class="kw-def">확률을 고려한 평균값 (중심 위치, 균형점)</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">조건부 확률</div>
+      <div class="kw-en">Conditional Probability</div>
+      <div class="kw-def">한 사건이 발생한 상태에서 다른 사건의 확률</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">베이즈 정리</div>
+      <div class="kw-en">Bayes' Theorem</div>
+      <div class="kw-def">결과를 보고 원인을 거꾸로 추론하는 방법</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">독립</div>
+      <div class="kw-en">Independence</div>
+      <div class="kw-def">한 사건이 다른 사건에 영향을 주지 않음</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">균등분포</div>
+      <div class="kw-en">Uniform Distribution</div>
+      <div class="kw-def">모든 사건의 발생 확률이 동일한 분포</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">베르누이 분포</div>
+      <div class="kw-en">Bernoulli Distribution</div>
+      <div class="kw-def">성공/실패 두 가지만 있는 시행의 분포</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">이항분포</div>
+      <div class="kw-en">Binomial Distribution</div>
+      <div class="kw-def">베르누이 시행을 n회 반복한 분포</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">푸아송 분포</div>
+      <div class="kw-en">Poisson Distribution</div>
+      <div class="kw-def">일정 구간에서 사건이 발생할 횟수의 분포</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">정규분포</div>
+      <div class="kw-en">Normal / Gaussian Distribution</div>
+      <div class="kw-def">종 모양의 대표적 연속확률분포</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">대수의 법칙</div>
+      <div class="kw-en">Law of Large Numbers</div>
+      <div class="kw-def">시행 횟수가 많아지면 평균이 기댓값에 수렴</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">중심극한정리</div>
+      <div class="kw-en">Central Limit Theorem (CLT)</div>
+      <div class="kw-def">표본 크기가 커지면 표본평균이 정규분포를 따름</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">추론통계학</div>
+      <div class="kw-en">Inferential Statistics</div>
+      <div class="kw-def">표본으로 모집단을 추측하는 학문</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">모집단</div>
+      <div class="kw-en">Population</div>
+      <div class="kw-def">분석 대상 전체 데이터</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">표본</div>
+      <div class="kw-en">Sample</div>
+      <div class="kw-def">모집단에서 추출한 일부 데이터</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">모수</div>
+      <div class="kw-en">Parameter</div>
+      <div class="kw-def">모집단의 특성을 나타내는 수 (모평균, 모분산)</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">추정량</div>
+      <div class="kw-en">Estimator</div>
+      <div class="kw-def">모수를 추정하기 위한 확률변수의 함수</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">점추정</div>
+      <div class="kw-en">Point Estimation</div>
+      <div class="kw-def">하나의 값으로 모수를 추정</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">구간추정</div>
+      <div class="kw-en">Interval Estimation</div>
+      <div class="kw-def">범위(구간)로 모수를 추정</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">신뢰구간</div>
+      <div class="kw-en">Confidence Interval</div>
+      <div class="kw-def">모수가 포함될 것으로 추정되는 구간</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">최대가능도법</div>
+      <div class="kw-en">MLE (Maximum Likelihood Estimation)</div>
+      <div class="kw-def">가능도함수를 최대화하여 모수를 추정하는 방법</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">귀무가설</div>
+      <div class="kw-en">Null Hypothesis, H<sub>0</sub></div>
+      <div class="kw-def">차이가 없다는 가설 (기각 대상)</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">대립가설</div>
+      <div class="kw-en">Alternative Hypothesis, H<sub>1</sub></div>
+      <div class="kw-def">차이가 있다는 가설 (주장하고 싶은 것)</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">p값</div>
+      <div class="kw-en">p-value</div>
+      <div class="kw-def">귀무가설이 옳다고 가정할 때 통계량이 산출될 확률</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">유의수준</div>
+      <div class="kw-en">Significance Level, &alpha;</div>
+      <div class="kw-def">귀무가설을 기각하는 기준 (보통 5% 또는 1%)</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">제1종 오류</div>
+      <div class="kw-en">Type I Error</div>
+      <div class="kw-def">귀무가설이 맞는데 기각하는 오류 (확률 = &alpha;)</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">제2종 오류</div>
+      <div class="kw-en">Type II Error</div>
+      <div class="kw-def">귀무가설이 틀린데 수용하는 오류 (확률 = &beta;)</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term">검정력</div>
+      <div class="kw-en">Statistical Power</div>
+      <div class="kw-def">1-&beta;, 대립가설이 참일 때 올바르게 기각할 확률</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 6: 연습문제 -->
+<!-- ============================================================ -->
+<section id="quiz">
+  <div class="section-title"><span class="icon">✏️</span> 연습문제</div>
+
+  <!-- Q1 -->
+  <div class="quiz-item">
+    <span class="q-num">Q1 — 단답형</span>
+    <div class="q-text">주사위를 한 번 던졌을 때 짝수가 나올 확률은?</div>
+    <input type="text" id="q1" placeholder="답 입력 (예: 0.5)">
+    <button class="quiz-btn check" onclick="checkShort('q1',['0.5','1/2','0.50'],
+      '정답! 짝수 {2,4,6}는 3개, 전체 6개이므로 3/6 = 0.5',
+      '오답. 짝수는 {2,4,6}로 3개, P = 3/6 = 0.5 (또는 1/2)')">정답 확인</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-item">
+    <span class="q-num">Q2 — 객관식</span>
+    <div class="q-text">확률의 공리에 해당하지 않는 것은?</div>
+    <label><input type="radio" name="q2" value="a"> a) 모든 사건의 확률은 0 이상이다</label>
+    <label><input type="radio" name="q2" value="b"> b) 전체 표본공간의 확률은 1이다</label>
+    <label><input type="radio" name="q2" value="c"> c) 확률은 -1에서 1 사이의 값을 가진다</label>
+    <label><input type="radio" name="q2" value="d"> d) 서로 배반인 사건들의 합사건 확률은 각 확률의 합이다</label>
+    <button class="quiz-btn check" onclick="checkRadio('q2','c',
+      '정답! 확률은 0 이상 1 이하이며, -1은 불가능합니다.',
+      '오답. 확률은 0~1 사이 값만 가집니다. -1부터라는 건 공리가 아닙니다. 정답: c)')">정답 확인</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-item">
+    <span class="q-num">Q3 — 단답형</span>
+    <div class="q-text">P(A)=0.3, P(B)=0.4, A와 B가 독립일 때 P(A&cap;B)는?</div>
+    <input type="text" id="q3" placeholder="답 입력">
+    <button class="quiz-btn check" onclick="checkShort('q3',['0.12'],
+      '정답! 독립이면 P(A∩B) = P(A)×P(B) = 0.3×0.4 = 0.12',
+      '오답. 독립이면 P(A∩B) = P(A)×P(B) = 0.3×0.4 = 0.12')">정답 확인</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-item">
+    <span class="q-num">Q4 — 객관식</span>
+    <div class="q-text">베이즈 정리에서 P(B|A)를 구하기 위해 필요하지 않은 것은?</div>
+    <label><input type="radio" name="q4" value="a"> a) P(A|B)</label>
+    <label><input type="radio" name="q4" value="b"> b) P(B)</label>
+    <label><input type="radio" name="q4" value="c"> c) P(A)</label>
+    <label><input type="radio" name="q4" value="d"> d) P(A&cup;B)</label>
+    <button class="quiz-btn check" onclick="checkRadio('q4','d',
+      '정답! 베이즈 정리는 P(A|B), P(B), P(A)를 사용하며, P(A∪B)는 필요하지 않습니다.',
+      '오답. 베이즈 정리: P(B|A) = P(A|B)·P(B)/P(A). 합집합 P(A∪B)는 불필요합니다. 정답: d)')">정답 확인</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-item">
+    <span class="q-num">Q5 — 객관식</span>
+    <div class="q-text">중심극한정리에 대한 설명으로 올바른 것은?</div>
+    <label><input type="radio" name="q5" value="a"> a) 표본 크기가 작아질수록 정규분포에 가까워진다</label>
+    <label><input type="radio" name="q5" value="b"> b) 표본 크기가 커질수록 표본평균의 분포가 정규분포에 가까워진다</label>
+    <label><input type="radio" name="q5" value="c"> c) 모집단이 정규분포일 때만 성립한다</label>
+    <label><input type="radio" name="q5" value="d"> d) 시행 횟수와 무관하다</label>
+    <button class="quiz-btn check" onclick="checkRadio('q5','b',
+      '정답! 중심극한정리: 표본 크기 N이 커질수록 표본평균의 분포가 정규분포에 가까워집니다.',
+      '오답. 중심극한정리는 표본 크기가 커질수록 표본평균이 정규분포를 따른다는 법칙입니다. 정답: b)')">정답 확인</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-item">
+    <span class="q-num">Q6 — 단답형</span>
+    <div class="q-text">이산확률변수 X의 확률질량함수가 P(X=1)=0.2, P(X=2)=0.3, P(X=3)=0.5일 때 기댓값 E(X)는?</div>
+    <input type="text" id="q6" placeholder="답 입력">
+    <button class="quiz-btn check" onclick="checkShort('q6',['2.3'],
+      '정답! E(X) = 1×0.2 + 2×0.3 + 3×0.5 = 0.2 + 0.6 + 1.5 = 2.3',
+      '오답. E(X) = 1×0.2 + 2×0.3 + 3×0.5 = 0.2 + 0.6 + 1.5 = 2.3')">정답 확인</button>
+    <div class="quiz-feedback" id="q6-fb"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-item">
+    <span class="q-num">Q7 — 객관식</span>
+    <div class="q-text">귀무가설이 참인데 기각하는 오류는?</div>
+    <label><input type="radio" name="q7" value="a"> a) 제1종 오류</label>
+    <label><input type="radio" name="q7" value="b"> b) 제2종 오류</label>
+    <label><input type="radio" name="q7" value="c"> c) 제3종 오류</label>
+    <label><input type="radio" name="q7" value="d"> d) 검정력 오류</label>
+    <button class="quiz-btn check" onclick="checkRadio('q7','a',
+      '정답! 제1종 오류(Type I Error): 귀무가설이 맞는데 기각. 확률 = α (유의수준)',
+      '오답. 귀무가설이 참인데 기각하는 것은 제1종 오류(α)입니다. 정답: a)')">정답 확인</button>
+    <div class="quiz-feedback" id="q7-fb"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-item">
+    <span class="q-num">Q8 — 객관식</span>
+    <div class="q-text">다음 중 이산형 확률분포가 아닌 것은?</div>
+    <label><input type="radio" name="q8" value="a"> a) 베르누이 분포</label>
+    <label><input type="radio" name="q8" value="b"> b) 이항분포</label>
+    <label><input type="radio" name="q8" value="c"> c) 정규분포</label>
+    <label><input type="radio" name="q8" value="d"> d) 푸아송 분포</label>
+    <button class="quiz-btn check" onclick="checkRadio('q8','c',
+      '정답! 정규분포는 대표적인 연속확률분포입니다.',
+      '오답. 정규분포는 연속확률분포입니다. 베르누이, 이항, 푸아송은 이산형. 정답: c)')">정답 확인</button>
+    <div class="quiz-feedback" id="q8-fb"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-item">
+    <span class="q-num">Q9 — 객관식</span>
+    <div class="q-text">통계적 검정에서 p값이 0.001일 때 유의수준 &alpha;=0.05에서의 결론은?</div>
+    <label><input type="radio" name="q9" value="a"> a) 귀무가설을 채택한다</label>
+    <label><input type="radio" name="q9" value="b"> b) 귀무가설을 기각한다</label>
+    <label><input type="radio" name="q9" value="c"> c) 판단할 수 없다</label>
+    <label><input type="radio" name="q9" value="d"> d) 추가 데이터가 필요하다</label>
+    <button class="quiz-btn check" onclick="checkRadio('q9','b',
+      '정답! p값(0.001) < α(0.05)이므로 귀무가설을 기각합니다.',
+      '오답. p값(0.001)이 유의수준(0.05)보다 작으므로 귀무가설을 기각합니다. 정답: b)')">정답 확인</button>
+    <div class="quiz-feedback" id="q9-fb"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-item">
+    <span class="q-num">Q10 — 객관식</span>
+    <div class="q-text">확률공간의 세 구성요소를 올바르게 나열한 것은?</div>
+    <label><input type="radio" name="q10" value="a"> a) (&Omega;, F, Pr)</label>
+    <label><input type="radio" name="q10" value="b"> b) (X, Y, Z)</label>
+    <label><input type="radio" name="q10" value="c"> c) (&mu;, &sigma;, n)</label>
+    <label><input type="radio" name="q10" value="d"> d) (P, Q, R)</label>
+    <button class="quiz-btn check" onclick="checkRadio('q10','a',
+      '정답! 확률공간 = (Ω: 표본공간, F: 사건의 모음, Pr: 확률함수)',
+      '오답. 확률공간 = (Ω, F, Pr). Ω=표본공간, F=사건 모음, Pr=확률함수. 정답: a)')">정답 확인</button>
+    <div class="quiz-feedback" id="q10-fb"></div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="quiz-item">
+    <span class="q-num">Q11 — 단답형</span>
+    <div class="q-text">동전의 앞면이 나올 확률을 &theta;라 할 때, 5번 던져서 앞, 앞, 앞, 뒤, 뒤가 나왔다면 최대가능도추정값 &theta;&#770;은?</div>
+    <input type="text" id="q11" placeholder="답 입력">
+    <button class="quiz-btn check" onclick="checkShort('q11',['0.6','3/5'],
+      '정답! L(θ) = θ³(1-θ)². 미분하여 최댓값을 구하면 θ̂ = 3/5 = 0.6',
+      '오답. 가능도함수 L(θ) = θ³(1-θ)²를 미분하여 최대화하면 θ̂ = 0.6 (=3/5)')">정답 확인</button>
+    <div class="quiz-feedback" id="q11-fb"></div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="quiz-item">
+    <span class="q-num">Q12 — 단답형</span>
+    <div class="q-text">대수의 법칙에 의하면, 주사위를 무한히 던질 때 평균값은 어떤 값에 수렴하는가?</div>
+    <input type="text" id="q12" placeholder="답 입력">
+    <button class="quiz-btn check" onclick="checkShort('q12',['3.5'],
+      '정답! E(X) = (1+2+3+4+5+6)/6 = 3.5. 대수의 법칙에 의해 평균이 3.5에 수렴.',
+      '오답. 주사위 기댓값 E(X) = 3.5. 대수의 법칙에 의해 시행이 많아질수록 3.5에 수렴합니다.')">정답 확인</button>
+    <div class="quiz-feedback" id="q12-fb"></div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="quiz-item">
+    <span class="q-num">Q13 — 객관식</span>
+    <div class="q-text">검정력(statistical power)의 일반적 기준은?</div>
+    <label><input type="radio" name="q13" value="a"> a) 0.5 이상</label>
+    <label><input type="radio" name="q13" value="b"> b) 0.8 이상</label>
+    <label><input type="radio" name="q13" value="c"> c) 0.95 이상</label>
+    <label><input type="radio" name="q13" value="d"> d) 1.0</label>
+    <button class="quiz-btn check" onclick="checkRadio('q13','b',
+      '정답! 검정력 = 1-β ≥ 0.8 이상이어야 합니다.',
+      '오답. 검정력(1-β)의 일반적 기준은 0.8 이상입니다. 정답: b)')">정답 확인</button>
+    <div class="quiz-feedback" id="q13-fb"></div>
+  </div>
+
+  <!-- Score -->
+  <div class="score-box" id="scoreBox" style="display:none;">
+    <div class="score-label">총 점수</div>
+    <div class="score-num" id="scoreNum">0 / 13</div>
+  </div>
+  <div style="text-align:center; margin-top:1rem;">
+    <button class="quiz-btn check" style="font-size:1rem; padding:0.7rem 2rem;" onclick="calcScore()">전체 점수 확인</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="text-align:center; padding:2rem; color:var(--text-sub); font-size:0.82rem; border-top:1px solid var(--border);">
+  데이터사이언스입문 — 4주차 확률과 통계 기초 | 한신대학교 2학년 1학기
+</footer>
+
+<script>
+// ===== DARK MODE =====
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.getElementById('themeBtn');
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.setAttribute('data-theme', 'light');
+    btn.textContent = '🌙';
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀️';
+    localStorage.setItem('theme', 'dark');
+  }
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('themeBtn').textContent = '☀️';
+  }
+})();
+
+// ===== TABS =====
+function openTab(evt, tabId) {
+  const container = evt.target.closest('.tab-container');
+  container.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  evt.target.classList.add('active');
+}
+
+// ===== QUIZ =====
+const answered = {};
+
+function checkRadio(name, correct, msgCorrect, msgWrong) {
+  const selected = document.querySelector('input[name="'+name+'"]:checked');
+  const fb = document.getElementById(name + '-fb');
+  if (!selected) { fb.className='quiz-feedback wrong'; fb.style.display='block'; fb.textContent='보기를 선택해주세요.'; return; }
+  if (selected.value === correct) {
+    fb.className = 'quiz-feedback correct'; fb.textContent = msgCorrect; answered[name] = true;
+  } else {
+    fb.className = 'quiz-feedback wrong'; fb.textContent = msgWrong; answered[name] = false;
+  }
+  fb.style.display = 'block';
+}
+
+function checkShort(id, corrects, msgCorrect, msgWrong) {
+  const input = document.getElementById(id);
+  const fb = document.getElementById(id + '-fb');
+  const val = input.value.trim();
+  if (!val) { fb.className='quiz-feedback wrong'; fb.style.display='block'; fb.textContent='답을 입력해주세요.'; return; }
+  if (corrects.includes(val)) {
+    fb.className = 'quiz-feedback correct'; fb.textContent = msgCorrect; answered[id] = true;
+  } else {
+    fb.className = 'quiz-feedback wrong'; fb.textContent = msgWrong; answered[id] = false;
+  }
+  fb.style.display = 'block';
+}
+
+function calcScore() {
+  let total = 0;
+  for (let key in answered) { if (answered[key]) total++; }
+  document.getElementById('scoreBox').style.display = 'block';
+  document.getElementById('scoreNum').textContent = total + ' / 13';
+  document.getElementById('scoreBox').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
