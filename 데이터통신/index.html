@@ -101,6 +101,8 @@
     .chapter-card.green { border-color: var(--success); }
     .chapter-card.orange { border-color: var(--warning); }
     .chapter-card.red { border-color: var(--danger); }
+    .chapter-card.purple { border-color: #7c3aed; }
+    .chapter-card.teal { border-color: #0d9488; }
 
     .ch-icon {
       width: 52px; height: 52px;
@@ -114,6 +116,10 @@
     .chapter-card.green .ch-icon { background: var(--success-light); color: var(--success); }
     .chapter-card.orange .ch-icon { background: var(--warning-light); color: var(--warning); }
     .chapter-card.red .ch-icon { background: var(--danger-light); color: var(--danger); }
+    .chapter-card.purple .ch-icon { background: #ede9fe; color: #7c3aed; }
+    .chapter-card.teal .ch-icon { background: #ccfbf1; color: #0d9488; }
+    [data-theme="dark"] .chapter-card.purple .ch-icon { background: #3b0764; }
+    [data-theme="dark"] .chapter-card.teal .ch-icon { background: #134e4a; }
 
     .ch-body { flex: 1; min-width: 0; }
     .ch-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
@@ -127,6 +133,10 @@
     }
     .chapter-card.green .tag { background: var(--success-light); color: var(--success); }
     .chapter-card.orange .tag { background: var(--warning-light); color: var(--warning); }
+    .chapter-card.purple .tag { background: #ede9fe; color: #7c3aed; }
+    .chapter-card.teal .tag { background: #ccfbf1; color: #0d9488; }
+    [data-theme="dark"] .chapter-card.purple .tag { background: #3b0764; }
+    [data-theme="dark"] .chapter-card.teal .tag { background: #134e4a; }
 
     .ch-arrow {
       color: var(--gray-700); font-size: 1.3rem; flex-shrink: 0;
@@ -255,6 +265,36 @@
           <span class="tag">ASK / FSK / PSK / QAM</span>
           <span class="tag">PCM</span>
           <span class="tag">AM / FM / PM</span>
+        </div>
+      </div>
+      <span class="ch-arrow">›</span>
+    </a>
+
+    <a href="./5장.html" class="chapter-card purple">
+      <div class="ch-icon">Ch5</div>
+      <div class="ch-body">
+        <div class="ch-title">제5장 - 데이터 통신 기초</div>
+        <div class="ch-desc">회선 접속·이용 방식, 직렬/병렬·동기/비동기, 물리 인터페이스, 토폴로지</div>
+        <div class="tags">
+          <span class="tag">점대점 / 다중점</span>
+          <span class="tag">Half / Full Duplex</span>
+          <span class="tag">EIA-232 / USB</span>
+          <span class="tag">버스·스타·링·메쉬</span>
+        </div>
+      </div>
+      <span class="ch-arrow">›</span>
+    </a>
+
+    <a href="./6장.html" class="chapter-card teal">
+      <div class="ch-icon">Ch6</div>
+      <div class="ch-body">
+        <div class="ch-title">제6장 - 전송 매체</div>
+        <div class="ch-desc">트위스티드 페어·동축·광케이블, 라디오파·마이크로파·적외선</div>
+        <div class="tags">
+          <span class="tag">UTP / STP</span>
+          <span class="tag">광섬유 / 스넬의 법칙</span>
+          <span class="tag">위성 통신</span>
+          <span class="tag">IrDA</span>
         </div>
       </div>
       <span class="ch-arrow">›</span>

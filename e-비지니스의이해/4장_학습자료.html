@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>제4장 스마트시대의 비즈니스와 모바일 상거래</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e3a8a;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #06b6d4;
+  --purple: #8b5cf6;
+  --pink: #ec4899;
+  --bg: #f3f4f6;
+  --card-bg: #ffffff;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --border: #e2e8f0;
+  --nav-bg: rgba(255,255,255,0.95);
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+}
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card-bg: #1e293b;
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --border: #334155;
+  --nav-bg: rgba(15,23,42,0.95);
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -4px rgba(0,0,0,0.2);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  transition: background 0.3s, color 0.3s;
+}
+/* NAV */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:1000;
+  background: var(--nav-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 1rem;
+  display: flex; align-items: center;
+  height: 52px;
+  box-shadow: var(--shadow);
+  transition: background 0.3s, border-color 0.3s;
+}
+nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+nav a:hover { background: var(--primary); color: #fff; }
+.nav-links { display:flex; gap:0.25rem; flex:1; overflow-x:auto; align-items:center; }
+.nav-links::-webkit-scrollbar { display:none; }
+#darkToggle {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.35rem 0.65rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.3s, border-color 0.3s;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: #fff;
+  padding: 5rem 1.5rem 3rem;
+  text-align: center;
+  margin-top: 52px;
+}
+.header h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 0.5rem; }
+.header p { font-size: 1rem; opacity: 0.85; }
+/* SECTIONS */
+.section {
+  max-width: 1100px;
+  margin: 2.5rem auto;
+  padding: 0 1rem;
+}
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.section-title .icon { font-size: 1.6rem; }
+/* CARDS */
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+@media (max-width: 768px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .header h1 { font-size: 1.5rem; }
+  nav a { font-size: 0.75rem; padding: 0.3rem 0.5rem; }
+}
+/* KEYWORD CARDS */
+.keyword-card {
+  border-top: 4px solid var(--primary);
+}
+.keyword-card .kw-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--primary);
+  margin-bottom: 0.4rem;
+}
+[data-theme="dark"] .keyword-card .kw-title { color: #60a5fa; }
+.keyword-card .kw-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+/* COMPARE CARDS */
+.compare-card { border-top: 4px solid var(--purple); }
+.compare-card h3 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--purple); }
+[data-theme="dark"] .compare-card h3 { color: #a78bfa; }
+.compare-row { display: flex; gap: 1rem; }
+@media (max-width: 600px) { .compare-row { flex-direction: column; } }
+.compare-side {
+  flex: 1;
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: background 0.3s;
+}
+.compare-side h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--border);
+}
+.compare-side ul { list-style: none; padding: 0; }
+.compare-side ul li { font-size: 0.85rem; padding: 0.2rem 0; color: var(--text-secondary); }
+.compare-side ul li::before { content: "• "; color: var(--primary); font-weight: 700; }
+/* TABLE CARD */
+.table-card { border-top: 4px solid var(--info); overflow-x: auto; }
+.table-card h3 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--info); }
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.styled-table th {
+  background: var(--primary);
+  color: #fff;
+  padding: 0.7rem 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+.styled-table td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+.styled-table tr:hover td { background: rgba(37,99,235,0.05); }
+[data-theme="dark"] .styled-table tr:hover td { background: rgba(96,165,250,0.08); }
+/* DIAGRAM */
+.diagram-card { border-top: 4px solid var(--success); }
+.diagram-card h3 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--success); }
+[data-theme="dark"] .diagram-card h3 { color: #34d399; }
+.diagram-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem 0;
+}
+.diagram-node {
+  background: linear-gradient(135deg, var(--primary), #3b82f6);
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  min-width: 80px;
+}
+.diagram-node.alt {
+  background: linear-gradient(135deg, var(--success), #34d399);
+}
+.diagram-node.warn {
+  background: linear-gradient(135deg, var(--warning), #fbbf24);
+  color: #1e293b;
+}
+.diagram-node.purple {
+  background: linear-gradient(135deg, var(--purple), #a78bfa);
+}
+.diagram-node.pink {
+  background: linear-gradient(135deg, var(--pink), #f472b6);
+}
+.diagram-arrow { font-size: 1.3rem; color: var(--text-secondary); }
+.diagram-branch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.diagram-branch-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.diagram-sub {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  color: var(--text);
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+/* EXAMPLE CARDS */
+.example-card { border-top: 4px solid var(--warning); }
+.example-card .ex-label {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--warning), #fbbf24);
+  color: #1e293b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.6rem;
+  border-radius: 20px;
+  margin-bottom: 0.5rem;
+}
+.example-card .ex-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; }
+.example-card .ex-desc { font-size: 0.85rem; color: var(--text-secondary); }
+/* QUIZ */
+.quiz-card { border-top: 4px solid var(--danger); margin-bottom: 1rem; }
+.quiz-card .q-num {
+  display: inline-block;
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.6rem;
+  border-radius: 20px;
+  margin-bottom: 0.5rem;
+}
+.quiz-card .q-text { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.8rem; }
+.quiz-card .options label {
+  display: block;
+  padding: 0.5rem 0.8rem;
+  margin: 0.3rem 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  border: 2px solid var(--border);
+  transition: border-color 0.2s, background 0.2s;
+}
+.quiz-card .options label:hover { border-color: var(--primary); }
+.quiz-card .options input { margin-right: 0.5rem; }
+.quiz-card .feedback {
+  margin-top: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: none;
+}
+.quiz-card .feedback.correct {
+  display: block;
+  background: rgba(16,185,129,0.12);
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+.quiz-card .feedback.wrong {
+  display: block;
+  background: rgba(239,68,68,0.12);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+[data-theme="dark"] .quiz-card .feedback.correct { background: rgba(16,185,129,0.15); }
+[data-theme="dark"] .quiz-card .feedback.wrong { background: rgba(239,68,68,0.15); }
+.check-btn {
+  margin-top: 0.5rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: background 0.2s;
+}
+.check-btn:hover { background: var(--primary-dark); }
+/* SCORE */
+.score-box {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  border-top: 4px solid var(--primary);
+  transition: background 0.3s;
+}
+.score-box .score-num { font-size: 3rem; font-weight: 900; color: var(--primary); }
+[data-theme="dark"] .score-box .score-num { color: #60a5fa; }
+.score-box p { color: var(--text-secondary); margin: 0.5rem 0; }
+.reset-btn {
+  margin-top: 1rem;
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: background 0.2s;
+}
+.reset-btn:hover { background: #dc2626; }
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav>
+  <div class="nav-links">
+    <a href="./index.html">← 목록</a>
+    <a href="#summary">핵심요약</a>
+    <a href="#compare">개념비교</a>
+    <a href="#diagram">관계다이어그램</a>
+    <a href="#examples">실생활예시</a>
+    <a href="#quiz">셀프체크퀴즈</a>
+  </div>
+  <button id="darkToggle" onclick="toggleDark()" aria-label="다크모드 전환">🌙</button>
+</nav>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>제4장 스마트시대의 비즈니스와 모바일 상거래</h1>
+  <p>e-비지니스의 이해 · 한신대학교 2학년 1학기</p>
+</div>
+
+<!-- SECTION 1: 핵심 요약 -->
+<div class="section" id="summary">
+  <div class="section-title"><span class="icon">📋</span> 핵심 요약 (30초 정리)</div>
+  <div class="grid-3">
+    <div class="card keyword-card">
+      <div class="kw-title">스마트 혁명</div>
+      <div class="kw-desc">2009년 아이폰 등장으로 시작된 변화. 사용자를 디지털 전문가로 변화시키며 산업 전반에 혁신을 불러옴</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">스마트폰</div>
+      <div class="kw-desc">인터넷 정보검색, PC 기능을 갖춘 휴대용 컴퓨터. 2021년 한국 가입자 약 5,566만명</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">N-Screen</div>
+      <div class="kw-desc">스마트폰 → 태블릿 → 스마트TV 등 다양한 기기 간 연결성을 강화하는 서비스</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">스마트 생태계</div>
+      <div class="kw-desc">다양한 스마트 기기 + 무선 인터넷 + 모바일 앱으로 형성된 개방적 생태계</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">SNS 확산</div>
+      <div class="kw-desc">페이스북 27억명(2021), 카카오톡 4,700만명(2021), 인스타그램 1,860만명(2022)</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">스마트 콘텐츠</div>
+      <div class="kw-desc">스마트 기기 특성을 활용한 콘텐츠. 국내 시장 규모 133.6조원(2021)</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">앱 스토어</div>
+      <div class="kw-desc">모바일 애플리케이션을 사고파는 온라인 장터. 앱 경제(App Economy)를 형성</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">모바일 광고</div>
+      <div class="kw-desc">2018년 1,572억 달러 → 2022년 3,195억 달러로 약 2배 증가</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">ICT 산업구조 개편</div>
+      <div class="kw-desc">요금제·통화품질 경쟁에서 OS·앱스토어 중심 경쟁으로 산업 구조가 전환</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">융합 비즈니스</div>
+      <div class="kw-desc">ICT + 전통산업 융합. 자동차, 에너지, 의료, 조선 등 다양한 분야와 결합</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">모바일 플랫폼</div>
+      <div class="kw-desc">애플 iOS + 구글 안드로이드 = 96.3% 시장 점유. 양강 구도 형성</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">모바일 웹 2.0</div>
+      <div class="kw-desc">모바일 + 참여·공유·개방 결합. 실시간 정보 생산·유통·공유가 가능</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">M-Commerce</div>
+      <div class="kw-desc">모바일 기기로 지불처리가 가능한 전자상거래. 재화·서비스·정보 거래 포함</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">LBS (위치기반 서비스)</div>
+      <div class="kw-desc">GPS 기반 위치기반 서비스. 구글 스트리트 뷰, 맛집 찾기 등에 활용</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">증강현실 (AR)</div>
+      <div class="kw-desc">실제 공간에 가상 정보를 추가한 기술. 포켓몬GO, IKEA Place 등</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">모바일 IPTV</div>
+      <div class="kw-desc">이동 중 방송 콘텐츠를 수신할 수 있는 서비스. 웨이브, 티빙 등</div>
+    </div>
+    <div class="card keyword-card">
+      <div class="kw-title">앱스토어 수익 모델</div>
+      <div class="kw-desc">애플 기준 개발자 70% : 애플 30% 배분. 2021년 개발자 수익 71조원</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: 개념 비교 -->
+<div class="section" id="compare">
+  <div class="section-title"><span class="icon">⚖️</span> 개념 비교 카드</div>
+  <div class="grid-2">
+    <!-- 1 -->
+    <div class="card compare-card">
+      <h3>스마트폰 vs 일반 모바일폰</h3>
+      <div class="compare-row">
+        <div class="compare-side">
+          <h4>스마트폰</h4>
+          <ul>
+            <li>PC 수준의 기능 수행</li>
+            <li>앱 설치 및 확장 가능</li>
+            <li>인터넷 브라우징</li>
+            <li>모바일 OS 탑재</li>
+          </ul>
+        </div>
+        <div class="compare-side">
+          <h4>일반 모바일폰</h4>
+          <ul>
+            <li>음성통화 중심</li>
+            <li>제한적 기능</li>
+            <li>앱 설치 불가</li>
+            <li>단순 운영체제</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- 2 -->
+    <div class="card compare-card">
+      <h3>과거 모바일 산업 vs 현재 플랫폼 기반</h3>
+      <div class="compare-row">
+        <div class="compare-side">
+          <h4>과거 (이통사 중심)</h4>
+          <ul>
+            <li>이동통신사 중심 구조</li>
+            <li>폐쇄적 생태계</li>
+            <li>HW 성능 맞춤 납품</li>
+            <li>SW 산업 왜곡</li>
+          </ul>
+        </div>
+        <div class="compare-side">
+          <h4>현재 (플랫폼 기반)</h4>
+          <ul>
+            <li>플랫폼 기반 단말기 생산</li>
+            <li>콘텐츠사 플랫폼별 제작</li>
+            <li>웹 통한 수익 창출</li>
+            <li>개방적 생태계</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- 3 -->
+    <div class="card compare-card">
+      <h3>모바일 웹 1.0 vs 모바일 웹 2.0</h3>
+      <div class="compare-row">
+        <div class="compare-side">
+          <h4>모바일 웹 1.0</h4>
+          <ul>
+            <li>단방향 정보 전달</li>
+            <li>제한적 콘텐츠</li>
+            <li>수동적 소비</li>
+            <li>정적인 웹</li>
+          </ul>
+        </div>
+        <div class="compare-side">
+          <h4>모바일 웹 2.0</h4>
+          <ul>
+            <li>참여·공유·개방</li>
+            <li>XML/XHTML 기반</li>
+            <li>Ajax UI, 오픈 API</li>
+            <li>실시간 소통</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- 4 -->
+    <div class="card compare-card">
+      <h3>초창기 플랫폼 vs 최근 플랫폼</h3>
+      <div class="compare-row">
+        <div class="compare-side">
+          <h4>초창기 플랫폼</h4>
+          <ul>
+            <li>하드웨어 제어 중심</li>
+            <li>보이지 않는 중간자</li>
+            <li>UI 없음</li>
+            <li>제한적 네트워크</li>
+          </ul>
+        </div>
+        <div class="compare-side">
+          <h4>최근 플랫폼</h4>
+          <ul>
+            <li>앱·서비스 실행 브레인</li>
+            <li>독자적 UI 보유</li>
+            <li>PC 수준 OS</li>
+            <li>5G / Wi-Fi 지원</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- 5 -->
+    <div class="card compare-card">
+      <h3>애플 앱스토어 vs 구글 플레이스토어</h3>
+      <div class="compare-row">
+        <div class="compare-side">
+          <h4>애플 App Store</h4>
+          <ul>
+            <li>업계 최초 앱스토어</li>
+            <li>220만개 앱(2017)</li>
+            <li>1,300억건 다운로드</li>
+            <li>매출 857억 달러(2021)</li>
+          </ul>
+        </div>
+        <div class="compare-side">
+          <h4>구글 Play Store</h4>
+          <ul>
+            <li>350만개 앱(2017)</li>
+            <li>멀티태스킹 지원</li>
+            <li>쉬운 연동성</li>
+            <li>PC 웹에서 바로 설치</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- M-Commerce Table -->
+  <div style="margin-top:1rem;">
+    <div class="card table-card">
+      <h3>M-Commerce 응용분야 — 3가지 분류</h3>
+      <table class="styled-table">
+        <thead>
+          <tr><th>분류</th><th>유형</th><th>주요 사례</th></tr>
+        </thead>
+        <tbody>
+          <tr><td rowspan="2"><strong>재화</strong></td><td>쇼핑</td><td>이동 중 상품 구매 (쿠팡, 11번가)</td></tr>
+          <tr><td>조달</td><td>B2B 모바일 조달</td></tr>
+          <tr><td rowspan="4"><strong>서비스</strong></td><td>뱅킹</td><td>모바일 뱅킹 (카카오뱅크, 토스)</td></tr>
+          <tr><td>주식거래</td><td>모바일 증권 거래</td></tr>
+          <tr><td>요금/e-cash</td><td>모바일 결제, 전자화폐</td></tr>
+          <tr><td>티켓/게임</td><td>모바일 발권, 모바일 게임</td></tr>
+          <tr><td rowspan="2"><strong>정보</strong></td><td>정보제공</td><td>뉴스, 날씨, 교통 정보</td></tr>
+          <tr><td>광고</td><td>유튜브 광고, 네이버 배너</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: 관계 다이어그램 -->
+<div class="section" id="diagram">
+  <div class="section-title"><span class="icon">🔗</span> 관계 다이어그램</div>
+  <div class="grid-2">
+    <!-- 1 -->
+    <div class="card diagram-card">
+      <h3>스마트 생태계 구조</h3>
+      <div class="diagram-flow" style="flex-direction:column; gap:0.8rem;">
+        <div class="diagram-branch-row">
+          <div class="diagram-node">스마트폰</div>
+          <div class="diagram-node alt">태블릿</div>
+          <div class="diagram-node purple">스마트TV</div>
+        </div>
+        <div class="diagram-arrow">↓</div>
+        <div class="diagram-node warn">N-Screen</div>
+        <div class="diagram-arrow">↓</div>
+        <div class="diagram-node alt">클라우드</div>
+        <div class="diagram-arrow">↓</div>
+        <div class="diagram-node pink">스마트홈</div>
+      </div>
+    </div>
+    <!-- 2 -->
+    <div class="card diagram-card">
+      <h3>모바일 플랫폼 생태계</h3>
+      <div class="diagram-flow" style="flex-direction:column; gap:0.8rem;">
+        <div class="diagram-branch-row">
+          <div class="diagram-node">iOS</div>
+          <div class="diagram-node alt">Android</div>
+        </div>
+        <div class="diagram-arrow">↓</div>
+        <div class="diagram-node purple">앱스토어</div>
+        <div class="diagram-arrow">↓</div>
+        <div class="diagram-branch-row">
+          <div class="diagram-node warn">개발자</div>
+          <div class="diagram-arrow">⇄</div>
+          <div class="diagram-node pink">사용자</div>
+        </div>
+        <div class="diagram-arrow">↓</div>
+        <div class="diagram-node alt">수익 순환</div>
+      </div>
+    </div>
+    <!-- 3 -->
+    <div class="card diagram-card">
+      <h3>M-Commerce 응용 분류</h3>
+      <div class="diagram-flow" style="flex-direction:column; gap:0.8rem;">
+        <div class="diagram-node">M-Commerce</div>
+        <div class="diagram-arrow">↓</div>
+        <div class="diagram-branch-row">
+          <div class="diagram-branch">
+            <div class="diagram-node alt">재화</div>
+            <div class="diagram-branch-row" style="margin-top:0.4rem;">
+              <div class="diagram-sub">쇼핑</div>
+              <div class="diagram-sub">조달</div>
+            </div>
+          </div>
+          <div class="diagram-branch">
+            <div class="diagram-node purple">서비스</div>
+            <div class="diagram-branch-row" style="margin-top:0.4rem;">
+              <div class="diagram-sub">뱅킹</div>
+              <div class="diagram-sub">주식</div>
+              <div class="diagram-sub">티켓</div>
+            </div>
+          </div>
+          <div class="diagram-branch">
+            <div class="diagram-node pink">정보</div>
+            <div class="diagram-branch-row" style="margin-top:0.4rem;">
+              <div class="diagram-sub">정보제공</div>
+              <div class="diagram-sub">광고</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 4 -->
+    <div class="card diagram-card">
+      <h3>모바일 콘텐츠 서비스 분류</h3>
+      <div class="diagram-flow" style="flex-direction:column; gap:0.8rem;">
+        <div class="diagram-node">모바일 콘텐츠</div>
+        <div class="diagram-arrow">↓</div>
+        <div class="diagram-branch-row">
+          <div class="diagram-node alt">전자책</div>
+          <div class="diagram-node warn">LBS</div>
+          <div class="diagram-node purple">IPTV</div>
+          <div class="diagram-node pink">AR</div>
+        </div>
+        <div class="diagram-branch-row" style="margin-top:0.3rem;">
+          <div class="diagram-sub">킨들, Scribd</div>
+          <div class="diagram-sub">위치기반</div>
+          <div class="diagram-sub">방송수신</div>
+          <div class="diagram-sub">증강현실</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: 실생활 예시 -->
+<div class="section" id="examples">
+  <div class="section-title"><span class="icon">🌍</span> 실생활 예시 카드</div>
+  <div class="grid-3">
+    <div class="card example-card">
+      <div class="ex-label">스마트 혁명</div>
+      <div class="ex-title">아이폰 (2009년 한국 출시)</div>
+      <div class="ex-desc">이동통신 시장에 혁명을 일으키며 스마트폰 시대의 서막을 열었다</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">SNS</div>
+      <div class="ex-title">페이스북 / 인스타그램 / 카카오톡</div>
+      <div class="ex-desc">실시간 소통과 정보 공유의 핵심 플랫폼으로 자리잡음</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">N-Screen</div>
+      <div class="ex-title">넷플릭스</div>
+      <div class="ex-desc">폰 → 태블릿 → TV로 끊김 없이 연동하여 콘텐츠 시청</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">모바일 광고</div>
+      <div class="ex-title">유튜브 광고 / 네이버 배너</div>
+      <div class="ex-desc">모바일 환경에 최적화된 타겟 광고로 급성장 중</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">융합 비즈니스</div>
+      <div class="ex-title">테슬라 / 원격의료</div>
+      <div class="ex-desc">자동차+IT, 의료+IT 등 전통산업과 ICT의 융합 사례</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">앱 경제</div>
+      <div class="ex-title">배달의민족 / 당근마켓 / 카카오택시</div>
+      <div class="ex-desc">앱 기반 비즈니스 모델로 새로운 경제 생태계를 형성</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">모바일 쇼핑</div>
+      <div class="ex-title">쿠팡 / 11번가</div>
+      <div class="ex-desc">이동 중에도 스마트폰으로 상품을 검색하고 구매 가능</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">모바일 뱅킹</div>
+      <div class="ex-title">카카오뱅크 / 토스</div>
+      <div class="ex-desc">은행 방문 없이 모바일로 계좌개설, 송금, 대출까지 가능</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">모바일 티켓</div>
+      <div class="ex-title">KTX 모바일 발권 / 스마트 항공권 QR</div>
+      <div class="ex-desc">종이 티켓 없이 모바일 QR코드로 탑승 가능</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">LBS</div>
+      <div class="ex-title">카카오맵 / 네이버 지도 / 배민 주변 맛집</div>
+      <div class="ex-desc">GPS 기반 위치정보를 활용한 서비스 제공</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">증강현실 (AR)</div>
+      <div class="ex-title">포켓몬GO / IKEA Place / 주가라(Zugara)</div>
+      <div class="ex-desc">실제 공간에 가상 정보를 겹쳐 보여주는 기술 활용 사례</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">전자책</div>
+      <div class="ex-title">아마존 킨들 / Scribd</div>
+      <div class="ex-desc">디지털 도서 유통 플랫폼. Scribd는 수익 80%를 저자에게 배분</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">앱스토어</div>
+      <div class="ex-title">애플 App Store / 구글 Play Store</div>
+      <div class="ex-desc">모바일 앱 유통의 양대 산맥. 앱 경제의 핵심 인프라</div>
+    </div>
+    <div class="card example-card">
+      <div class="ex-label">모바일 IPTV</div>
+      <div class="ex-title">웨이브 / 티빙</div>
+      <div class="ex-desc">이동 중에도 방송 콘텐츠를 스트리밍으로 시청 가능</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: 셀프 체크 퀴즈 -->
+<div class="section" id="quiz">
+  <div class="section-title"><span class="icon">✏️</span> 셀프 체크 퀴즈</div>
+
+  <!-- Q1 -->
+  <div class="card quiz-card" id="q1">
+    <div class="q-num">Q1</div>
+    <div class="q-text">한국에 아이폰이 출시된 시기는?</div>
+    <div class="options">
+      <label><input type="radio" name="q1" value="a"> 2007년 6월</label>
+      <label><input type="radio" name="q1" value="b"> 2008년 7월</label>
+      <label><input type="radio" name="q1" value="c"> 2009년 11월</label>
+      <label><input type="radio" name="q1" value="d"> 2010년 3월</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q1','c','정답! 한국에 아이폰이 2009년 11월에 출시되면서 스마트 혁명이 시작되었습니다.','오답입니다. 한국에 아이폰은 2009년 11월에 출시되었습니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q1"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="card quiz-card" id="q2">
+    <div class="q-num">Q2</div>
+    <div class="q-text">2021년 한국 스마트폰 가입자 수는?</div>
+    <div class="options">
+      <label><input type="radio" name="q2" value="a"> 약 3,200만명</label>
+      <label><input type="radio" name="q2" value="b"> 약 4,100만명</label>
+      <label><input type="radio" name="q2" value="c"> 약 5,566만명</label>
+      <label><input type="radio" name="q2" value="d"> 약 6,800만명</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q2','c','정답! 2021년 한국 스마트폰 가입자 수는 약 5,566만명입니다.','오답입니다. 정답은 약 5,566만명입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q2"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="card quiz-card" id="q3">
+    <div class="q-num">Q3</div>
+    <div class="q-text">한국의 스마트폰 보급률(2019)은 세계 몇 위인가?</div>
+    <div class="options">
+      <label><input type="radio" name="q3" value="a"> 3위 (88%)</label>
+      <label><input type="radio" name="q3" value="b"> 1위 (95%)</label>
+      <label><input type="radio" name="q3" value="c"> 2위 (92%)</label>
+      <label><input type="radio" name="q3" value="d"> 5위 (82%)</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q3','b','정답! 한국은 2019년 스마트폰 보급률 95%로 세계 1위를 기록했습니다.','오답입니다. 한국은 95% 보급률로 세계 1위입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q3"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="card quiz-card" id="q4">
+    <div class="q-num">Q4</div>
+    <div class="q-text">N-Screen 서비스란 무엇인가?</div>
+    <div class="options">
+      <label><input type="radio" name="q4" value="a"> 하나의 화면을 N등분하는 기술</label>
+      <label><input type="radio" name="q4" value="b"> 여러 스마트 기기 간 연결성을 강화하는 서비스</label>
+      <label><input type="radio" name="q4" value="c"> N개의 앱을 동시에 실행하는 기능</label>
+      <label><input type="radio" name="q4" value="d"> 네트워크 속도를 N배로 높이는 기술</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q4','b','정답! N-Screen은 스마트폰, 태블릿, 스마트TV 등 여러 기기 간 연결성을 강화하는 서비스입니다.','오답입니다. N-Screen은 여러 스마트 기기 간 연결성을 강화하는 서비스입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q4"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="card quiz-card" id="q5">
+    <div class="q-num">Q5</div>
+    <div class="q-text">2021년 카카오톡 사용자 수는 약 몇 명인가?</div>
+    <div class="options">
+      <label><input type="radio" name="q5" value="a"> 약 2,300만명</label>
+      <label><input type="radio" name="q5" value="b"> 약 3,500만명</label>
+      <label><input type="radio" name="q5" value="c"> 약 4,700만명</label>
+      <label><input type="radio" name="q5" value="d"> 약 5,200만명</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q5','c','정답! 2021년 카카오톡 사용자 수는 약 4,700만명입니다.','오답입니다. 정답은 약 4,700만명입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q5"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="card quiz-card" id="q6">
+    <div class="q-num">Q6</div>
+    <div class="q-text">2021년 국내 스마트 콘텐츠 시장 규모는?</div>
+    <div class="options">
+      <label><input type="radio" name="q6" value="a"> 55.2조원</label>
+      <label><input type="radio" name="q6" value="b"> 89.4조원</label>
+      <label><input type="radio" name="q6" value="c"> 133.6조원</label>
+      <label><input type="radio" name="q6" value="d"> 210.5조원</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q6','c','정답! 2021년 국내 스마트 콘텐츠 시장 규모는 133.6조원입니다.','오답입니다. 정답은 133.6조원입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q6"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="card quiz-card" id="q7">
+    <div class="q-num">Q7</div>
+    <div class="q-text">모바일 플랫폼 시장에서 iOS + 안드로이드의 점유율은?</div>
+    <div class="options">
+      <label><input type="radio" name="q7" value="a"> 78.5%</label>
+      <label><input type="radio" name="q7" value="b"> 85.1%</label>
+      <label><input type="radio" name="q7" value="c"> 96.3%</label>
+      <label><input type="radio" name="q7" value="d"> 99.9%</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q7','c','정답! iOS와 안드로이드가 합쳐서 96.3%의 시장 점유율을 보유합니다.','오답입니다. 정답은 96.3%입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q7"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="card quiz-card" id="q8">
+    <div class="q-num">Q8</div>
+    <div class="q-text">모바일 웹 2.0의 핵심 개념은 무엇인가?</div>
+    <div class="options">
+      <label><input type="radio" name="q8" value="a"> 보안, 암호화, 인증</label>
+      <label><input type="radio" name="q8" value="b"> 참여, 공유, 개방의 확산</label>
+      <label><input type="radio" name="q8" value="c"> 속도, 용량, 해상도 향상</label>
+      <label><input type="radio" name="q8" value="d"> 비용 절감, 효율화, 자동화</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q8','b','정답! 모바일 웹 2.0의 핵심은 참여, 공유, 개방의 확산입니다.','오답입니다. 핵심 개념은 참여, 공유, 개방의 확산입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q8"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="card quiz-card" id="q9">
+    <div class="q-num">Q9</div>
+    <div class="q-text">M-Commerce의 정의로 가장 적합한 것은?</div>
+    <div class="options">
+      <label><input type="radio" name="q9" value="a"> 대형 마트에서의 전자결제</label>
+      <label><input type="radio" name="q9" value="b"> 모바일 기기로 지불처리가 가능한 전자상거래</label>
+      <label><input type="radio" name="q9" value="c"> PC 기반 온라인 쇼핑몰</label>
+      <label><input type="radio" name="q9" value="d"> 오프라인 매장의 POS 시스템</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q9','b','정답! M-Commerce는 모바일 기기로 지불처리가 가능한 전자상거래를 의미합니다.','오답입니다. M-Commerce는 모바일 기기로 지불처리가 가능한 전자상거래입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q9"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="card quiz-card" id="q10">
+    <div class="q-num">Q10</div>
+    <div class="q-text">LBS(위치기반 서비스)의 핵심 기술은?</div>
+    <div class="options">
+      <label><input type="radio" name="q10" value="a"> Bluetooth</label>
+      <label><input type="radio" name="q10" value="b"> NFC</label>
+      <label><input type="radio" name="q10" value="c"> GPS (Global Positioning System)</label>
+      <label><input type="radio" name="q10" value="d"> RFID</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q10','c','정답! LBS의 핵심 기술은 GPS(Global Positioning System)입니다.','오답입니다. LBS의 핵심 기술은 GPS입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q10"></div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="card quiz-card" id="q11">
+    <div class="q-num">Q11</div>
+    <div class="q-text">증강현실(AR)과 가상현실(VR)의 차이점으로 올바른 것은?</div>
+    <div class="options">
+      <label><input type="radio" name="q11" value="a"> AR은 100% 가상, VR은 실제 공간 활용</label>
+      <label><input type="radio" name="q11" value="b"> AR은 실제 공간에 가상 정보 추가, VR은 100% 가상</label>
+      <label><input type="radio" name="q11" value="c"> 둘 다 100% 가상 환경</label>
+      <label><input type="radio" name="q11" value="d"> 둘 다 실제 공간 기반</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q11','b','정답! AR은 실제 공간에 가상 정보를 추가하고, VR은 100% 가상 환경입니다.','오답입니다. AR은 실제 공간에 가상 정보를 추가하고, VR은 100% 가상입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q11"></div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="card quiz-card" id="q12">
+    <div class="q-num">Q12</div>
+    <div class="q-text">애플 앱스토어의 수익 배분 비율은?</div>
+    <div class="options">
+      <label><input type="radio" name="q12" value="a"> 개발자 50% : 애플 50%</label>
+      <label><input type="radio" name="q12" value="b"> 개발자 60% : 애플 40%</label>
+      <label><input type="radio" name="q12" value="c"> 개발자 70% : 애플 30%</label>
+      <label><input type="radio" name="q12" value="d"> 개발자 80% : 애플 20%</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q12','c','정답! 애플 앱스토어는 개발자 70%, 애플 30%의 비율로 수익을 배분합니다.','오답입니다. 정답은 개발자 70% : 애플 30%입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q12"></div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="card quiz-card" id="q13">
+    <div class="q-num">Q13</div>
+    <div class="q-text">2017년 기준 구글 플레이스토어의 앱 등록 수는?</div>
+    <div class="options">
+      <label><input type="radio" name="q13" value="a"> 약 100만개</label>
+      <label><input type="radio" name="q13" value="b"> 약 220만개</label>
+      <label><input type="radio" name="q13" value="c"> 약 350만개</label>
+      <label><input type="radio" name="q13" value="d"> 약 500만개</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q13','c','정답! 2017년 기준 구글 플레이스토어에는 약 350만개의 앱이 등록되어 있었습니다.','오답입니다. 정답은 약 350만개입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q13"></div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="card quiz-card" id="q14">
+    <div class="q-num">Q14</div>
+    <div class="q-text">과거 모바일 산업의 주요 문제점은?</div>
+    <div class="options">
+      <label><input type="radio" name="q14" value="a"> 앱 개발자 과잉 공급</label>
+      <label><input type="radio" name="q14" value="b"> 이동통신사 중심 폐쇄적 구조와 소프트웨어 산업 왜곡</label>
+      <label><input type="radio" name="q14" value="c"> 스마트폰 가격 폭등</label>
+      <label><input type="radio" name="q14" value="d"> 인터넷 속도 부족</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q14','b','정답! 과거 모바일 산업은 이동통신사 중심의 폐쇄적 구조로 소프트웨어 산업이 왜곡되는 문제가 있었습니다.','오답입니다. 정답은 이동통신사 중심 폐쇄적 구조와 소프트웨어 산업 왜곡입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q14"></div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="card quiz-card" id="q15">
+    <div class="q-num">Q15</div>
+    <div class="q-text">모바일 상거래(M-Commerce)의 응용분야 3가지 분류는?</div>
+    <div class="options">
+      <label><input type="radio" name="q15" value="a"> 하드웨어, 소프트웨어, 네트워크</label>
+      <label><input type="radio" name="q15" value="b"> 재화, 서비스, 정보</label>
+      <label><input type="radio" name="q15" value="c"> 생산, 유통, 소비</label>
+      <label><input type="radio" name="q15" value="d"> 개발, 운영, 마케팅</label>
+    </div>
+    <button class="check-btn" onclick="checkAnswer('q15','b','정답! M-Commerce의 응용분야는 재화, 서비스, 정보 3가지로 분류됩니다.','오답입니다. 정답은 재화, 서비스, 정보입니다.')">정답 확인</button>
+    <div class="feedback" id="fb-q15"></div>
+  </div>
+
+  <!-- SCORE -->
+  <div class="score-box" id="scoreBox" style="display:none; margin-top:1.5rem;">
+    <div class="score-num" id="scoreNum">0 / 15</div>
+    <p id="scoreMsg">결과를 확인하세요</p>
+    <button class="reset-btn" onclick="resetQuiz()">다시 풀기</button>
+  </div>
+  <div style="text-align:center; margin-top:1rem;">
+    <button class="check-btn" onclick="showScore()" style="padding:0.7rem 2rem; font-size:1rem;">전체 점수 확인</button>
+  </div>
+</div>
+
+<footer>
+  <p>e-비지니스의 이해 · 한신대학교 2학년 1학기 · 제4장 스마트시대의 비즈니스와 모바일 상거래</p>
+</footer>
+
+<script>
+// Dark mode
+function toggleDark() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('darkToggle').textContent = next === 'dark' ? '☀️' : '🌙';
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+    if (saved === 'dark') document.getElementById('darkToggle').textContent = '☀️';
+  }
+})();
+
+// Quiz
+let answered = {};
+function checkAnswer(qId, correct, correctMsg, wrongMsg) {
+  const selected = document.querySelector('input[name="'+qId+'"]:checked');
+  if (!selected) return;
+  const fb = document.getElementById('fb-' + qId);
+  if (selected.value === correct) {
+    fb.className = 'feedback correct';
+    fb.textContent = '✅ ' + correctMsg;
+    answered[qId] = true;
+  } else {
+    fb.className = 'feedback wrong';
+    fb.textContent = '❌ ' + wrongMsg;
+    answered[qId] = false;
+  }
+  // disable further changes
+  document.querySelectorAll('input[name="'+qId+'"]').forEach(function(r){ r.disabled = true; });
+}
+
+function showScore() {
+  let correct = 0;
+  let total = 15;
+  for (var key in answered) {
+    if (answered[key]) correct++;
+  }
+  document.getElementById('scoreNum').textContent = correct + ' / ' + total;
+  var pct = Math.round((correct / total) * 100);
+  var msg = '';
+  if (pct === 100) msg = '완벽합니다! 모든 문제를 맞혔습니다! 🎉';
+  else if (pct >= 80) msg = '훌륭합니다! 핵심 내용을 잘 이해하고 있습니다.';
+  else if (pct >= 60) msg = '좋습니다! 조금만 더 복습하면 완벽해질 거예요.';
+  else msg = '더 열심히 복습해 봅시다! 핵심 요약을 다시 확인해 보세요.';
+  document.getElementById('scoreMsg').textContent = msg;
+  document.getElementById('scoreBox').style.display = 'block';
+  document.getElementById('scoreBox').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answered = {};
+  for (var i = 1; i <= 15; i++) {
+    var qId = 'q' + i;
+    document.querySelectorAll('input[name="'+qId+'"]').forEach(function(r){
+      r.checked = false;
+      r.disabled = false;
+    });
+    var fb = document.getElementById('fb-' + qId);
+    fb.className = 'feedback';
+    fb.textContent = '';
+  }
+  document.getElementById('scoreBox').style.display = 'none';
+  document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

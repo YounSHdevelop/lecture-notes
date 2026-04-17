@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터 사이언스 입문 — 중간고사 대비 학습자료 (1~6장)</title>
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e3a8a;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warning: #d97706;
+  --purple: #7c3aed;
+  --teal: #0d9488;
+  --indigo: #4f46e5;
+  --pink: #db2777;
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --text: #1f2937;
+  --text-sub: #6b7280;
+  --border: #e5e7eb;
+  --code-bg: #1e293b;
+  --code-text: #e2e8f0;
+  --nav-bg: rgba(255,255,255,0.95);
+  --tag-bg: #eff6ff;
+  --tag-text: #1d4ed8;
+}
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --text-sub: #94a3b8;
+  --border: #334155;
+  --nav-bg: rgba(15,23,42,0.97);
+  --tag-bg: #1e3a8a;
+  --tag-text: #93c5fd;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; line-height: 1.7; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--nav-bg); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.2rem; height: 54px; gap: 0.5rem;
+}
+.nav-links { display: flex; gap: 0.2rem; flex-wrap: wrap; overflow-x: auto; }
+.nav-links a {
+  font-size: 0.76rem; padding: 0.3rem 0.6rem; border-radius: 6px;
+  color: var(--text); text-decoration: none; transition: background 0.2s;
+  white-space: nowrap;
+}
+.nav-links a:hover { background: var(--border); color: var(--primary); }
+#themeBtn {
+  background: none; border: 1px solid var(--border); border-radius: 8px;
+  padding: 0.3rem 0.7rem; cursor: pointer; font-size: 0.95rem;
+  color: var(--text); transition: background 0.2s; white-space: nowrap;
+}
+#themeBtn:hover { background: var(--border); }
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white; text-align: center; padding: 5rem 1.5rem 3rem;
+  margin-top: 54px;
+}
+header .tag-course { font-size: 0.8rem; opacity: 0.75; margin-bottom: 0.4rem; }
+header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+header p { font-size: 1rem; opacity: 0.88; }
+.header-badges { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1.2rem; flex-wrap: wrap; }
+.badge { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 0.25rem 0.9rem; font-size: 0.78rem; }
+.exam-notice {
+  background: rgba(255,255,255,0.1);
+  border: 1px dashed rgba(255,255,255,0.3);
+  border-radius: 10px; padding: 0.7rem 1rem;
+  margin: 1.4rem auto 0; max-width: 760px; font-size: 0.84rem; line-height: 1.7;
+}
+.exam-notice strong { color: #fde68a; }
+
+/* SECTIONS */
+section { max-width: 1150px; margin: 0 auto; padding: 3rem 1.5rem; }
+.section-title {
+  font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.6rem;
+  padding-bottom: 0.7rem; border-bottom: 3px solid var(--primary);
+}
+.section-title .icon { font-size: 1.6rem; }
+.chapter-label {
+  display: inline-block; background: var(--primary); color: white;
+  font-size: 0.7rem; padding: 0.18rem 0.6rem; border-radius: 12px;
+  margin-left: auto; font-weight: 700;
+}
+
+/* CARDS */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.1rem; }
+.card-grid.three { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.2rem 1.3rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-top: 4px solid var(--primary);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
+.card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+.card p, .card li { font-size: 0.86rem; color: var(--text-sub); line-height: 1.65; }
+.card ul { padding-left: 1.1rem; margin-top: 0.3rem; }
+.card.blue { border-top-color: var(--primary); }
+.card.green { border-top-color: var(--success); }
+.card.red { border-top-color: var(--danger); }
+.card.purple { border-top-color: var(--purple); }
+.card.teal { border-top-color: var(--teal); }
+.card.orange { border-top-color: var(--warning); }
+.card.pink { border-top-color: var(--pink); }
+.card.indigo { border-top-color: var(--indigo); }
+
+/* GOAL */
+.goal-card {
+  background: var(--card); border-radius: 12px; padding: 1rem 1.3rem;
+  display: flex; gap: 0.9rem; align-items: flex-start;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-left: 4px solid var(--primary);
+  margin-bottom: 0.7rem;
+}
+.goal-num {
+  background: var(--primary); color: white; border-radius: 50%;
+  width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+}
+.goal-card p { font-size: 0.9rem; line-height: 1.6; color: var(--text); }
+
+/* CHAPTER BLOCKS */
+.chapter-block {
+  background: var(--card); border-radius: 14px; padding: 1.6rem 1.7rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 1.3rem;
+  border-top: 4px solid var(--primary);
+}
+.chapter-block.teal { border-top-color: var(--teal); }
+.chapter-block.green { border-top-color: var(--success); }
+.chapter-block.purple { border-top-color: var(--purple); }
+.chapter-block.orange { border-top-color: var(--warning); }
+.chapter-block.pink { border-top-color: var(--pink); }
+.chapter-block.indigo { border-top-color: var(--indigo); }
+.chapter-block.red { border-top-color: var(--danger); }
+.chapter-title {
+  font-size: 1.08rem; font-weight: 800; margin-bottom: 1rem;
+  padding-bottom: 0.6rem; border-bottom: 2px solid var(--border);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.sub-title { font-size: 0.98rem; font-weight: 700; margin: 1rem 0 0.5rem; color: var(--primary); }
+.note { font-size: 0.82rem; color: var(--text-sub); line-height: 1.65; margin-top: 0.5rem; }
+
+/* CODE BLOCKS */
+pre {
+  background: var(--code-bg); color: var(--code-text);
+  border-radius: 9px; padding: 0.95rem 1.1rem; font-size: 0.82rem;
+  overflow-x: auto; line-height: 1.65; margin: 0.6rem 0;
+  font-family: 'Consolas', 'Monaco', monospace;
+}
+code { font-family: 'Consolas', 'Monaco', monospace; font-size: 0.88em; }
+.inline-code {
+  background: var(--tag-bg); color: var(--tag-text);
+  padding: 0.1em 0.4em; border-radius: 4px; font-size: 0.85em;
+  font-family: 'Consolas', monospace;
+}
+
+/* TABLE */
+.table-wrap { overflow-x: auto; margin: 0.8rem 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th { background: var(--primary); color: white; padding: 0.6rem 0.9rem; text-align: left; }
+td { padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--border); color: var(--text); }
+tr:last-child td { border-bottom: none; }
+[data-theme="dark"] tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+
+/* FORMULA */
+.formula-box {
+  background: var(--bg); border-left: 4px solid var(--primary); border-radius: 6px;
+  padding: 0.8rem 1rem; margin: 0.6rem 0;
+}
+.formula-label { font-size: 0.75rem; font-weight: 700; color: var(--primary); margin-bottom: 0.3rem; }
+.formula-math { font-family: 'Cambria Math', 'Times New Roman', serif; font-size: 1rem; color: var(--text); line-height: 1.5; }
+.formula-desc { font-size: 0.82rem; color: var(--text-sub); margin-top: 0.3rem; }
+
+/* CATCH */
+.catch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 0.9rem; }
+.catch-item {
+  background: var(--card); border-radius: 10px; padding: 0.95rem 1.1rem;
+  border-left: 4px solid var(--warning);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.catch-label { font-size: 0.68rem; font-weight: 800; color: var(--warning); letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+.catch-item p { font-size: 0.85rem; line-height: 1.6; }
+
+/* KEYWORD */
+.keyword-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px,1fr)); gap: 0.9rem; }
+.kw-card {
+  background: var(--card); border-radius: 10px; padding: 0.9rem 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-top: 3px solid var(--teal);
+}
+.kw-card.ch1 { border-top-color: var(--primary); }
+.kw-card.ch2 { border-top-color: var(--success); }
+.kw-card.ch3 { border-top-color: var(--warning); }
+.kw-card.ch4 { border-top-color: var(--purple); }
+.kw-card.ch5 { border-top-color: var(--teal); }
+.kw-card.ch6 { border-top-color: var(--pink); }
+.kw-en { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.03em; opacity: 0.8; color: var(--primary); }
+.kw-ko { font-size: 0.98rem; font-weight: 700; margin: 0.15rem 0; color: var(--text); }
+.kw-desc { font-size: 0.8rem; color: var(--text-sub); line-height: 1.5; }
+
+/* QUIZ */
+.quiz-container { display: flex; flex-direction: column; gap: 1.2rem; }
+.quiz-card {
+  background: var(--card); border-radius: 12px; padding: 1.2rem 1.3rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-left: 4px solid var(--primary);
+  position: relative;
+}
+.quiz-card.answered-ok { border-left-color: var(--success); }
+.quiz-card.answered-ng { border-left-color: var(--danger); }
+.q-header { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.7rem; flex-wrap: wrap; }
+.q-tag {
+  font-size: 0.68rem; padding: 0.15rem 0.55rem; border-radius: 10px; font-weight: 700;
+}
+.q-tag.mc { background: var(--tag-bg); color: var(--tag-text); }
+.q-tag.sa { background: #fef3c7; color: #92400e; }
+.q-tag.code { background: #ede9fe; color: #6d28d9; }
+[data-theme="dark"] .q-tag.sa { background: #78350f; color: #fcd34d; }
+[data-theme="dark"] .q-tag.code { background: #3b0764; color: #c4b5fd; }
+.q-ch {
+  font-size: 0.68rem; background: var(--border); color: var(--text-sub);
+  padding: 0.15rem 0.55rem; border-radius: 10px; font-weight: 700;
+}
+.q-num {
+  display: inline-flex; width: 26px; height: 26px; background: var(--primary);
+  color: white; border-radius: 50%; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700;
+}
+.quiz-q { font-size: 0.92rem; font-weight: 600; margin-bottom: 0.9rem; line-height: 1.7; }
+.quiz-q code { background: var(--tag-bg); color: var(--tag-text); padding: 2px 6px; border-radius: 4px; font-size: 0.86rem; }
+.options { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 0.9rem; }
+.option-btn {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 0.6rem 0.9rem; cursor: pointer; text-align: left; font-size: 0.85rem;
+  color: var(--text); transition: background 0.2s, border-color 0.2s; font-family: inherit;
+}
+.option-btn:hover:not(:disabled) { background: var(--tag-bg); border-color: var(--primary); }
+.option-btn.correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #166534 !important; }
+.option-btn.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; }
+[data-theme="dark"] .option-btn.correct { background: #14532d !important; color: #86efac !important; }
+[data-theme="dark"] .option-btn.wrong { background: #7f1d1d !important; color: #fca5a5 !important; }
+.feedback { font-size: 0.84rem; padding: 0.6rem 0.9rem; border-radius: 6px; display: none; line-height: 1.6; }
+.feedback.show { display: block; }
+.feedback.ok { background: #dcfce7; color: #166534; }
+.feedback.no { background: #fee2e2; color: #991b1b; }
+[data-theme="dark"] .feedback.ok { background: #14532d; color: #86efac; }
+[data-theme="dark"] .feedback.no { background: #7f1d1d; color: #fca5a5; }
+.feedback .theory { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed rgba(0,0,0,0.2); font-size: 0.8rem; opacity: 0.92; }
+
+/* SHORT ANSWER */
+.sa-input {
+  width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px;
+  font-size: 0.86rem; background: var(--bg); color: var(--text);
+  margin-bottom: 0.65rem; font-family: 'Consolas', 'Noto Sans KR', monospace;
+}
+.sa-input:focus { outline: none; border-color: var(--primary); }
+.btn-row { display: flex; gap: 0.5rem; margin-bottom: 0.6rem; }
+.check-btn, .show-btn {
+  padding: 0.48rem 1.1rem; border-radius: 8px; cursor: pointer; font-size: 0.84rem;
+  border: none; font-family: inherit; transition: opacity 0.2s; font-weight: 600;
+}
+.check-btn { background: var(--primary); color: white; }
+.show-btn { background: var(--border); color: var(--text); }
+.check-btn:hover, .show-btn:hover { opacity: 0.85; }
+.answer-reveal {
+  display: none; margin-top: 0.6rem; background: var(--tag-bg); border-radius: 8px;
+  padding: 0.65rem 0.9rem; font-size: 0.84rem; color: var(--tag-text); line-height: 1.6;
+}
+.answer-reveal.show { display: block; }
+.answer-reveal code { background: rgba(255,255,255,0.3); padding: 2px 5px; border-radius: 3px; }
+[data-theme="dark"] .answer-reveal code { background: rgba(0,0,0,0.3); }
+
+/* FOOTER */
+footer { text-align: center; padding: 2rem; font-size: 0.82rem; color: var(--text-sub); border-top: 1px solid var(--border); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  header h1 { font-size: 1.5rem; }
+  nav { padding: 0 0.8rem; }
+  .nav-links a { font-size: 0.7rem; padding: 0.25rem 0.45rem; }
+  section { padding: 2rem 1rem; }
+  .card-grid, .catch-grid, .keyword-grid { grid-template-columns: 1fr; }
+  .section-title { font-size: 1.25rem; }
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-links">
+    <a href="#goals">학습목표</a>
+    <a href="#scope">시험범위</a>
+    <a href="#ch1">1장</a>
+    <a href="#ch2">2장</a>
+    <a href="#ch3">3장</a>
+    <a href="#ch4">4장</a>
+    <a href="#ch5">5장</a>
+    <a href="#ch6">6장</a>
+    <a href="#catch">핵심캐치</a>
+    <a href="#keywords">키워드</a>
+    <a href="#quiz">연습문제</a>
+  </div>
+  <button id="themeBtn" onclick="toggleTheme()">🌙 야간모드</button>
+</nav>
+
+<header>
+  <div class="tag-course">데이터사이언스입문 · 한신대학교 2026-1</div>
+  <h1>📘 중간고사 대비 학습자료</h1>
+  <p>1장 ~ 6장 (4월 15일자 강의 기준) — 이론 요약 · 공식 · 연습문제</p>
+  <div class="header-badges">
+    <span class="badge">Chapter 1~6</span>
+    <span class="badge">핵심 이론 요약</span>
+    <span class="badge">공식·키워드</span>
+    <span class="badge">연습문제 중심</span>
+  </div>
+  <div class="exam-notice">
+    📌 <strong>출제 범위 특이사항</strong><br>
+    ① <strong>4장 확률과 통계 기초</strong>의 <u>프로그래밍 부분은 범위 제외</u> (이론만 출제)<br>
+    ② <strong>프로그래밍 문제</strong>는 <u>PPT 연습문제 위주</u>로 출제 예정<br>
+    ③ <strong>6장</strong>은 <u>4월 15일(수) 강의 내용까지만</u> 출제
+  </div>
+</header>
+
+<!-- 학습 목표 -->
+<section id="goals">
+  <div class="section-title"><span class="icon">🎯</span> 학습 목표</div>
+  <div class="goal-card"><div class="goal-num">1</div><p>데이터 과학의 개념·프로세스·빅데이터 3V를 설명하고, 파이썬 기초 문법(변수·자료구조·제어문·함수·클래스)을 활용할 수 있다.</p></div>
+  <div class="goal-card"><div class="goal-num">2</div><p>NumPy, SciPy, Pandas, Matplotlib 라이브러리의 역할과 핵심 API(배열 생성·슬라이싱·벡터화·시각화)를 이해한다.</p></div>
+  <div class="goal-card"><div class="goal-num">3</div><p>기술통계(평균·분산·표준편차·사분위수·공분산·상관계수)와 단순선형회귀·결정계수 개념을 해석할 수 있다.</p></div>
+  <div class="goal-card"><div class="goal-num">4</div><p>확률·확률변수·확률분포·조건부확률·베이즈 정리·중심극한정리·가설검정을 이해한다 (이론 중심).</p></div>
+  <div class="goal-card"><div class="goal-num">5</div><p>SciPy 고급(보간·행렬분해·적분·최적화)의 개념과 핵심 함수(interp1d, qr, quad, minimize)를 안다.</p></div>
+  <div class="goal-card"><div class="goal-num">6</div><p>Pandas 계층형 인덱스(MultiIndex)와 데이터 결합(merge, concat)의 유형과 사용법을 구분한다.</p></div>
+</section>
+
+<!-- 시험 범위 요약 -->
+<section id="scope">
+  <div class="section-title"><span class="icon">📋</span> 시험 범위 한눈에 보기</div>
+  <div class="card-grid">
+    <div class="card blue">
+      <h3>✅ 1장 — 파이썬 기초</h3>
+      <ul>
+        <li>데이터 과학 개념·3V·유형</li>
+        <li>파이썬 변수·자료구조·제어문</li>
+        <li>함수·람다·클래스·OOP</li>
+      </ul>
+    </div>
+    <div class="card green">
+      <h3>✅ 2장 — 데이터 분석 라이브러리</h3>
+      <ul>
+        <li>NumPy(ndarray·벡터화·난수)</li>
+        <li>SciPy(선형대수·최적화)</li>
+        <li>Pandas(Series·DataFrame)</li>
+        <li>Matplotlib(시각화)</li>
+      </ul>
+    </div>
+    <div class="card orange">
+      <h3>✅ 3장 — 기술통계·회귀</h3>
+      <ul>
+        <li>기술/추론 통계 구분</li>
+        <li>평균·분산·표준편차·CV</li>
+        <li>공분산·상관계수</li>
+        <li>단순선형회귀·R²</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h3>⚠️ 4장 — 확률·통계 (이론만)</h3>
+      <ul>
+        <li>확률 공리·조건부·베이즈</li>
+        <li>확률변수·분포</li>
+        <li>대수법칙·중심극한정리</li>
+        <li>추정·가설검정 (이론)</li>
+        <li style="color:var(--danger);">※ 프로그래밍 코드 제외</li>
+      </ul>
+    </div>
+    <div class="card teal">
+      <h3>✅ 5장 — SciPy 고급</h3>
+      <ul>
+        <li>보간법(interp1d·spline)</li>
+        <li>행렬분해(SVD·LU·Cholesky·QR·NMF)</li>
+        <li>적분(quad·dblquad·odeint)</li>
+        <li>최적화(fsolve·minimize)</li>
+      </ul>
+    </div>
+    <div class="card pink">
+      <h3>⚠️ 6장 — Pandas 고급 (4/15까지)</h3>
+      <ul>
+        <li>Pandas 기본 요약</li>
+        <li>계층형 인덱스(MultiIndex)</li>
+        <li>데이터 결합(merge, concat)</li>
+        <li>inner/outer/left/right join</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 1 ==================== -->
+<section id="ch1">
+  <div class="section-title"><span class="icon">💻</span> 1장 — 데이터 과학과 파이썬 기초 <span class="chapter-label">Ch.1</span></div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🌐 데이터 과학 개요</div>
+    <div class="card-grid" style="margin-bottom:0.8rem;">
+      <div class="card blue">
+        <h3>데이터 과학 벤다이어그램</h3>
+        <p>데이터 과학 = <strong>통계학(Statistics)</strong> + <strong>해킹 스킬/컴퓨터 과학(Hacking Skills)</strong> + <strong>도메인 전문지식(Domain Expertise)</strong>의 교집합 (Rachel Schutt &amp; Cathy O'Neil).</p>
+      </div>
+      <div class="card orange">
+        <h3>빅데이터 3V</h3>
+        <ul>
+          <li><strong>Volume</strong>(규모): 대용량 데이터</li>
+          <li><strong>Velocity</strong>(속도): 실시간 생성</li>
+          <li><strong>Variety</strong>(다양성): 정형/비정형</li>
+        </ul>
+      </div>
+      <div class="card teal">
+        <h3>데이터의 4가지 유형</h3>
+        <ul>
+          <li><strong>정형</strong>: DB, SQL, 테이블</li>
+          <li><strong>머신 생성</strong>: IoT, 로그</li>
+          <li><strong>그래프/네트워크</strong>: SNS 관계</li>
+          <li><strong>비정형</strong>: 텍스트, 이미지(NLP)</li>
+        </ul>
+      </div>
+      <div class="card purple">
+        <h3>데이터 과학 프로세스</h3>
+        <p>①Raw Data 수집 → ②전처리(cleansing) → ③EDA(탐색적 분석) → ④모델 구축(ML/통계)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block teal">
+    <div class="chapter-title">🐍 파이썬 기본 — 변수 · 연산자 · 키워드</div>
+    <div class="sub-title">① 변수(Variable)</div>
+    <pre>msg = "test"
+# [0]t  [1]e  [2]s  [3]t  ← 인덱스 0부터
+print(msg[0])      # 't'
+print(len(msg))    # 4
+print(msg[5])      # IndexError: string index out of range</pre>
+    <div class="note">타입 선언 불필요, 문자열은 ' ' 또는 " " 사용, 파이썬 코딩 스타일은 <strong>PEP8</strong> 권장.</div>
+
+    <div class="sub-title">② 주요 연산자</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>분류</th><th>연산자</th><th>설명</th></tr>
+        <tr><td rowspan="4">산술</td><td><code>+ -</code></td><td>덧셈, 뺄셈</td></tr>
+        <tr><td><code>* /</code></td><td>곱셈, 나눗셈(실수 결과)</td></tr>
+        <tr><td><code>// %</code></td><td>몫, 나머지</td></tr>
+        <tr><td><code>**</code></td><td>제곱</td></tr>
+        <tr><td rowspan="3">비교</td><td><code>==</code> <code>!=</code></td><td>같다 / 다르다</td></tr>
+        <tr><td><code>&gt; &lt;</code></td><td>크다 / 작다</td></tr>
+        <tr><td><code>&gt;= &lt;=</code></td><td>이상 / 이하</td></tr>
+        <tr><td>논리</td><td><code>and or not</code></td><td>논리곱/합/부정</td></tr>
+      </table>
+    </div>
+
+    <div class="sub-title">③ 예약어(Keyword) — SyntaxError 주의</div>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>제어/반복</h3>
+        <p><code>if, else, elif, for, while, break, continue, pass</code></p>
+      </div>
+      <div class="card green">
+        <h3>함수/클래스</h3>
+        <p><code>def, return, class, lambda, yield</code></p>
+      </div>
+      <div class="card purple">
+        <h3>예외·논리·상수</h3>
+        <p><code>try, except, finally, raise</code> · <code>and, or, not</code> · <code>True, False, None</code></p>
+      </div>
+    </div>
+    <div class="note">🧷 <strong>매직 메서드</strong>: <code>__init__</code>, <code>__str__</code> 등 언더스코어 2개(dunder)로 감싼 특수 메서드.</div>
+
+    <div class="sub-title">④ 내장 함수(Built-in Functions)</div>
+    <pre>print(x)      # 출력
+type(x)       # 자료형 확인
+len(x)        # 길이(원소 수)
+int(x), float(x), str(x)  # 타입 변환
+input()       # 키보드 입력
+sum(), range(), max(), min()</pre>
+  </div>
+
+  <div class="chapter-block green">
+    <div class="chapter-title">📦 자료구조 (Collection) — 4종 비교</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>자료형</th><th>기호</th><th>순서</th><th>변경</th><th>중복</th><th>특징</th></tr>
+        <tr><td><strong>리스트(list)</strong></td><td><code>[ ]</code></td><td>O</td><td>O</td><td>O</td><td>가장 일반적. append/remove/pop/del</td></tr>
+        <tr><td><strong>튜플(tuple)</strong></td><td><code>( )</code></td><td>O</td><td><strong style="color:#dc2626;">X</strong></td><td>O</td><td>불변(immutable). 읽기 전용</td></tr>
+        <tr><td><strong>딕셔너리(dict)</strong></td><td><code>{ k:v }</code></td><td>O(3.7+)</td><td>O</td><td>키 중복 <strong style="color:#dc2626;">X</strong></td><td>키-값 쌍. <code>[key]</code>, <code>.get()</code>로 접근</td></tr>
+        <tr><td><strong>집합(set)</strong></td><td><code>{ }</code></td><td>X</td><td>O</td><td><strong style="color:#dc2626;">X</strong></td><td>합집합(|), 교집합(&amp;), 차집합(-)</td></tr>
+      </table>
+    </div>
+    <pre># 리스트
+data_list = [1,2,3]
+data_list.append(11)    # 끝에 추가
+data_list.remove(11)    # 값으로 삭제
+data_list.pop(2)        # 인덱스로 삭제
+del data_list[0]        # 인덱스로 삭제
+
+# 딕셔너리
+dic = {'apple':100, 'banana':200}
+dic['apple'] = 150      # 값 변경
+dic['cherry'] = 300     # 추가
+del dic['banana']       # 삭제</pre>
+  </div>
+
+  <div class="chapter-block purple">
+    <div class="chapter-title">🔁 제어문 · 반복문 · 컴프리헨션</div>
+    <div class="sub-title">① if / for / while</div>
+    <pre># if - elif - else
+if findvalue in data_list:
+    print(f'{findvalue} 있음')
+elif findvalue == 0:
+    print('영')
+else:
+    print('없음')
+
+# for + range
+for i in range(0, 10, 2):   # 0, 2, 4, 6, 8 (10 미포함!)
+    print(i)
+
+# 딕셔너리 순회
+for k, v in dic.items():    # (key, value) 동시
+    print(k, v)
+
+# while — 조건이 True일 동안
+while condition:
+    ...
+    break    # 즉시 종료
+    continue # 다음 반복으로</pre>
+
+    <div class="sub-title">② 리스트 컴프리헨션 · zip · enumerate</div>
+    <pre># 리스트 컴프리헨션: [표현식 for 변수 in iterable if 조건]
+result = [x**2 for x in range(5) if x % 2 == 0]
+# → [0, 4, 16]
+
+# zip: 두 리스트를 묶어서 순회
+for a, b in zip([1,2,3], [11,12,13]):
+    print(a, b)   # (1,11) (2,12) (3,13)
+
+# enumerate: 인덱스와 값 동시
+for i, v in enumerate(['a','b','c']):
+    print(i, v)   # (0,'a') (1,'b') (2,'c')</pre>
+  </div>
+
+  <div class="chapter-block orange">
+    <div class="chapter-title">🛠️ 함수 (Function) · 재귀 · 람다</div>
+    <pre># 일반 함수
+def calc_multi(a, b):      # parameter
+    return a * b           # 반환값
+calc_multi(3, 5)           # argument로 호출
+
+# 재귀 함수 (피보나치)
+def fib(n):
+    if n < 2: return n
+    return fib(n-1) + fib(n-2)
+
+# 람다: 이름 없는 한 줄 함수
+f = lambda x: x * 2
+list(map(lambda x: x*2, [1,2,3]))   # [2,4,6]
+
+# map: 반복 가능한 객체의 모든 원소에 함수 적용
+list(map(int, ['1','2','3']))       # [1,2,3]</pre>
+    <div class="note">🎯 <strong>재귀 주의</strong>: 탈출 조건이 없으면 <code>RecursionError</code> 발생.</div>
+  </div>
+
+  <div class="chapter-block indigo">
+    <div class="chapter-title">🏗️ 객체지향 (OOP) — 클래스와 인스턴스</div>
+    <pre>class MyCalcClass:
+    def __init__(self, x, y):   # 생성자
+        self.x = x               # 속성(attribute)
+        self.y = y
+    def add(self):              # 메서드(method)
+        return self.x + self.y
+
+instance_1 = MyCalcClass(1, 2)   # 인스턴스 생성
+instance_2 = MyCalcClass(5, 10)  # 같은 클래스 → 여러 인스턴스 가능!
+print(instance_1.add())          # 3</pre>
+    <div class="card-grid" style="margin-top:0.8rem;">
+      <div class="card blue">
+        <h3>클래스 vs 인스턴스</h3>
+        <p><strong>클래스</strong> = 설계도(붕어빵 틀) / <strong>인스턴스</strong> = 실체(붕어빵). 하나의 클래스로 여러 인스턴스 생성 가능.</p>
+      </div>
+      <div class="card green">
+        <h3>__init__ (생성자)</h3>
+        <p>인스턴스 생성 시 <strong>자동 호출</strong>. <code>self</code>는 인스턴스 자신을 참조.</p>
+      </div>
+      <div class="card purple">
+        <h3>OOP 4대 특성</h3>
+        <p>① 캡슐화 ② 재사용성 ③ 유지보수성 ④ 상속(Inheritance)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 2 ==================== -->
+<section id="ch2">
+  <div class="section-title"><span class="icon">📊</span> 2장 — 데이터 분석 라이브러리 <span class="chapter-label">Ch.2</span></div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🔢 4대 라이브러리 Import · Jupyter 매직 명령어</div>
+    <pre>import numpy as np
+import scipy as sp
+import pandas as pd
+from pandas import Series, DataFrame
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+%matplotlib inline      # 노트북 내 차트 출력
+%precision 3            # 소수점 3자리
+np.random.seed(0)       # 재현성 보장</pre>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>NumPy</h3>
+        <p>수치 배열 처리 (<code>ndarray</code>), 벡터화 연산, 난수.</p>
+      </div>
+      <div class="card green">
+        <h3>SciPy</h3>
+        <p>NumPy 위 과학 계산. 선형대수(<code>linalg</code>), 최적화(<code>optimize</code>).</p>
+      </div>
+      <div class="card purple">
+        <h3>Pandas</h3>
+        <p>테이블 데이터. <code>Series</code>(1D), <code>DataFrame</code>(2D).</p>
+      </div>
+      <div class="card orange">
+        <h3>Matplotlib</h3>
+        <p>시각화. <code>pyplot</code> 모듈로 선/산점/히스토/서브플롯.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block teal">
+    <div class="chapter-title">🧮 NumPy — 배열 생성 · 속성 · 연산</div>
+    <pre>arr = np.array([0, 1, 2, 3, 4, 5])
+mat = np.array([[0,1,2],[3,4,5]])
+
+mat.dtype   # int64       — 데이터 타입
+mat.ndim    # 2           — 차원 수
+mat.size    # 6           — 전체 원소 수
+mat.shape   # (2, 3)      — 행 × 열
+
+# 벡터화 연산 (원소별)
+a = np.array([1,2,3]); b = np.array([4,5,6])
+a + b      # [5,7,9]       리스트의 +는 연결!
+a * b      # [4,10,18]     원소별 곱
+a ** 2     # [1,4,9]
+a + 1      # [2,3,4]       브로드캐스팅
+
+# 정렬 / 슬라이싱
+np.sort(arr)          # 오름차순
+np.sort(arr)[::-1]    # 내림차순 (역순 슬라이싱)
+
+# reshape / 배열 생성
+np.arange(0,10,2)     # [0,2,4,6,8]
+np.zeros((2,3))       # 2×3 영행렬
+np.ones((3,3))        # 3×3 1행렬
+arr.reshape(2,3)      # 형태 변환</pre>
+
+    <div class="sub-title">🎲 난수 생성 · 통계 함수</div>
+    <pre>np.random.seed(0)
+np.random.randn(3)              # 표준정규 3개
+np.random.choice(10, 3)         # 0~9 중 3개 (복원, 중복 허용)
+np.random.choice(10, 3, replace=False)  # 비복원(중복 X)
+
+arr.min(), arr.max(), arr.sum(), arr.mean(), arr.std()
+arr.cumsum()    # [1,2,3,4,5] → [1,3,6,10,15] 누적합</pre>
+
+    <div class="sub-title">✖️ 행렬 곱 vs 원소별 곱 — <span style="color:var(--danger);">★ 시험 빈출</span></div>
+    <pre>A * B            # 원소별 곱 (Hadamard)
+np.dot(A, B)     # 행렬 곱
+A @ B            # 행렬 곱 (Python 3.5+)
+A.T              # 전치 (2,3) → (3,2)</pre>
+  </div>
+
+  <div class="chapter-block green">
+    <div class="chapter-title">🔬 SciPy — 선형대수 · 최적화</div>
+    <pre>from scipy import linalg
+A = np.array([[1,2],[3,4]])
+linalg.det(A)    # 행렬식 = -2
+linalg.inv(A)    # 역행렬
+eigenvalues, eigenvectors = linalg.eig(A)  # (값, 벡터) 튜플!
+
+# 방정식 근 찾기 (뉴턴법)
+from scipy.optimize import newton
+root = newton(lambda x: x**3 - 2, x0=1)    # ≈ 1.26 (∛2)
+
+# 함수 최솟값
+from scipy.optimize import minimize_scalar
+result = minimize_scalar(lambda x: (x-3)**2 + 2, method='Brent')
+result.x, result.fun   # 3.0, 2.0</pre>
+  </div>
+
+  <div class="chapter-block purple">
+    <div class="chapter-title">🐼 Pandas — Series, DataFrame 기초 연산</div>
+    <pre>s = pd.Series([1,2,3], index=['a','b','c'])
+df = pd.DataFrame({'name':['Kim','Lee'], 'score':[90,85]})
+
+df['name']         # Series 반환 (1D)
+df[['name']]       # DataFrame 반환 (2D, 이중 대괄호!)
+df.T               # 전치
+df[df['salary']>5000]                   # 조건 필터
+df[df['dept'].isin(['IT','HR'])]        # 여러 값 포함
+
+df.drop('salary', axis=1)   # 열 삭제 (axis=1)
+df.drop(0, axis=0)          # 행 삭제 (axis=0)
+df.drop(..., inplace=True)  # 원본 변경
+
+pd.merge(df1, df2, on='id')         # SQL JOIN
+df.groupby('dept')['salary'].mean()  # 그룹화
+df.sort_values('salary', ascending=False)  # 정렬
+
+# 결측값
+df.isnull().sum()   # 열별 NaN 개수
+df.dropna()         # NaN 있는 행 삭제
+df.fillna(0)        # 0으로 대체
+df.fillna(df.mean())  # 평균 대체</pre>
+  </div>
+
+  <div class="chapter-block orange">
+    <div class="chapter-title">📈 Matplotlib — 시각화</div>
+    <pre>import matplotlib.pyplot as plt
+
+# 선 그래프
+plt.plot(x, y, color='blue', label='sin(x)')
+plt.title('제목'); plt.xlabel('x'); plt.ylabel('y')
+plt.legend(); plt.grid(True); plt.show()
+
+# 산점도 / 히스토그램
+plt.scatter(x, y, c='red', s=50, alpha=0.7)
+plt.hist(data, bins=30, edgecolor='white')
+
+# 서브플롯
+fig, axes = plt.subplots(1, 2, figsize=(12,4))
+axes[0].plot(...); axes[1].scatter(...)
+plt.tight_layout()
+plt.savefig('file.png')</pre>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 3 ==================== -->
+<section id="ch3">
+  <div class="section-title"><span class="icon">📐</span> 3장 — 기술통계와 회귀분석 <span class="chapter-label">Ch.3</span></div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">📋 통계의 두 갈래 · 분포의 형태</div>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>기술 통계 (Descriptive)</h3>
+        <p>데이터를 <strong>요약·정리</strong>. 평균, 분산, 박스플롯, 히스토그램.</p>
+      </div>
+      <div class="card purple">
+        <h3>추론 통계 (Inferential)</h3>
+        <p>표본으로 <strong>모집단 추정·검정</strong>. 신뢰구간, 가설검정.</p>
+      </div>
+      <div class="card orange">
+        <h3>회귀분석</h3>
+        <p>독립변수→종속변수 관계 모형화. 선형회귀 등.</p>
+      </div>
+    </div>
+    <div class="sub-title" style="margin-top:1rem;">분포의 모양 — 왜도 &amp; 첨도</div>
+    <div class="card-grid">
+      <div class="card teal">
+        <h3>왜도 (Skewness)</h3>
+        <p><strong>한쪽으로 치우쳤는가</strong> (좌/우 비대칭). > 0: 오른쪽 꼬리, &lt; 0: 왼쪽 꼬리.</p>
+      </div>
+      <div class="card pink">
+        <h3>첨도 (Kurtosis)</h3>
+        <p><strong>가운데가 뾰족하게 몰렸는가</strong>. > 3: 정규보다 뾰족, &lt; 3: 평평.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block teal">
+    <div class="chapter-title">📊 중심경향 · 산포도 (대표 통계량)</div>
+    <div class="sub-title">① 중심경향(대표값)</div>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>산술평균 (Mean)</h3>
+        <p>Σxᵢ / n — 결석 횟수의 합 / 학생 수</p>
+      </div>
+      <div class="card green">
+        <h3>중앙값 (Median)</h3>
+        <p>정렬 후 가운데 값. 이상값 영향 ↓</p>
+      </div>
+      <div class="card purple">
+        <h3>최빈값 (Mode)</h3>
+        <p>가장 많이 나타난 값</p>
+      </div>
+    </div>
+
+    <div class="sub-title">② 산포도 (퍼짐)</div>
+    <div class="formula-box">
+      <div class="formula-label">분산 (Variance, σ²)</div>
+      <div class="formula-math">σ² = (1/n) Σ(xᵢ − x̄)²</div>
+      <div class="formula-desc">각 값이 평균에서 얼마나 떨어져 있는지의 평균 (제곱)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">표준편차 (Standard Deviation, σ)</div>
+      <div class="formula-math">σ = √σ² = √분산</div>
+      <div class="formula-desc">분산을 원래 단위로 환산한 값. 항상 0 이상.</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">변동계수 (CV, Coefficient of Variation)</div>
+      <div class="formula-math">CV = σ / x̄ = 표준편차 / 평균</div>
+      <div class="formula-desc">평균에 비해 얼마나 퍼져 있는지 <strong>비율</strong>. 단위가 다른 데이터 비교 가능.</div>
+    </div>
+    <div class="table-wrap" style="margin-top:0.6rem;">
+      <table>
+        <tr><th>CV 값</th><th>해석</th></tr>
+        <tr><td>&lt; 0.1</td><td>매우 안정적</td></tr>
+        <tr><td>0.1 ~ 0.3</td><td>보통</td></tr>
+        <tr><td>&gt; 0.5</td><td>변동 큼</td></tr>
+        <tr><td>&gt; 1.0</td><td>매우 큼</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="chapter-block green">
+    <div class="chapter-title">📊 describe() · 박스플롯 · 사분위수</div>
+    <pre>student_data_math['absences'].describe()
+# 0 count  1 mean   2 std   3 min
+# 4 25%    5 50%    6 75%   7 max
+# (← 최빈값(mode)은 포함 안 됨!)</pre>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>사분위수</h3>
+        <ul>
+          <li><strong>Q1 (25%)</strong>: 하위 25% 지점</li>
+          <li><strong>Q2 (50%)</strong>: 중앙값</li>
+          <li><strong>Q3 (75%)</strong>: 상위 25% 지점</li>
+          <li><strong>IQR</strong> = Q3 − Q1</li>
+        </ul>
+      </div>
+      <div class="card orange">
+        <h3>박스플롯 (boxplot)</h3>
+        <p>중앙 + 퍼짐 + 이상값을 한번에. 수염 밖: <strong>이상값(outlier)</strong>. 기본엔 <strong>평균 표시 안 됨</strong>(showmeans=True 옵션).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block purple">
+    <div class="chapter-title">🔗 공분산 · 상관계수</div>
+    <div class="formula-box">
+      <div class="formula-label">공분산 (Covariance)</div>
+      <div class="formula-math">Cov(X,Y) = (1/n) Σ (xᵢ − x̄)(yᵢ − ȳ)</div>
+      <div class="formula-desc">같이 증가/감소하는지 보는 값. 양수: 같은 방향, 음수: 반대. <strong>단위에 영향 받아 강도 판단 불가!</strong></div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">피어슨 상관계수 (Pearson Correlation)</div>
+      <div class="formula-math">r = Cov(X,Y) / (σₓ · σᵧ)</div>
+      <div class="formula-desc">공분산을 두 표준편차의 곱으로 나눠 <strong>-1 ≤ r ≤ 1</strong>로 표준화. r=1: 완벽한 양의 선형, r=-1: 완벽한 음의 선형, r=0: <strong>선형</strong> 관계 없음 (비선형은 있을 수 있음!).</div>
+    </div>
+    <div class="note">📎 <strong>상관계수 ≠ 인과관계</strong>. p값(p-value)이 낮을수록 관계의 신뢰도↑</div>
+  </div>
+
+  <div class="chapter-block orange">
+    <div class="chapter-title">📈 단순선형회귀 · 최소제곱법 · 결정계수</div>
+    <div class="formula-box">
+      <div class="formula-label">단순선형회귀 모형</div>
+      <div class="formula-math">y = ax + b</div>
+      <div class="formula-desc"><strong>a</strong>(기울기·회귀계수): X가 1 증가할 때 Y의 변화량<br><strong>b</strong>(절편): X=0일 때 Y의 값</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">최소제곱법 (OLS, Ordinary Least Squares)</div>
+      <div class="formula-math">min Σ (yᵢ − ŷᵢ)²</div>
+      <div class="formula-desc">실제값과 예측값 차이(잔차)의 <strong>제곱합</strong>을 최소화하여 a, b를 찾음</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">결정계수 (R², Coefficient of Determination)</div>
+      <div class="formula-math">R² = 1 − (모델 오차 / 전체 변동성)</div>
+      <div class="formula-desc">0 ≤ R² ≤ 1. R²=0.64 → 모델이 데이터 변동의 <strong>약 64% 설명</strong>. 단순선형회귀에선 R² = r²</div>
+    </div>
+    <div class="card-grid" style="margin-top:0.6rem;">
+      <div class="card blue">
+        <h3>지도학습 구분</h3>
+        <ul>
+          <li><strong>단순회귀</strong>: 독립변수 1개 (예: G1→G3)</li>
+          <li><strong>다중회귀</strong>: 독립변수 여러 개</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>예측 vs 추론</h3>
+        <ul>
+          <li><strong>예측(prediction)</strong>: 새로운 X로 Y 값 예측</li>
+          <li><strong>추론(inference)</strong>: 변수 관계 해석</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 4 ==================== -->
+<section id="ch4">
+  <div class="section-title"><span class="icon">🎲</span> 4장 — 확률과 통계 기초 <span class="chapter-label">Ch.4 (이론만)</span></div>
+
+  <div class="chapter-block" style="background:linear-gradient(135deg, #fef3c7, #fde68a); color:#92400e; border-top-color:#d97706;">
+    <div class="chapter-title" style="color:#92400e;">⚠️ 중요 — 프로그래밍 부분 범위 제외</div>
+    <p style="font-size:0.92rem;">4장 중간고사에서는 <strong>Python/NumPy 코드 문제는 제외</strong>하고, <strong>개념·공식·계산</strong> 중심으로 출제됩니다. (확률 공리, 베이즈, 분포 종류, 기댓값, 가설검정 등)</p>
+  </div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">📘 확률 기초 — 표기법 · 용어</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>기호</th><th>의미</th></tr>
+        <tr><td>Ω</td><td><strong>표본공간</strong>: 가능한 모든 결과. 예) 주사위 {1,2,3,4,5,6}</td></tr>
+        <tr><td>F</td><td>사건(Event)들의 모음 (시그마 대수)</td></tr>
+        <tr><td>Pr(·)</td><td>확률 함수 (사건이 파라미터, 0~1 사이)</td></tr>
+        <tr><td>P(·)</td><td>확률질량함수(PMF) — 이산 확률변수</td></tr>
+        <tr><td>p(·)</td><td>확률밀도함수(PDF) — 연속 확률변수</td></tr>
+      </table>
+    </div>
+    <p class="note">⭐ 확률공간 = <strong>(Ω, F, Pr)</strong></p>
+    <div class="card-grid" style="margin-top:0.7rem;">
+      <div class="card blue">
+        <h3>실험 · 사건</h3>
+        <ul>
+          <li><strong>실험(trial)</strong>: 결과를 모르는 행동 (주사위 던지기)</li>
+          <li><strong>근원사건</strong>: 각 시행 결과 (1,2,3,4,5,6)</li>
+          <li><strong>사건(event)</strong>: 표본공간의 부분집합 (짝수={2,4,6})</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>사건의 종류</h3>
+        <ul>
+          <li><strong>전사건</strong>: P(S)=1</li>
+          <li><strong>공사건</strong>: P(∅)=0</li>
+          <li><strong>여사건</strong>(Eᶜ): E에 속하지 않는 결과</li>
+          <li><strong>배반사건</strong>: A ∩ B = ∅</li>
+        </ul>
+      </div>
+      <div class="card orange">
+        <h3>⚠️ 여사건 ≠ 배반</h3>
+        <p>여사건 → 반드시 배반. 하지만 <strong>배반 → 반드시 여사건 X</strong> (자주 출제!)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block teal">
+    <div class="chapter-title">📜 확률의 3공리</div>
+    <div class="formula-box">
+      <div class="formula-label">공리 1 — 비음수성</div>
+      <div class="formula-math">Pr(A) ≥ 0 &nbsp;&nbsp;(모든 사건 A에 대해)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">공리 2 — 정규성</div>
+      <div class="formula-math">Pr(Ω) = 1 &nbsp;&nbsp;(전체 확률 = 1)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">공리 3 — 가법성(서로소)</div>
+      <div class="formula-math">A ∩ B = ∅ &nbsp;⇒&nbsp; Pr(A ∪ B) = Pr(A) + Pr(B)</div>
+    </div>
+    <div class="note">🔸 Pr(∅)=0 (불가능한 사건). 확률은 <strong>0 이상 1 이하</strong>만 가능. -1은 불가능!</div>
+  </div>
+
+  <div class="chapter-block purple">
+    <div class="chapter-title">🔀 조건부 확률 · 독립 · 베이즈 정리</div>
+    <div class="formula-box">
+      <div class="formula-label">조건부 확률</div>
+      <div class="formula-math">P(B | A) = P(A ∩ B) / P(A)</div>
+      <div class="formula-desc">A가 일어난 상태에서 B가 일어날 확률</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">곱셈 공식</div>
+      <div class="formula-math">P(A ∩ B) = P(B | A) · P(A)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">독립 (Independence)</div>
+      <div class="formula-math">A ⊥ B ⇔ P(A ∩ B) = P(A) · P(B)</div>
+      <div class="formula-desc">동시 확률이 <strong>각 확률의 곱</strong>이면 독립. 아니면 종속.</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">베이즈 정리 (Bayes' Theorem)</div>
+      <div class="formula-math">P(B|A) = [P(A|B) · P(B)] / P(A)</div>
+      <div class="formula-desc">분모: P(A) = P(A|B)·P(B) + P(A|Bᶜ)·P(Bᶜ)</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>구성요소</th><th>기호</th><th>의미</th></tr>
+        <tr><td>사전확률</td><td>P(B)</td><td>사건 A 이전 B의 확률 (기존 경험)</td></tr>
+        <tr><td>가능도</td><td>P(A|B)</td><td>B가 주어졌을 때 A 발생 확률</td></tr>
+        <tr><td>증거</td><td>P(A)</td><td>사건 A가 일어날 전체 확률</td></tr>
+        <tr><td>사후확률</td><td>P(B|A)</td><td>A 관찰 후 B의 확률 (추론)</td></tr>
+      </table>
+    </div>
+    <div class="note">🎯 <strong>베이즈 = 결과 → 원인 역추론</strong>. P(A∪B)(합집합)는 베이즈에 쓰이지 <strong>않음</strong>!</div>
+  </div>
+
+  <div class="chapter-block orange">
+    <div class="chapter-title">🎯 확률변수와 확률분포</div>
+    <p class="note"><strong>확률변수(X)</strong>: 표본공간의 결과를 <strong>숫자로 매핑하는 함수</strong>. 실현값 = 실제 관측된 값.</p>
+    <div class="card-grid" style="margin:0.6rem 0;">
+      <div class="card purple">
+        <h3>이산 확률변수</h3>
+        <p>값이 <strong>셀 수 있음</strong> (주사위). 확률질량함수(PMF): Σp(xᵢ) = 1</p>
+      </div>
+      <div class="card indigo">
+        <h3>연속 확률변수</h3>
+        <p>값이 <strong>연속적</strong> (키, 시간). 확률밀도함수(PDF)</p>
+      </div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">누적분포함수 (CDF)</div>
+      <div class="formula-math">F(x) = P(X ≤ x)</div>
+      <div class="formula-desc">지금까지 누적된 확률 (← PDF 적분)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">확률밀도함수 (PDF)</div>
+      <div class="formula-math">f(x) = dF(x)/dx</div>
+      <div class="formula-desc">확률이 얼마나 빠르게 쌓이는지 (← CDF 미분)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">기댓값 (Expected Value)</div>
+      <div class="formula-math">E(X) = Σ x · P(X=x)</div>
+      <div class="formula-desc">확률 고려한 평균 = "중심 위치" or "균형점" (<strong>실제 나올 수 없는 값일 수도!</strong>)</div>
+    </div>
+    <p class="note">예) 주사위 E(X) = 1(1/6)+2(1/6)+…+6(1/6) = <strong>3.5</strong></p>
+  </div>
+
+  <div class="chapter-block pink">
+    <div class="chapter-title">📊 주요 확률분포 — 이산형 vs 연속형</div>
+    <div class="formula-box" style="margin-bottom:0.7rem;">
+      <div class="formula-label">분포 확장 흐름</div>
+      <div class="formula-math">균등 → 베르누이 → 이항 → 푸아송 → 정규</div>
+      <div class="formula-desc">간단 → 복잡 순서. 베르누이(한 번) → 이항(여러 번) → 푸아송(시간 기준) → 정규(전체 형태)</div>
+    </div>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>균등분포 (Uniform) — 이산/연속</h3>
+        <p>모든 사건이 <strong>동일 확률</strong>. 예) 주사위 각 면 1/6</p>
+      </div>
+      <div class="card green">
+        <h3>베르누이 (Bernoulli) — 이산</h3>
+        <p><strong>성공(1) / 실패(0)</strong>의 단일 시행</p>
+      </div>
+      <div class="card purple">
+        <h3>이항분포 (Binomial) — 이산</h3>
+        <p>독립 베르누이 시행을 <strong>n회 반복</strong>했을 때 성공 횟수. 예) 동전 30번 던져 앞면 수</p>
+      </div>
+      <div class="card orange">
+        <h3>푸아송 (Poisson) — 이산</h3>
+        <p>발생 확률이 작은 사건이 <strong>시간/면적당</strong> 몇 번 발생하는지. λ(lambda)</p>
+      </div>
+      <div class="card pink">
+        <h3>정규분포 (Normal) — 연속</h3>
+        <p><strong>종 모양</strong>(bell curve). 가우시안. 대칭. 평균 ± 표준편차</p>
+      </div>
+      <div class="card indigo">
+        <h3>로그정규 — 연속</h3>
+        <p>log(X)가 정규분포. 양수만, 오른쪽 꼬리 긺. 소득분포 등</p>
+      </div>
+    </div>
+    <p class="note">⭐ <strong>시험 빈출</strong>: 이산형 vs 연속형 구분 — <strong>정규분포는 연속형</strong>, 베르누이·이항·푸아송은 이산형.</p>
+  </div>
+
+  <div class="chapter-block indigo">
+    <div class="chapter-title">🌟 추론통계 3대 법칙</div>
+    <div class="card-grid">
+      <div class="card green">
+        <h3>대수의 법칙</h3>
+        <p><strong>평균이 진짜 값으로 간다</strong>. 시행 횟수 N이 커지면 표본평균이 기댓값에 수렴.</p>
+      </div>
+      <div class="card blue">
+        <h3>중심극한정리 (CLT)</h3>
+        <p><strong>분포 모양이 정규분포가 된다</strong>. 모집단이 어떤 분포든, 표본 크기가 커지면 <strong>표본평균의 분포</strong>가 정규분포에 가까워짐.</p>
+      </div>
+      <div class="card purple">
+        <h3>대편차 원리</h3>
+        <p><strong>평균에서 크게 벗어날 확률이 지수적으로 감소</strong>. 극단값은 드물다.</p>
+      </div>
+    </div>
+
+    <div class="sub-title">주요 파생분포</div>
+    <div class="card-grid">
+      <div class="card red">
+        <h3>카이제곱 (χ²)</h3>
+        <p>m개의 표준정규 확률변수의 제곱합. W = Σ Zᵢ². (자유도 m)</p>
+      </div>
+      <div class="card purple">
+        <h3>스튜던트 t분포</h3>
+        <p>T = Z / √(W/m). 소표본 평균 검정에 사용.</p>
+      </div>
+      <div class="card teal">
+        <h3>F 분포</h3>
+        <p>두 카이제곱분포의 비율. 분산 비교(ANOVA).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block teal">
+    <div class="chapter-title">📏 통계적 추정 (Estimation)</div>
+    <div class="formula-box">
+      <div class="formula-label">표본평균 (Sample Mean)</div>
+      <div class="formula-math">X̄ = (1/n) Σ Xᵢ</div>
+      <div class="formula-desc">추정량 = 확률변수의 함수 T(X₁,…,Xₙ)</div>
+    </div>
+    <div class="card-grid">
+      <div class="card indigo">
+        <h3>불편성 (Unbiasedness)</h3>
+        <p>E[T] = θ. 편향(bias) 없음. 기대값이 참값과 일치.</p>
+      </div>
+      <div class="card teal">
+        <h3>일치성 (Consistency)</h3>
+        <p>n이 커지면 θ에 수렴. 표본 많을수록 정확.</p>
+      </div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">신뢰구간 (Confidence Interval)</div>
+      <div class="formula-math">[X̄ − z(α/2)/√n, &nbsp; X̄ + z(α/2)/√n]</div>
+      <div class="formula-desc">신뢰수준 = 1 − α (보통 95% or 99%)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">최대가능도법 (MLE, Maximum Likelihood Estimation)</div>
+      <div class="formula-math">d/dθ [log L(θ; x)] = 0 &nbsp;→&nbsp; θ̂</div>
+      <div class="formula-desc">① 가능도함수 L(θ;X) = Π f(xᵢ;θ) → ② 로그 취함 → ③ 미분=0 → ④ θ̂ 구함</div>
+    </div>
+    <p class="note">예) 동전 5번 던져 앞/앞/앞/뒤/뒤 → L(θ) = θ³(1−θ)² → θ̂ = 3/5 = <strong>0.6</strong></p>
+  </div>
+
+  <div class="chapter-block red">
+    <div class="chapter-title">⚖️ 통계적 검정 (Hypothesis Testing)</div>
+    <div class="card-grid" style="margin-bottom:0.7rem;">
+      <div class="card blue">
+        <h3>귀무가설 H₀</h3>
+        <p>"차이 없다" (현상 유지). 예: μ₁ = μ₂</p>
+      </div>
+      <div class="card red">
+        <h3>대립가설 H₁</h3>
+        <p>"차이 있다" (주장). 예: μ₁ ≠ μ₂</p>
+      </div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">p값 (p-value)</div>
+      <div class="formula-math">p &lt; α → H₀ 기각</div>
+      <div class="formula-desc">H₀가 참이라 가정할 때 이 통계량이 나올 확률. 유의수준 α(보통 0.05).</div>
+    </div>
+
+    <div class="sub-title">제1종 오류 vs 제2종 오류</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th></th><th>H₀ 참 (차이 없음)</th><th>H₀ 거짓 (차이 있음)</th></tr>
+        <tr><td><strong>H₀ 기각</strong></td><td style="background:#fee2e2; color:#991b1b;"><strong>제1종 오류 (α)</strong><br>무죄→유죄</td><td style="background:#dcfce7; color:#166534;"><strong>올바른 결정</strong><br>검정력 = 1−β</td></tr>
+        <tr><td><strong>H₀ 채택</strong></td><td style="background:#dcfce7; color:#166534;"><strong>올바른 결정</strong></td><td style="background:#fef3c7; color:#92400e;"><strong>제2종 오류 (β)</strong><br>유죄→무죄</td></tr>
+      </table>
+    </div>
+    <div class="note">🎯 <strong>검정력(Power) = 1 − β ≥ 0.8</strong> 권장. α와 β는 <strong>트레이드오프</strong>. 빅데이터에서는 p값만 보지 말고 <strong>신뢰구간</strong>도 확인!</div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 5 ==================== -->
+<section id="ch5">
+  <div class="section-title"><span class="icon">🔬</span> 5장 — SciPy 고급 · 선형대수 · 최적화 <span class="chapter-label">Ch.5</span></div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">🔍 NumPy 복습 — 슬라이싱 · 조건연산 · 행렬</div>
+    <pre># 슬라이싱: 배열[시작:끝:간격]
+arr[1:4]         # 인덱스 1~3
+arr[::2]         # 2칸 간격
+arr[::-1]        # 역순
+arr[1:4].copy()  # ★ 원본 변경 방지 (슬라이스는 뷰)
+
+# np.where(cond, x, y): 조건 참이면 x, 거짓이면 y
+np.where(data >= 3, 1, 0)   # 머신러닝 feature 생성
+
+# np.unique: 중복 제거 (이상값·편향 확인)
+np.unique(arr, return_counts=True)
+
+# 유니버셜 함수
+np.sqrt(arr), np.exp(arr)
+
+# 진릿값 판정
+arr > 2           # 배열 단위 비교 → boolean array
+np.any(arr > 2)   # 하나라도 True?
+np.all(arr > 2)   # 모두 True? (True=1, False=0)
+
+# 대각 · 트레이스
+np.diag(A)        # 대각성분 추출
+np.trace(A)       # 대각합
+
+# 결합 / 분할
+np.concatenate([A, B], axis=0)
+np.vstack([A, B])    # 세로(행)
+np.hstack([A, B])    # 가로(열)
+np.split(arr, [1, 3]) # 인덱스 1,3에서 분할
+
+# 브로드캐스팅: 서로 다른 크기 배열 자동 맞춤</pre>
+  </div>
+
+  <div class="chapter-block teal">
+    <div class="chapter-title">📏 보간법 (Interpolation)</div>
+    <p class="note"><strong>보간법</strong>: 이미 알고 있는 데이터 점들 <strong>사이의 값</strong>을 추정. 결측치 복원·이미지 리스케일링에 사용.</p>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>선형 보간 (Linear)</h3>
+        <p>두 점을 <strong>직선</strong>으로 연결하여 추정. 꺾임 발생. <code>interp1d(x, y, kind='linear')</code></p>
+      </div>
+      <div class="card green">
+        <h3>스플라인 3차 (Cubic Spline)</h3>
+        <p>데이터 점을 <strong>3차 다항식(곡선)</strong>으로 연결. 가장 자연스러움. <code>kind='cubic'</code></p>
+      </div>
+      <div class="card orange">
+        <h3>기타 kind</h3>
+        <p><code>'zero'</code>(0차), <code>'linear'</code>(1차), <code>'quadratic'</code>(2차), <code>'cubic'</code>(3차)</p>
+      </div>
+    </div>
+    <pre>from scipy import interpolate
+f_linear = interpolate.interp1d(x, y, kind='linear')
+f_cubic  = interpolate.interp1d(x, y, kind='cubic')</pre>
+  </div>
+
+  <div class="chapter-block purple">
+    <div class="chapter-title">🧩 행렬 분해 (Matrix Decomposition)</div>
+    <p class="note">복잡한 행렬을 단순한 행렬들의 곱으로 분해 → 계산 효율 ↑, 내부구조 파악.</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>분해</th><th>식</th><th>특징</th><th>대표 활용</th></tr>
+        <tr><td><strong>SVD</strong></td><td>A = U · S · Vᵀ</td><td>데이터 본질 구조 분석. 매우 높은 안정성. 느림.</td><td>PCA, 추천시스템, 이미지 압축, 노이즈 제거</td></tr>
+        <tr><td><strong>LU</strong></td><td>PA = L · U</td><td>하삼각(L) × 상삼각(U). P는 행 교환. 빠름.</td><td>연립방정식 풀이, 수치해석</td></tr>
+        <tr><td><strong>Cholesky</strong></td><td>A = L · Lᵀ</td><td>대칭 + 양의 정부호 전용. 매우 빠름.</td><td>머신러닝, 칼만필터</td></tr>
+        <tr><td><strong>QR</strong></td><td>A = Q · R</td><td>직교행렬(Q) × 상삼각(R). 안정적.</td><td>최소제곱법(회귀), 직교화</td></tr>
+        <tr><td><strong>NMF</strong></td><td>X = W · H (≥0)</td><td>비음수 행렬만. 차원 축소.</td><td>토픽모델링, 추천, 특징 추출</td></tr>
+      </table>
+    </div>
+    <pre>from scipy import linalg
+# SVD
+U, s, Vt = linalg.svd(A)
+# LU
+P, L, U = linalg.lu(A)
+# Cholesky
+L = linalg.cholesky(A, lower=True)
+# QR
+Q, R = linalg.qr(A, mode='full')       # full: (m,m)(m,n)
+Q, R = linalg.qr(A, mode='economic')   # (m,n)(n,n)</pre>
+    <div class="note">💡 <strong>SVD 의미</strong>: A = 회전(Vᵀ) × 늘림(S:중요도) × 회전(U:방향). S의 <strong>특잇값</strong>은 데이터의 중요도 순서.</div>
+  </div>
+
+  <div class="chapter-block green">
+    <div class="chapter-title">∫ 적분 (Integration)</div>
+    <div class="formula-box">
+      <div class="formula-label">quad — 1차원 정적분</div>
+      <div class="formula-math">∫ₐᵇ f(x) dx</div>
+      <div class="formula-desc"><code>quad(함수, 시작점, 끝점)</code> → (결과값, 추정오차) 튜플</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">dblquad — 2차원 이중적분</div>
+      <div class="formula-math">∬ f(x, t) dt dx → 부피</div>
+      <div class="formula-desc"><code>dblquad(f, x하한, x상한, t하한, t상한)</code>. 무한대는 <code>np.inf</code></div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">odeint — 상미분방정식(ODE) 풀이</div>
+      <div class="formula-math">dv/dt = f(v, t)</div>
+      <div class="formula-desc">로렌츠 시스템 등. 누적해서 미래 예측.</div>
+    </div>
+    <pre>from scipy.integrate import quad, dblquad, odeint
+import math
+
+# ∫₀^1 (pi 계산)
+val, err = quad(lambda x: 4/(1+x**2), 0, 1)   # ≈ π
+
+# ∫₀^π sin(x) dx = 2
+val, err = quad(math.sin, 0, math.pi)</pre>
+  </div>
+
+  <div class="chapter-block orange">
+    <div class="chapter-title">🎯 최적화 (Optimization)</div>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>fsolve — 방정식의 해</h3>
+        <p>f(x)=0의 근. 초기값 근처에서 해 찾기.</p>
+        <pre style="font-size:0.75rem;">from scipy.optimize import fsolve
+fsolve(lambda x: x**2 - 4, 2)  # → 2.0</pre>
+      </div>
+      <div class="card green">
+        <h3>minimize — 최솟값</h3>
+        <p>목적함수 최소화 (범용). <code>SLSQP</code>: 제약조건 있는 비선형.</p>
+        <pre style="font-size:0.75rem;">from scipy.optimize import minimize
+minimize(f, x0=[1,5,5,1],
+  method='SLSQP',
+  bounds=[(1,5)]*4,
+  constraints=[con1, con2])</pre>
+      </div>
+      <div class="card purple">
+        <h3>newton — 뉴턴법</h3>
+        <p>초기값에서 접선의 기울기로 근 반복 근사.</p>
+      </div>
+      <div class="card orange">
+        <h3>minimize_scalar</h3>
+        <p>1변수 함수의 최솟값. <code>method='Brent'</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 6 ==================== -->
+<section id="ch6">
+  <div class="section-title"><span class="icon">🐼</span> 6장 — Pandas 고급 (4/15까지) <span class="chapter-label">Ch.6</span></div>
+
+  <div class="chapter-block">
+    <div class="chapter-title">📋 Pandas 핵심 기능 맵</div>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>1. 데이터 구조</h3>
+        <ul>
+          <li><strong>Series</strong>: 1차원</li>
+          <li><strong>DataFrame</strong>: 2차원 (엑셀 표)</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>2. 입출력</h3>
+        <p><code>read_csv / to_csv</code>, <code>read_excel</code>, <code>read_sql</code>, <code>read_json</code></p>
+      </div>
+      <div class="card purple">
+        <h3>3. 탐색/검사</h3>
+        <p><code>head()</code> <code>tail()</code> <code>info()</code> <code>describe()</code> <code>shape</code></p>
+      </div>
+      <div class="card orange">
+        <h3>4. 선택·필터링</h3>
+        <p><code>df['col']</code>, <code>df.loc[]</code>(라벨), <code>df.iloc[]</code>(위치), 조건 필터</p>
+      </div>
+      <div class="card red">
+        <h3>5. 정제·결측치</h3>
+        <p><code>drop</code>, <code>fillna</code>, <code>dropna</code>, <code>duplicated</code></p>
+      </div>
+      <div class="card teal">
+        <h3>6. 결합</h3>
+        <p><code>merge</code>(키 기준), <code>concat</code>(쌓기)</p>
+      </div>
+      <div class="card indigo">
+        <h3>7. 그룹화/집계</h3>
+        <p><code>groupby</code>, <code>sum/mean/count</code>, <code>pivot_table</code></p>
+      </div>
+      <div class="card pink">
+        <h3>8. 시계열/변환</h3>
+        <p><code>to_datetime</code>, <code>resample</code>, <code>melt</code>, <code>stack/unstack</code></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-block pink">
+    <div class="chapter-title">🏗️ 계층형 인덱스 (MultiIndex)</div>
+    <p class="note">행과 열 모두 <strong>2단계(Level)</strong> 계층 구조를 가질 수 있음 → 가독성 ↑, 다차원 분석 가능.</p>
+    <pre>import numpy as np, pandas as pd
+
+hier_df = pd.DataFrame(
+    np.arange(9).reshape(3, 3),
+    index=[['a','a','b'], ['key1','key2','key1']],
+    columns=[['Seoul','Seoul','Pusan'], ['red','blue','red']]
+)
+# index에 이름 부여
+hier_df.index.names = ['key1','key2']
+hier_df.columns.names = ['city','color']
+
+# 상위 열 'Pusan' 선택 → 해당 하위 color 열 모두 선택 (열 우선)
+hier_df['Pusan']
+
+# 그룹화 (기본은 행 기준)
+hier_df.groupby(level='key2').sum()
+# 가로 방향 (axis=1) 같은 color끼리 합계
+hier_df.groupby(level='color', axis=1).sum()
+# 또는: hier_df.T.groupby(level='color').sum().T
+
+# 계층형에서 삭제
+hier_df.drop(['b'])              # 행 삭제 (axis=0 default)
+hier_df.drop('Seoul', axis=1)    # 열 삭제</pre>
+  </div>
+
+  <div class="chapter-block teal">
+    <div class="chapter-title">🔗 데이터 결합 (Merge · Concat)</div>
+
+    <div class="sub-title">① merge — 키 기준 결합 (SQL JOIN과 동일)</div>
+    <pre>pd.merge(df1, df2, on='ID', how='inner')  # 기본값
+pd.merge(df1, df2, on='ID', how='outer')
+pd.merge(df1, df2, on='ID', how='left')
+pd.merge(df1, df2, on='ID', how='right')</pre>
+    <div class="table-wrap">
+      <table>
+        <tr><th>how 값</th><th>의미</th><th>설명</th></tr>
+        <tr><td><code>'inner'</code></td><td>내부 결합</td><td>(기본값) 양쪽 모두에 존재하는 키만 (교집합)</td></tr>
+        <tr><td><code>'outer'</code></td><td>외부 결합</td><td>양쪽 중 한 곳에만 있어도 모두 유지 (합집합). 없는 값은 NaN</td></tr>
+        <tr><td><code>'left'</code></td><td>왼쪽 결합</td><td>왼쪽 df 모두 유지, 오른쪽은 매칭되는 것만 붙임</td></tr>
+        <tr><td><code>'right'</code></td><td>오른쪽 결합</td><td>오른쪽 df 모두 유지, 왼쪽은 매칭만</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      ⚠️ <strong>NaN 포함 시 타입 변환</strong>: int 컬럼이 NaN을 포함하면 자동으로 <strong>float</strong>로 변환됨.<br>
+      ⚠️ <strong>중복 컬럼명</strong>: 같은 이름 컬럼이 두 df에 있고 기준이 아니면 자동 접미사 <code>_x</code>, <code>_y</code> 추가.<br>
+      ⚠️ <strong>키 명시</strong>: 같은 이름 컬럼이 여러 개 있을 때는 <code>on=</code>으로 기준 명시.
+    </div>
+
+    <div class="sub-title">② 인덱스 기반 merge</div>
+    <pre># 왼쪽(df1)의 행 인덱스와 오른쪽(df2)의 index_num 컬럼 값 비교
+pd.merge(df1, df2, left_index=True, right_on='index_num')</pre>
+
+    <div class="sub-title">③ concat — 단순 이어붙이기</div>
+    <pre># 수직 방향 (위아래)
+pd.concat([df1, df3], axis=0)    # 기본 = axis=0
+
+# 수평 방향 (좌우)
+pd.concat([df1, df2], axis=1)</pre>
+    <div class="card-grid">
+      <div class="card blue">
+        <h3>concat (vertical, axis=0)</h3>
+        <p>같은 양식의 <strong>월별 데이터 통합</strong> 같은 경우. 위에서 아래로 쌓음.</p>
+      </div>
+      <div class="card green">
+        <h3>concat (horizontal, axis=1)</h3>
+        <p>인덱스가 같을 때 <strong>옆으로 붙이기</strong>.</p>
+      </div>
+      <div class="card orange">
+        <h3>merge vs concat</h3>
+        <p><strong>merge</strong>: 공통 키 기준으로 지능적 결합 (SQL JOIN). <strong>concat</strong>: 단순 이어붙임.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 핵심 캐치 ==================== -->
+<section id="catch">
+  <div class="section-title"><span class="icon">🔥</span> 핵심 캐치 — 시험 빈출 포인트 20</div>
+  <div class="catch-grid">
+    <div class="catch-item"><div class="catch-label">★ 1장</div><p><strong>빅데이터 3V</strong>: Volume(규모) + Velocity(속도) + Variety(다양성). Validity(유효성)는 아님!</p></div>
+    <div class="catch-item"><div class="catch-label">★ 1장</div><p><strong>데이터 과학 = 통계 + 해킹(CS) + 도메인</strong>. 인공지능(AI)은 벤다이어그램 구성요소 아님.</p></div>
+    <div class="catch-item"><div class="catch-label">★ 1장</div><p><strong>딕셔너리 키는 중복 불가</strong>. 같은 키로 값 넣으면 덮어씀. 튜플은 생성 후 변경 불가.</p></div>
+    <div class="catch-item"><div class="catch-label">★ 1장</div><p><strong>range(0, 10, 2)</strong> → [0,2,4,6,8]. <strong>stop(10) 포함 X</strong>! 자주 출제!</p></div>
+    <div class="catch-item"><div class="catch-label">★ 1장</div><p><strong>리스트 * 2 는 연결</strong>! [1,2,3]*2 = [1,2,3,1,2,3]. NumPy라야 원소별 곱.</p></div>
+    <div class="catch-item"><div class="catch-label">★ 2장</div><p><strong>np.dot(A,B) = A@B = 행렬 곱</strong>. A*B = <strong>원소별 곱</strong>. 서로 다름!</p></div>
+    <div class="catch-item"><div class="catch-label">★ 2장</div><p><strong>replace=False</strong>는 비복원(중복 X). 기본 replace=True(복원).</p></div>
+    <div class="catch-item"><div class="catch-label">★ 2장</div><p><strong>linalg.eig()</strong> 반환 = (고유값 배열, 고유벡터 행렬) <strong>튜플</strong>!</p></div>
+    <div class="catch-item"><div class="catch-label">★ 2장</div><p><strong>df.drop(axis=0/1)</strong>: 0=행삭제, 1=열삭제. inplace=True 없으면 원본 유지.</p></div>
+    <div class="catch-item"><div class="catch-label">★ 2장</div><p><strong>df['name']=Series, df[['name']]=DataFrame</strong>. 대괄호 개수 주의!</p></div>
+    <div class="catch-item"><div class="catch-label">★ 3장</div><p><strong>describe()에 mode(최빈값) 없음</strong>! count/mean/std/min/25%/50%/75%/max 8개.</p></div>
+    <div class="catch-item"><div class="catch-label">★ 3장</div><p><strong>상관계수 r=0</strong>은 "선형관계 없음". 비선형 관계는 있을 수 있음!</p></div>
+    <div class="catch-item"><div class="catch-label">★ 3장</div><p><strong>박스플롯에 평균 없음</strong> (showmeans=True 옵션 필요). 중앙값·Q1·Q3·이상값만.</p></div>
+    <div class="catch-item"><div class="catch-label">★ 3장</div><p><strong>공분산</strong>은 방향만, <strong>강도는 상관계수</strong>로. 공분산은 단위에 의존.</p></div>
+    <div class="catch-item"><div class="catch-label">★ 4장</div><p><strong>확률 공리 3개</strong>: 비음수·정규성(=1)·가법성. "확률은 -1~1 사이"는 공리 아님!</p></div>
+    <div class="catch-item"><div class="catch-label">★ 4장</div><p><strong>여사건 → 배반이지만, 배반 → 여사건 X</strong>. 자주 출제!</p></div>
+    <div class="catch-item"><div class="catch-label">★ 4장</div><p><strong>베이즈 정리에 P(A∪B) 불필요</strong>. 필요한 건 P(A|B), P(B), P(A).</p></div>
+    <div class="catch-item"><div class="catch-label">★ 4장</div><p><strong>정규분포는 연속형</strong>! 베르누이·이항·푸아송은 이산형.</p></div>
+    <div class="catch-item"><div class="catch-label">★ 4장</div><p><strong>제1종 오류(α)</strong>: H₀ 참인데 기각(무죄→유죄). <strong>제2종(β)</strong>: H₀ 거짓인데 채택.</p></div>
+    <div class="catch-item"><div class="catch-label">★ 5장·6장</div><p><strong>SVD = U·S·Vᵀ</strong>. PCA/추천/이미지압축. <strong>how='inner'가 merge 기본값</strong>!</p></div>
+  </div>
+</section>
+
+<!-- ==================== 키워드 ==================== -->
+<section id="keywords">
+  <div class="section-title"><span class="icon">📖</span> 핵심 키워드</div>
+  <div class="keyword-grid">
+    <!-- CH1 -->
+    <div class="kw-card ch1"><div class="kw-en">Data Science</div><div class="kw-ko">데이터 과학</div><div class="kw-desc">통계 + 해킹 스킬 + 도메인 지식의 교집합</div></div>
+    <div class="kw-card ch1"><div class="kw-en">3V</div><div class="kw-ko">빅데이터 3V</div><div class="kw-desc">Volume(규모)·Velocity(속도)·Variety(다양성)</div></div>
+    <div class="kw-card ch1"><div class="kw-en">Collection</div><div class="kw-ko">자료구조</div><div class="kw-desc">list [ ], tuple ( ), dict { : }, set { }</div></div>
+    <div class="kw-card ch1"><div class="kw-en">Lambda</div><div class="kw-ko">람다 함수</div><div class="kw-desc">이름 없는 한 줄 함수. map·filter·sorted와 사용</div></div>
+    <div class="kw-card ch1"><div class="kw-en">OOP / __init__</div><div class="kw-ko">객체지향·생성자</div><div class="kw-desc">클래스=설계도, 인스턴스=실체. self=자기 자신</div></div>
+    <!-- CH2 -->
+    <div class="kw-card ch2"><div class="kw-en">ndarray</div><div class="kw-ko">N차원 배열</div><div class="kw-desc">NumPy의 핵심. dtype 통일, 벡터화 연산</div></div>
+    <div class="kw-card ch2"><div class="kw-en">Vectorization</div><div class="kw-ko">벡터화</div><div class="kw-desc">반복문 없이 배열 전체에 연산 적용</div></div>
+    <div class="kw-card ch2"><div class="kw-en">Broadcasting</div><div class="kw-ko">브로드캐스팅</div><div class="kw-desc">크기 다른 배열 연산 시 자동 형태 맞춤</div></div>
+    <div class="kw-card ch2"><div class="kw-en">seed</div><div class="kw-ko">난수 시드</div><div class="kw-desc">재현성 보장. 같은 시드 → 같은 난수</div></div>
+    <div class="kw-card ch2"><div class="kw-en">replace=False</div><div class="kw-ko">비복원 추출</div><div class="kw-desc">중복 없음. 기본값은 True(복원)</div></div>
+    <div class="kw-card ch2"><div class="kw-en">Series / DataFrame</div><div class="kw-ko">시리즈/데이터프레임</div><div class="kw-desc">Pandas 1D/2D 자료구조</div></div>
+    <div class="kw-card ch2"><div class="kw-en">isin() / dropna() / fillna()</div><div class="kw-ko">포함/결측제거/대체</div><div class="kw-desc">필터링과 결측값 처리</div></div>
+    <!-- CH3 -->
+    <div class="kw-card ch3"><div class="kw-en">Skewness / Kurtosis</div><div class="kw-ko">왜도/첨도</div><div class="kw-desc">왜도=치우침, 첨도=뾰족함</div></div>
+    <div class="kw-card ch3"><div class="kw-en">σ² / σ</div><div class="kw-ko">분산/표준편차</div><div class="kw-desc">퍼짐 정도. σ = √σ²</div></div>
+    <div class="kw-card ch3"><div class="kw-en">CV</div><div class="kw-ko">변동계수</div><div class="kw-desc">σ/x̄. 단위 다른 데이터 비교</div></div>
+    <div class="kw-card ch3"><div class="kw-en">IQR</div><div class="kw-ko">사분위 범위</div><div class="kw-desc">Q3 − Q1. 박스플롯 상자 높이</div></div>
+    <div class="kw-card ch3"><div class="kw-en">Correlation r</div><div class="kw-ko">상관계수</div><div class="kw-desc">Cov(X,Y)/(σₓσᵧ). -1~1</div></div>
+    <div class="kw-card ch3"><div class="kw-en">OLS / R²</div><div class="kw-ko">최소제곱/결정계수</div><div class="kw-desc">잔차제곱합 최소화, 설명력(0~1)</div></div>
+    <!-- CH4 -->
+    <div class="kw-card ch4"><div class="kw-en">(Ω, F, Pr)</div><div class="kw-ko">확률공간</div><div class="kw-desc">표본공간·사건·확률함수</div></div>
+    <div class="kw-card ch4"><div class="kw-en">Axiom</div><div class="kw-ko">확률 공리</div><div class="kw-desc">비음수·정규성·가법성</div></div>
+    <div class="kw-card ch4"><div class="kw-en">Bayes' Theorem</div><div class="kw-ko">베이즈 정리</div><div class="kw-desc">결과→원인 역추론. P(B|A)=P(A|B)P(B)/P(A)</div></div>
+    <div class="kw-card ch4"><div class="kw-en">PMF / PDF / CDF</div><div class="kw-ko">확률질량/밀도/누적</div><div class="kw-desc">이산/연속/누적 확률 함수</div></div>
+    <div class="kw-card ch4"><div class="kw-en">E(X)</div><div class="kw-ko">기댓값</div><div class="kw-desc">Σx·P(X=x). 중심 위치</div></div>
+    <div class="kw-card ch4"><div class="kw-en">CLT</div><div class="kw-ko">중심극한정리</div><div class="kw-desc">표본 클수록 표본평균 분포 → 정규</div></div>
+    <div class="kw-card ch4"><div class="kw-en">MLE</div><div class="kw-ko">최대가능도법</div><div class="kw-desc">가능도 최대화로 파라미터 추정</div></div>
+    <div class="kw-card ch4"><div class="kw-en">Type I / II Error</div><div class="kw-ko">제1/2종 오류</div><div class="kw-desc">α: H₀참 기각 / β: H₀거짓 채택</div></div>
+    <div class="kw-card ch4"><div class="kw-en">Power = 1−β</div><div class="kw-ko">검정력</div><div class="kw-desc">H₁참일 때 올바르게 기각. ≥ 0.8</div></div>
+    <!-- CH5 -->
+    <div class="kw-card ch5"><div class="kw-en">Interpolation</div><div class="kw-ko">보간법</div><div class="kw-desc">알고 있는 점 사이의 값 추정</div></div>
+    <div class="kw-card ch5"><div class="kw-en">Cubic Spline</div><div class="kw-ko">3차 스플라인</div><div class="kw-desc">3차 다항식으로 점 연결. 가장 자연스러움</div></div>
+    <div class="kw-card ch5"><div class="kw-en">SVD</div><div class="kw-ko">특잇값 분해</div><div class="kw-desc">A = U·S·Vᵀ. PCA/추천/압축</div></div>
+    <div class="kw-card ch5"><div class="kw-en">LU / Cholesky / QR</div><div class="kw-ko">행렬 분해</div><div class="kw-desc">삼각분해·대칭전용·직교분해</div></div>
+    <div class="kw-card ch5"><div class="kw-en">quad / dblquad</div><div class="kw-ko">적분</div><div class="kw-desc">1차 정적분 / 2차 이중적분</div></div>
+    <div class="kw-card ch5"><div class="kw-en">fsolve / minimize</div><div class="kw-ko">해찾기/최소화</div><div class="kw-desc">방정식 해, 목적함수 최적화(SLSQP)</div></div>
+    <!-- CH6 -->
+    <div class="kw-card ch6"><div class="kw-en">MultiIndex</div><div class="kw-ko">계층형 인덱스</div><div class="kw-desc">행/열이 2단계 계층 구조</div></div>
+    <div class="kw-card ch6"><div class="kw-en">merge / on / how</div><div class="kw-ko">키 기반 결합</div><div class="kw-desc">SQL JOIN 스타일. inner 기본값</div></div>
+    <div class="kw-card ch6"><div class="kw-en">inner/outer/left/right</div><div class="kw-ko">4가지 조인</div><div class="kw-desc">교집합·합집합·좌기준·우기준</div></div>
+    <div class="kw-card ch6"><div class="kw-en">concat(axis=)</div><div class="kw-ko">이어붙이기</div><div class="kw-desc">axis=0:수직, axis=1:수평</div></div>
+    <div class="kw-card ch6"><div class="kw-en">_x / _y</div><div class="kw-ko">중복컬럼 접미사</div><div class="kw-desc">merge 시 같은 이름 컬럼 자동 접미사</div></div>
+  </div>
+</section>
+
+<!-- ==================== 연습문제 ==================== -->
+<section id="quiz">
+  <div class="section-title"><span class="icon">✏️</span> 연습문제 — 1~6장 종합</div>
+  <p class="note" style="margin-bottom:1rem;">※ 실제 중간고사 문제는 PPT의 연습문제에서 주로 출제됩니다. 아래는 핵심 개념 확인용 자가 진단 문제입니다. (객관식·단답형·코드형 총 30문제)</p>
+
+  <div class="quiz-container">
+
+    <!-- ======== CH1 ======== -->
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">1</span><span class="q-tag mc">객관식</span><span class="q-ch">1장</span></div>
+      <div class="quiz-q">데이터 과학의 벤다이어그램에서 교집합을 이루는 세 가지 요소가 <strong>아닌</strong> 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb1', '통계학은 데이터 과학의 3대 요소 중 하나입니다.')">① 통계학 (Statistics)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb1', '해킹 스킬(컴퓨터 과학)은 3대 요소 중 하나입니다.')">② 해킹 스킬 (Hacking Skills)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb1', '도메인 전문지식은 3대 요소 중 하나입니다.')">③ 도메인 전문지식 (Domain Expertise)</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb1', '정답! 벤다이어그램 = 통계 + 해킹 + 도메인. AI는 응용 분야이지 구성요소 아님.')">④ 인공지능 (Artificial Intelligence)</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">2</span><span class="q-tag mc">객관식</span><span class="q-ch">1장</span></div>
+      <div class="quiz-q">빅데이터의 <strong>3V</strong>에 해당하지 <strong>않는</strong> 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb2', 'Volume(규모)은 3V 중 하나입니다.')">① Volume (규모)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb2', 'Velocity(속도)는 3V 중 하나입니다.')">② Velocity (속도)</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb2', '정답! Validity는 3V가 아님. 3V = Volume + Velocity + Variety.')">③ Validity (유효성)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb2', 'Variety(다양성)는 3V 중 하나입니다.')">④ Variety (다양성)</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">3</span><span class="q-tag mc">객관식</span><span class="q-ch">1장</span></div>
+      <div class="quiz-q">파이썬 자료구조에 대한 설명으로 <strong>옳지 않은</strong> 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb3', '리스트는 순서·중복 허용, 변경 가능합니다.')">① 리스트(list)는 순서가 있고 중복을 허용한다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb3', '튜플은 불변(immutable)입니다.')">② 튜플(tuple)은 생성 후 원소 변경이 불가능하다</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb3', '정답! 딕셔너리의 키는 고유해야 하며 중복 불가. 같은 키 재할당 시 값이 덮어써짐.')">③ 딕셔너리(dict)는 키(key) 중복이 허용된다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb3', '집합은 중복 없고 순서가 없습니다.')">④ 집합(set)은 중복 원소가 없고 순서가 없다</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">4</span><span class="q-tag code">코드형</span><span class="q-ch">1장</span></div>
+      <div class="quiz-q">다음 코드의 출력 결과는?<pre>data = [1, 2, 3]
+print(data * 2)</pre></div>
+      <input class="sa-input" id="sa4" placeholder="예: [1, 2, 3, 1, 2, 3]">
+      <div class="btn-row">
+        <button class="check-btn" onclick="checkSA('sa4', ['[1, 2, 3, 1, 2, 3]','[1,2,3,1,2,3]'], 'sfb4')">확인</button>
+        <button class="show-btn" onclick="showAnswer('ans4')">정답 보기</button>
+      </div>
+      <div class="feedback" id="sfb4"></div>
+      <div class="answer-reveal" id="ans4">✅ <code>[1, 2, 3, 1, 2, 3]</code> — 리스트의 <code>*</code>는 원소별 곱이 아닌 <strong>반복 연결</strong>입니다. NumPy 배열이라야 원소별 곱이 됩니다.</div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">5</span><span class="q-tag code">코드형</span><span class="q-ch">1장</span></div>
+      <div class="quiz-q"><code>range(0, 10, 2)</code>를 리스트로 변환한 결과는?</div>
+      <input class="sa-input" id="sa5" placeholder="예: [0, 2, 4, ...]">
+      <div class="btn-row">
+        <button class="check-btn" onclick="checkSA('sa5', ['[0, 2, 4, 6, 8]','[0,2,4,6,8]'], 'sfb5')">확인</button>
+        <button class="show-btn" onclick="showAnswer('ans5')">정답 보기</button>
+      </div>
+      <div class="feedback" id="sfb5"></div>
+      <div class="answer-reveal" id="ans5">✅ <code>[0, 2, 4, 6, 8]</code> — range(start, stop, step)에서 <strong>stop(10)은 포함되지 않음</strong>!</div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">6</span><span class="q-tag code">코드형</span><span class="q-ch">1장</span></div>
+      <div class="quiz-q">다음 코드의 출력 결과는?<pre>result = [x**2 for x in range(5) if x % 2 == 0]
+print(result)</pre></div>
+      <input class="sa-input" id="sa6" placeholder="출력 결과">
+      <div class="btn-row">
+        <button class="check-btn" onclick="checkSA('sa6', ['[0, 4, 16]','[0,4,16]'], 'sfb6')">확인</button>
+        <button class="show-btn" onclick="showAnswer('ans6')">정답 보기</button>
+      </div>
+      <div class="feedback" id="sfb6"></div>
+      <div class="answer-reveal" id="ans6">✅ <code>[0, 4, 16]</code> — range(5)={0,1,2,3,4} 중 짝수(0,2,4)만 골라 제곱 → 0,4,16</div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">7</span><span class="q-tag sa">단답형</span><span class="q-ch">1장</span></div>
+      <div class="quiz-q">딕셔너리에서 <strong>키와 값을 동시에 순회</strong>할 때 사용하는 메서드는?</div>
+      <input class="sa-input" id="sa7" placeholder="메서드명">
+      <div class="btn-row">
+        <button class="check-btn" onclick="checkSAKeyword('sa7', ['items'], 'sfb7')">확인</button>
+        <button class="show-btn" onclick="showAnswer('ans7')">정답 보기</button>
+      </div>
+      <div class="feedback" id="sfb7"></div>
+      <div class="answer-reveal" id="ans7">✅ <code>.items()</code> — <code>for k, v in dic.items():</code>로 키-값을 동시에 얻습니다.</div>
+    </div>
+
+    <!-- ======== CH2 ======== -->
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">8</span><span class="q-tag mc">객관식</span><span class="q-ch">2장</span></div>
+      <div class="quiz-q">NumPy 배열과 Python 리스트의 차이로 <strong>옳은</strong> 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb8', '리스트의 +는 연결, 벡터화 연산은 지원하지 않습니다.')">① 리스트도 원소별 수학 연산을 지원한다</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb8', '정답! NumPy는 벡터화 연산, 리스트의 +는 연결(concatenate).')">② NumPy 배열은 원소별 연산(벡터화)을 지원하고, 리스트의 +는 연결 연산이다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb8', 'NumPy 배열은 동일한 dtype만 저장합니다.')">③ NumPy 배열은 서로 다른 타입의 원소를 저장할 수 있다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb8', 'NumPy가 C 기반으로 훨씬 빠릅니다.')">④ Python 리스트가 NumPy 배열보다 수치 연산이 빠르다</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">9</span><span class="q-tag code">코드형</span><span class="q-ch">2장</span></div>
+      <div class="quiz-q"><code>np.array([1, 2, 3, 4, 5, 6]).reshape(2, 3)</code>의 <strong>shape</strong>는?</div>
+      <input class="sa-input" id="sa9" placeholder="예: (행, 열)">
+      <div class="btn-row">
+        <button class="check-btn" onclick="checkSA('sa9', ['(2, 3)','(2,3)','2,3'], 'sfb9')">확인</button>
+        <button class="show-btn" onclick="showAnswer('ans9')">정답 보기</button>
+      </div>
+      <div class="feedback" id="sfb9"></div>
+      <div class="answer-reveal" id="ans9">✅ <code>(2, 3)</code> — 6개 원소를 2행 × 3열로 재배치. 원소 수 = 2×3=6 일치해야 함.</div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">10</span><span class="q-tag mc">객관식</span><span class="q-ch">2장</span></div>
+      <div class="quiz-q"><code>np.random.choice(5, 3, replace=False)</code>에 대한 설명으로 <strong>옳은</strong> 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb10', 'replace=False는 중복 없음.')">① 0~4 중 중복을 허용하여 3개를 추출</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb10', '첫 인수가 5이므로 0~4 범위입니다.')">② 1~5 중 비복원 추출</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb10', '정답! 0~4 범위(5개)에서 중복 없이 3개 추출.')">③ 0~4 중 중복 없이(비복원) 3개 추출</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb10', 'seed 고정 없으면 매번 달라집니다.')">④ 항상 같은 결과를 반환</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">11</span><span class="q-tag sa">단답형</span><span class="q-ch">2장</span></div>
+      <div class="quiz-q"><code>A @ B</code>와 동일한 <strong>행렬 곱</strong>을 수행하는 NumPy 함수를 쓰시오.</div>
+      <input class="sa-input" id="sa11" placeholder="np._____(A, B)">
+      <div class="btn-row">
+        <button class="check-btn" onclick="checkSAKeyword('sa11', ['np.dot', 'dot'], 'sfb11')">확인</button>
+        <button class="show-btn" onclick="showAnswer('ans11')">정답 보기</button>
+      </div>
+      <div class="feedback" id="sfb11"></div>
+      <div class="answer-reveal" id="ans11">✅ <code>np.dot(A, B)</code> — @와 np.dot()은 행렬 곱. A*B는 원소별 곱(Hadamard)이라 결과가 다릅니다!</div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">12</span><span class="q-tag mc">객관식</span><span class="q-ch">2장</span></div>
+      <div class="quiz-q"><code>df.drop('salary', axis=1)</code>이 하는 동작은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb12', 'axis=1은 열 방향.')">① salary 값이 있는 행을 삭제</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb12', 'inplace=True 없으면 원본은 유지.')">② 원본 df에서 salary 열이 즉시 삭제됨</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb12', '정답! axis=1 = 열 삭제. 원본 변경 없이 새 DataFrame 반환.')">③ salary 열을 삭제한 새 DataFrame을 반환</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb12', 'drop은 삭제이지 인덱스 지정이 아님.')">④ salary 행을 인덱스로 지정</button>
+      </div>
+      <div class="feedback" id="fb12"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">13</span><span class="q-tag sa">단답형</span><span class="q-ch">2장</span></div>
+      <div class="quiz-q">NumPy에서 배열을 <strong>내림차순</strong>으로 정렬하려면 빈칸에 무엇이 들어가야 하는가?<pre>np.sort(arr)[  ???  ]</pre></div>
+      <input class="sa-input" id="sa13" placeholder="예: [::-1]">
+      <div class="btn-row">
+        <button class="check-btn" onclick="checkSA('sa13', ['[::-1]','::-1'], 'sfb13')">확인</button>
+        <button class="show-btn" onclick="showAnswer('ans13')">정답 보기</button>
+      </div>
+      <div class="feedback" id="sfb13"></div>
+      <div class="answer-reveal" id="ans13">✅ <code>[::-1]</code> — np.sort()는 오름차순이므로 [::-1]로 뒤집어서 내림차순으로 만듭니다.</div>
+    </div>
+
+    <!-- ======== CH3 ======== -->
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">14</span><span class="q-tag mc">객관식</span><span class="q-ch">3장</span></div>
+      <div class="quiz-q">기술통계의 중심경향(대표값) 지표가 <strong>아닌</strong> 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb14', '평균은 대표적 중심경향 지표.')">① 평균(mean)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb14', '중앙값은 중심경향 지표.')">② 중앙값(median)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb14', '최빈값은 중심경향 지표.')">③ 최빈값(mode)</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb14', '정답! 분산은 산포도(퍼짐) 지표. 중심경향 아님.')">④ 분산(variance)</button>
+      </div>
+      <div class="feedback" id="fb14"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">15</span><span class="q-tag mc">객관식</span><span class="q-ch">3장</span></div>
+      <div class="quiz-q"><strong>변동계수(CV)</strong>에 대한 설명으로 올바른 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb15', '평균/표준편차가 아니라 표준편차/평균입니다.')">① CV = 평균 / 표준편차</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb15', '정답! CV = σ/x̄. 단위가 달라도 데이터 퍼짐을 비율로 비교 가능.')">② CV = 표준편차 / 평균이며, 평균 대비 퍼짐을 비율로 나타냄</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb15', 'CV가 클수록 변동이 큽니다 (불안정).')">③ CV 값이 클수록 데이터가 안정적</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb15', 'CV는 1 이상도 가능합니다 (매우 큰 변동).')">④ CV는 항상 1 이하</button>
+      </div>
+      <div class="feedback" id="fb15"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">16</span><span class="q-tag mc">객관식</span><span class="q-ch">3장</span></div>
+      <div class="quiz-q">상관계수(r)에 대한 설명으로 <strong>틀린</strong> 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb16', '맞는 설명입니다. -1 ≤ r ≤ 1.')">① 상관계수는 -1에서 1 사이의 값을 가진다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb16', '맞는 설명입니다.')">② r=1이면 완벽한 양의 선형관계</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb16', '맞는 설명입니다. 피어슨 공식.')">③ 공분산을 두 변수 표준편차의 곱으로 나눈 값</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb16', '정답! r=0은 선형관계 없음. 비선형 관계는 있을 수 있습니다.')">④ 상관계수가 0이면 두 변수 사이에 어떠한 관계도 없다</button>
+      </div>
+      <div class="feedback" id="fb16"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">17</span><span class="q-tag sa">단답형</span><span class="q-ch">3장</span></div>
+      <div class="quiz-q">왜도(skewness)는 '한쪽으로 치우쳤는가'를 나타내는 값이다. 그러면 '<strong>가운데가 뾰족하게 몰렸는가</strong>'를 나타내는 것은?</div>
+      <input class="sa-input" id="sa17" placeholder="한글로 입력">
+      <div class="btn-row">
+        <button class="check-btn" onclick="checkSAKeyword('sa17', ['첨도','kurtosis'], 'sfb17')">확인</button>
+        <button class="show-btn" onclick="showAnswer('ans17')">정답 보기</button>
+      </div>
+      <div class="feedback" id="sfb17"></div>
+      <div class="answer-reveal" id="ans17">✅ <strong>첨도(kurtosis)</strong> — 분포의 뾰족한 정도. > 3: 정규보다 뾰족, &lt; 3: 평평.</div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">18</span><span class="q-tag mc">객관식</span><span class="q-ch">3장</span></div>
+      <div class="quiz-q">단순선형회귀 <code>y = ax + b</code>에서 <strong>최소제곱법(OLS)</strong>이 최소화하려는 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, true, 'fb18', '정답! OLS = 잔차(실제값-예측값)의 제곱합을 최소화.')">① 실제값과 예측값 차이의 제곱합(잔차 제곱합)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb18', '절댓값 합이 아니라 제곱합을 최소화합니다.')">② 실제값과 예측값 차이의 절댓값 합</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb18', '기울기 크기와는 무관합니다.')">③ 기울기 a의 크기</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb18', '절편 크기와는 무관합니다.')">④ 절편 b의 크기</button>
+      </div>
+      <div class="feedback" id="fb18"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">19</span><span class="q-tag mc">객관식</span><span class="q-ch">3장</span></div>
+      <div class="quiz-q"><code>df.describe()</code>가 반환하는 값에 <strong>포함되지 않는</strong> 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb19', 'describe()는 count, mean, std 포함.')">① count, mean, std</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb19', 'describe()는 min, 25%, 50% 포함.')">② min, 25%, 50%</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb19', '75%, max도 포함.')">③ 75%, max</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb19', '정답! mode(최빈값)는 describe()에 없음. df.mode() 별도 호출.')">④ mode (최빈값)</button>
+      </div>
+      <div class="feedback" id="fb19"></div>
+    </div>
+
+    <!-- ======== CH4 ======== -->
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">20</span><span class="q-tag mc">객관식</span><span class="q-ch">4장</span></div>
+      <div class="quiz-q">확률의 공리에 <strong>해당하지 않는</strong> 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb20', '공리 1 — 비음수성.')">① 모든 사건의 확률은 0 이상이다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb20', '공리 2 — 정규성.')">② 전체 표본공간의 확률은 1이다</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb20', '정답! 확률은 0~1 사이. -1은 불가능합니다!')">③ 확률은 -1에서 1 사이의 값을 가진다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb20', '공리 3 — 가법성.')">④ 서로 배반인 사건들의 합사건 확률은 각 확률의 합</button>
+      </div>
+      <div class="feedback" id="fb20"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">21</span><span class="q-tag sa">단답형</span><span class="q-ch">4장</span></div>
+      <div class="quiz-q">P(A)=0.3, P(B)=0.4이고 A와 B가 <strong>독립</strong>일 때, <code>P(A∩B)</code>는?</div>
+      <input class="sa-input" id="sa21" placeholder="답 입력">
+      <div class="btn-row">
+        <button class="check-btn" onclick="checkSA('sa21', ['0.12'], 'sfb21')">확인</button>
+        <button class="show-btn" onclick="showAnswer('ans21')">정답 보기</button>
+      </div>
+      <div class="feedback" id="sfb21"></div>
+      <div class="answer-reveal" id="ans21">✅ <strong>0.12</strong> — 독립이면 P(A∩B) = P(A) × P(B) = 0.3 × 0.4 = 0.12</div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">22</span><span class="q-tag mc">객관식</span><span class="q-ch">4장</span></div>
+      <div class="quiz-q">베이즈 정리에서 <code>P(B|A)</code>를 구하기 위해 <strong>필요하지 않은</strong> 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb22', '가능도로 필요.')">① P(A|B)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb22', '사전확률로 필요.')">② P(B)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb22', '증거(분모)로 필요.')">③ P(A)</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb22', '정답! P(A∪B)는 합사건이며 베이즈 정리에 쓰이지 않음.')">④ P(A∪B)</button>
+      </div>
+      <div class="feedback" id="fb22"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">23</span><span class="q-tag mc">객관식</span><span class="q-ch">4장</span></div>
+      <div class="quiz-q"><strong>중심극한정리(CLT)</strong>에 대한 설명으로 올바른 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb23', '오히려 표본이 커질수록 정규에 가까워짐.')">① 표본 크기가 작아질수록 정규분포에 가까워진다</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb23', '정답! 모집단 분포와 무관하게 표본이 커질수록 표본평균 분포가 정규로 수렴.')">② 표본 크기가 커질수록 표본평균의 분포가 정규분포에 가까워진다</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb23', '모집단이 정규가 아니어도 성립.')">③ 모집단이 정규분포일 때만 성립</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb23', '시행 횟수(표본 크기)에 의존.')">④ 시행 횟수와 무관하다</button>
+      </div>
+      <div class="feedback" id="fb23"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">24</span><span class="q-tag sa">단답형</span><span class="q-ch">4장</span></div>
+      <div class="quiz-q">이산확률변수 X가 P(X=1)=0.2, P(X=2)=0.3, P(X=3)=0.5일 때, <strong>기댓값 E(X)</strong>는?</div>
+      <input class="sa-input" id="sa24" placeholder="답 입력">
+      <div class="btn-row">
+        <button class="check-btn" onclick="checkSA('sa24', ['2.3'], 'sfb24')">확인</button>
+        <button class="show-btn" onclick="showAnswer('ans24')">정답 보기</button>
+      </div>
+      <div class="feedback" id="sfb24"></div>
+      <div class="answer-reveal" id="ans24">✅ <strong>2.3</strong> — E(X) = 1×0.2 + 2×0.3 + 3×0.5 = 0.2 + 0.6 + 1.5 = 2.3</div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">25</span><span class="q-tag mc">객관식</span><span class="q-ch">4장</span></div>
+      <div class="quiz-q">다음 중 <strong>이산형</strong> 확률분포가 <strong>아닌</strong> 것은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb25', '베르누이는 이산형.')">① 베르누이 분포</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb25', '이항분포는 이산형.')">② 이항분포</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb25', '정답! 정규분포(가우시안)는 대표적인 연속확률분포.')">③ 정규분포</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb25', '푸아송은 이산형.')">④ 푸아송 분포</button>
+      </div>
+      <div class="feedback" id="fb25"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">26</span><span class="q-tag mc">객관식</span><span class="q-ch">4장</span></div>
+      <div class="quiz-q"><strong>귀무가설이 참인데 기각</strong>하는 오류는?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, true, 'fb26', '정답! 제1종 오류 = H₀ 참인데 기각. 확률 = α(유의수준).')">① 제1종 오류 (Type I Error, α)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb26', '제2종은 H₀ 거짓인데 채택(β).')">② 제2종 오류 (Type II Error, β)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb26', '그런 용어는 없습니다.')">③ 제3종 오류</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb26', '검정력 = 1-β로 오류 이름 아님.')">④ 검정력 오류</button>
+      </div>
+      <div class="feedback" id="fb26"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">27</span><span class="q-tag sa">단답형</span><span class="q-ch">4장</span></div>
+      <div class="quiz-q">동전의 앞면 확률을 θ라 할 때, 5번 던져 <strong>앞앞앞뒤뒤</strong>가 나왔다면 <strong>최대가능도추정값 θ̂</strong>은?</div>
+      <input class="sa-input" id="sa27" placeholder="답 입력">
+      <div class="btn-row">
+        <button class="check-btn" onclick="checkSA('sa27', ['0.6','3/5'], 'sfb27')">확인</button>
+        <button class="show-btn" onclick="showAnswer('ans27')">정답 보기</button>
+      </div>
+      <div class="feedback" id="sfb27"></div>
+      <div class="answer-reveal" id="ans27">✅ <strong>0.6 (= 3/5)</strong> — L(θ) = θ³(1-θ)². 로그 미분 → θ̂ = 앞면 / 전체 = 3/5</div>
+    </div>
+
+    <!-- ======== CH5 ======== -->
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">28</span><span class="q-tag mc">객관식</span><span class="q-ch">5장</span></div>
+      <div class="quiz-q">데이터 점 사이를 <strong>3차 다항식(곡선)</strong>으로 연결하여 가장 자연스럽게 값을 추정하는 보간법은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb28', '선형 보간은 직선(1차).')">① 선형 보간 (linear)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb28', 'zero는 0차(계단형).')">② 0차 스플라인 (zero)</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb28', '정답! cubic = 3차 스플라인. 가장 부드럽고 안정적.')">③ 3차 스플라인 (cubic)</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb28', 'SVD는 행렬 분해 기법.')">④ SVD</button>
+      </div>
+      <div class="feedback" id="fb28"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">29</span><span class="q-tag mc">객관식</span><span class="q-ch">5장</span></div>
+      <div class="quiz-q">다음 중 <strong>PCA·추천시스템·이미지 압축</strong>에 가장 많이 사용되는 행렬 분해는?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, false, 'fb29', 'LU는 연립방정식 풀이용.')">① LU 분해</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb29', 'Cholesky는 대칭+양의정부호 전용.')">② Cholesky 분해</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb29', 'QR은 최소제곱법(회귀)에 사용.')">③ QR 분해</button>
+        <button class="option-btn" onclick="checkMC(this, true, 'fb29', '정답! SVD = U·S·Vᵀ. 데이터 본질 구조 분석(PCA, 추천, 압축).')">④ SVD (특잇값 분해)</button>
+      </div>
+      <div class="feedback" id="fb29"></div>
+    </div>
+
+    <!-- ======== CH6 ======== -->
+    <div class="quiz-card">
+      <div class="q-header"><span class="q-num">30</span><span class="q-tag mc">객관식</span><span class="q-ch">6장</span></div>
+      <div class="quiz-q"><code>pd.merge(df1, df2, on='id', how='???')</code>에서 <strong>양쪽 모두에 존재하는 키만</strong> 유지(교집합)하는 how 값은?</div>
+      <div class="options">
+        <button class="option-btn" onclick="checkMC(this, true, 'fb30', '정답! inner = 교집합 (기본값).')">① 'inner'</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb30', 'outer는 양쪽 합집합.')">② 'outer'</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb30', 'left는 왼쪽 df 모두 유지.')">③ 'left'</button>
+        <button class="option-btn" onclick="checkMC(this, false, 'fb30', 'right는 오른쪽 df 모두 유지.')">④ 'right'</button>
+      </div>
+      <div class="feedback" id="fb30"></div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <p>📚 데이터사이언스입문 · 중간고사 대비 학습자료 (1~6장 · 4/15 기준)</p>
+  <p style="margin-top:0.3rem;">한신대학교 AI·SW대학 · 2026 봄학기 · bskoh@hs.ac.kr</p>
+</footer>
+
+<script>
+// ===== THEME =====
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.getElementById('themeBtn');
+  if (html.getAttribute('data-theme') === 'light') {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀️ 라이트';
+    localStorage.setItem('ds-mid-theme', 'dark');
+  } else {
+    html.setAttribute('data-theme', 'light');
+    btn.textContent = '🌙 야간모드';
+    localStorage.setItem('ds-mid-theme', 'light');
+  }
+}
+(function() {
+  const saved = localStorage.getItem('ds-mid-theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('themeBtn');
+      if (btn) btn.textContent = '☀️ 라이트';
+    });
+  }
+})();
+
+// ===== QUIZ =====
+function checkMC(btn, isCorrect, fbId, explanation) {
+  const opts = btn.closest('.options').querySelectorAll('.option-btn');
+  opts.forEach(b => b.disabled = true);
+  const fb = document.getElementById(fbId);
+  const card = btn.closest('.quiz-card');
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.innerHTML = '✅ ' + explanation;
+    fb.className = 'feedback ok show';
+    card.classList.add('answered-ok');
+  } else {
+    btn.classList.add('wrong');
+    // 정답 강조
+    opts.forEach(b => {
+      // find the btn with onclick containing ", true,"
+      if (/,\s*true\s*,/.test(b.getAttribute('onclick')||'')) {
+        b.classList.add('correct');
+      }
+    });
+    fb.innerHTML = '❌ ' + explanation;
+    fb.className = 'feedback no show';
+    card.classList.add('answered-ng');
+  }
+}
+
+function checkSA(inputId, answers, fbId) {
+  const val = document.getElementById(inputId).value.trim().replace(/\s+/g, ' ');
+  const fb = document.getElementById(fbId);
+  const match = answers.some(a => {
+    const norm = a.replace(/\s+/g, ' ').trim();
+    return val === norm || val.replace(/\s+/g, '') === norm.replace(/\s+/g, '');
+  });
+  const card = fb.closest('.quiz-card');
+  if (match) {
+    fb.innerHTML = '✅ 정답입니다!';
+    fb.className = 'feedback ok show';
+    card.classList.add('answered-ok');
+  } else {
+    fb.innerHTML = '❌ 오답입니다. "정답 보기" 버튼을 눌러 확인하세요.';
+    fb.className = 'feedback no show';
+    card.classList.add('answered-ng');
+  }
+}
+
+function checkSAKeyword(inputId, keywords, fbId) {
+  const val = document.getElementById(inputId).value.trim().toLowerCase();
+  const fb = document.getElementById(fbId);
+  const match = keywords.some(kw => val.includes(kw.toLowerCase()));
+  const card = fb.closest('.quiz-card');
+  if (match) {
+    fb.innerHTML = '✅ 정답입니다!';
+    fb.className = 'feedback ok show';
+    card.classList.add('answered-ok');
+  } else {
+    fb.innerHTML = '❌ 오답입니다. "정답 보기" 버튼을 눌러 확인하세요.';
+    fb.className = 'feedback no show';
+    card.classList.add('answered-ng');
+  }
+}
+
+function showAnswer(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터통신 5장 — 데이터 통신 기초</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3f4f6; --card-bg: #ffffff; --text: #1e293b; --text-sub: #64748b;
+    --border: #e2e8f0; --primary: #2563eb; --primary-light: #dbeafe;
+    --success: #16a34a; --success-light: #dcfce7;
+    --danger: #dc2626; --danger-light: #fee2e2;
+    --warning: #d97706; --warning-light: #fef3c7;
+    --purple: #7c3aed; --purple-light: #ede9fe;
+    --teal: #0d9488; --teal-light: #ccfbf1;
+    --nav-bg: rgba(255,255,255,0.95); --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] {
+    --bg: #0f172a; --card-bg: #1e293b; --text: #f1f5f9; --text-sub: #94a3b8;
+    --border: #334155; --primary-light: #1e3a8a; --success-light: #14532d;
+    --danger-light: #7f1d1d; --warning-light: #78350f;
+    --purple-light: #3b0764; --teal-light: #134e4a;
+    --nav-bg: rgba(15,23,42,0.97); --shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; transition: background 0.3s, color 0.3s; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--nav-bg); border-bottom: 1px solid var(--border); box-shadow: var(--shadow); backdrop-filter: blur(8px); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; padding: 8px 16px; }
+  .nav-inner a { font-size: 0.78rem; font-weight: 500; color: var(--text-sub); text-decoration: none; padding: 4px 8px; border-radius: 6px; transition: background 0.2s, color 0.2s; white-space: nowrap; }
+  .nav-inner a:hover { background: var(--primary-light); color: var(--primary); }
+  .nav-inner a.back { color: var(--primary); font-weight: 700; }
+  .nav-sep { color: var(--border); font-size: 0.9rem; }
+  #darkToggle { margin-left: auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; cursor: pointer; font-size: 0.82rem; color: var(--text); transition: background 0.2s; }
+  #darkToggle:hover { background: var(--primary-light); }
+  header { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; text-align: center; padding: 80px 16px 48px; }
+  .badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 16px; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 16px; }
+  header h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; margin-bottom: 10px; }
+  header p { font-size: 1rem; opacity: 0.85; }
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 16px 80px; }
+  section { margin-bottom: 56px; }
+  section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); border-left: 4px solid var(--primary); padding-left: 12px; margin-bottom: 24px; }
+  .card-grid { display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
+  @media(max-width:640px){ .card-grid { grid-template-columns: 1fr; } }
+  .card-grid-3 { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); }
+  @media(max-width:768px){ .card-grid-3 { grid-template-columns: repeat(2,1fr); } }
+  @media(max-width:480px){ .card-grid-3 { grid-template-columns: 1fr; } }
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); transition: transform 0.2s; }
+  .card:hover { transform: translateY(-2px); }
+  .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .card p, .card li { font-size: 0.9rem; color: var(--text-sub); }
+  .card ul { padding-left: 18px; }
+  .card ul li { margin-bottom: 4px; }
+  .c-blue { border-top: 4px solid #2563eb; }
+  .c-green { border-top: 4px solid #16a34a; }
+  .c-red { border-top: 4px solid #dc2626; }
+  .c-purple { border-top: 4px solid #7c3aed; }
+  .c-teal { border-top: 4px solid #0d9488; }
+  .c-orange { border-top: 4px solid #d97706; }
+  .c-pink { border-top: 4px solid #db2777; }
+  .c-sky { border-top: 4px solid #0284c7; }
+  .goal-list { display: flex; flex-direction: column; gap: 12px; }
+  .goal-item { display: flex; align-items: flex-start; gap: 14px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; box-shadow: var(--shadow); }
+  .goal-num { min-width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+  .goal-item p { font-size: 0.92rem; color: var(--text); }
+  .formula-box { background: var(--primary-light); border: 1px solid #bfdbfe; border-radius: 10px; padding: 16px 20px; margin: 12px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: var(--primary); text-align: center; font-weight: 600; }
+  [data-theme="dark"] .formula-box { border-color: #1e40af; }
+  .example-box { background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 16px 0; }
+  .example-box .ex-title { font-weight: 700; font-size: 0.9rem; color: var(--primary); margin-bottom: 8px; }
+  .example-box p, .example-box li { font-size: 0.88rem; color: var(--text); }
+  .example-box ul { padding-left: 18px; }
+  .example-box .ex-ans { margin-top: 10px; padding: 10px 14px; background: var(--success-light); border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; color: var(--success); }
+  .catch-grid { display: grid; gap: 14px; grid-template-columns: repeat(2,1fr); }
+  @media(max-width:600px){ .catch-grid { grid-template-columns: 1fr; } }
+  .catch-item { background: var(--warning-light); border: 1px solid #fcd34d; border-radius: 10px; padding: 14px 18px; }
+  [data-theme="dark"] .catch-item { border-color: #92400e; }
+  .catch-item .catch-icon { font-size: 1.2rem; margin-bottom: 6px; }
+  .catch-item h4 { font-size: 0.92rem; font-weight: 700; color: var(--warning); margin-bottom: 4px; }
+  .catch-item p { font-size: 0.85rem; color: var(--text); }
+  .kw-grid { display: grid; gap: 12px; grid-template-columns: repeat(2,1fr); }
+  @media(max-width:600px){ .kw-grid { grid-template-columns: 1fr; } }
+  .kw-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .kw-card .kw-en { font-size: 0.78rem; color: var(--primary); font-weight: 600; margin-bottom: 2px; }
+  .kw-card .kw-ko { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+  .kw-card .kw-def { font-size: 0.83rem; color: var(--text-sub); }
+  .lc-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .lc-table th { background: var(--primary); color: white; padding: 10px 12px; text-align: left; font-weight: 600; }
+  .lc-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  .lc-table tr:hover td { background: var(--primary-light); }
+  .lc-wrap { overflow-x: auto; border-radius: 10px; box-shadow: var(--shadow); }
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .cmp-table th { background: var(--purple); color: white; padding: 10px 12px; text-align: center; font-weight: 600; }
+  .cmp-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: center; color: var(--text); }
+  .cmp-table tr:hover td { background: var(--purple-light); }
+  .cmp-wrap { overflow-x: auto; border-radius: 10px; box-shadow: var(--shadow); }
+  .tag { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+  .tag-blue { background: var(--primary-light); color: var(--primary); }
+  .tag-green { background: var(--success-light); color: var(--success); }
+  .tag-red { background: var(--danger-light); color: var(--danger); }
+  .tag-purple { background: var(--purple-light); color: var(--purple); }
+  .tag-orange { background: var(--warning-light); color: var(--warning); }
+  .sub-section { margin-bottom: 28px; }
+  .sub-section h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 16px; }
+  .quiz-section { margin-bottom: 32px; }
+  .quiz-section h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+  .q-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .q-stem { font-size: 0.92rem; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+  .q-opts { display: flex; flex-direction: column; gap: 8px; }
+  .q-opts button { text-align: left; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; font-size: 0.87rem; color: var(--text); transition: background 0.2s, color 0.2s; }
+  .q-opts button:hover:not(:disabled) { background: var(--primary-light); color: var(--primary); }
+  .q-feedback { display: none; font-size: 0.88rem; font-weight: 600; margin-top: 10px; }
+  .short-q { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+  .short-q input { flex: 1; min-width: 180px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 0.88rem; }
+  .short-q button { padding: 8px 18px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.87rem; white-space: nowrap; }
+  .short-q button:hover { background: #1d4ed8; }
+  #scrollTop { position: fixed; bottom: 24px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); display: none; align-items: center; justify-content: center; z-index: 99; }
+  #scrollTop.visible { display: flex; }
+  .topo-diagram { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 18px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text); white-space: pre; overflow-x: auto; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="./index.html" class="back">← 목록</a>
+    <span class="nav-sep">|</span>
+    <a href="#goals">학습목표</a>
+    <a href="#summary">핵심요약</a>
+    <a href="#line">회선접속</a>
+    <a href="#duplex">이용방식</a>
+    <a href="#trans">전송방식</a>
+    <a href="#interface">물리인터페이스</a>
+    <a href="#cast">캐스팅모드</a>
+    <a href="#topo">토폴로지</a>
+    <a href="#catch">핵심캐치</a>
+    <a href="#keywords">키워드</a>
+    <a href="#examples">예제풀이</a>
+    <a href="#quiz">연습문제</a>
+    <button id="darkToggle">🌙 야간모드</button>
+  </div>
+</nav>
+
+<header>
+  <div class="badge">제5장 · 데이터 통신 기초</div>
+  <h1>데이터통신 5장 — 데이터 통신 기초</h1>
+  <p>회선 접속·이용 방식 · 직렬/병렬 · 동기/비동기 · 물리 인터페이스 · 토폴로지</p>
+</header>
+
+<main>
+
+<!-- 학습 목표 -->
+<section id="goals">
+  <h2>🎯 학습 목표</h2>
+  <div class="goal-list">
+    <div class="goal-item"><div class="goal-num">1</div><p>통신 회선의 접속 방식(점대점·다중점·집선·다중)을 이해하고 설명할 수 있다.</p></div>
+    <div class="goal-item"><div class="goal-num">2</div><p>단방향(Simplex)·반이중(Half-duplex)·전이중(Full-duplex) 방식을 구분할 수 있다.</p></div>
+    <div class="goal-item"><div class="goal-num">3</div><p>직렬/병렬 전송과 동기식/비동기식 전송 방식의 종류와 특성, 전송 효율을 설명·계산할 수 있다.</p></div>
+    <div class="goal-item"><div class="goal-num">4</div><p>물리 인터페이스(EIA-232/449/530, X.21, V.35, USB)의 종류와 특성을 설명할 수 있다.</p></div>
+    <div class="goal-item"><div class="goal-num">5</div><p>캐스팅 모드(유니/애니/멀티/브로드캐스트)와 6가지 토폴로지의 의미·종류·장단점을 설명할 수 있다.</p></div>
+  </div>
+</section>
+
+<!-- 핵심 요약 -->
+<section id="summary">
+  <h2>📋 핵심 요약</h2>
+  <div class="card-grid">
+    <div class="card c-blue">
+      <h3>회선 구성과 링크</h3>
+      <ul>
+        <li><b>회선 구성(Line config.)</b>: 둘 이상의 장치가 하나의 링크에 연결되는 방식</li>
+        <li><b>링크(Link)</b>: 장치 간 데이터를 전달하는 물리적 통신 경로</li>
+        <li><b>변조(Modulation)</b>: 데이터를 반송파에 싣는 과정</li>
+      </ul>
+    </div>
+    <div class="card c-green">
+      <h3>회선 접속 4종</h3>
+      <ul>
+        <li>점대점 / 다중점 / 집선 / 다중</li>
+        <li>다중점 = 멀티드롭, 폴링·셀렉션·경쟁 사용</li>
+        <li>집선: 순차 독점 / 다중화: 주파수·시간 분할 동시 사용</li>
+      </ul>
+    </div>
+    <div class="card c-orange">
+      <h3>회선 이용 방식</h3>
+      <ul>
+        <li><b>Simplex</b>: TV·라디오 (단방향)</li>
+        <li><b>Half-duplex</b>: 무전기 (교대 송수신)</li>
+        <li><b>Full-duplex</b>: 전화·컴퓨터 통신 (동시 송수신)</li>
+      </ul>
+    </div>
+    <div class="card c-purple">
+      <h3>전송 방식</h3>
+      <ul>
+        <li>직렬 vs 병렬 (전송 회선 수)</li>
+        <li>직렬 → 비동기식(Start-stop) / 동기식(블록)</li>
+        <li>동기식 → 문자 위주(SYN/STX/ETX) / 비트 위주(Flag)</li>
+      </ul>
+    </div>
+    <div class="card c-red">
+      <h3>물리 인터페이스</h3>
+      <ul>
+        <li>DTE(컴퓨터) ↔ DCE(모뎀·DSU·라우터)</li>
+        <li>EIA-232: 25/9핀, 15m, 20Kbps</li>
+        <li>USB 3.0: 5Gbps, 전이중, 최대 127개</li>
+      </ul>
+    </div>
+    <div class="card c-teal">
+      <h3>토폴로지 6종</h3>
+      <ul>
+        <li>버스 / 스타 / 링 / 메쉬 / 트리 / 혼합</li>
+        <li>메쉬 회선 수: n(n−1)/2, 포트 수: n−1</li>
+        <li>스타·트리: 허브 고장 시 전체 마비</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 통신 회선 접속 방식 -->
+<section id="line">
+  <h2>🔌 01. 통신 회선의 접속 방식</h2>
+
+  <div class="sub-section">
+    <h3>① 점대점 회선 방식 (Point-to-point) <span class="tag tag-blue">PPP</span></h3>
+    <div class="card c-blue">
+      <ul>
+        <li>두 장치를 <b>전용 회선</b>으로 직접 연결, 채널 용량을 두 장치가 독점</li>
+        <li>응답 속도가 빨라 <b>고속 처리</b>에 이용</li>
+        <li>TCP/IP 환경에서 <b>PPP(Point-to-Point Protocol)</b>로 두 노드 1:1 연결</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>② 다중점 회선 방식 (Multipoint, 멀티드롭) <span class="tag tag-green">공유</span></h3>
+    <div class="card c-green">
+      <ul>
+        <li>3개 이상의 장치가 <b>하나의 링크를 공유</b></li>
+        <li>데이터 전송: <b>폴링(Polling) + 셀렉션(Selection)</b>, 또는 경쟁(Contention) 방식</li>
+        <li>단말당 송수신 데이터가 적을 때 효과적, 회선 비용 절감</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>③ 집선 회선 방식 (Line concentration) <span class="tag tag-orange">독점</span></h3>
+    <div class="card c-orange">
+      <ul>
+        <li><b>집선 장치(Concentrator)</b>: 다수 입력 회선을 소수 출력 회선으로 집중화</li>
+        <li>저속 단말 데이터를 모아 컴퓨터로 <b>고속 전송</b></li>
+        <li>단말 수 m, 채널 수 n일 때 <b>m &gt; n</b></li>
+        <li>도착 순서대로 <b>한 단말이 회선을 독점</b> 사용</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>④ 다중 회선 방식 (Multiplexing) <span class="tag tag-purple">동시</span></h3>
+    <div class="card c-purple">
+      <ul>
+        <li>다중화 장비로 <b>주파수·시간을 분할</b>하여 여러 단말이 <b>동시에</b> 회선 사용</li>
+        <li>집선과 유사하지만 동시 사용 가능 (집선은 순차 독점)</li>
+        <li>고속 단일 링크를 다수의 저속 단말이 공유</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cmp-wrap">
+    <table class="cmp-table">
+      <thead><tr><th>구분</th><th>점대점</th><th>다중점</th><th>집선</th><th>다중</th></tr></thead>
+      <tbody>
+        <tr><td>장치 수</td><td>2개</td><td>3개 이상</td><td>다수</td><td>다수</td></tr>
+        <tr><td>링크 사용</td><td>독점</td><td>공유(폴링)</td><td>순차 독점</td><td>동시 공유</td></tr>
+        <tr><td>속도</td><td>고속</td><td>저속</td><td>저→고속</td><td>저→고속</td></tr>
+        <tr><td>대표 예</td><td>PPP</td><td>멀티드롭</td><td>Concentrator</td><td>FDM/TDM</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 통신 회선 이용 방식 -->
+<section id="duplex">
+  <h2>↔️ 02. 통신 회선의 이용 방식</h2>
+  <div class="card-grid-3">
+    <div class="card c-blue">
+      <h3>단방향 (Simplex)</h3>
+      <p>한쪽은 <b>송신만</b>, 다른 쪽은 <b>수신만</b>. 채널은 늘 한 방향.</p>
+      <p style="margin-top:8px;"><b>예:</b> TV, 라디오 방송, 켜기/끄기 신호</p>
+    </div>
+    <div class="card c-orange">
+      <h3>반이중 (Half-duplex)</h3>
+      <p>송수신 모두 가능하지만 <b>동시 불가</b>. 시간상 교대로 데이터 교환.</p>
+      <p style="margin-top:8px;"><b>예:</b> 무전기(워키토키)</p>
+    </div>
+    <div class="card c-green">
+      <h3>전이중 (Full-duplex)</h3>
+      <p>양쪽이 <b>동시에 송수신</b>. 링크 용량을 양방향으로 공유 → 회선 사용 효율 높음.</p>
+      <p style="margin-top:8px;"><b>예:</b> 전화, 일반 컴퓨터 통신</p>
+    </div>
+  </div>
+</section>
+
+<!-- 데이터 전송 방식 -->
+<section id="trans">
+  <h2>📡 03. 데이터 전송 방식</h2>
+  <p style="margin-bottom:16px; color:var(--text-sub);">
+    <b>동기화(Synchronization)</b>: 송신측에서 정보의 시작과 끝을 알려, 수신측이 올바르게 수신하도록 하는 절차.
+  </p>
+  <div class="topo-diagram">데이터 전송 ─┬─ 병렬 전송
+            └─ 직렬 전송 ─┬─ 비동기식 전송
+                         └─ 동기식 전송 ─┬─ 문자 위주
+                                        └─ 비트 위주</div>
+
+  <div class="sub-section" style="margin-top:24px;">
+    <h3>① 직렬 전송 vs ② 병렬 전송</h3>
+    <div class="cmp-wrap">
+      <table class="cmp-table">
+        <thead><tr><th>항목</th><th>직렬 전송 (Serial)</th><th>병렬 전송 (Parallel)</th></tr></thead>
+        <tbody>
+          <tr><td>비트 전송</td><td>한 번에 1비트씩 순차</td><td>여러 비트 동시 전송</td></tr>
+          <tr><td>회선 수</td><td>1개</td><td>비트 수만큼</td></tr>
+          <tr><td>거리</td><td>원거리 적합</td><td>단거리(컴퓨터-주변기기)</td></tr>
+          <tr><td>비용</td><td>경제적</td><td>회선 비용 큼</td></tr>
+          <tr><td>변환기</td><td>병렬↔직렬 변환기 필요(시프트 레지스터)</td><td>불필요</td></tr>
+          <tr><td>예</td><td>RS-232C, USB</td><td>컴퓨터 내부 버스</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>③ 비동기식 전송 (Asynchronous, Start-stop) <span class="tag tag-orange">저속</span></h3>
+    <div class="card c-orange">
+      <ul>
+        <li>송수신 클럭을 일치시키는 절차 없음</li>
+        <li><b>시작 비트(1) + 데이터(5~8비트) + 패리티 + 종료 비트(1·1.5·2)</b></li>
+        <li>휴지 상태(Idle)에서는 비트 1을 계속 전송</li>
+        <li>문자마다 2~3 비트의 <b>오버헤드</b> → 전송 효율 낮음</li>
+        <li>동기는 <b>문자 단위</b>, 송수신이 항상 동기 상태일 필요 없음</li>
+      </ul>
+    </div>
+    <div class="formula-box">전송 효율 = (정보 비트 수 / 전체 비트 수) × 100 [%]</div>
+  </div>
+
+  <div class="sub-section">
+    <h3>④ 동기식 전송 (Synchronous) <span class="tag tag-green">고속</span></h3>
+    <div class="card c-green">
+      <ul>
+        <li><b>블록 단위</b>로 전송, 동기 신호로 시작·끝 구분</li>
+        <li>고속 데이터 통신에 사용, 단말은 반드시 <b>버퍼</b> 보유</li>
+        <li>한 묶음(Packet) 내에서 <b>휴지 간격 없음</b></li>
+      </ul>
+    </div>
+
+    <div class="card-grid" style="margin-top:14px;">
+      <div class="card c-purple">
+        <h3>문자 위주 방식</h3>
+        <p>제어 문자(SYN, STX, ETX 등) 사용</p>
+        <p style="margin-top:6px; font-family:'JetBrains Mono',monospace; font-size:0.8rem;">
+          [SYN][SYN][SOH][Heading][STX][data][ETX/ETB][BCC]
+        </p>
+      </div>
+      <div class="card c-teal">
+        <h3>비트 위주 방식</h3>
+        <p>플래그(Flag, 8비트) 사용 → 프레임 단위 전송. 대용량 전송에 유리.</p>
+        <p style="margin-top:6px; font-family:'JetBrains Mono',monospace; font-size:0.8rem;">
+          [Flag 8b][데이터][Flag 8b]
+        </p>
+      </div>
+    </div>
+
+    <div class="lc-wrap" style="margin-top:14px;">
+      <table class="lc-table">
+        <thead><tr><th>문자</th><th>의미</th><th>기능</th><th>코드(16진수)</th></tr></thead>
+        <tbody>
+          <tr><td>SYN</td><td>Synchronization</td><td>문자 동기</td><td>16H</td></tr>
+          <tr><td>SOH</td><td>Start of Header</td><td>헤더의 시작</td><td>01H</td></tr>
+          <tr><td>STX</td><td>Start of Text</td><td>본문 시작 / 헤더 종료</td><td>02H</td></tr>
+          <tr><td>ETX</td><td>End of Text</td><td>본문 종료</td><td>03H</td></tr>
+          <tr><td>ETB</td><td>End of Transmission Block</td><td>블록 종료</td><td>17H</td></tr>
+          <tr><td>EOT</td><td>End of Transmission</td><td>전송 종료 / 데이터링크 해제</td><td>04H</td></tr>
+          <tr><td>ENQ</td><td>Enquiry</td><td>데이터링크 설정/응답 요구</td><td>05H</td></tr>
+          <tr><td>DLE</td><td>Data Link Escape</td><td>제어 문자를 데이터로 취급</td><td>10H</td></tr>
+          <tr><td>ACK</td><td>Acknowledgement</td><td>긍정 응답</td><td>06H</td></tr>
+          <tr><td>NAK</td><td>Negative Acknowledgement</td><td>부정 응답</td><td>15H</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 물리 인터페이스 -->
+<section id="interface">
+  <h2>🔧 04. 물리 인터페이스</h2>
+
+  <div class="sub-section">
+    <h3>DTE - DCE 인터페이스</h3>
+    <div class="card-grid">
+      <div class="card c-blue">
+        <h3>DTE (Data Terminal Equipment)</h3>
+        <p>정보 처리 장치 = <b>컴퓨터, 단말</b></p>
+      </div>
+      <div class="card c-green">
+        <h3>DCE (Data Circuit-terminating Equipment)</h3>
+        <p>DTE와 전송 매체 사이 데이터 전송 담당 = <b>모뎀, DSU, 라우터</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>주요 인터페이스 규격 비교</h3>
+    <div class="cmp-wrap">
+      <table class="cmp-table">
+        <thead><tr><th>규격</th><th>커넥터</th><th>거리</th><th>속도</th><th>특징</th></tr></thead>
+        <tbody>
+          <tr><td><b>EIA-232</b></td><td>25핀(DB-25) / 9핀(DB-9)</td><td>15m 이내</td><td>20Kbps 이하</td><td>모뎀 접속, 직렬 전송</td></tr>
+          <tr><td><b>EIA-449</b></td><td>37핀(DB-37)+9핀</td><td>100m 이상</td><td>10Mbps</td><td>고속 통신용</td></tr>
+          <tr><td><b>EIA-530</b></td><td>25핀(DB-25)</td><td>100m 이상</td><td>2Mbps 이상</td><td>EIA-449 변형</td></tr>
+          <tr><td><b>X.21</b></td><td>15핀(DB-15)</td><td>—</td><td>600bps~64Kbps</td><td>회선교환망, 전이중·동기식</td></tr>
+          <tr><td><b>V.35</b></td><td>34핀(직사각형)</td><td>—</td><td>6Mbps</td><td>라우터-라우터 직결</td></tr>
+          <tr><td><b>USB 3.0</b></td><td>type-A/B/C</td><td>5m 이내</td><td>5Gbps 전이중</td><td>최대 127개, 다중 스타형</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>EIA-232 주요 핀 기능</h3>
+    <div class="lc-wrap">
+      <table class="lc-table">
+        <thead><tr><th>핀명</th><th>의미</th><th>9핀</th><th>25핀</th><th>방향</th><th>기능</th></tr></thead>
+        <tbody>
+          <tr><td>TXD</td><td>Transmit Data</td><td>3</td><td>2</td><td>DTE→DCE</td><td>송신 데이터</td></tr>
+          <tr><td>RXD</td><td>Receive Data</td><td>2</td><td>3</td><td>DTE←DCE</td><td>수신 데이터</td></tr>
+          <tr><td>GND</td><td>Ground</td><td>5</td><td>7</td><td>—</td><td>접지</td></tr>
+          <tr><td>RTS</td><td>Ready To Send</td><td>7</td><td>4</td><td>DTE→DCE</td><td>전송 요구</td></tr>
+          <tr><td>CTS</td><td>Clear To Send</td><td>8</td><td>5</td><td>DTE←DCE</td><td>전송 요구 응답</td></tr>
+          <tr><td>DTR</td><td>DTE Ready</td><td>4</td><td>20</td><td>DTE→DCE</td><td>DTE 준비됨</td></tr>
+          <tr><td>DSR</td><td>DCE Ready</td><td>6</td><td>6</td><td>DTE←DCE</td><td>DCE 준비됨</td></tr>
+          <tr><td>DCD</td><td>Data Carrier Detect</td><td>1</td><td>8</td><td>DTE←DCE</td><td>캐리어 감지</td></tr>
+          <tr><td>RI</td><td>Ring Indicator</td><td>9</td><td>22</td><td>DTE←DCE</td><td>회선 호출</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>관련 개념</h3>
+    <div class="card-grid">
+      <div class="card c-purple">
+        <h3>널 모뎀 (Null MODEM)</h3>
+        <p>모뎀 없이 두 컴퓨터를 케이블로 직접 연결 (Crossover cable). 15m 이내, 20Kbps.</p>
+      </div>
+      <div class="card c-teal">
+        <h3>UART</h3>
+        <p>EIA-232와 <b>논리 호환</b>, 물리 규격은 다름. UART(0~5V TTL) ↔ EIA(±12V). 변환 IC: MAX232.</p>
+      </div>
+      <div class="card c-orange">
+        <h3>불균형 vs 균형 모드</h3>
+        <p><b>불균형(Unbalanced)</b>: 짧은 거리·저속·저비용 / <b>균형(Balanced)</b>: 보수 신호로 잡음 제거, 더 높은 전송률</p>
+      </div>
+      <div class="card c-blue">
+        <h3>USB 속도</h3>
+        <p>USB 1.0 = 12Mbps / USB 2.0 = 480Mbps(반이중) / USB 3.0 = 5Gbps(전이중). OTG: 4번 핀, 스마트폰을 호스트로.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 캐스팅 모드 -->
+<section id="cast">
+  <h2>📢 05. 캐스팅 모드의 전송 방식</h2>
+  <div class="card-grid">
+    <div class="card c-blue">
+      <h3>유니캐스트 (Unicast)</h3>
+      <p>송신 노드 1 ↔ 수신 노드 1 (1:1 통신)</p>
+    </div>
+    <div class="card c-green">
+      <h3>애니캐스트 (Anycast) <span class="tag tag-blue">IPv6</span></h3>
+      <p>수신 가능한 노드 중 <b>한 노드에만</b> 전송</p>
+    </div>
+    <div class="card c-purple">
+      <h3>멀티캐스트 (Multicast) <span class="tag tag-blue">IPv6</span></h3>
+      <p>하나 이상의 <b>지정된 수신 노드 그룹</b>에 전송</p>
+    </div>
+    <div class="card c-red">
+      <h3>브로드캐스트 (Broadcast) <span class="tag tag-orange">IPv4</span></h3>
+      <p>수신 가능한 <b>모든 노드</b>에 전송</p>
+    </div>
+  </div>
+</section>
+
+<!-- 토폴로지 -->
+<section id="topo">
+  <h2>🌐 06. 토폴로지 (Topology)</h2>
+  <p style="margin-bottom:16px; color:var(--text-sub);">
+    물리적 또는 논리적인 네트워크 배치 방식. 링크와 노드 간 관계를 기하학적으로 표현.
+  </p>
+
+  <div class="sub-section">
+    <h3>① 버스형 (Bus)</h3>
+    <div class="card-grid">
+      <div class="card c-blue">
+        <h3>특징</h3>
+        <ul>
+          <li>공통 배선(버스)을 모든 노드가 공유, LAN의 일반적 방식</li>
+          <li>탭(Tap)·유도선(Drop line)으로 노드 연결</li>
+          <li>한 노드 전송 → <b>브로드캐스트</b>로 모든 노드 수신</li>
+        </ul>
+      </div>
+      <div class="card c-green">
+        <h3>장점 / 단점</h3>
+        <ul>
+          <li>👍 설치 간단·저렴, 링크 길이 최소화, 노드 오류 영향 적음</li>
+          <li>👎 <b>버스 고장 시 전체 마비</b>, 둘 이상 동시 전송 시 충돌, 노드 수 증가 시 성능 저하</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>② 스타형 (Star)</h3>
+    <div class="card-grid">
+      <div class="card c-blue">
+        <h3>특징</h3>
+        <ul>
+          <li>각 노드는 <b>중앙 허브</b>와 점대점 연결</li>
+          <li>중앙 허브가 통신 제어 권한·책임</li>
+          <li>모든 전송은 허브를 통해 중계</li>
+        </ul>
+      </div>
+      <div class="card c-green">
+        <h3>장점 / 단점</h3>
+        <ul>
+          <li>👍 설치 비용 저렴(노드당 링크 1개), 고장 발견 쉬움, 노드 증설 쉬움, 한 링크 끊겨도 다른 링크 영향 없음</li>
+          <li>👎 <b>허브 장애 = 전체 마비</b>, 링크 수 많음, 데이터 증가 시 지연</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>③ 링형 (Ring)</h3>
+    <div class="card-grid">
+      <div class="card c-blue">
+        <h3>특징</h3>
+        <ul>
+          <li>각 노드는 양쪽 노드와 점대점 연결</li>
+          <li>신호는 <b>한 방향</b>으로 링을 따라 순환</li>
+        </ul>
+      </div>
+      <div class="card c-green">
+        <h3>장점 / 단점</h3>
+        <ul>
+          <li>👍 설치·재구성 쉬움, 스타형보다 링크 짧음(경제적), 장애 노드 파악 쉬움</li>
+          <li>👎 제어 절차 복잡, 노드 1개 장애로 전체 마비 → <b>이중 링</b>으로 해결, 노드 추가 시 링 절단 필요</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>④ 메쉬형 (Mesh)</h3>
+    <div class="card c-purple">
+      <h3>특징</h3>
+      <ul>
+        <li>모든 노드 간 <b>점대점 직접 연결</b></li>
+        <li>장애 시 대체 경로 전달 가능</li>
+        <li>링형과 함께 <b>네트워크 백본</b> 구성에 사용</li>
+      </ul>
+      <div class="formula-box" style="margin-top:12px;">물리 채널 수 = n(n−1)/2 &nbsp;|&nbsp; 입출력 포트 수 = (n−1)</div>
+    </div>
+    <div class="card-grid" style="margin-top:14px;">
+      <div class="card c-green"><h3>장점</h3><ul><li>신뢰성 우수</li><li>고장 발견 쉬움</li><li>다른 트래픽 영향 최소</li></ul></div>
+      <div class="card c-red"><h3>단점</h3><ul><li>선로 구축 비용 많음</li><li>설치·설정 복잡, 시간 소요</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>⑤ 트리형 (Tree)</h3>
+    <div class="card-grid">
+      <div class="card c-blue">
+        <h3>특징</h3>
+        <ul>
+          <li>스타형의 변형, 중앙 허브는 <b>능동적 허브(중계기 기능)</b></li>
+          <li>대부분 노드는 2차 허브에 연결(능동/수동)</li>
+          <li>2차 허브로 <b>통신 분리·우선순위 부여</b> 가능</li>
+        </ul>
+      </div>
+      <div class="card c-green">
+        <h3>장점 / 단점</h3>
+        <ul>
+          <li>👍 고장 발견·노드 증설 쉬움, 1차 허브에 많은 노드 연결, 우선순위 부여</li>
+          <li>👎 <b>중앙 허브 병목 현상</b>, 중앙 허브 장애 시 마비/분할</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>⑥ 혼합형 (Hybrid)</h3>
+    <div class="card c-teal">
+      <ul>
+        <li>네트워크 규모·용도에 따라 다양한 형태 결합</li>
+        <li>여러 LAN을 연결한 <b>MAN/WAN</b>에서 자주 등장</li>
+        <li>여러 종류 기술 사용 → <b>관리가 어려움</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 핵심 캐치 -->
+<section id="catch">
+  <h2>🎯 핵심 캐치 — 시험 빈출</h2>
+  <div class="catch-grid">
+    <div class="catch-item">
+      <div class="catch-icon">🏆</div>
+      <h4>다중점 = 멀티드롭, 폴링·셀렉션</h4>
+      <p>다중점(Multipoint) 회선의 데이터 전송은 <b>폴링(Polling) + 셀렉션(Selection)</b>으로 수행 (경쟁 방식도 있음).</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">⚡</div>
+      <h4>집선 vs 다중화</h4>
+      <p>집선 = <b>도착 순서대로 한 단말이 독점</b>, 다중화 = <b>주파수·시간 분할로 동시 사용</b>.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">📞</div>
+      <h4>이용 방식 예시 암기</h4>
+      <p>Simplex = TV/라디오 / Half-duplex = 무전기 / Full-duplex = 전화·컴퓨터 통신</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">🧮</div>
+      <h4>전송 효율 공식</h4>
+      <p><b>(정보 비트 / 전체 비트) × 100%</b>. 비동기식은 시작·종료 비트 포함, 동기식은 SYN/STX/ETX 포함.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">🔌</div>
+      <h4>EIA-232 핵심 수치</h4>
+      <p><b>15m 이내, 20Kbps 이하</b>, 25/9핀 커넥터. UART는 논리 호환(TTL ↔ ±12V).</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">🌐</div>
+      <h4>메쉬 회선·포트 수</h4>
+      <p>회선 = <b>n(n−1)/2</b>, 각 노드 포트 = <b>n−1</b>. 백본망 구성에 사용.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">🔁</div>
+      <h4>토폴로지 단점 패턴</h4>
+      <p>버스 = 충돌·버스 고장, 스타·트리 = <b>중앙 허브 고장 시 전체 마비</b>, 링 = 단일 노드 장애로 마비(이중링으로 해결).</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">📡</div>
+      <h4>캐스팅 모드 구분</h4>
+      <p>Anycast = <b>IPv6 신규</b> / Multicast = IPv6 / Broadcast = <b>IPv4</b> (IPv6에는 브로드캐스트 없음).</p>
+    </div>
+  </div>
+</section>
+
+<!-- 핵심 키워드 -->
+<section id="keywords">
+  <h2>🔑 핵심 키워드</h2>
+  <div class="kw-grid">
+    <div class="kw-card"><div class="kw-en">Line Configuration</div><div class="kw-ko">회선 구성</div><div class="kw-def">둘 이상의 장치가 하나의 링크에 연결되는 방식</div></div>
+    <div class="kw-card"><div class="kw-en">Modulation</div><div class="kw-ko">변조</div><div class="kw-def">데이터를 반송파(carrier)에 싣는 과정</div></div>
+    <div class="kw-card"><div class="kw-en">Polling / Selection</div><div class="kw-ko">폴링 / 셀렉션</div><div class="kw-def">다중점 회선에서 송수신 차례를 제어하는 방식</div></div>
+    <div class="kw-card"><div class="kw-en">Concentrator</div><div class="kw-ko">집선 장치</div><div class="kw-def">다수 입력 회선을 소수 출력 회선으로 집중화하는 장비</div></div>
+    <div class="kw-card"><div class="kw-en">Simplex / Half / Full Duplex</div><div class="kw-ko">단방향 / 반이중 / 전이중</div><div class="kw-def">송수신 방향과 동시성에 따른 분류</div></div>
+    <div class="kw-card"><div class="kw-en">Synchronization</div><div class="kw-ko">동기화</div><div class="kw-def">송수신 측이 정보의 시작·끝을 일치시키는 절차</div></div>
+    <div class="kw-card"><div class="kw-en">Start-stop</div><div class="kw-ko">비동기식 전송</div><div class="kw-def">시작 비트·종료 비트로 문자 단위 동기 (저속용)</div></div>
+    <div class="kw-card"><div class="kw-en">SYN / STX / ETX / Flag</div><div class="kw-ko">동기 제어 문자/플래그</div><div class="kw-def">동기식 전송에서 블록·프레임의 시작·끝을 표시</div></div>
+    <div class="kw-card"><div class="kw-en">DTE / DCE</div><div class="kw-ko">데이터 단말 / 회선종단 장비</div><div class="kw-def">DTE = 컴퓨터, DCE = 모뎀·DSU·라우터</div></div>
+    <div class="kw-card"><div class="kw-en">UART</div><div class="kw-ko">범용 비동기 송수신기</div><div class="kw-def">EIA-232와 논리 호환, TTL 레벨 사용</div></div>
+    <div class="kw-card"><div class="kw-en">Null MODEM</div><div class="kw-ko">널 모뎀</div><div class="kw-def">모뎀 없이 두 컴퓨터를 케이블로 직접 연결 (Crossover)</div></div>
+    <div class="kw-card"><div class="kw-en">OTG (On-The-Go)</div><div class="kw-ko">OTG</div><div class="kw-def">USB 4번 핀 활용, 스마트폰·태블릿이 호스트 역할 가능</div></div>
+    <div class="kw-card"><div class="kw-en">Unicast / Anycast / Multicast / Broadcast</div><div class="kw-ko">캐스팅 모드</div><div class="kw-def">송수신 노드 수에 따른 전송 방식 분류</div></div>
+    <div class="kw-card"><div class="kw-en">Topology</div><div class="kw-ko">토폴로지</div><div class="kw-def">네트워크 노드와 링크의 기하학적 배치</div></div>
+    <div class="kw-card"><div class="kw-en">Tap / Drop line</div><div class="kw-ko">탭 / 유도선</div><div class="kw-def">버스형 토폴로지에서 노드를 버스에 연결하는 부품</div></div>
+    <div class="kw-card"><div class="kw-en">Backbone</div><div class="kw-ko">백본</div><div class="kw-def">메쉬·링형으로 구성하는 네트워크의 중심 회선</div></div>
+  </div>
+</section>
+
+<!-- 예제 -->
+<section id="examples">
+  <h2>📝 예제 풀이</h2>
+
+  <div class="example-box">
+    <div class="ex-title">예제 5-1. 직렬 → 8비트 병렬로 변경 시 속도 향상은?</div>
+    <p>병렬 전송은 동시에 8비트를 전송하므로 직렬 대비 <b>8배</b>의 전송 속도 향상이 예상된다.</p>
+    <div class="ex-ans">∴ 8배 향상</div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 5-2. 7비트 문자 + 시작 1비트 + 종료 1비트 비동기식 전송 효율</div>
+    <p>전송 효율 = 정보 비트 ÷ 전체 비트</p>
+    <div class="ex-ans">전송 효율 = 7 / (1+7+1) × 100 = 7/9 × 100 ≈ 77.78 %</div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 5-3. 문자 위주 동기식 전송 효율 (STX 8b, ETX 8b, 100문자×8b)</div>
+    <p><b>동기식:</b> 800 / (8 + 800 + 8) × 100 = 800/816 × 100 ≈ <b>98 %</b></p>
+    <p style="margin-top:6px;"><b>비동기식 비교:</b> 800 / (100 + 800 + 100) × 100 = 800/1000 × 100 = <b>80 %</b></p>
+    <div class="ex-ans">동기식이 비동기식보다 전송 효율이 훨씬 높다 (98% vs 80%)</div>
+  </div>
+
+  <div class="example-box">
+    <div class="ex-title">예제 5-4. 메쉬형 토폴로지에서 노드 120개일 때 전체 회선 수</div>
+    <p>회선 수 = n(n−1)/2 = 120 × 119 / 2</p>
+    <div class="ex-ans">∴ 120 × 119 / 2 = 7,140 개</div>
+  </div>
+</section>
+
+<!-- 연습문제 -->
+<section id="quiz">
+  <h2>📝 연습문제</h2>
+
+  <div class="quiz-section">
+    <h3>객관식 문제</h3>
+
+    <div class="q-item">
+      <div class="q-stem">Q1. 3개 이상의 장치가 하나의 링크를 공유하며, 폴링과 셀렉션으로 데이터를 전송하는 회선 접속 방식은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb1')">① 점대점 회선 방식</button>
+        <button onclick="answerMC(this, true, 'fb1')">② 다중점 회선 방식</button>
+        <button onclick="answerMC(this, false, 'fb1')">③ 집선 회선 방식</button>
+        <button onclick="answerMC(this, false, 'fb1')">④ 다중 회선 방식</button>
+      </div>
+      <div class="q-feedback" id="fb1"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q2. 양쪽 단말 장치가 동시에 송신과 수신을 할 수 있는 통신 방식은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb2')">① Simplex (단방향)</button>
+        <button onclick="answerMC(this, false, 'fb2')">② Half-duplex (반이중)</button>
+        <button onclick="answerMC(this, true, 'fb2')">③ Full-duplex (전이중)</button>
+        <button onclick="answerMC(this, false, 'fb2')">④ Multipoint (다중점)</button>
+      </div>
+      <div class="q-feedback" id="fb2"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q3. 비동기식 전송에 대한 설명으로 올바른 것은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb3')">① 블록 단위로 전송하며 SYN 문자를 사용한다.</button>
+        <button onclick="answerMC(this, true, 'fb3')">② 시작·종료 비트로 문자 단위 동기를 맞추며 저속에 적합하다.</button>
+        <button onclick="answerMC(this, false, 'fb3')">③ 휴지 상태에서 비트 0을 전송한다.</button>
+        <button onclick="answerMC(this, false, 'fb3')">④ 동기 신호로 플래그(Flag)를 사용한다.</button>
+      </div>
+      <div class="q-feedback" id="fb3"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q4. EIA-232의 표준 전송 거리와 속도로 옳은 것은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb4')">① 100m, 10Mbps</button>
+        <button onclick="answerMC(this, true, 'fb4')">② 15m, 20Kbps 이하</button>
+        <button onclick="answerMC(this, false, 'fb4')">③ 5m, 5Gbps</button>
+        <button onclick="answerMC(this, false, 'fb4')">④ 100m, 2Mbps</button>
+      </div>
+      <div class="q-feedback" id="fb4"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q5. 다음 중 IPv6에서 새로 도입된 캐스팅 모드는?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb5')">① Unicast</button>
+        <button onclick="answerMC(this, true, 'fb5')">② Anycast</button>
+        <button onclick="answerMC(this, false, 'fb5')">③ Broadcast</button>
+        <button onclick="answerMC(this, false, 'fb5')">④ Multicast</button>
+      </div>
+      <div class="q-feedback" id="fb5"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q6. 중앙 허브의 장애가 곧 네트워크 전체의 마비를 의미하는 토폴로지는?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb6')">① 버스형</button>
+        <button onclick="answerMC(this, true, 'fb6')">② 스타형</button>
+        <button onclick="answerMC(this, false, 'fb6')">③ 메쉬형</button>
+        <button onclick="answerMC(this, false, 'fb6')">④ 링형</button>
+      </div>
+      <div class="q-feedback" id="fb6"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q7. 동기식 전송의 비트 위주 방식에서 동기 신호로 사용되는 것은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb7')">① SYN 문자</button>
+        <button onclick="answerMC(this, false, 'fb7')">② STX 문자</button>
+        <button onclick="answerMC(this, true, 'fb7')">③ Flag (8비트)</button>
+        <button onclick="answerMC(this, false, 'fb7')">④ Start bit</button>
+      </div>
+      <div class="q-feedback" id="fb7"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q8. USB 3.0의 전송 속도와 통신 방식은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb8')">① 480Mbps, 반이중</button>
+        <button onclick="answerMC(this, false, 'fb8')">② 12Mbps, 반이중</button>
+        <button onclick="answerMC(this, true, 'fb8')">③ 5Gbps, 전이중</button>
+        <button onclick="answerMC(this, false, 'fb8')">④ 5Gbps, 반이중</button>
+      </div>
+      <div class="q-feedback" id="fb8"></div>
+    </div>
+  </div>
+
+  <div class="quiz-section">
+    <h3>단답형 문제</h3>
+
+    <div class="q-item">
+      <div class="q-stem">Q9. 8비트 문자에 시작 비트 1개와 종료 비트 1개를 추가하여 비동기식으로 전송할 때 전송 효율(%)을 구하시오.</div>
+      <div class="short-q">
+        <input type="text" id="sq1" placeholder="답 입력 (단위: %)">
+        <button onclick="checkShort('sq1', ['80', '80%', '80 %'], 'sfb1', '8 / (1+8+1) × 100 = 8/10 × 100 = 80 %')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb1"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q10. 메쉬형 토폴로지에서 노드가 10개일 때 필요한 물리 회선의 수는?</div>
+      <div class="short-q">
+        <input type="text" id="sq2" placeholder="답 입력 (개)">
+        <button onclick="checkShort('sq2', ['45'], 'sfb2', 'n(n−1)/2 = 10 × 9 / 2 = 45 개')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb2"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q11. 문자 위주 동기식 전송에서 본문의 시작과 헤더의 종료를 알리는 제어 문자(영문 약어)는?</div>
+      <div class="short-q">
+        <input type="text" id="sq3" placeholder="답 입력">
+        <button onclick="checkShort('sq3', ['STX', 'stx'], 'sfb3', 'STX (Start of Text, 02H) — 본문의 시작이자 헤더의 종료를 의미')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb3"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q12. 두 컴퓨터를 모뎀 없이 케이블로 직접 연결하는 방식의 이름은? (영문)</div>
+      <div class="short-q">
+        <input type="text" id="sq4" placeholder="답 입력">
+        <button onclick="checkShort('sq4', ['Null MODEM', 'null modem', 'Null Modem', 'Crossover', 'crossover'], 'sfb4', 'Null MODEM (Crossover cable) — 15m 이내, 20Kbps')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb4"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q13. 메쉬형 토폴로지에서 노드 5개일 때 각 노드가 가져야 할 입출력 포트 수는?</div>
+      <div class="short-q">
+        <input type="text" id="sq5" placeholder="답 입력 (개)">
+        <button onclick="checkShort('sq5', ['4'], 'sfb5', '각 노드의 포트 수 = (n−1) = 5−1 = 4 개')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb5"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+const toggle = document.getElementById('darkToggle');
+const html = document.documentElement;
+function applyTheme(theme) {
+  html.setAttribute('data-theme', theme);
+  toggle.textContent = theme === 'dark' ? '☀️ 라이트모드' : '🌙 야간모드';
+}
+const saved = localStorage.getItem('theme') || 'light';
+applyTheme(saved);
+toggle.addEventListener('click', function() {
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', next);
+  applyTheme(next);
+});
+const scrollBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', function() {
+  scrollBtn.classList.toggle('visible', window.scrollY > 400);
+});
+function answerMC(btn, correct, feedbackId) {
+  const fb = document.getElementById(feedbackId);
+  if (correct) {
+    btn.style.background = '#dcfce7'; btn.style.color = '#16a34a'; btn.style.borderColor = '#16a34a';
+    fb.textContent = '✓ 정답!'; fb.style.color = '#16a34a';
+  } else {
+    btn.style.background = '#fee2e2'; btn.style.color = '#dc2626'; btn.style.borderColor = '#dc2626';
+    fb.textContent = '✗ 오답. 다시 생각해보세요.'; fb.style.color = '#dc2626';
+  }
+  fb.style.display = 'block';
+  btn.parentElement.querySelectorAll('button').forEach(function(b) { b.disabled = true; });
+}
+function checkShort(inputId, answers, feedbackId, explanation) {
+  var val = document.getElementById(inputId).value.trim();
+  var fb = document.getElementById(feedbackId);
+  var correct = answers.some(function(a) { return val.includes(a); });
+  if (correct) {
+    fb.textContent = '✓ 정답! ' + explanation; fb.style.color = '#16a34a';
+  } else {
+    fb.textContent = '✗ 다시 생각해보세요. 정답: ' + answers[0] + ' | ' + explanation; fb.style.color = '#dc2626';
+  }
+  fb.style.display = 'block';
+}
+</script>
+</body>
+</html>

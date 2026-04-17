@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터통신 6장 — 전송 매체</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3f4f6; --card-bg: #ffffff; --text: #1e293b; --text-sub: #64748b;
+    --border: #e2e8f0; --primary: #2563eb; --primary-light: #dbeafe;
+    --success: #16a34a; --success-light: #dcfce7;
+    --danger: #dc2626; --danger-light: #fee2e2;
+    --warning: #d97706; --warning-light: #fef3c7;
+    --purple: #7c3aed; --purple-light: #ede9fe;
+    --teal: #0d9488; --teal-light: #ccfbf1;
+    --nav-bg: rgba(255,255,255,0.95); --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] {
+    --bg: #0f172a; --card-bg: #1e293b; --text: #f1f5f9; --text-sub: #94a3b8;
+    --border: #334155; --primary-light: #1e3a8a; --success-light: #14532d;
+    --danger-light: #7f1d1d; --warning-light: #78350f;
+    --purple-light: #3b0764; --teal-light: #134e4a;
+    --nav-bg: rgba(15,23,42,0.97); --shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; transition: background 0.3s, color 0.3s; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--nav-bg); border-bottom: 1px solid var(--border); box-shadow: var(--shadow); backdrop-filter: blur(8px); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; padding: 8px 16px; }
+  .nav-inner a { font-size: 0.78rem; font-weight: 500; color: var(--text-sub); text-decoration: none; padding: 4px 8px; border-radius: 6px; transition: background 0.2s, color 0.2s; white-space: nowrap; }
+  .nav-inner a:hover { background: var(--primary-light); color: var(--primary); }
+  .nav-inner a.back { color: var(--primary); font-weight: 700; }
+  .nav-sep { color: var(--border); font-size: 0.9rem; }
+  #darkToggle { margin-left: auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; cursor: pointer; font-size: 0.82rem; color: var(--text); transition: background 0.2s; }
+  #darkToggle:hover { background: var(--primary-light); }
+  header { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; text-align: center; padding: 80px 16px 48px; }
+  .badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 16px; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 16px; }
+  header h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; margin-bottom: 10px; }
+  header p { font-size: 1rem; opacity: 0.85; }
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 16px 80px; }
+  section { margin-bottom: 56px; }
+  section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); border-left: 4px solid var(--primary); padding-left: 12px; margin-bottom: 24px; }
+  .card-grid { display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
+  @media(max-width:640px){ .card-grid { grid-template-columns: 1fr; } }
+  .card-grid-3 { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); }
+  @media(max-width:768px){ .card-grid-3 { grid-template-columns: repeat(2,1fr); } }
+  @media(max-width:480px){ .card-grid-3 { grid-template-columns: 1fr; } }
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); transition: transform 0.2s; }
+  .card:hover { transform: translateY(-2px); }
+  .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .card p, .card li { font-size: 0.9rem; color: var(--text-sub); }
+  .card ul { padding-left: 18px; }
+  .card ul li { margin-bottom: 4px; }
+  .c-blue { border-top: 4px solid #2563eb; }
+  .c-green { border-top: 4px solid #16a34a; }
+  .c-red { border-top: 4px solid #dc2626; }
+  .c-purple { border-top: 4px solid #7c3aed; }
+  .c-teal { border-top: 4px solid #0d9488; }
+  .c-orange { border-top: 4px solid #d97706; }
+  .c-pink { border-top: 4px solid #db2777; }
+  .c-sky { border-top: 4px solid #0284c7; }
+  .goal-list { display: flex; flex-direction: column; gap: 12px; }
+  .goal-item { display: flex; align-items: flex-start; gap: 14px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; box-shadow: var(--shadow); }
+  .goal-num { min-width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+  .goal-item p { font-size: 0.92rem; color: var(--text); }
+  .formula-box { background: var(--primary-light); border: 1px solid #bfdbfe; border-radius: 10px; padding: 16px 20px; margin: 12px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: var(--primary); text-align: center; font-weight: 600; }
+  [data-theme="dark"] .formula-box { border-color: #1e40af; }
+  .example-box { background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 16px 0; }
+  .example-box .ex-title { font-weight: 700; font-size: 0.9rem; color: var(--primary); margin-bottom: 8px; }
+  .example-box p, .example-box li { font-size: 0.88rem; color: var(--text); }
+  .example-box ul { padding-left: 18px; }
+  .example-box .ex-ans { margin-top: 10px; padding: 10px 14px; background: var(--success-light); border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; color: var(--success); }
+  .catch-grid { display: grid; gap: 14px; grid-template-columns: repeat(2,1fr); }
+  @media(max-width:600px){ .catch-grid { grid-template-columns: 1fr; } }
+  .catch-item { background: var(--warning-light); border: 1px solid #fcd34d; border-radius: 10px; padding: 14px 18px; }
+  [data-theme="dark"] .catch-item { border-color: #92400e; }
+  .catch-item .catch-icon { font-size: 1.2rem; margin-bottom: 6px; }
+  .catch-item h4 { font-size: 0.92rem; font-weight: 700; color: var(--warning); margin-bottom: 4px; }
+  .catch-item p { font-size: 0.85rem; color: var(--text); }
+  .kw-grid { display: grid; gap: 12px; grid-template-columns: repeat(2,1fr); }
+  @media(max-width:600px){ .kw-grid { grid-template-columns: 1fr; } }
+  .kw-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .kw-card .kw-en { font-size: 0.78rem; color: var(--primary); font-weight: 600; margin-bottom: 2px; }
+  .kw-card .kw-ko { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+  .kw-card .kw-def { font-size: 0.83rem; color: var(--text-sub); }
+  .lc-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .lc-table th { background: var(--primary); color: white; padding: 10px 12px; text-align: left; font-weight: 600; }
+  .lc-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  .lc-table tr:hover td { background: var(--primary-light); }
+  .lc-wrap { overflow-x: auto; border-radius: 10px; box-shadow: var(--shadow); }
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .cmp-table th { background: var(--purple); color: white; padding: 10px 12px; text-align: center; font-weight: 600; }
+  .cmp-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: center; color: var(--text); }
+  .cmp-table tr:hover td { background: var(--purple-light); }
+  .cmp-wrap { overflow-x: auto; border-radius: 10px; box-shadow: var(--shadow); }
+  .tag { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+  .tag-blue { background: var(--primary-light); color: var(--primary); }
+  .tag-green { background: var(--success-light); color: var(--success); }
+  .tag-red { background: var(--danger-light); color: var(--danger); }
+  .tag-purple { background: var(--purple-light); color: var(--purple); }
+  .tag-orange { background: var(--warning-light); color: var(--warning); }
+  .sub-section { margin-bottom: 28px; }
+  .sub-section h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 16px; }
+  .quiz-section { margin-bottom: 32px; }
+  .quiz-section h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+  .q-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .q-stem { font-size: 0.92rem; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+  .q-opts { display: flex; flex-direction: column; gap: 8px; }
+  .q-opts button { text-align: left; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; font-size: 0.87rem; color: var(--text); transition: background 0.2s, color 0.2s; }
+  .q-opts button:hover:not(:disabled) { background: var(--primary-light); color: var(--primary); }
+  .q-feedback { display: none; font-size: 0.88rem; font-weight: 600; margin-top: 10px; }
+  .short-q { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+  .short-q input { flex: 1; min-width: 180px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 0.88rem; }
+  .short-q button { padding: 8px 18px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.87rem; white-space: nowrap; }
+  .short-q button:hover { background: #1d4ed8; }
+  #scrollTop { position: fixed; bottom: 24px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); display: none; align-items: center; justify-content: center; z-index: 99; }
+  #scrollTop.visible { display: flex; }
+  .ascii-tree { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 18px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text); white-space: pre; overflow-x: auto; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="./index.html" class="back">← 목록</a>
+    <span class="nav-sep">|</span>
+    <a href="#goals">학습목표</a>
+    <a href="#summary">핵심요약</a>
+    <a href="#wired">유선매체</a>
+    <a href="#tp">트위스티드페어</a>
+    <a href="#coax">동축케이블</a>
+    <a href="#fiber">광케이블</a>
+    <a href="#wireless">무선매체</a>
+    <a href="#catch">핵심캐치</a>
+    <a href="#keywords">키워드</a>
+    <a href="#quiz">연습문제</a>
+    <button id="darkToggle">🌙 야간모드</button>
+  </div>
+</nav>
+
+<header>
+  <div class="badge">제6장 · 전송 매체</div>
+  <h1>데이터통신 6장 — 전송 매체</h1>
+  <p>Transmission Media · 트위스티드 페어, 동축, 광케이블, 라디오·마이크로파·적외선</p>
+</header>
+
+<main>
+
+<!-- 학습 목표 -->
+<section id="goals">
+  <h2>🎯 학습 목표</h2>
+  <div class="goal-list">
+    <div class="goal-item"><div class="goal-num">1</div><p>유선 매체(트위스티드 페어, 동축, 광케이블)의 종류·구조·특성과 등급별 차이를 설명할 수 있다.</p></div>
+    <div class="goal-item"><div class="goal-num">2</div><p>광케이블의 동작 원리(스넬의 법칙, 임계각)와 전파 방식(계단형/증가형 다중모드, 단일모드)을 비교할 수 있다.</p></div>
+    <div class="goal-item"><div class="goal-num">3</div><p>광섬유의 전송 손실(레일리, 흡수, 마이크로벤딩 등)과 분산(모드/재료/구조)의 원인을 설명할 수 있다.</p></div>
+    <div class="goal-item"><div class="goal-num">4</div><p>무선 매체(라디오파, 마이크로파, 적외선)의 주파수 대역·전파 방식·활용 분야를 설명할 수 있다.</p></div>
+    <div class="goal-item"><div class="goal-num">5</div><p>위성 마이크로파의 주파수 할당 원리와 고도별 위성(LEO/MEO/GEO) 종류·장단점을 설명할 수 있다.</p></div>
+  </div>
+</section>
+
+<!-- 핵심 요약 -->
+<section id="summary">
+  <h2>📋 핵심 요약</h2>
+  <div class="ascii-tree">전송 매체
+├── 유선 매체 (Wired, 유도 매체)
+│    ├── 트위스티드 페어 (TP) — UTP / FTP / STP / S-STP
+│    ├── 동축 케이블 (Coaxial)
+│    └── 광케이블 (Optical fiber) — 다중모드(계단/증가) / 단일모드
+└── 무선 매체 (Wireless, 비유도 매체)
+     ├── 라디오파 (3KHz ~ 1GHz) — 전방향성
+     ├── 마이크로파 (1GHz ~ 300GHz) — 지상/위성, 가시선 전파
+     └── 적외선파 (300GHz ~ 400THz) — 단거리, IrDA</div>
+
+  <div class="card-grid" style="margin-top:18px;">
+    <div class="card c-blue">
+      <h3>주파수와 전파 특성</h3>
+      <ul>
+        <li><b>높은 주파수</b>: 감쇠 큼 / 직진성 강함 / 정보량 많음 → 초고속 통신</li>
+        <li><b>낮은 주파수</b>: 감쇠 작음 / 회절성 강함 / 장거리 통신(해상·항공)</li>
+        <li>출력은 진행 거리의 제곱에 반비례하여 감쇠</li>
+      </ul>
+    </div>
+    <div class="card c-green">
+      <h3>유선 매체 데이터 전송률</h3>
+      <ul>
+        <li>UTP CAT.5E: 1Gbps, CAT.6E·7: 10Gbps</li>
+        <li>동축: 수백 Mbps, 차폐성 우수</li>
+        <li>광케이블: 50Km까지 중계기 없음 (TP/동축은 5Km마다)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 유선 매체 분류 -->
+<section id="wired">
+  <h2>🧵 01. 유선 매체</h2>
+  <p style="color:var(--text-sub); margin-bottom:16px;">
+    물리적인 도체나 부도체를 이용해 신호를 전달하는 매체 = <b>유도 매체(Guided)</b>
+  </p>
+</section>
+
+<!-- 트위스티드 페어 -->
+<section id="tp">
+  <h2>🔗 트위스티드 페어 (Twisted Pair)</h2>
+
+  <div class="sub-section">
+    <h3>기본 개념</h3>
+    <div class="card c-blue">
+      <ul>
+        <li>2개 이상의 <b>구리 도선</b>이 꼬인 형태, 각 도선은 절연체로 피복</li>
+        <li>도선 하나는 <b>신호 전달</b>, 다른 하나는 <b>접지(Ground)</b></li>
+        <li>도선을 꼬으면 단위 길이당 꼬임 횟수가 늘수록 잡음이 상쇄됨</li>
+        <li>전화선·LAN(100BASE-T·기가비트 이더넷)에서 광범위 사용</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>UTP 케이블 등급 (CAT.) <span class="tag tag-blue">EIA 표준</span></h3>
+    <div class="lc-wrap">
+      <table class="lc-table">
+        <thead><tr><th>등급</th><th>전송 속도</th><th>용도</th></tr></thead>
+        <tbody>
+          <tr><td>CAT.1</td><td>저속</td><td>전화선</td></tr>
+          <tr><td>CAT.2</td><td>4 Mbps</td><td>음성·저속 데이터</td></tr>
+          <tr><td>CAT.3</td><td>10 Mbps</td><td>전화 표준, 10BASE-T</td></tr>
+          <tr><td>CAT.4</td><td>16 Mbps</td><td>토큰링, 10BASE-T</td></tr>
+          <tr><td>CAT.5</td><td>100 Mbps</td><td>고속 이더넷(100BASE-T)</td></tr>
+          <tr><td><b>CAT.5E</b></td><td>1 Gbps</td><td>100MHz 대역폭, 기가비트 이더넷 (현재 주류)</td></tr>
+          <tr><td>CAT.6</td><td>1 Gbps</td><td>250MHz, 기가비트 이더넷</td></tr>
+          <tr><td>CAT.6E</td><td>10 Gbps</td><td>250MHz, 10GBase-T</td></tr>
+          <tr><td>CAT.7</td><td>10 Gbps</td><td>600MHz, 10GBase-T (S-STP)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>차폐 여부에 따른 분류</h3>
+    <div class="card-grid-3">
+      <div class="card c-green">
+        <h3>UTP <span class="tag tag-blue">주류</span></h3>
+        <p>Unshielded TP. 금속 박막 없이 플라스틱 피복만. 가장 저렴·유연. 최대 100m, 155MHz(CAT.5E).</p>
+      </div>
+      <div class="card c-orange">
+        <h3>FTP</h3>
+        <p>Foiled TP. 4쌍을 포일(금속 박막)로 한 번 감쌈. UTP보다 우수, 공장·PC방.</p>
+      </div>
+      <div class="card c-red">
+        <h3>STP</h3>
+        <p>Shielded TP. 각 쌍을 금속 박막으로 둘러쌈. 비싸고 설치 불편 → 거의 사용 안 함.</p>
+      </div>
+      <div class="card c-purple">
+        <h3>S-STP <span class="tag tag-blue">CAT.7</span></h3>
+        <p>Screened Shielded TP. 10기가비트 이더넷용, 각 쌍 + 전체에 차폐.</p>
+      </div>
+      <div class="card c-blue">
+        <h3>커넥터: RJ-45</h3>
+        <p>Register Jack, 8핀. 송신 1·2번, 수신 3·6번 (CAT.5 기준).</p>
+      </div>
+      <div class="card c-teal">
+        <h3>다이렉트 vs 크로스</h3>
+        <p>다이렉트: PC↔허브/스위치 (송수신 그대로). 크로스: PC↔PC, 허브↔허브 (송수신 교차).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 동축 케이블 -->
+<section id="coax">
+  <h2>📺 동축 케이블 (Coaxial Cable)</h2>
+
+  <div class="card-grid">
+    <div class="card c-blue">
+      <h3>구조와 특성</h3>
+      <ul>
+        <li>내부 도체 - 절연체 - 외부 도체(차폐) - 플라스틱 피복</li>
+        <li>구조 특성상 <b>차폐성 우수</b> → 외부 간섭 적음</li>
+        <li>주파수 특성이 TP보다 우수, <b>수백 Mbps</b> 가능</li>
+        <li>전력 손실 적음, 바다·땅 속 매설 가능</li>
+        <li>커넥터: <b>BNC 커넥터</b></li>
+      </ul>
+    </div>
+    <div class="card c-green">
+      <h3>RG 등급 (Radio Government)</h3>
+      <ul>
+        <li><b>RG-6</b> (75Ω): CATV, 위성 TV</li>
+        <li><b>RG-8</b> (50Ω): 10BASE5 LAN (Thick Ethernet)</li>
+        <li><b>RG-11</b> (75Ω): 10BASE5 LAN</li>
+        <li><b>RG-58</b> (50Ω): 10BASE2 LAN (Thin Ethernet)</li>
+        <li><b>RG-59</b> (75Ω): CATV</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 광케이블 -->
+<section id="fiber">
+  <h2>💡 광케이블 (Optical Fiber)</h2>
+
+  <div class="sub-section">
+    <h3>기본 원리</h3>
+    <div class="card c-blue">
+      <ul>
+        <li><b>가는 유리 섬유</b>를 이용해 정보 전달 → <b>전기적 간섭 없음</b></li>
+        <li>전송 속도 높고, 대역폭 넓고, 오류 적음</li>
+        <li>스넬의 법칙으로 빛의 굴절·전반사를 이용</li>
+      </ul>
+    </div>
+    <div class="formula-box" style="margin-top:12px;">스넬의 법칙: n₁ · sin θ₁ = n₂ · sin θ₂ &nbsp;|&nbsp; 임계각 θc = sin⁻¹(n₂/n₁)</div>
+  </div>
+
+  <div class="sub-section">
+    <h3>광섬유 구조</h3>
+    <div class="card-grid-3">
+      <div class="card c-blue">
+        <h3>코어 (Core)</h3>
+        <p><b>높은 굴절률</b>의 투명한 덮개. 빛이 통과하는 통로.</p>
+      </div>
+      <div class="card c-green">
+        <h3>클래딩 (Cladding)</h3>
+        <p>코어보다 <b>낮은 굴절률</b>, 코어 외부를 싸며 빛을 반사. 표준 지름 125μm.</p>
+      </div>
+      <div class="card c-orange">
+        <h3>코팅 (Coating)</h3>
+        <p>합성수지 피복으로 코어와 클래딩 보호.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>광섬유의 전파 방식 비교</h3>
+    <div class="cmp-wrap">
+      <table class="cmp-table">
+        <thead><tr><th>구분</th><th>계단형 다중모드 (SI)</th><th>증가형 다중모드 (GI)</th><th>단일모드 (SM)</th></tr></thead>
+        <tbody>
+          <tr><td>코어 지름</td><td>50 μm</td><td>50, 62.5, 100 μm</td><td>9 ~ 10 μm</td></tr>
+          <tr><td>클래딩 지름</td><td>125 μm</td><td>125 μm</td><td>125 μm</td></tr>
+          <tr><td>전송 대역폭</td><td>수십 MHz/Km</td><td>수백 MHz ~ 수 GHz/Km</td><td><b>10 GHz/Km 이상</b></td></tr>
+          <tr><td>코어 밀도</td><td>일정 (모드 분산 발생)</td><td>클래딩 쪽으로 감소 (모드 분산 ↓)</td><td>—</td></tr>
+          <tr><td>수신 특성</td><td>기본</td><td>SI보다 우수</td><td><b>최고</b></td></tr>
+          <tr><td>용도</td><td>LAN·데이터링크</td><td>고속 장거리 LAN</td><td>대용량(100Mbps↑)·장거리(30Km↑)·공중망 (도시간)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>광통신 시스템 송·수신부</h3>
+    <div class="card-grid">
+      <div class="card c-purple">
+        <h3>송신부 (전→광 변환)</h3>
+        <ul>
+          <li><b>LED</b>: 단거리용</li>
+          <li><b>ILD (분사 레이저 다이오드)</b>: 장거리용</li>
+        </ul>
+      </div>
+      <div class="card c-teal">
+        <h3>수신부 (광→전 변환)</h3>
+        <ul>
+          <li><b>PD</b> (Photo Diode)</li>
+          <li><b>APD</b> (Avalanche Photo Diode)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>광섬유의 장점과 단점</h3>
+    <div class="card-grid">
+      <div class="card c-green">
+        <h3>👍 장점</h3>
+        <ul>
+          <li><b>대역폭 넓음</b>: 가시광선의 넓은 대역 → 높은 전송률</li>
+          <li><b>신호 감쇠 낮음</b>: 중계기 없이 50Km 전달 (TP/동축은 5Km마다)</li>
+          <li>전자기파 간섭에 강함</li>
+          <li><b>도청에 강함</b>: 광섬유 연결이 매우 어려움</li>
+          <li>무게가 가볍다</li>
+        </ul>
+      </div>
+      <div class="card c-red">
+        <h3>👎 단점</h3>
+        <ul>
+          <li>설치·유지 보수 어렵고 부러지기 쉬움</li>
+          <li>특정 도구·기술 필요</li>
+          <li>레이저 광원이 전기 신호 발생기보다 비쌈</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>광섬유의 전송 손실 6종</h3>
+    <div class="card-grid">
+      <div class="card c-blue">
+        <h3>광섬유 고유 손실</h3>
+        <ul>
+          <li><b>레일리 산란 손실</b>: 광이 미소한 입자에 부딪혀 여러 방향으로 진행</li>
+          <li><b>흡수 손실</b>: 광 출력 일부가 광섬유 내에서 열로 유실</li>
+          <li><b>구조 불완전 손실</b>: 불균일한 면으로 광 에너지가 코어 밖으로 누설</li>
+        </ul>
+      </div>
+      <div class="card c-orange">
+        <h3>제조 후 부가 손실</h3>
+        <ul>
+          <li><b>마이크로벤딩 손실</b>: 불균일한 압력으로 축이 휘어 발생</li>
+          <li><b>휨 손실</b>: 설치 시 광섬유가 구부러져 발생</li>
+          <li><b>접속 손실</b>: 광섬유 접속 시 코어 정렬 부정확</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>광섬유의 분산 (Dispersion)</h3>
+    <div class="card c-purple">
+      <p style="color:var(--text);">광 펄스가 광섬유를 통과하면서 <b>시간적으로 퍼지는 현상</b>.</p>
+      <ul style="margin-top:8px;">
+        <li><b>모드 분산</b>: 각 모드 전파 경로 차이 → <b>다중모드에만 존재</b>(단일모드 X). 계단형에서 영향 큼, 증가형이 개선.</li>
+        <li><b>재료 분산</b>: 빛 파장에 따라 굴절률이 달라 파형이 벌어짐. 레이저는 완전 단일 파장이 아니어서 발생.</li>
+        <li><b>구조 분산(도파로 분산)</b>: 경계면에서 빛 일부가 클래딩으로 누설.</li>
+      </ul>
+      <div class="formula-box" style="margin-top:10px;">분산의 크기: 모드 분산 &gt; 재료 분산 &gt; 구조 분산</div>
+    </div>
+  </div>
+</section>
+
+<!-- 무선 매체 -->
+<section id="wireless">
+  <h2>📡 02. 무선 매체</h2>
+  <p style="color:var(--text-sub); margin-bottom:16px;">
+    공기·진공 상태에서 전자기파를 전달하는 매체 = <b>비유도 매체(Unguided)</b>
+  </p>
+
+  <div class="sub-section">
+    <h3>주파수에 따른 전파 특성</h3>
+    <div class="card-grid">
+      <div class="card c-blue">
+        <h3>주파수가 높을수록 ↑</h3>
+        <ul>
+          <li>감쇠가 심하지만 <b>직진성 강함</b></li>
+          <li>대량 정보 전송 가능 → 고정·초고속 통신 적합</li>
+          <li>안테나를 소형 제작 가능</li>
+        </ul>
+      </div>
+      <div class="card c-orange">
+        <h3>주파수가 낮을수록 ↓</h3>
+        <ul>
+          <li><b>회절성 강함</b>, 감쇠 적음</li>
+          <li>전송 정보량 적음 → 해상·항공 등 <b>장거리 통신</b> 적합</li>
+          <li>출력은 진행 거리 제곱에 반비례 감쇠</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>무선 통신의 전파 방법 3종</h3>
+    <div class="card-grid-3">
+      <div class="card c-blue">
+        <h3>지표면 전파</h3>
+        <p>라디오파가 지구를 감싸는 대기의 가장 낮은 부분을 통해 이동. (장파·중파)</p>
+      </div>
+      <div class="card c-green">
+        <h3>전리층 전파</h3>
+        <p>높은 주파수의 라디오파가 전리층에 발사되어 반사되어 돌아옴. (단파)</p>
+      </div>
+      <div class="card c-orange">
+        <h3>가시선 전파</h3>
+        <p>초단파가 안테나에서 안테나로 직선으로 직접 전송. (VHF 이상·마이크로파)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>① 방송형 무선 라디오파 (3KHz ~ 1GHz)</h3>
+    <div class="card c-blue">
+      <h3>특징</h3>
+      <ul>
+        <li>감쇠 적음, 고출력 단일 주파수면 <b>장거리 전송</b> 가능</li>
+        <li>전파는 모든 방향으로 방사되는 <b>전방향성</b></li>
+        <li>주파수 대역 재사용 가능, 물체 반사로 여러 경로 전파</li>
+      </ul>
+    </div>
+
+    <div class="lc-wrap" style="margin-top:14px;">
+      <table class="lc-table">
+        <thead><tr><th>명칭</th><th>약어</th><th>주파수</th><th>활용 분야</th></tr></thead>
+        <tbody>
+          <tr><td>초장파 (Very Low Freq.)</td><td>VLF</td><td>3KHz ~ 30KHz</td><td>장거리 무선 항해</td></tr>
+          <tr><td>장파 (Low Freq.)</td><td>LF</td><td>30KHz ~ 300KHz</td><td>선박·항공기 무선 통신</td></tr>
+          <tr><td>중파 (Medium Freq.)</td><td>MF</td><td>300KHz ~ 3MHz</td><td>AM 라디오, 해상 라디오</td></tr>
+          <tr><td>단파 (High Freq.)</td><td>HF</td><td>3MHz ~ 30MHz</td><td>단파 방송, 아마추어 무선(HAM)</td></tr>
+          <tr><td>초단파 (Very High Freq.)</td><td>VHF</td><td>30MHz ~ 300MHz</td><td>VHF TV, FM 라디오</td></tr>
+          <tr><td>극초단파 (Ultra High Freq.)</td><td>UHF</td><td>300MHz ~ 3GHz</td><td>TV 방송, 이동 전화, 레이더</td></tr>
+          <tr><td>초고주파 (Super High Freq.)</td><td>SHF</td><td>3GHz ~ 30GHz</td><td>위성 통신, 레이더</td></tr>
+          <tr><td>마이크로파 (Extremely High Freq.)</td><td>EHF</td><td>30GHz ~ 300GHz</td><td>미사일, 우주 통신</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>② 지상 마이크로파 (Terrestrial Microwave)</h3>
+    <div class="card-grid">
+      <div class="card c-blue">
+        <h3>특징</h3>
+        <ul>
+          <li>유선 매체 설치 비용 비싸거나 불가능할 때 사용</li>
+          <li><b>가시선 전파</b> 이용 → 안테나는 고지대에 위치</li>
+          <li><b>지향성 안테나</b>(접시형, 혼)</li>
+          <li>장거리 구간에서 높은 데이터 전송률, 동축보다 증폭기·리피터 적음</li>
+          <li>구조물·기상 조건에 영향 받음</li>
+        </ul>
+      </div>
+      <div class="card c-purple">
+        <h3>최대 전송 거리 공식</h3>
+        <div class="formula-box" style="margin:8px 0;">d = 7.14 × √(K × h)</div>
+        <ul>
+          <li>d: 안테나 간 거리 (Km)</li>
+          <li>h: 안테나 높이 (m)</li>
+          <li>K: 4/3</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>③ 위성 마이크로파 (Satellite Microwave)</h3>
+    <div class="card c-blue">
+      <ul>
+        <li>위성을 매개체로 데이터 송수신</li>
+        <li>전리층을 통과해야 하므로 <b>1GHz 이상</b> 주파수 이용</li>
+        <li><b>상향 링크 &gt; 하향 링크</b>: 지상은 강한 송신 가능, 위성은 전력 한계 → 감쇠 적은 낮은 주파수 사용</li>
+      </ul>
+    </div>
+
+    <div class="lc-wrap" style="margin-top:14px;">
+      <table class="lc-table">
+        <thead><tr><th>대역</th><th>상향 링크</th><th>하향 링크</th><th>활용</th></tr></thead>
+        <tbody>
+          <tr><td>L</td><td>1.6 GHz</td><td>1.5 GHz</td><td>이동체 위성(인마샛)</td></tr>
+          <tr><td>S</td><td>2.6 GHz</td><td>2.5 GHz</td><td>이동체 위성</td></tr>
+          <tr><td>C</td><td>6 GHz</td><td>4 GHz</td><td>국제·지역(인텔셋)</td></tr>
+          <tr><td>Ku</td><td>14 GHz</td><td>12 GHz</td><td>국가·지역(무궁화위성)</td></tr>
+          <tr><td>Ka</td><td>30 GHz</td><td>20 GHz</td><td>초고속 통신(ACTS)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-grid-3" style="margin-top:14px;">
+      <div class="card c-orange">
+        <h3>저궤도 (LEO)</h3>
+        <p>100 ~ 1,500 Km</p>
+      </div>
+      <div class="card c-purple">
+        <h3>중궤도 (MEO)</h3>
+        <p>5,000 ~ 20,000 Km</p>
+      </div>
+      <div class="card c-teal">
+        <h3>정지궤도 (GEO) <span class="tag tag-blue">36,000Km</span></h3>
+        <p>적도 상공 36,000 Km. 지구 자전에 맞춰 돌아 <b>지상에서 정지된 것처럼</b> 보임. 송수신국이 항상 같은 위치 → 통신 활용 용이.</p>
+      </div>
+    </div>
+
+    <div class="card-grid" style="margin-top:14px;">
+      <div class="card c-green">
+        <h3>👍 위성 마이크로파 장점</h3>
+        <ul>
+          <li>매우 넓은 영역에 신호 도달 → <b>다중점 연결에 유리</b></li>
+          <li>C 대역 링크 대역폭 500MHz → 음성 채널 다중화 다수</li>
+          <li>대기 통과 거리가 짧아 <b>오류율 낮음</b> (1×10⁻⁸ vs 지상 1×10⁻⁶)</li>
+        </ul>
+      </div>
+      <div class="card c-red">
+        <h3>👎 위성 마이크로파 단점</h3>
+        <ul>
+          <li><b>전송 지연 길다</b>: GEO 위성 왕복 ≈ 0.24초 (2 × 36,000 / 300,000)</li>
+          <li>주파수 ↑ → 기후(비·눈) 영향 ↑</li>
+          <li>보안성 떨어지고 위성 고장 시 수리 어려움</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <h3>④ 적외선파 (Infrared)</h3>
+    <div class="card c-orange">
+      <ul>
+        <li>주파수: <b>300GHz ~ 400THz</b>, 단거리 통신, 벽을 통과하지 못하는 특성 활용</li>
+        <li>리모컨(Remocon)에 사용</li>
+        <li><b>IrDA (Infrared Data Association)</b>: 적외선 통신의 표준
+          <ul style="margin-top:4px;">
+            <li>키보드·마우스·프린터 등 주변기기와 PC의 무선 통신 표준</li>
+            <li>원래 8m 이내에서 75Kbps → 최근 <b>4Mbps</b>까지 개선</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 핵심 캐치 -->
+<section id="catch">
+  <h2>🎯 핵심 캐치 — 시험 빈출</h2>
+  <div class="catch-grid">
+    <div class="catch-item">
+      <div class="catch-icon">🧵</div>
+      <h4>UTP 등급 핵심</h4>
+      <p><b>CAT.5E = 1Gbps (100MHz)</b>, CAT.6 = 1Gbps (250MHz), CAT.7 = 10Gbps (600MHz, S-STP).</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">🔌</div>
+      <h4>커넥터 매칭</h4>
+      <p>UTP = <b>RJ-45</b>(8핀), 동축 = <b>BNC</b>. UTP 송신 1·2번, 수신 3·6번.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">📐</div>
+      <h4>스넬의 법칙·임계각</h4>
+      <p>n₁·sin θ₁ = n₂·sin θ₂. <b>임계각 = 굴절각이 90°일 때의 입사각</b>. 입사각 &gt; 임계각 → <b>전반사</b>.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">💡</div>
+      <h4>광섬유 모드 비교</h4>
+      <p>수신 특성: <b>단일 &gt; 증가형 다중 &gt; 계단형 다중</b>. 단일모드: 도시간 장거리(30Km↑).</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">📊</div>
+      <h4>광섬유 분산 크기</h4>
+      <p><b>모드 분산 &gt; 재료 분산 &gt; 구조 분산</b>. 모드 분산은 <b>다중모드에만</b> 존재.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">📡</div>
+      <h4>주파수와 통신 특성</h4>
+      <p>고주파 = 직진성·정보량↑·감쇠↑(초고속). 저주파 = 회절성·감쇠↓(장거리).</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">🛰️</div>
+      <h4>위성 상·하향 링크</h4>
+      <p>상향 &gt; 하향 (지상은 강한 송신 가능). C대역: 6GHz↑ / 4GHz↓. <b>GEO 왕복 지연 0.24초</b>.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-icon">📐</div>
+      <h4>지상 마이크로파 거리 공식</h4>
+      <p><b>d = 7.14√(K·h)</b>, K=4/3, h는 안테나 높이(m), d는 거리(Km).</p>
+    </div>
+  </div>
+</section>
+
+<!-- 핵심 키워드 -->
+<section id="keywords">
+  <h2>🔑 핵심 키워드</h2>
+  <div class="kw-grid">
+    <div class="kw-card"><div class="kw-en">Transmission Media</div><div class="kw-ko">전송 매체</div><div class="kw-def">물리적으로 신호 전달을 담당하는 것 (유선/무선)</div></div>
+    <div class="kw-card"><div class="kw-en">Twisted Pair (UTP/FTP/STP)</div><div class="kw-ko">트위스티드 페어</div><div class="kw-def">2개 이상의 구리 도선이 꼬인 형태, 차폐 정도로 분류</div></div>
+    <div class="kw-card"><div class="kw-en">RJ-45</div><div class="kw-ko">RJ-45 커넥터</div><div class="kw-def">UTP 케이블 표준 8핀 커넥터 (Register Jack)</div></div>
+    <div class="kw-card"><div class="kw-en">Coaxial Cable / BNC</div><div class="kw-ko">동축 케이블</div><div class="kw-def">차폐성 우수, BNC 커넥터 사용, RG 등급으로 분류</div></div>
+    <div class="kw-card"><div class="kw-en">Optical Fiber</div><div class="kw-ko">광케이블</div><div class="kw-def">유리 섬유로 빛을 전송, 전자기 간섭 없음, 50Km 무중계</div></div>
+    <div class="kw-card"><div class="kw-en">Snell's Law</div><div class="kw-ko">스넬의 법칙</div><div class="kw-def">n₁·sin θ₁ = n₂·sin θ₂. 빛의 굴절 원리</div></div>
+    <div class="kw-card"><div class="kw-en">Critical Angle</div><div class="kw-ko">임계각</div><div class="kw-def">굴절각이 90°일 때의 입사각, 이상이면 전반사</div></div>
+    <div class="kw-card"><div class="kw-en">Core / Cladding / Coating</div><div class="kw-ko">코어 / 클래딩 / 코팅</div><div class="kw-def">광섬유의 3층 구조 (높은 굴절률 / 낮은 굴절률 / 보호)</div></div>
+    <div class="kw-card"><div class="kw-en">Single-mode / Multi-mode</div><div class="kw-ko">단일모드 / 다중모드</div><div class="kw-def">단일모드: 9~10μm 코어, 장거리 / 다중모드: 50μm↑, 단거리</div></div>
+    <div class="kw-card"><div class="kw-en">Mode Dispersion</div><div class="kw-ko">모드 분산</div><div class="kw-def">다중모드에만 존재, 각 모드 경로 차이로 발생</div></div>
+    <div class="kw-card"><div class="kw-en">LED / ILD / PD / APD</div><div class="kw-ko">광 송수신 소자</div><div class="kw-def">송신: LED(단)·ILD(장) / 수신: PD·APD</div></div>
+    <div class="kw-card"><div class="kw-en">Line-of-Sight</div><div class="kw-ko">가시선 전파</div><div class="kw-def">초단파가 안테나 간 직선으로 직접 전송되는 방식</div></div>
+    <div class="kw-card"><div class="kw-en">Microwave (Terrestrial / Satellite)</div><div class="kw-ko">마이크로파</div><div class="kw-def">1GHz ~ 300GHz, 가시선 전파, 지향성 안테나 사용</div></div>
+    <div class="kw-card"><div class="kw-en">GEO (Geostationary Earth Orbit)</div><div class="kw-ko">정지궤도 위성</div><div class="kw-def">36,000Km 적도 상공, 지상에서 정지된 것처럼 보임</div></div>
+    <div class="kw-card"><div class="kw-en">IrDA</div><div class="kw-ko">적외선 통신 표준</div><div class="kw-def">키보드·마우스·프린터 등 PC와 무선 통신, 4Mbps</div></div>
+    <div class="kw-card"><div class="kw-en">VLF / LF / MF / HF / VHF / UHF / SHF / EHF</div><div class="kw-ko">주파수 대역</div><div class="kw-def">3KHz부터 300GHz까지의 라디오·마이크로파 8개 구간</div></div>
+  </div>
+</section>
+
+<!-- 연습문제 -->
+<section id="quiz">
+  <h2>📝 연습문제</h2>
+
+  <div class="quiz-section">
+    <h3>객관식 문제</h3>
+
+    <div class="q-item">
+      <div class="q-stem">Q1. UTP 케이블 등급 중 100MHz 대역폭으로 기가비트 이더넷까지 지원하는 것은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb1')">① CAT.3</button>
+        <button onclick="answerMC(this, false, 'fb1')">② CAT.5</button>
+        <button onclick="answerMC(this, true, 'fb1')">③ CAT.5E</button>
+        <button onclick="answerMC(this, false, 'fb1')">④ CAT.6E</button>
+      </div>
+      <div class="q-feedback" id="fb1"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q2. 동축 케이블에 장비를 연결할 때 사용하는 표준 커넥터는?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb2')">① RJ-45</button>
+        <button onclick="answerMC(this, true, 'fb2')">② BNC</button>
+        <button onclick="answerMC(this, false, 'fb2')">③ DB-25</button>
+        <button onclick="answerMC(this, false, 'fb2')">④ ST</button>
+      </div>
+      <div class="q-feedback" id="fb2"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q3. 광섬유에서 빛이 전반사되기 위한 조건은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb3')">① 입사각 &lt; 임계각</button>
+        <button onclick="answerMC(this, false, 'fb3')">② 입사각 = 임계각</button>
+        <button onclick="answerMC(this, true, 'fb3')">③ 입사각 &gt; 임계각</button>
+        <button onclick="answerMC(this, false, 'fb3')">④ 입사각 = 90°</button>
+      </div>
+      <div class="q-feedback" id="fb3"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q4. 다음 광섬유 중 도시 간 장거리 통신(30Km 이상)에 가장 적합한 것은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb4')">① 계단형 다중모드 (SI)</button>
+        <button onclick="answerMC(this, false, 'fb4')">② 증가형 다중모드 (GI)</button>
+        <button onclick="answerMC(this, true, 'fb4')">③ 단일모드 (SM)</button>
+        <button onclick="answerMC(this, false, 'fb4')">④ 동축 광케이블</button>
+      </div>
+      <div class="q-feedback" id="fb4"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q5. 광섬유의 분산 크기를 큰 순서대로 올바르게 나열한 것은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, true, 'fb5')">① 모드 분산 &gt; 재료 분산 &gt; 구조 분산</button>
+        <button onclick="answerMC(this, false, 'fb5')">② 재료 분산 &gt; 모드 분산 &gt; 구조 분산</button>
+        <button onclick="answerMC(this, false, 'fb5')">③ 구조 분산 &gt; 재료 분산 &gt; 모드 분산</button>
+        <button onclick="answerMC(this, false, 'fb5')">④ 모드 분산 &gt; 구조 분산 &gt; 재료 분산</button>
+      </div>
+      <div class="q-feedback" id="fb5"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q6. 주파수가 높을수록 나타나는 특성이 아닌 것은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb6')">① 직진성이 강해진다</button>
+        <button onclick="answerMC(this, false, 'fb6')">② 감쇠가 심해진다</button>
+        <button onclick="answerMC(this, false, 'fb6')">③ 안테나를 소형으로 제작 가능하다</button>
+        <button onclick="answerMC(this, true, 'fb6')">④ 회절성이 강해진다</button>
+      </div>
+      <div class="q-feedback" id="fb6"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q7. 정지궤도(GEO) 위성의 고도는 약 얼마인가?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb7')">① 1,500 Km</button>
+        <button onclick="answerMC(this, false, 'fb7')">② 5,000 Km</button>
+        <button onclick="answerMC(this, false, 'fb7')">③ 20,000 Km</button>
+        <button onclick="answerMC(this, true, 'fb7')">④ 36,000 Km</button>
+      </div>
+      <div class="q-feedback" id="fb7"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q8. AM 라디오와 해상 라디오에 사용되는 주파수 대역은?</div>
+      <div class="q-opts">
+        <button onclick="answerMC(this, false, 'fb8')">① VLF (3~30KHz)</button>
+        <button onclick="answerMC(this, false, 'fb8')">② LF (30~300KHz)</button>
+        <button onclick="answerMC(this, true, 'fb8')">③ MF (300KHz~3MHz)</button>
+        <button onclick="answerMC(this, false, 'fb8')">④ HF (3~30MHz)</button>
+      </div>
+      <div class="q-feedback" id="fb8"></div>
+    </div>
+  </div>
+
+  <div class="quiz-section">
+    <h3>단답형 문제</h3>
+
+    <div class="q-item">
+      <div class="q-stem">Q9. 광섬유의 코어 외부를 감싸며 코어보다 낮은 굴절률을 가진 층의 이름은?</div>
+      <div class="short-q">
+        <input type="text" id="sq1" placeholder="답 입력">
+        <button onclick="checkShort('sq1', ['클래딩', 'Cladding', 'cladding'], 'sfb1', '클래딩(Cladding) — 표준 지름 125μm, 빛을 반사하여 코어 안에 가둠')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb1"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q10. 지상 마이크로파에서 안테나 높이 h=80m, K=4/3일 때 최대 전송 거리 d는 약 몇 km인가? (소수점 첫째 자리까지)</div>
+      <div class="short-q">
+        <input type="text" id="sq2" placeholder="답 입력 (km)">
+        <button onclick="checkShort('sq2', ['73.7', '73.6', '73', '74', '약 73'], 'sfb2', 'd = 7.14 × √(4/3 × 80) = 7.14 × √106.67 = 7.14 × 10.328 ≈ 73.7 km')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb2"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q11. 적외선 통신의 표준을 제정한 단체의 영문 약어는?</div>
+      <div class="short-q">
+        <input type="text" id="sq3" placeholder="답 입력">
+        <button onclick="checkShort('sq3', ['IrDA', 'irda', 'IRDA'], 'sfb3', 'IrDA (Infrared Data Association) — 키보드·마우스·프린터 등의 무선 통신 표준')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb3"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q12. 정지궤도 위성 통신에서 상향+하향 링크 왕복 전송 지연(초)을 구하시오. (위성 36,000Km, 빛 속도 300,000Km/s)</div>
+      <div class="short-q">
+        <input type="text" id="sq4" placeholder="답 입력 (초)">
+        <button onclick="checkShort('sq4', ['0.24', '0.24초', '약 0.24'], 'sfb4', '왕복 = 2 × 36,000 / 300,000 = 0.24초')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb4"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-stem">Q13. CAT.5 UTP 케이블에서 송신용으로 사용하는 핀 번호와 수신용으로 사용하는 핀 번호는?</div>
+      <div class="short-q">
+        <input type="text" id="sq5" placeholder="예: 송신 1,2 / 수신 3,6">
+        <button onclick="checkShort('sq5', ['1,2', '1, 2', '3,6', '3, 6', '1·2'], 'sfb5', '송신 = 1·2번, 수신 = 3·6번. 다이렉트 케이블은 그대로, 크로스 케이블은 송수신 교차.')">확인</button>
+      </div>
+      <div class="q-feedback" id="sfb5"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+const toggle = document.getElementById('darkToggle');
+const html = document.documentElement;
+function applyTheme(theme) {
+  html.setAttribute('data-theme', theme);
+  toggle.textContent = theme === 'dark' ? '☀️ 라이트모드' : '🌙 야간모드';
+}
+const saved = localStorage.getItem('theme') || 'light';
+applyTheme(saved);
+toggle.addEventListener('click', function() {
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', next);
+  applyTheme(next);
+});
+const scrollBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', function() {
+  scrollBtn.classList.toggle('visible', window.scrollY > 400);
+});
+function answerMC(btn, correct, feedbackId) {
+  const fb = document.getElementById(feedbackId);
+  if (correct) {
+    btn.style.background = '#dcfce7'; btn.style.color = '#16a34a'; btn.style.borderColor = '#16a34a';
+    fb.textContent = '✓ 정답!'; fb.style.color = '#16a34a';
+  } else {
+    btn.style.background = '#fee2e2'; btn.style.color = '#dc2626'; btn.style.borderColor = '#dc2626';
+    fb.textContent = '✗ 오답. 다시 생각해보세요.'; fb.style.color = '#dc2626';
+  }
+  fb.style.display = 'block';
+  btn.parentElement.querySelectorAll('button').forEach(function(b) { b.disabled = true; });
+}
+function checkShort(inputId, answers, feedbackId, explanation) {
+  var val = document.getElementById(inputId).value.trim();
+  var fb = document.getElementById(feedbackId);
+  var correct = answers.some(function(a) { return val.includes(a); });
+  if (correct) {
+    fb.textContent = '✓ 정답! ' + explanation; fb.style.color = '#16a34a';
+  } else {
+    fb.textContent = '✗ 다시 생각해보세요. 정답: ' + answers[0] + ' | ' + explanation; fb.style.color = '#dc2626';
+  }
+  fb.style.display = 'block';
+}
+</script>
+</body>
+</html>
