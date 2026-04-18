@@ -303,6 +303,7 @@ footer { text-align: center; padding: 2rem; font-size: 0.82rem; color: var(--tex
   <div class="nav-links">
     <a href="#goals">학습목표</a>
     <a href="#scope">시험범위</a>
+    <a href="#plan">📅3일계획</a>
     <a href="#ch1">1장</a>
     <a href="#ch2">2장</a>
     <a href="#ch3">3장</a>
@@ -406,9 +407,98 @@ footer { text-align: center; padding: 2rem; font-size: 0.82rem; color: var(--tex
   </div>
 </section>
 
+<!-- ==================== 3일 암기 플래너 ==================== -->
+<section id="plan">
+  <div class="section-title"><span class="icon">📅</span> 3일 암기 플래너</div>
+  <p style="font-size:0.9rem; color:var(--text-sub); margin-bottom:1.2rem;">
+    중간고사 전 3일을 코드 중심(Day1) → 통계 이론(Day2) → 고급·종합(Day3) 순서로 분배.
+    <strong>하루에 한 덩어리씩</strong> 머리에 꽉 채우고, 마지막 날에 전체를 다시 훑는 흐름이야.
+  </p>
+  <div class="card-grid">
+
+    <div class="card blue" style="border-top-width:6px;">
+      <h3 style="color:var(--primary); font-size:1.08rem;">📘 Day 1 — 오늘 (4/18)</h3>
+      <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:0.5rem;">파이썬 기초 + 라이브러리 개요 · <strong>코드 중심</strong></p>
+      <ul style="padding-left:1.1rem;">
+        <li><strong>1장</strong> — 데이터 과학 개요·3V·4유형·프로세스</li>
+        <li><strong>1장</strong> — 변수·연산자·예약어·내장함수</li>
+        <li><strong>1장</strong> — 자료구조 4종(list/tuple/dict/set)</li>
+        <li><strong>1장</strong> — 제어문·반복문·컴프리헨션</li>
+        <li><strong>1장</strong> — 함수·람다·재귀·OOP(클래스)</li>
+        <li><strong>2장</strong> — 4대 라이브러리 import · %매직</li>
+        <li><strong>2장</strong> — NumPy 배열·속성·연산·난수</li>
+        <li><strong>2장</strong> — SciPy 선형대수·최적화 맛보기</li>
+        <li><strong>2장</strong> — Pandas Series/DataFrame 기초</li>
+        <li><strong>2장</strong> — Matplotlib 시각화 기본</li>
+      </ul>
+      <p style="font-size:0.78rem; color:var(--success); margin-top:0.6rem;">✅ 목표: 파이썬 문법을 눈감고 써내고, 4대 라이브러리 역할 구분</p>
+    </div>
+
+    <div class="card orange" style="border-top-width:6px;">
+      <h3 style="color:var(--warning); font-size:1.08rem;">📗 Day 2 — 내일 (4/19)</h3>
+      <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:0.5rem;">통계 이론 집중 · <strong>제일 무거운 날</strong></p>
+      <ul style="padding-left:1.1rem;">
+        <li><strong>3장</strong> — 기술/추론통계 구분·분포 형태(왜도·첨도)</li>
+        <li><strong>3장</strong> — 평균·중앙값·최빈·분산·표준편차·CV</li>
+        <li><strong>3장</strong> — describe()·박스플롯·사분위수</li>
+        <li><strong>3장</strong> — 공분산·상관계수</li>
+        <li><strong>3장</strong> — 단순선형회귀·최소제곱·R²</li>
+        <li><strong>4장</strong> — 확률 공리 3개 · 조건부확률</li>
+        <li><strong>4장</strong> — 독립·베이즈 정리</li>
+        <li><strong>4장</strong> — 확률변수·이산/연속 분포</li>
+        <li><strong>4장</strong> — 대수법칙·중심극한정리</li>
+        <li><strong>4장</strong> — 추정·가설검정(1·2종 오류)</li>
+      </ul>
+      <p style="font-size:0.78rem; color:var(--danger); margin-top:0.6rem;">⚠️ 4장은 <u>이론만</u> — 코드 암기 X</p>
+    </div>
+
+    <div class="card teal" style="border-top-width:6px;">
+      <h3 style="color:var(--teal); font-size:1.08rem;">📙 Day 3 — 내일모레 (4/20)</h3>
+      <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:0.5rem;">고급 주제 + <strong>전체 회독 · 마무리</strong></p>
+      <ul style="padding-left:1.1rem;">
+        <li><strong>5장</strong> — NumPy 슬라이싱·조건·행렬 복습</li>
+        <li><strong>5장</strong> — 보간법(interp1d·spline)</li>
+        <li><strong>5장</strong> — 행렬분해(SVD/LU/Cholesky/QR/NMF)</li>
+        <li><strong>5장</strong> — 적분(quad·dblquad·odeint)</li>
+        <li><strong>5장</strong> — 최적화(fsolve·minimize)</li>
+        <li><strong>6장</strong> — Pandas 핵심 기능 맵</li>
+        <li><strong>6장</strong> — 계층형 인덱스(MultiIndex)</li>
+        <li><strong>6장</strong> — merge/concat · 4종 join</li>
+        <li style="color:var(--primary);"><strong>종합</strong> — 핵심캐치 20 재점검</li>
+        <li style="color:var(--primary);"><strong>종합</strong> — 키워드 · 연습문제 풀이</li>
+      </ul>
+      <p style="font-size:0.78rem; color:var(--success); margin-top:0.6rem;">🎯 마지막엔 연습문제 섹션만 반복 — 출제 포인트는 여기에 다 있음</p>
+    </div>
+
+  </div>
+</section>
+
 <!-- ==================== CHAPTER 1 ==================== -->
 <section id="ch1">
-  <div class="section-title"><span class="icon">💻</span> 1장 — 데이터 과학과 파이썬 기초 <span class="chapter-label">Ch.1</span></div>
+  <div class="section-title"><span class="icon">💻</span> 1장 — 데이터 과학과 파이썬 기초 <span class="chapter-label" style="background:#2563eb;">📘 Day 1</span><span class="chapter-label" style="margin-left:0.4rem;">Ch.1</span></div>
+
+  <div class="chapter-block" style="background:linear-gradient(135deg,#fffbeb,#fef3c7); border-top-color:#f59e0b; color:#78350f;">
+    <div class="chapter-title" style="color:#78350f;">⚡ 초단기 암기 모드 (이것만 외우면 절반은 먹고 들어간다)</div>
+    <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.9;">
+      <li><strong>데이터과학 = 통계 + CS(해킹 스킬) + 도메인</strong> (3요소 벤다이어그램)</li>
+      <li><strong>3V</strong>: <span style="background:#fde68a; padding:0 4px;">V</span>olume(규모) · <span style="background:#fde68a; padding:0 4px;">V</span>elocity(속도) · <span style="background:#fde68a; padding:0 4px;">V</span>ariety(다양성)</li>
+      <li><strong>데이터 4유형</strong>: 정형 / 머신생성 / 그래프 / 비정형</li>
+      <li><strong>프로세스</strong>: 수집 → 전처리 → EDA → 모델</li>
+      <li><strong>자료구조 4종</strong> (순서·변경·중복):
+        <ul style="margin-top:0.3rem;">
+          <li><code>list [ ]</code> — 순O · 변O · 중O</li>
+          <li><code>tuple ( )</code> — 순O · <span style="color:#b91c1c;"><strong>변X</strong></span> · 중O (불변)</li>
+          <li><code>dict {k:v}</code> — 순O(3.7+) · 변O · 키 중복<span style="color:#b91c1c;"><strong>X</strong></span></li>
+          <li><code>set { }</code> — 순<span style="color:#b91c1c;"><strong>X</strong></span> · 변O · 중<span style="color:#b91c1c;"><strong>X</strong></span> · 합<code>|</code> 교<code>&</code> 차<code>-</code></li>
+        </ul>
+      </li>
+      <li><strong>for / while / break / continue</strong> + 컴프리헨션 <code>[x for x in ...]</code>, <code>zip</code>, <code>enumerate</code></li>
+      <li><strong>함수</strong> = def/return / <strong>람다</strong> = 이름 없는 한 줄 / <strong>재귀</strong> = 탈출조건 없으면 RecursionError</li>
+      <li><strong>OOP 4대 특성</strong>: 캡슐화 · 재사용성 · 유지보수성 · 상속</li>
+      <li><strong>class = 설계도, instance = 실체</strong> (붕어빵 틀 vs 붕어빵). <code>__init__(self)</code> = 생성자 자동호출</li>
+      <li><strong>★ 빈출 함정</strong>: <code>range(0,10,2)</code>는 10 <span style="color:#b91c1c;">포함 X</span> · 리스트<code>*2</code>는 연결 (NumPy만 원소곱)</li>
+    </ul>
+  </div>
 
   <div class="chapter-block">
     <div class="chapter-title">🌐 데이터 과학 개요</div>
@@ -608,7 +698,35 @@ print(instance_1.add())          # 3</pre>
 
 <!-- ==================== CHAPTER 2 ==================== -->
 <section id="ch2">
-  <div class="section-title"><span class="icon">📊</span> 2장 — 데이터 분석 라이브러리 <span class="chapter-label">Ch.2</span></div>
+  <div class="section-title"><span class="icon">📊</span> 2장 — 데이터 분석 라이브러리 <span class="chapter-label" style="background:#2563eb;">📘 Day 1</span><span class="chapter-label" style="margin-left:0.4rem;">Ch.2</span></div>
+
+  <div class="chapter-block" style="background:linear-gradient(135deg,#fffbeb,#fef3c7); border-top-color:#f59e0b; color:#78350f;">
+    <div class="chapter-title" style="color:#78350f;">⚡ 초단기 암기 모드</div>
+    <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.9;">
+      <li><strong>4대 라이브러리 역할</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li><strong>NumPy</strong> → 수치 <strong>배열(ndarray)</strong>, 벡터화 연산, 난수</li>
+          <li><strong>SciPy</strong> → NumPy 위 <strong>과학계산</strong> (선형대수 <code>linalg</code>, 최적화 <code>optimize</code>)</li>
+          <li><strong>Pandas</strong> → <strong>테이블</strong> (Series=1D, DataFrame=2D)</li>
+          <li><strong>Matplotlib</strong> → <strong>시각화</strong> (pyplot)</li>
+        </ul>
+      </li>
+      <li><strong>NumPy 배열 속성 4개</strong>: <code>dtype</code> · <code>ndim</code> · <code>size</code> · <code>shape</code></li>
+      <li><strong>난수</strong>: <code>np.random.seed(0)</code> · <code>randn</code>(표준정규) · <code>choice(n, k, replace=?)</code> — <span style="color:#b91c1c;"><strong>replace=False면 중복 X</strong></span></li>
+      <li><strong>★ 행렬곱 vs 원소곱</strong> (가장 자주 함정):
+        <ul style="margin-top:0.3rem;">
+          <li><code>A * B</code> → <strong>원소별(Hadamard)</strong> 곱</li>
+          <li><code>np.dot(A,B) = A @ B</code> → <strong>행렬곱</strong></li>
+          <li><code>A.T</code> → 전치</li>
+        </ul>
+      </li>
+      <li><strong>scipy.linalg</strong>: <code>det</code>(행렬식) · <code>inv</code>(역행렬) · <code>eig</code>(고유값·벡터 <u>튜플</u> 반환)</li>
+      <li><strong>Pandas 대괄호 개수 함정</strong>: <code>df['x']</code>=Series(1D) / <code>df[['x']]</code>=DataFrame(2D)</li>
+      <li><strong>Pandas 핵심 동사</strong>: <code>drop(axis=0/1)</code> · <code>inplace=True</code>(원본 변경) · <code>merge(on=)</code> · <code>groupby</code> · <code>sort_values</code></li>
+      <li><strong>결측치 3종 세트</strong>: <code>isnull().sum()</code> → <code>dropna()</code> · <code>fillna(0)</code> · <code>fillna(df.mean())</code></li>
+      <li><strong>Matplotlib</strong>: <code>plot</code>(선) · <code>scatter</code>(산점) · <code>hist</code>(히스토) · <code>title/xlabel/ylabel/legend/show</code></li>
+    </ul>
+  </div>
 
   <div class="chapter-block">
     <div class="chapter-title">🔢 4대 라이브러리 Import · Jupyter 매직 명령어</div>
@@ -752,7 +870,33 @@ plt.savefig('file.png')</pre>
 
 <!-- ==================== CHAPTER 3 ==================== -->
 <section id="ch3">
-  <div class="section-title"><span class="icon">📐</span> 3장 — 기술통계와 회귀분석 <span class="chapter-label">Ch.3</span></div>
+  <div class="section-title"><span class="icon">📐</span> 3장 — 기술통계와 회귀분석 <span class="chapter-label" style="background:#d97706;">📗 Day 2</span><span class="chapter-label" style="margin-left:0.4rem;">Ch.3</span></div>
+
+  <div class="chapter-block" style="background:linear-gradient(135deg,#fffbeb,#fef3c7); border-top-color:#f59e0b; color:#78350f;">
+    <div class="chapter-title" style="color:#78350f;">⚡ 초단기 암기 모드</div>
+    <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.9;">
+      <li><strong>통계 두 갈래</strong>: <strong>기술통계</strong>(요약·정리) vs <strong>추론통계</strong>(모집단 추정·검정)</li>
+      <li><strong>분포 모양</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li>왜도(Skewness) — 한쪽 치우침 (>0 오른쪽 꼬리 / &lt;0 왼쪽 꼬리)</li>
+          <li>첨도(Kurtosis) — 뾰족한 정도 (&gt;3 뾰족 / &lt;3 평평, 기준 3)</li>
+        </ul>
+      </li>
+      <li><strong>중심경향 3총사</strong>: 평균 · 중앙값 · 최빈 (이상값 있으면 <strong>중앙값</strong>이 유리)</li>
+      <li><strong>산포 3총사</strong>: 분산 σ² = (1/n)Σ(xᵢ-x̄)² → 표준편차 σ=√σ² → <strong>CV = σ/μ</strong> (단위 제거, 비교 가능)</li>
+      <li><strong>CV 해석</strong>: &lt;0.1 안정 / 0.1~0.3 보통 / &gt;0.5 큼 / &gt;1 매우 큼</li>
+      <li><strong>describe() 8개</strong>: count · mean · std · min · <strong>25%(Q1)</strong> · <strong>50%(Q2=중앙값)</strong> · <strong>75%(Q3)</strong> · max — <span style="color:#b91c1c;"><strong>최빈값(mode) 포함 X</strong></span></li>
+      <li><strong>IQR = Q3 - Q1</strong>. 박스플롯은 <span style="color:#b91c1c;"><strong>기본 평균 표시 X</strong></span> (showmeans=True 필요)</li>
+      <li><strong>공분산 Cov(X,Y)</strong> = (1/n)Σ(xᵢ-x̄)(yᵢ-ȳ) — <span style="color:#b91c1c;">단위에 영향 → 강도 판단 불가</span></li>
+      <li><strong>피어슨 상관계수 r = Cov(X,Y) / (σₓ·σᵧ)</strong>, <strong>-1 ≤ r ≤ 1</strong></li>
+      <li><strong>r=0 함정</strong>: <u>선형</u> 관계만 없음 (비선형 관계는 있을 수 있음!)</li>
+      <li><strong>상관 ≠ 인과</strong>. p값 낮을수록 관계 신뢰도 ↑</li>
+      <li><strong>단순선형회귀</strong> y = ax + b: a=기울기(회귀계수) / b=절편(X=0일 때 Y)</li>
+      <li><strong>최소제곱법(OLS)</strong>: <strong>min Σ(yᵢ - ŷᵢ)²</strong> (잔차 제곱합 최소화)</li>
+      <li><strong>R² = 1 - (오차/전체변동)</strong>, 0~1. <strong>단순회귀에선 R² = r²</strong></li>
+      <li><strong>단순회귀</strong>(X 1개) vs <strong>다중회귀</strong>(X 여러 개), <strong>예측</strong>(새 X로 Y) vs <strong>추론</strong>(관계 해석)</li>
+    </ul>
+  </div>
 
   <div class="chapter-block">
     <div class="chapter-title">📋 통계의 두 갈래 · 분포의 형태</div>
@@ -904,7 +1048,59 @@ plt.savefig('file.png')</pre>
 
 <!-- ==================== CHAPTER 4 ==================== -->
 <section id="ch4">
-  <div class="section-title"><span class="icon">🎲</span> 4장 — 확률과 통계 기초 <span class="chapter-label">Ch.4 (이론만)</span></div>
+  <div class="section-title"><span class="icon">🎲</span> 4장 — 확률과 통계 기초 <span class="chapter-label" style="background:#d97706;">📗 Day 2</span><span class="chapter-label" style="margin-left:0.4rem;">Ch.4 (이론만)</span></div>
+
+  <div class="chapter-block" style="background:linear-gradient(135deg,#fffbeb,#fef3c7); border-top-color:#f59e0b; color:#78350f;">
+    <div class="chapter-title" style="color:#78350f;">⚡ 초단기 암기 모드 <span style="font-size:0.75rem; margin-left:0.5rem; color:#b91c1c;">※ 4장은 이론만 — 코드 암기 X</span></div>
+    <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.9;">
+      <li><strong>확률공간 = (Ω, F, Pr)</strong> — 표본공간 · 사건모음 · 확률함수</li>
+      <li><strong>용어</strong>: 실험(trial) / 근원사건 / 사건(event=부분집합) · 전사건P=1 / 공사건P=0 / 여사건Eᶜ / 배반(A∩B=∅)</li>
+      <li><span style="color:#b91c1c;"><strong>여사건 ≠ 배반</strong></span> — 여사건은 반드시 배반이지만, 배반이 여사건은 아님 (빈출!)</li>
+      <li><strong>확률 3공리</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li>① 비음수성: P(A) ≥ 0</li>
+          <li>② 정규성: P(Ω) = 1</li>
+          <li>③ 가법성(서로소): A∩B=∅ ⇒ P(A∪B) = P(A) + P(B)</li>
+        </ul>
+      </li>
+      <li><strong>조건부확률 P(B|A) = P(A∩B)/P(A)</strong> · 곱셈공식 P(A∩B) = P(B|A)·P(A)</li>
+      <li><strong>독립</strong>: P(A∩B) = P(A)·P(B)</li>
+      <li><strong>베이즈 정리</strong>: <strong>P(B|A) = P(A|B)·P(B) / P(A)</strong> — <span style="background:#fde68a; padding:0 4px;">결과 → 원인 역추론</span></li>
+      <li><strong>베이즈 4요소</strong>: 사전P(B) · 가능도P(A|B) · 증거P(A) · 사후P(B|A)</li>
+      <li><strong>확률변수(X)</strong> = 결과를 <strong>숫자로 매핑하는 함수</strong>
+        <ul style="margin-top:0.3rem;">
+          <li><strong>이산</strong>(셀 수 있음): PMF, Σp(xᵢ)=1</li>
+          <li><strong>연속</strong>(연속적): PDF · CDF F(x)=P(X≤x) · <strong>CDF↔PDF = 적분/미분</strong></li>
+        </ul>
+      </li>
+      <li><strong>기댓값 E(X) = Σx·P(X=x)</strong> (주사위 E(X) = 3.5, 실제 나올 수 없는 값 가능)</li>
+      <li><strong>★ 분포 흐름</strong>: 균등 → 베르누이 → 이항 → 푸아송 → <strong>정규(연속)</strong>, 로그정규(연속)
+        <ul style="margin-top:0.3rem;">
+          <li><strong>이산</strong>: 베르누이 · 이항 · 푸아송 · (이산)균등</li>
+          <li><strong>연속</strong>: <span style="background:#fde68a; padding:0 4px;">정규 · 로그정규</span> · (연속)균등</li>
+        </ul>
+      </li>
+      <li><strong>추론통계 3대 법칙</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li>대수의 법칙 — 표본평균이 기댓값에 수렴</li>
+          <li>중심극한정리(CLT) — <strong>표본평균의 분포</strong>가 정규분포에 근접</li>
+          <li>대편차 원리 — 극단값 확률은 지수적으로 감소</li>
+        </ul>
+      </li>
+      <li><strong>파생분포 3종</strong>: χ²(표준정규 제곱합, 자유도 m) · t(소표본 평균검정) · F(분산 비교, ANOVA)</li>
+      <li><strong>추정량 성질</strong>: 불편성 E[T]=θ / 일치성 n↑→θ</li>
+      <li><strong>신뢰구간</strong>: X̄ ± z(α/2)/√n, 신뢰수준 1-α (95%, 99%)</li>
+      <li><strong>MLE(최대가능도)</strong>: L(θ)=Πf(xᵢ;θ) → log → 미분=0 → θ̂ (동전 앞3뒤2 → θ̂=0.6)</li>
+      <li><strong>가설검정</strong>: H₀(차이없음/현상유지) vs H₁(차이있음/주장), <strong>p &lt; α → H₀ 기각</strong>, 보통 α=0.05</li>
+      <li><strong>오류 2종 (매우 빈출)</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li><strong>제1종 α</strong>: H₀참인데 기각 (<em>무죄→유죄</em>)</li>
+          <li><strong>제2종 β</strong>: H₀거짓인데 채택 (<em>유죄→무죄</em>)</li>
+          <li><strong>검정력 = 1 - β</strong> (≥0.8 권장), α와 β는 <strong>트레이드오프</strong></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 
   <div class="chapter-block" style="background:linear-gradient(135deg, #fef3c7, #fde68a); color:#92400e; border-top-color:#d97706;">
     <div class="chapter-title" style="color:#92400e;">⚠️ 중요 — 프로그래밍 부분 범위 제외</div>
@@ -1162,7 +1358,48 @@ plt.savefig('file.png')</pre>
 
 <!-- ==================== CHAPTER 5 ==================== -->
 <section id="ch5">
-  <div class="section-title"><span class="icon">🔬</span> 5장 — SciPy 고급 · 선형대수 · 최적화 <span class="chapter-label">Ch.5</span></div>
+  <div class="section-title"><span class="icon">🔬</span> 5장 — SciPy 고급 · 선형대수 · 최적화 <span class="chapter-label" style="background:#0d9488;">📙 Day 3</span><span class="chapter-label" style="margin-left:0.4rem;">Ch.5</span></div>
+
+  <div class="chapter-block" style="background:linear-gradient(135deg,#fffbeb,#fef3c7); border-top-color:#f59e0b; color:#78350f;">
+    <div class="chapter-title" style="color:#78350f;">⚡ 초단기 암기 모드</div>
+    <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.9;">
+      <li><strong>NumPy 복습 핵심</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li>슬라이싱 <code>arr[::-1]</code> 역순, <code>arr[::2]</code> 2칸 간격, <strong>슬라이스는 뷰</strong> → <code>.copy()</code>로 원본 보호</li>
+          <li><code>np.where(조건, x, y)</code> · <code>np.unique(arr, return_counts=True)</code></li>
+          <li><code>np.any</code>·<code>np.all</code> · <code>np.diag</code>·<code>np.trace</code> · <code>vstack</code>(세로)·<code>hstack</code>(가로)·<code>concatenate(axis=)</code></li>
+          <li>브로드캐스팅 = 크기가 다른 배열 자동 맞춤</li>
+        </ul>
+      </li>
+      <li><strong>보간법(Interpolation)</strong> — 알려진 점 <strong>사이</strong> 값 추정 (결측 복원·이미지)</li>
+      <li><strong>interp1d kind 4종</strong>: <code>'zero'</code>(0차) · <code>'linear'</code>(1차, 직선·꺾임) · <code>'quadratic'</code>(2차) · <code>'cubic'</code>(3차 스플라인, 가장 자연스러움)</li>
+      <li><strong>행렬 분해 5종 (이걸로 외우자)</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li><strong>SVD</strong>: A = U·S·Vᵀ → <span style="background:#fde68a; padding:0 4px;">PCA·추천·이미지 압축·노이즈 제거</span></li>
+          <li><strong>LU</strong>: PA = L·U (하삼각·상삼각) → 연립방정식·수치해석</li>
+          <li><strong>Cholesky</strong>: A = L·Lᵀ → <span style="color:#b91c1c;"><strong>대칭 + 양의 정부호 전용</strong></span>, 매우 빠름</li>
+          <li><strong>QR</strong>: A = Q·R (직교·상삼각) → <strong>최소제곱법(회귀)</strong>, 직교화</li>
+          <li><strong>NMF</strong>: X = W·H (<span style="color:#b91c1c;"><strong>≥0 비음수만</strong></span>) → 토픽모델·추천·특징추출</li>
+        </ul>
+      </li>
+      <li><strong>SVD 의미</strong>: 회전(Vᵀ) × 늘림(S=중요도) × 회전(U=방향). <strong>S의 특잇값</strong>이 데이터 중요도 순서</li>
+      <li><strong>적분 3종</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li><code>quad(f, a, b)</code> → 1D 정적분, <strong>(값, 오차) 튜플</strong> 반환</li>
+          <li><code>dblquad</code> → 2D 이중적분 (부피)</li>
+          <li><code>odeint</code> → 상미분방정식(ODE) 풀이 (로렌츠·미래 예측)</li>
+        </ul>
+      </li>
+      <li><strong>최적화 4종</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li><code>fsolve</code> → <strong>f(x)=0 근</strong> (초기값 필요)</li>
+          <li><code>minimize</code> → 다변수 최솟값, <code>method='SLSQP'</code>=제약 비선형</li>
+          <li><code>newton</code> → 뉴턴법(접선 기울기로 근 근사)</li>
+          <li><code>minimize_scalar</code> → 1변수, <code>method='Brent'</code></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 
   <div class="chapter-block">
     <div class="chapter-title">🔍 NumPy 복습 — 슬라이싱 · 조건연산 · 행렬</div>
@@ -1306,7 +1543,45 @@ minimize(f, x0=[1,5,5,1],
 
 <!-- ==================== CHAPTER 6 ==================== -->
 <section id="ch6">
-  <div class="section-title"><span class="icon">🐼</span> 6장 — Pandas 고급 (4/15까지) <span class="chapter-label">Ch.6</span></div>
+  <div class="section-title"><span class="icon">🐼</span> 6장 — Pandas 고급 (4/15까지) <span class="chapter-label" style="background:#0d9488;">📙 Day 3</span><span class="chapter-label" style="margin-left:0.4rem;">Ch.6</span></div>
+
+  <div class="chapter-block" style="background:linear-gradient(135deg,#fffbeb,#fef3c7); border-top-color:#f59e0b; color:#78350f;">
+    <div class="chapter-title" style="color:#78350f;">⚡ 초단기 암기 모드</div>
+    <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.9;">
+      <li><strong>Pandas 핵심 기능 8</strong>: ①구조(Series·DF) ②입출력(read_csv 등) ③탐색(head·info·describe·shape) ④선택/필터(<code>loc</code>=라벨, <code>iloc</code>=위치) ⑤정제/결측(<code>drop·fillna·dropna·duplicated</code>) ⑥결합 ⑦그룹(<code>groupby·pivot_table</code>) ⑧시계열/변환(<code>to_datetime·resample·melt·stack</code>)</li>
+      <li><strong>MultiIndex (계층형 인덱스)</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li>행·열 모두 <strong>2단계(level)</strong> 계층 가능 → 가독성↑, 다차원 분석</li>
+          <li><code>index.names = ['key1','key2']</code> · <code>columns.names = ['city','color']</code>로 이름 부여</li>
+          <li><code>groupby(level='key2').sum()</code>(행 기준), <code>groupby(level='color', axis=1).sum()</code>(열 기준)</li>
+          <li>삭제: <code>drop(['b'])</code>(행 default) / <code>drop('Seoul', axis=1)</code>(열)</li>
+        </ul>
+      </li>
+      <li><strong>★ merge vs concat</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li><strong>merge</strong> = 공통 <strong>키</strong> 기준 (SQL JOIN과 동일, 지능적 결합)</li>
+          <li><strong>concat</strong> = 단순 <strong>축</strong> 기준 이어붙이기</li>
+        </ul>
+      </li>
+      <li><strong>merge how 4종 (빈출 100%)</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li><code>'inner'</code> = <strong>교집합</strong> (기본값)</li>
+          <li><code>'outer'</code> = <strong>합집합</strong>, 없는 값은 <span style="background:#fde68a; padding:0 4px;">NaN</span></li>
+          <li><code>'left'</code> = 왼쪽 df 모두 유지, 오른쪽은 매칭만</li>
+          <li><code>'right'</code> = 오른쪽 df 모두 유지, 왼쪽은 매칭만</li>
+        </ul>
+      </li>
+      <li><strong>concat axis</strong>: <code>axis=0</code>=위아래 쌓기(기본) / <code>axis=1</code>=좌우 붙이기</li>
+      <li><strong>★ merge 함정 3개</strong>:
+        <ul style="margin-top:0.3rem;">
+          <li><span style="color:#b91c1c;"><strong>NaN 섞이면 int → float 자동 변환</strong></span></li>
+          <li>기준 아닌 같은 이름 컬럼 → 자동 <code>_x</code>, <code>_y</code> 접미사</li>
+          <li>동명 컬럼 여러 개면 <code>on=</code>으로 명시</li>
+        </ul>
+      </li>
+      <li><strong>인덱스 기반 merge</strong>: <code>pd.merge(df1, df2, left_index=True, right_on='index_num')</code></li>
+    </ul>
+  </div>
 
   <div class="chapter-block">
     <div class="chapter-title">📋 Pandas 핵심 기능 맵</div>

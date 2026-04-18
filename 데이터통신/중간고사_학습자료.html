@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>데이터통신 중간고사 대비 종합 학습자료</title>
+<title>데이터통신 중간고사 3일 암기 플랜</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -14,157 +14,143 @@
     --nav-bg: rgba(255,255,255,0.95);
     --shadow: 0 4px 24px rgba(0,0,0,0.08);
     --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
+    --day1: #2563eb;
+    --day2: #7c3aed;
+    --day3: #ea580c;
 }
 [data-theme="dark"] {
     --bg: #0f172a; --card-bg: #1e293b;
     --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
     --nav-bg: rgba(15,23,42,0.95);
     --shadow: 0 4px 24px rgba(0,0,0,0.4);
-    --shadow-hover: 0 8px 32px rgba(0,0,0,0.6);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; padding-top:64px; }
 
-/* Nav */
 .nav { position:fixed; top:0; left:0; right:0; height:60px; background:var(--nav-bg); backdrop-filter:blur(12px); display:flex; align-items:center; padding:0 24px; z-index:1000; border-bottom:1px solid var(--border); }
-.nav-logo { font-weight:700; color:var(--primary); text-decoration:none; font-size:1rem; white-space:nowrap; }
-.nav-links { display:flex; gap:8px; margin-left:24px; flex-wrap:wrap; overflow:hidden; }
-.nav-links a { text-decoration:none; color:var(--text-muted); font-size:0.8rem; padding:4px 10px; border-radius:6px; white-space:nowrap; transition:all 0.2s; }
-.nav-links a:hover { background:rgba(37,99,235,0.1); color:var(--primary); }
-.nav-right { margin-left:auto; display:flex; align-items:center; gap:10px; }
+.nav-logo { font-weight:700; color:var(--primary); text-decoration:none; font-size:1rem; }
+.nav-links { display:flex; gap:10px; margin-left:24px; flex-wrap:wrap; }
+.nav-links a { text-decoration:none; color:var(--text-muted); font-size:0.85rem; padding:6px 12px; border-radius:8px; font-weight:600; }
+.nav-links a.day1 { color:var(--day1); background:rgba(37,99,235,0.1); }
+.nav-links a.day2 { color:var(--day2); background:rgba(124,58,237,0.1); }
+.nav-links a.day3 { color:var(--day3); background:rgba(234,88,12,0.1); }
+.nav-right { margin-left:auto; display:flex; gap:10px; align-items:center; }
 .nav-home { text-decoration:none; color:var(--text-muted); font-size:0.85rem; }
-.btn-theme { background:none; border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; font-size:1rem; }
+.btn-theme { background:none; border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; }
 
-/* Header */
 .page-header { background:linear-gradient(135deg, #1e3a8a, #2563eb); color:white; padding:56px 24px 48px; text-align:center; }
-.week-badge { display:inline-block; background:rgba(255,255,255,0.2); padding:6px 18px; border-radius:20px; font-size:0.85rem; font-weight:500; margin-bottom:16px; }
-.page-header h1 { font-size:2.2rem; font-weight:900; margin-bottom:10px; }
+.week-badge { display:inline-block; background:rgba(255,255,255,0.2); padding:6px 18px; border-radius:20px; font-size:0.85rem; margin-bottom:16px; }
+.page-header h1 { font-size:2rem; font-weight:900; margin-bottom:10px; }
 .page-header .subtitle { font-size:1rem; opacity:0.85; }
-.exam-info { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:20px; }
-.exam-tag { background:rgba(255,255,255,0.15); padding:6px 14px; border-radius:8px; font-size:0.85rem; }
 
-/* Sections */
+/* Plan overview */
+.plan-overview { max-width:960px; margin:32px auto; padding:0 16px; }
+.plan-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.plan-card { padding:24px; border-radius:16px; background:var(--card-bg); box-shadow:var(--shadow); }
+.plan-card.d1 { border-top:5px solid var(--day1); }
+.plan-card.d2 { border-top:5px solid var(--day2); }
+.plan-card.d3 { border-top:5px solid var(--day3); }
+.plan-card .day-tag { font-size:0.8rem; font-weight:700; letter-spacing:1px; }
+.plan-card.d1 .day-tag { color:var(--day1); }
+.plan-card.d2 .day-tag { color:var(--day2); }
+.plan-card.d3 .day-tag { color:var(--day3); }
+.plan-card h3 { font-size:1.1rem; margin:6px 0 10px; }
+.plan-card ul { list-style:none; font-size:0.88rem; }
+.plan-card ul li { padding:4px 0; color:var(--text-muted); }
+.plan-card ul li::before { content:"▸ "; color:var(--text-muted); }
+
+/* Section cards */
 .section-card { max-width:960px; margin:32px auto; padding:32px; background:var(--card-bg); border-radius:16px; box-shadow:var(--shadow); }
-.section-card.blue { border-top:4px solid #2563eb; }
-.section-card.purple { border-top:4px solid #7c3aed; }
-.section-card.cyan { border-top:4px solid #0891b2; }
-.section-card.amber { border-top:4px solid #d97706; }
-.section-card.orange { border-top:4px solid #ea580c; }
-.section-card.green { border-top:4px solid #16a34a; }
-.section-card.red { border-top:4px solid #dc2626; }
-.section-card.indigo { border-top:4px solid #4f46e5; }
-.section-title { font-size:1.4rem; font-weight:700; margin-bottom:20px; }
+.section-card.d1 { border-top:5px solid var(--day1); }
+.section-card.d2 { border-top:5px solid var(--day2); }
+.section-card.d3 { border-top:5px solid var(--day3); }
+.day-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:16px; border-bottom:2px solid var(--border); }
+.day-badge { font-size:0.85rem; font-weight:900; letter-spacing:1px; padding:6px 14px; border-radius:20px; color:white; }
+.d1 .day-badge { background:var(--day1); }
+.d2 .day-badge { background:var(--day2); }
+.d3 .day-badge { background:var(--day3); }
+.day-title { font-size:1.5rem; font-weight:700; }
 
-/* Keyword box */
-.keyword-box { background:rgba(37,99,235,0.06); border-left:4px solid #2563eb; border-radius:0 10px 10px 0; padding:16px 20px; margin-bottom:14px; }
-.keyword-box .term { font-weight:700; font-size:1rem; color:var(--primary); margin-bottom:4px; }
-.keyword-box .def { font-size:0.95rem; line-height:1.75; }
-.keyword-box.purple-box { background:rgba(124,58,237,0.06); border-left-color:#7c3aed; }
-.keyword-box.purple-box .term { color:#7c3aed; }
-.keyword-box.cyan-box { background:rgba(8,145,178,0.06); border-left-color:#0891b2; }
-.keyword-box.cyan-box .term { color:#0891b2; }
-.keyword-box.amber-box { background:rgba(217,119,6,0.06); border-left-color:#d97706; }
-.keyword-box.amber-box .term { color:#d97706; }
-.keyword-box.green-box { background:rgba(22,163,74,0.06); border-left-color:#16a34a; }
-.keyword-box.green-box .term { color:#16a34a; }
-.keyword-box.red-box { background:rgba(220,38,38,0.06); border-left-color:#dc2626; }
-.keyword-box.red-box .term { color:#dc2626; }
+/* Memorize card (앞글자 암기) */
+.memo-hook { padding:20px 24px; border-radius:14px; margin:16px 0; text-align:center; font-weight:700; }
+.memo-hook.d1 { background:linear-gradient(135deg, rgba(37,99,235,0.1), rgba(37,99,235,0.05)); border:2px solid var(--day1); color:var(--day1); }
+.memo-hook.d2 { background:linear-gradient(135deg, rgba(124,58,237,0.1), rgba(124,58,237,0.05)); border:2px solid var(--day2); color:var(--day2); }
+.memo-hook.d3 { background:linear-gradient(135deg, rgba(234,88,12,0.1), rgba(234,88,12,0.05)); border:2px solid var(--day3); color:var(--day3); }
+.memo-hook .mnemonic { font-size:1.8rem; font-weight:900; letter-spacing:4px; margin:10px 0; }
+.memo-hook .hook-label { font-size:0.78rem; opacity:0.8; letter-spacing:2px; }
+.memo-hook .hook-desc { font-size:0.88rem; opacity:0.9; margin-top:6px; font-weight:500; }
 
-/* Sub headings */
-.sub-heading { font-size:1.1rem; font-weight:700; margin:28px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--border); }
+/* Topic block */
+.topic { margin:28px 0 14px; }
+.topic-title { font-size:1.15rem; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.topic-num { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:var(--primary); color:white; font-size:0.85rem; font-weight:700; }
+.d1 .topic-num { background:var(--day1); }
+.d2 .topic-num { background:var(--day2); }
+.d3 .topic-num { background:var(--day3); }
 
-/* Compare */
-.compare-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
-.compare-card { padding:20px; border-radius:12px; border:1px solid var(--border); background:var(--card-bg); }
-.compare-card h3 { font-size:1.05rem; margin-bottom:6px; }
-.compare-tag { display:inline-block; padding:2px 10px; border-radius:12px; font-size:0.75rem; font-weight:500; margin-bottom:8px; }
+/* Flashcard */
+.flash-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0; }
+.flash { padding:14px 16px; border-radius:10px; background:var(--bg); border-left:4px solid var(--primary); }
+.d1 .flash { border-left-color:var(--day1); }
+.d2 .flash { border-left-color:var(--day2); }
+.d3 .flash { border-left-color:var(--day3); }
+.flash .q { font-weight:700; font-size:0.9rem; margin-bottom:6px; }
+.flash .a { font-size:0.88rem; color:var(--text-muted); line-height:1.65; }
 
-/* OSI Table */
-.osi-table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.9rem; }
-.osi-table th, .osi-table td { padding:12px 14px; border:1px solid var(--border); text-align:left; }
+/* Bullet list for memorization */
+.memo-list { margin:12px 0; padding:16px 20px; background:var(--bg); border-radius:10px; }
+.memo-list-title { font-weight:700; font-size:0.95rem; margin-bottom:8px; }
+.memo-list ol, .memo-list ul { padding-left:24px; }
+.memo-list li { padding:3px 0; font-size:0.92rem; }
+.memo-list li strong { color:var(--primary); }
+
+/* Table */
+.osi-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.88rem; }
+.osi-table th, .osi-table td { padding:10px 12px; border:1px solid var(--border); text-align:left; }
 .osi-table th { background:rgba(37,99,235,0.08); font-weight:700; }
-.osi-table tr:nth-child(even) { background:rgba(0,0,0,0.02); }
-[data-theme="dark"] .osi-table tr:nth-child(even) { background:rgba(255,255,255,0.03); }
-
-/* Diagram */
-.flow-diagram { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; margin:20px 0; }
-.flow-step { background:rgba(37,99,235,0.1); color:var(--primary); padding:12px 20px; border-radius:10px; font-weight:600; font-size:0.9rem; text-align:center; min-width:100px; }
-.flow-arrow { font-size:1.2rem; color:var(--text-muted); }
+.osi-table td.highlight { background:rgba(220,38,38,0.05); font-weight:600; }
 
 /* Formula */
-.formula-box { background:rgba(124,58,237,0.06); border:1px solid rgba(124,58,237,0.2); border-radius:10px; padding:16px 20px; margin:12px 0; text-align:center; }
-.formula-box .formula { font-size:1.1rem; font-weight:700; color:#7c3aed; font-family:'Courier New',monospace; }
-.formula-box .formula-desc { font-size:0.85rem; color:var(--text-muted); margin-top:6px; }
+.formula-box { background:rgba(124,58,237,0.06); border:1px solid rgba(124,58,237,0.2); border-radius:10px; padding:14px 18px; margin:10px 0; text-align:center; }
+.formula { font-size:1.05rem; font-weight:700; color:#7c3aed; font-family:'Courier New',monospace; }
+.formula-desc { font-size:0.83rem; color:var(--text-muted); margin-top:6px; }
 
-/* Highlight box */
-.highlight-box { background:rgba(220,38,38,0.06); border:1px solid rgba(220,38,38,0.2); border-radius:10px; padding:16px 20px; margin:12px 0; }
-.highlight-box .hl-title { font-weight:700; color:#dc2626; margin-bottom:6px; }
-
-/* Example card */
-.example-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
-.example-card { padding:18px; border-radius:12px; border:1px solid var(--border); }
-.example-card .company { font-weight:700; font-size:1rem; margin-bottom:4px; }
-.category { display:inline-block; padding:2px 10px; border-radius:12px; font-size:0.75rem; font-weight:500; margin-bottom:8px; }
-.example-card .desc { font-size:0.9rem; color:var(--text-muted); }
-
-/* Topology */
-.topo-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
-.topo-card { padding:20px; border-radius:12px; border:1px solid var(--border); }
-.topo-card h3 { font-size:1.05rem; margin-bottom:8px; }
-.topo-card .topo-icon { font-size:2rem; margin-bottom:8px; }
-.topo-pros, .topo-cons { font-size:0.88rem; margin-top:8px; }
-.topo-pros strong { color:var(--success); }
-.topo-cons strong { color:var(--danger); }
-
-/* Timeline */
-.timeline { position:relative; padding-left:32px; }
-.timeline::before { content:''; position:absolute; left:5px; top:0; bottom:0; width:3px; background:linear-gradient(180deg,#d97706,#f59e0b,#fbbf24); border-radius:2px; }
-.timeline-item { position:relative; margin-bottom:24px; }
-.timeline-item::before { content:''; position:absolute; left:-28px; top:6px; width:12px; height:12px; background:#d97706; border-radius:50%; border:2px solid var(--card-bg); }
-.era { font-weight:700; color:#d97706; font-size:0.9rem; }
-.tl-title { font-weight:600; font-size:1rem; margin:2px 0; }
-.tl-desc { font-size:0.9rem; color:var(--text-muted); }
+/* Check list (오늘의 암기 목표) */
+.checklist { background:var(--bg); border-radius:12px; padding:18px 22px; margin:14px 0; }
+.checklist-title { font-weight:700; margin-bottom:10px; font-size:1rem; }
+.checklist label { display:flex; align-items:flex-start; gap:10px; padding:6px 0; cursor:pointer; font-size:0.92rem; }
+.checklist input[type="checkbox"] { margin-top:4px; width:18px; height:18px; cursor:pointer; }
+.checklist label.done { text-decoration:line-through; color:var(--text-muted); }
 
 /* Quiz */
-.quiz-item { margin-bottom:24px; padding:20px; border-radius:12px; border:1px solid var(--border); }
-.quiz-q { font-weight:600; margin-bottom:12px; font-size:1rem; }
+.quiz-item { margin-bottom:18px; padding:18px; border-radius:12px; border:1px solid var(--border); }
+.quiz-q { font-weight:600; margin-bottom:10px; font-size:0.95rem; }
 .q-num { color:var(--primary); font-weight:700; margin-right:6px; }
 .quiz-options { list-style:none; }
-.quiz-options li { margin-bottom:8px; }
-.quiz-options button { width:100%; text-align:left; padding:10px 16px; border:1px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); cursor:pointer; font-size:0.92rem; font-family:inherit; transition:all 0.2s; }
-.quiz-options button:hover:not(:disabled) { border-color:var(--primary); background:rgba(37,99,235,0.05); }
+.quiz-options li { margin-bottom:6px; }
+.quiz-options button { width:100%; text-align:left; padding:9px 14px; border:1px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); cursor:pointer; font-size:0.9rem; font-family:inherit; }
+.quiz-options button:hover:not(:disabled) { border-color:var(--primary); }
 .quiz-options button.correct { background:rgba(22,163,74,0.12); border-color:#16a34a; color:#16a34a; font-weight:600; }
 .quiz-options button.wrong { background:rgba(220,38,38,0.12); border-color:#dc2626; color:#dc2626; }
-.quiz-feedback { display:none; margin-top:12px; padding:12px 16px; border-radius:8px; font-size:0.9rem; }
+.quiz-feedback { display:none; margin-top:10px; padding:10px 14px; border-radius:8px; font-size:0.88rem; }
 .quiz-feedback.show { display:block; }
 .quiz-feedback.correct-fb { background:rgba(22,163,74,0.08); color:#16a34a; }
 .quiz-feedback.wrong-fb { background:rgba(220,38,38,0.08); color:#dc2626; }
 
-/* Short answer quiz */
-.short-answer { margin-top:10px; }
-.short-answer input { padding:8px 14px; border:1px solid var(--border); border-radius:8px; font-size:0.92rem; font-family:inherit; background:var(--card-bg); color:var(--text); width:60%; min-width:200px; }
-.short-answer button { padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.9rem; margin-left:8px; }
-.short-answer button:hover { opacity:0.9; }
-
-/* Descriptive quiz */
-.desc-answer { margin-top:10px; }
-.desc-answer textarea { width:100%; min-height:80px; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:0.92rem; font-family:inherit; background:var(--card-bg); color:var(--text); resize:vertical; }
-.desc-answer button { margin-top:8px; padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.9rem; }
-.model-answer { display:none; margin-top:12px; padding:14px 18px; border-radius:8px; background:rgba(37,99,235,0.06); border-left:4px solid var(--primary); font-size:0.9rem; line-height:1.8; }
+.short-answer input { padding:8px 12px; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:var(--card-bg); color:var(--text); width:60%; min-width:180px; }
+.short-answer button { padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.88rem; margin-left:6px; }
+.model-answer { display:none; margin-top:10px; padding:12px 16px; border-radius:8px; background:rgba(37,99,235,0.06); border-left:4px solid var(--primary); font-size:0.88rem; line-height:1.75; }
 .model-answer.show { display:block; }
-.model-answer strong { color:var(--primary); }
+.desc-answer textarea { width:100%; min-height:70px; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:var(--card-bg); color:var(--text); resize:vertical; }
+.desc-answer button { margin-top:6px; padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.88rem; }
 
-footer { text-align:center; padding:32px; color:var(--text-muted); font-size:0.85rem; }
+footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.85rem; }
 
 @media (max-width:680px) {
-    .compare-grid, .example-grid, .topo-grid { grid-template-columns:1fr; }
+    .plan-grid, .flash-grid { grid-template-columns:1fr; }
     .nav-links { display:none; }
-    .page-header h1 { font-size:1.5rem; }
-    .section-card { margin:16px 12px; padding:20px; }
-    .flow-diagram { flex-direction:column; }
-    .flow-arrow { transform:rotate(90deg); }
-    .short-answer input { width:100%; margin-bottom:8px; }
-    .short-answer button { margin-left:0; width:100%; }
+    .page-header h1 { font-size:1.4rem; }
+    .section-card { margin:16px 10px; padding:20px; }
 }
 </style>
 </head>
@@ -173,1257 +159,1012 @@ footer { text-align:center; padding:32px; color:var(--text-muted); font-size:0.8
 <nav class="nav">
     <a href="index.html" class="nav-logo">데이터통신</a>
     <div class="nav-links">
-        <a href="#ch1">1장 개요</a>
-        <a href="#ch2">2장 OSI</a>
-        <a href="#ch3">3장 신호</a>
-        <a href="#ch4">4장 변환</a>
-        <a href="#ch5">5장 기초</a>
-        <a href="#quiz">퀴즈</a>
+        <a href="#day1" class="day1">DAY 1</a>
+        <a href="#day2" class="day2">DAY 2</a>
+        <a href="#day3" class="day3">DAY 3</a>
+        <a href="#final">최종정리</a>
     </div>
     <div class="nav-right">
         <a href="index.html" class="nav-home">홈</a>
-        <button class="btn-theme" id="themeToggle" title="테마 전환">🌙</button>
+        <button class="btn-theme" id="themeToggle">🌙</button>
     </div>
 </nav>
 
 <header class="page-header">
-    <div class="week-badge">중간고사 대비 · 데이터통신</div>
-    <h1>데이터통신 중간고사 종합 정리</h1>
-    <p class="subtitle">1장~5장 핵심 내용 총정리 · 단답 + 객관 + 서술 대비</p>
-    <div class="exam-info">
-        <span class="exam-tag">범위: 1~5장</span>
-        <span class="exam-tag">형식: 단답 · 객관 · 서술</span>
-        <span class="exam-tag">장소: 18418</span>
-    </div>
+    <div class="week-badge">중간고사 3일 암기 플랜</div>
+    <h1>데이터통신 3일 만에 완성</h1>
+    <p class="subtitle">오늘(1·2장) → 내일(3·4장) → 모레(5장+토폴로지+복습)</p>
 </header>
+
+<!-- ==================== PLAN OVERVIEW ==================== -->
+<div class="plan-overview">
+    <div class="plan-grid">
+        <div class="plan-card d1">
+            <div class="day-tag">DAY 1 · 오늘</div>
+            <h3>1장 개요 + 2장 OSI</h3>
+            <ul>
+                <li>데이터통신 정의</li>
+                <li>구성요소 5가지</li>
+                <li>프로토콜 정의·3요소</li>
+                <li>OSI 7계층</li>
+                <li>계층별 PDU·특징</li>
+            </ul>
+        </div>
+        <div class="plan-card d2">
+            <div class="day-tag">DAY 2 · 내일</div>
+            <h3>3장 신호 + 4장 변환</h3>
+            <ul>
+                <li>아날로그/디지털 신호</li>
+                <li>대역폭·비트율·채널용량</li>
+                <li>감쇠·왜곡·잡음</li>
+                <li>PCM (표본화·양자화·부호화)</li>
+                <li>ASK·FSK·PSK·QAM</li>
+            </ul>
+        </div>
+        <div class="plan-card d3">
+            <div class="day-tag">DAY 3 · 모레</div>
+            <h3>5장 기초 + 전체 복습</h3>
+            <ul>
+                <li>단방향·반이중·전이중</li>
+                <li>직렬·병렬 전송</li>
+                <li>토폴로지 6가지</li>
+                <li>전체 퀴즈 복습</li>
+                <li>백지 테스트</li>
+            </ul>
+        </div>
+    </div>
+</div>
 
 <main>
 
-<!-- ==================== 1장: 데이터통신 개요 ==================== -->
-<section class="section-card blue" id="ch1">
-    <h2 class="section-title">📘 1장 — 데이터통신 개요</h2>
-
-    <h3 class="sub-heading">1. 데이터통신의 정의</h3>
-    <div class="keyword-box">
-        <div class="term">데이터 (Data)</div>
-        <div class="def">특정 형태로 정리되지 않은 사실, 개념, 명령어 등의 집합. 문자, 숫자, 기호 등을 포함한다.</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">정보 (Information)</div>
-        <div class="def">데이터를 가공·처리하여 의미를 부여한 것</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">통신 (Communication)</div>
-        <div class="def">송신자(발신측)에서 전송매체(통신회선)를 통해 수신자(착신측)에게 정보를 전달하는 것</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">데이터통신 (Data Communication)</div>
-        <div class="def">컴퓨터와 컴퓨터 간 또는 컴퓨터와 단말장치 사이에서 통신회선을 이용하여 데이터를 송수신하는 것. <strong>데이터통신 = 데이터처리 + 통신</strong></div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">정보통신</div>
-        <div class="def">데이터뿐만 아니라 음성, 영상 등 멀티미디어를 포함하는 넓은 의미의 통신. <strong>정보통신 = 정보처리 = 데이터통신</strong></div>
+<!-- ==================== DAY 1 ==================== -->
+<section class="section-card d1" id="day1">
+    <div class="day-header">
+        <span class="day-badge">DAY 1</span>
+        <div class="day-title">1장 데이터통신 개요 + 2장 OSI 7계층</div>
     </div>
 
-    <h3 class="sub-heading">2. 데이터통신 시스템의 구성요소 5가지 ⭐</h3>
-    <div class="highlight-box">
-        <div class="hl-title">시험 핵심 — 5가지 구성요소와 각각의 특징을 반드시 암기!</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">① 송신자 (Sender)</div>
-        <div class="def">데이터를 보내는 장치. 컴퓨터, 전화기 등</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">② 수신자 (Receiver)</div>
-        <div class="def">데이터를 받는 장치. 컴퓨터, 전화기 등</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">③ 전송매체 (Medium)</div>
-        <div class="def">데이터가 이동하는 물리적 통로. 꼬임쌍선(Twisted-pair), 동축케이블, 광섬유, 무선 등</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">④ 메시지 (Message)</div>
-        <div class="def">전달하려는 데이터(정보). 텍스트, 숫자, 이미지, 오디오, 비디오 등</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">⑤ 프로토콜 (Protocol)</div>
-        <div class="def">데이터 통신을 지배하는 규칙의 집합. 통신 양 끝에서 약속된 규약</div>
+    <div class="checklist">
+        <div class="checklist-title">📌 오늘 외워야 할 것 (체크하며 공부)</div>
+        <label><input type="checkbox"> 데이터통신 정의를 한 문장으로 말하기</label>
+        <label><input type="checkbox"> 구성요소 5가지 앞글자 외우기 (송·수·전·메·프)</label>
+        <label><input type="checkbox"> 프로토콜 정의 + 3요소 (구·의·타)</label>
+        <label><input type="checkbox"> OSI 7계층 아래→위 순서 외우기 (물·데·네·전·세·표·응)</label>
+        <label><input type="checkbox"> 각 계층 PDU 외우기 (비·프·패·세·데·데·데)</label>
+        <label><input type="checkbox"> 각 계층 핵심 기능 1줄 말하기</label>
     </div>
 
-    <h3 class="sub-heading">3. 데이터통신 시스템의 장치 구성</h3>
-    <div class="keyword-box">
-        <div class="term">단말장치 (Terminal)</div>
-        <div class="def">
-            - <strong>더미 터미널 (Dummy Terminal)</strong>: 중앙 컴퓨터에 종속적이며 독자적 처리 능력 없음<br>
-            - <strong>지능형 터미널 (Intelligent Terminal)</strong>: 자체 처리 능력을 가진 단말장치 (PC 등)
-        </div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">MODEM (Modulator and Demodulator, 변복조기)</div>
-        <div class="def">아날로그 회선에서 디지털 데이터를 전송하기 위해 변조·복조를 수행하는 장치</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">DSU/CSU (Digital Service Unit / Channel Service Unit)</div>
-        <div class="def">디지털 회선에서 사용하는 신호 변환 장치. CSU는 디지털 전용회선(T-1, E-1 등)에 접속</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">CCU (Communication Control Unit, 통신제어장치)</div>
-        <div class="def">데이터 전송과 관련된 모든 제어 기능을 담당. CCP(통신제어 프로세서), FEP(전처리기) 포함</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">DTE (Data Terminal Equipment)</div>
-        <div class="def">데이터를 생성하거나 소비하는 장치. 컴퓨터, 단말기 등. DCE를 통해 네트워크에 접속</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">DCE (Data Communication Equipment)</div>
-        <div class="def">DTE의 데이터를 통신 회선에 적합한 형태로 변환하는 장치. 모뎀, DSU 등</div>
-    </div>
-
-    <h3 class="sub-heading">4. 네트워크 분류</h3>
-    <div class="compare-grid">
-        <div class="compare-card" style="border-top:3px solid #2563eb;">
-            <h3>LAN (Local Area Network)</h3>
-            <span class="compare-tag" style="background:rgba(37,99,235,0.1);color:#2563eb;">근거리</span>
-            <p>건물, 사무실 등 제한된 지역 내 네트워크. 수 Km 이내, Mbps~Gbps급 고속. 사설 네트워크.</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #7c3aed;">
-            <h3>MAN (Metropolitan Area Network)</h3>
-            <span class="compare-tag" style="background:rgba(124,58,237,0.1);color:#7c3aed;">도시</span>
-            <p>LAN과 WAN 중간 규모. 도시 내 LAN들을 연결. IEEE의 DQDB(Distributed Queue Dual Bus) 표준.</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #0891b2;">
-            <h3>WAN (Wide Area Network)</h3>
-            <span class="compare-tag" style="background:rgba(8,145,178,0.1);color:#0891b2;">광역</span>
-            <p>국가, 대륙 간 연결. 공중 네트워크(통신사업자 제공). X.25, ATM 등 사용. LAN보다 느리고 에러율 높음.</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #d97706;">
-            <h3>네트워크 공식</h3>
-            <span class="compare-tag" style="background:rgba(217,119,6,0.1);color:#d97706;">공식</span>
-            <p><strong>N개 장치 → N(N-1)/2 링크</strong> (완전연결 시). 장치가 많을수록 통신망 필요.</p>
-        </div>
-    </div>
-
-    <h3 class="sub-heading">5. 프로토콜의 정의와 구성요소 3가지 ⭐</h3>
-    <div class="highlight-box">
-        <div class="hl-title">시험 핵심 — 프로토콜 정의 + 구성요소 3가지와 의미를 외우기!</div>
-    </div>
-    <div class="keyword-box">
-        <div class="term">프로토콜 (Protocol) 정의</div>
-        <div class="def">통신을 위해 통신 양단 간에 약속된 규칙의 집합. 데이터 형식, 전송 순서, 오류 처리 등을 규정한다.</div>
-    </div>
-
-    <div class="keyword-box" style="border-left-color:#dc2626; background:rgba(220,38,38,0.06);">
-        <div class="term" style="color:#dc2626;">구성요소 ① 구문 (Syntax)</div>
-        <div class="def">데이터의 <strong>형식, 구조, 부호화</strong>를 정의. 어떤 순서로, 어떤 크기로 데이터를 보낼 것인지 규정.</div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#dc2626; background:rgba(220,38,38,0.06);">
-        <div class="term" style="color:#dc2626;">구성요소 ② 의미 (Semantics)</div>
-        <div class="def">전송되는 데이터의 <strong>의미, 해석, 제어 정보</strong>를 정의. 오류가 발생했을 때 어떻게 처리할지 등.</div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#dc2626; background:rgba(220,38,38,0.06);">
-        <div class="term" style="color:#dc2626;">구성요소 ③ 타이밍 (Timing)</div>
-        <div class="def">데이터의 <strong>전송 속도와 순서</strong>를 정의. 예: 송신측이 100Mbps로 보내는데, 수신측이 10Mbps만 처리 가능하면?</div>
-    </div>
-
-    <h3 class="sub-heading">6. 프로토콜의 주요 기능</h3>
-    <div class="compare-grid">
-        <div class="compare-card" style="border-top:3px solid #2563eb;">
-            <h3>주소 지정 (Addressing)</h3>
-            <p>발신지, 목적지 주소를 포함하여 데이터가 올바른 수신자에게 전달되도록 함</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #7c3aed;">
-            <h3>순서 제어 (Sequencing)</h3>
-            <p>전송되는 데이터의 순서를 명시하여 올바른 순서로 재조립</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #0891b2;">
-            <h3>단편화·재조립 (Fragmentation / Reassembly)</h3>
-            <p>큰 데이터를 작은 블록(세그먼트)으로 나누어 전송하고, 수신 측에서 재조립</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #d97706;">
-            <h3>캡슐화 (Encapsulation)</h3>
-            <p>데이터에 제어정보(헤더, 트레일러)를 붙여 전송 단위를 구성</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #ea580c;">
-            <h3>흐름 제어 (Flow Control)</h3>
-            <p>수신측의 처리 속도에 맞춰 송신 속도를 조절하여 데이터 손실 방지</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #16a34a;">
-            <h3>오류 제어 (Error Control)</h3>
-            <p>전송 중 발생하는 오류를 검출·수정. 패리티, CRC, 체크섬 등 사용</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #dc2626;">
-            <h3>동기화 (Synchronization)</h3>
-            <p>송수신 측의 타이밍을 맞추어 데이터를 정확히 송수신</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #4f46e5;">
-            <h3>다중화 (Multiplexing)</h3>
-            <p>하나의 통신 회선을 여러 사용자가 공유하여 효율적으로 사용</p>
-        </div>
-    </div>
-</section>
-
-<!-- ==================== 2장: OSI 7계층 ==================== -->
-<section class="section-card purple" id="ch2">
-    <h2 class="section-title">📙 2장 — OSI 7계층 모델</h2>
-
-    <h3 class="sub-heading">1. OSI 모델 개요</h3>
-    <div class="keyword-box purple-box">
-        <div class="term">OSI (Open System Interconnection) 참조 모델</div>
-        <div class="def">1984년 ISO(국제표준화기구)가 제정한 네트워크 통신의 7계층 표준 모델. 서로 다른 시스템 간의 상호 연결을 위한 참조 모델(Reference Model)이다.</div>
-    </div>
-
-    <h3 class="sub-heading">2. OSI 7계층 나열 및 특징 ⭐⭐⭐</h3>
-    <div class="highlight-box">
-        <div class="hl-title">최대 출제 포인트 — 7계층 이름, 처리 단위(PDU), 핵심 기능을 모두 암기!</div>
-    </div>
-
-    <table class="osi-table">
-        <thead>
-            <tr><th>계층</th><th>이름</th><th>PDU (처리 단위)</th><th>핵심 기능</th><th>주요 프로토콜/표준</th></tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>7</strong></td>
-                <td><strong>응용 계층</strong><br>(Application)</td>
-                <td>메시지/데이터</td>
-                <td>사용자에게 네트워크 서비스 제공. 이메일, 파일 전송 등</td>
-                <td>X.400(이메일), X.500(디렉토리), FTAM</td>
-            </tr>
-            <tr>
-                <td><strong>6</strong></td>
-                <td><strong>표현 계층</strong><br>(Presentation)</td>
-                <td>메시지/데이터</td>
-                <td><strong>변환</strong>(Translation, ASCII↔EBCDIC), <strong>암호화</strong>(Encryption), <strong>압축</strong>(Compression)</td>
-                <td>JPEG, MPEG, DVI, ASCII, EBCDIC</td>
-            </tr>
-            <tr>
-                <td><strong>5</strong></td>
-                <td><strong>세션 계층</strong><br>(Session)</td>
-                <td>메시지/데이터</td>
-                <td><strong>세션</strong> 설정·유지·종료, 동기화, 대화 제어 (반이중/전이중 결정)</td>
-                <td>-</td>
-            </tr>
-            <tr>
-                <td><strong>4</strong></td>
-                <td><strong>전송 계층</strong><br>(Transport)</td>
-                <td><strong>세그먼트 (Segment)</strong></td>
-                <td><strong>프로세스 간(Process-to-process)</strong> End-to-End 전달, <strong>포트 주소</strong>로 프로세스 식별</td>
-                <td>TCP, UDP</td>
-            </tr>
-            <tr>
-                <td><strong>3</strong></td>
-                <td><strong>네트워크 계층</strong><br>(Network)</td>
-                <td><strong>패킷 (Packet)</strong></td>
-                <td><strong>논리 주소 지정</strong>, <strong>라우팅</strong>(경로 설정), End-to-end 전달</td>
-                <td>X.25, IP</td>
-            </tr>
-            <tr>
-                <td><strong>2</strong></td>
-                <td><strong>데이터링크 계층</strong><br>(Data Link)</td>
-                <td><strong>프레임 (Frame)</strong></td>
-                <td><strong>프레임화</strong>, <strong>물리 주소 지정</strong>, <strong>흐름 제어</strong>, <strong>오류 제어</strong>, Hop-by-hop(Node-by-node) 전달</td>
-                <td>HDLC, BSC, PPP, LLC</td>
-            </tr>
-            <tr>
-                <td><strong>1</strong></td>
-                <td><strong>물리 계층</strong><br>(Physical)</td>
-                <td><strong>비트 (Bit)</strong></td>
-                <td><strong>비트 전송</strong>, 전기적·기계적·기능적·절차적 특성 정의, DTE↔DCE 인터페이스</td>
-                <td>V.21, V.22, X.21, RS-232C</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h3 class="sub-heading">3. 계층별 상세 설명</h3>
-
-    <div class="keyword-box purple-box">
-        <div class="term">물리 계층 (Physical Layer) — 1계층</div>
-        <div class="def">
-            비트(0, 1)를 전송매체를 통해 전달하는 역할<br>
-            <strong>4가지 특성:</strong><br>
-            - <strong>전기적 특성</strong>: 전압 레벨, 임피던스 등<br>
-            - <strong>기계적 특성</strong>: 커넥터의 모양, 핀 배치 등<br>
-            - <strong>기능적 특성</strong>: 각 핀의 기능 정의<br>
-            - <strong>절차적 특성</strong>: 비트 전송 순서, 타이밍 등
-        </div>
-    </div>
-    <div class="keyword-box purple-box">
-        <div class="term">데이터링크 계층 (Data Link Layer) — 2계층</div>
-        <div class="def">
-            인접 노드 간(hop-by-hop) <strong>프레임</strong> 단위로 데이터 전달<br>
-            - <strong>프레임화</strong>: 비트열을 프레임으로 구성<br>
-            - <strong>물리 주소 지정</strong>: MAC 주소를 사용하여 프레임 전달<br>
-            - <strong>흐름 제어</strong>: Stop-and-wait, Sliding window 방식<br>
-            - <strong>오류 제어</strong>: 손상·분실 프레임 감지 및 재전송<br>
-            - <strong>접근 제어</strong>: 공유 링크에서의 매체 접근 제어
-        </div>
-    </div>
-    <div class="keyword-box purple-box">
-        <div class="term">네트워크 계층 (Network Layer) — 3계층</div>
-        <div class="def">
-            발신지에서 목적지까지(End-to-end) <strong>패킷</strong>을 전달<br>
-            - <strong>논리 주소 지정</strong>: IP 주소 등 논리적 주소 부여<br>
-            - <strong>라우팅(경로 설정)</strong>: 최적 경로를 결정하여 패킷 전달<br>
-            - 2계층이 hop-by-hop이라면, 3계층은 <strong>end-to-end</strong> 전달
-        </div>
-    </div>
-    <div class="keyword-box purple-box">
-        <div class="term">전송 계층 (Transport Layer) — 4계층</div>
-        <div class="def">
-            <strong>프로세스 대 프로세스(Process-to-process)</strong> End-to-end 전달<br>
-            - <strong>포트 주소</strong>(Port address)를 사용하여 프로세스 식별<br>
-            - 네트워크 계층(3계층)이 컴퓨터까지 전달한다면, 전송 계층은 <strong>해당 컴퓨터의 특정 프로세스</strong>까지 전달
-        </div>
-    </div>
-    <div class="keyword-box purple-box">
-        <div class="term">세션 계층 (Session Layer) — 5계층</div>
-        <div class="def">
-            통신 장치 간 <strong>세션(대화)</strong>을 설정·유지·종료<br>
-            - <strong>동기화</strong>: 동기점을 설정하여 장애 시 재전송 위치 결정<br>
-            - <strong>대화 제어</strong>: 반이중(Half-duplex) 또는 전이중(Full-duplex) 방식 결정<br>
-            - <strong>체크포인트</strong>: 오류 복구를 위한 동기점 삽입
-        </div>
-    </div>
-    <div class="keyword-box purple-box">
-        <div class="term">표현 계층 (Presentation Layer) — 6계층</div>
-        <div class="def">
-            데이터의 <strong>형식 변환</strong>을 담당 (3가지 핵심 기능):<br>
-            - <strong>변환(Translation)</strong>: 코드 변환 (예: ASCII ↔ EBCDIC)<br>
-            - <strong>암호화(Encryption)</strong>: 보안을 위한 데이터 암호화·복호화<br>
-            - <strong>압축(Compression)</strong>: 전송 효율을 위한 데이터 압축 (JPEG, MPEG 등)
-        </div>
-    </div>
-    <div class="keyword-box purple-box">
-        <div class="term">응용 계층 (Application Layer) — 7계층</div>
-        <div class="def">
-            사용자에게 네트워크 서비스를 직접 제공<br>
-            - <strong>NVT (Network Virtual Terminal)</strong>: 가상 터미널 서비스<br>
-            - <strong>FTAM</strong>: 파일 전송, 접근, 관리<br>
-            - <strong>전자우편</strong>: X.400 표준<br>
-            - <strong>디렉토리 서비스</strong>: X.500 표준
-        </div>
-    </div>
-
-    <h3 class="sub-heading">4. 핵심 개념</h3>
-    <div class="keyword-box purple-box">
-        <div class="term">캡슐화 (Encapsulation)</div>
-        <div class="def">상위 계층의 데이터에 헤더(Header)를 붙여 하위 계층으로 전달. 2계층은 트레일러(Trailer)도 추가.</div>
-    </div>
-    <div class="keyword-box purple-box">
-        <div class="term">SDU vs PDU</div>
-        <div class="def">
-            <strong>SDU (Service Data Unit)</strong>: 상위 계층에서 내려온 원본 데이터<br>
-            <strong>PDU (Protocol Data Unit)</strong>: SDU + 제어정보(헤더). 즉 <strong>PDU = SDU + 헤더</strong>
-        </div>
-    </div>
-    <div class="keyword-box purple-box">
-        <div class="term">동료 프로세스 (Peer-to-Peer Process)</div>
-        <div class="def">같은 계층끼리는 논리적으로 직접 통신하는 것처럼 보임. 실제로는 하위 계층을 통해 전달.</div>
-    </div>
-
-    <h3 class="sub-heading">5. 암호화 방식</h3>
-    <div class="compare-grid">
-        <div class="compare-card" style="border-top:3px solid #7c3aed;">
-            <h3>대칭 키 암호화 (비밀 키)</h3>
-            <span class="compare-tag" style="background:rgba(124,58,237,0.1);color:#7c3aed;">Secret Key</span>
-            <p>암호화와 복호화에 <strong>같은 키</strong>를 사용. 키 배포 문제가 있음.</p>
-            <div class="compare-examples">
-                <div class="label">알고리즘</div>
-                <ul><li>DES, AES, SEED</li></ul>
+    <!-- 주제 1: 데이터통신 정의 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>데이터통신 정의</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">Q. 데이터란?</div>
+                <div class="a">특정 형태로 정리되지 않은 사실, 개념, 명령어 등의 집합 (문자·숫자·기호)</div>
             </div>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #0891b2;">
-            <h3>비대칭 키 암호화 (공개 키)</h3>
-            <span class="compare-tag" style="background:rgba(8,145,178,0.1);color:#0891b2;">Public Key</span>
-            <p><strong>공개 키</strong>로 암호화, <strong>개인 키</strong>로 복호화. 공개 키로는 복호화 불가.</p>
-            <div class="compare-examples">
-                <div class="label">알고리즘</div>
-                <ul><li>RSA</li></ul>
+            <div class="flash">
+                <div class="q">Q. 정보란?</div>
+                <div class="a">데이터를 가공·처리하여 의미를 부여한 것</div>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- ==================== 3장: 신호 ==================== -->
-<section class="section-card cyan" id="ch3">
-    <h2 class="section-title">📗 3장 — 신호</h2>
-
-    <h3 class="sub-heading">1. 아날로그 신호 vs 디지털 신호 ⭐</h3>
-    <div class="compare-grid">
-        <div class="compare-card" style="border-top:3px solid #0891b2;">
-            <h3>아날로그 데이터/신호</h3>
-            <span class="compare-tag" style="background:rgba(8,145,178,0.1);color:#0891b2;">연속적</span>
-            <p><strong>아날로그 데이터</strong>: 연속적인 값을 가지는 데이터 (음성, 영상, 오디오, 비디오)</p>
-            <p><strong>아날로그 신호</strong>: 연속적인 전자기 신호로, 무한히 많은 값을 가짐</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #2563eb;">
-            <h3>디지털 데이터/신호</h3>
-            <span class="compare-tag" style="background:rgba(37,99,235,0.1);color:#2563eb;">이산적</span>
-            <p><strong>디지털 데이터</strong>: 이산적인 값을 가지는 데이터 (0과 1)</p>
-            <p><strong>디지털 신호</strong>: 이산적인 전자기 신호로, 유한한 수의 값만 가짐</p>
-        </div>
-    </div>
-
-    <h3 class="sub-heading">2. 사인파(정현파)의 3요소</h3>
-    <div class="formula-box">
-        <div class="formula">s(t) = A sin(2πft + φ)</div>
-        <div class="formula-desc">A: 진폭, f: 주파수, φ: 위상</div>
-    </div>
-    <div class="keyword-box cyan-box">
-        <div class="term">진폭 (Amplitude, A)</div>
-        <div class="def">신호의 세기(높이). 에너지의 크기를 나타냄.</div>
-    </div>
-    <div class="keyword-box cyan-box">
-        <div class="term">주파수 (Frequency, f) / 주기 (Period, T)</div>
-        <div class="def">
-            <strong>주기(T)</strong>: 한 사이클을 완성하는 데 걸리는 시간 (초)<br>
-            <strong>주파수(f)</strong>: 1초 동안 반복되는 사이클 수 (Hz)<br>
-            <strong>f = 1/T, T = 1/f</strong>
-        </div>
-    </div>
-    <div class="keyword-box cyan-box">
-        <div class="term">위상 (Phase, φ)</div>
-        <div class="def">시간 0에서의 파형의 상대적 위치. 도(Degree) 또는 라디안(Radian)으로 표현.</div>
-    </div>
-
-    <h3 class="sub-heading">3. 대역폭 (Bandwidth) ⭐</h3>
-    <div class="keyword-box cyan-box">
-        <div class="term">대역폭 (Bandwidth)</div>
-        <div class="def">
-            신호가 차지하는 주파수의 범위. <strong>최고 주파수 - 최저 주파수</strong>로 계산.<br>
-            예) 1000Hz~5000Hz → 대역폭 = 4000Hz<br>
-            <strong>유효 대역폭(Effective Bandwidth)</strong>: 실제로 사용되는 주파수 범위 (예: 전화 300~3300Hz → 3000Hz)
-        </div>
-    </div>
-
-    <h3 class="sub-heading">4. 비트율 (Bit Rate) ⭐</h3>
-    <div class="keyword-box cyan-box">
-        <div class="term">비트 간격 (Bit Interval)</div>
-        <div class="def">1비트를 전송하는 데 걸리는 시간</div>
-    </div>
-    <div class="keyword-box cyan-box">
-        <div class="term">비트율 (Bit Rate)</div>
-        <div class="def">
-            1초 동안 전송되는 비트 수. 단위: <strong>bps (bits per second)</strong><br>
-            예) 8bps → 비트 간격 = 1/8 = 0.125초 = 125ms
-        </div>
-    </div>
-
-    <h3 class="sub-heading">5. 채널 용량 (Channel Capacity) ⭐</h3>
-    <div class="highlight-box">
-        <div class="hl-title">두 가지 공식을 모두 암기! 계산 문제 출제 가능성 높음</div>
-    </div>
-
-    <div class="formula-box">
-        <div class="formula">나이퀴스트: C = 2W log₂L</div>
-        <div class="formula-desc">W: 대역폭(Hz), L: 신호 레벨 수, C: 채널 용량(bps). 잡음이 없는 이상적 환경</div>
-    </div>
-    <div class="keyword-box cyan-box">
-        <div class="term">나이퀴스트 공식 예제</div>
-        <div class="def">
-            <strong>예1)</strong> L=8, W=1KHz → C = 2×1000×log₂8 = 2×1000×3 = <strong>6Kbps</strong><br>
-            <strong>예2)</strong> 대역폭 400Hz, 비트율 3200bps → 3200 = 2×400×log₂L → L = 2⁴ = <strong>16</strong>
-        </div>
-    </div>
-
-    <div class="formula-box">
-        <div class="formula">샤논: C = W log₂(1 + S/N)</div>
-        <div class="formula-desc">W: 대역폭(Hz), S/N: 신호대잡음비, C: 채널 용량(bps). 잡음이 있는 현실 환경</div>
-    </div>
-    <div class="keyword-box cyan-box">
-        <div class="term">S/N비와 데시벨 변환</div>
-        <div class="def">
-            <strong>SNR(dB) = 10 log₁₀(S/N)</strong><br>
-            예) SNR = 20dB → 20 = 10×log₁₀(S/N) → S/N = 10² = <strong>100</strong><br>
-            예) SNR = 30dB → S/N = 10³ = <strong>1000</strong>
-        </div>
-    </div>
-    <div class="keyword-box cyan-box">
-        <div class="term">샤논 공식 예제</div>
-        <div class="def">
-            W=3KHz, SNR=30dB → S/N=1000<br>
-            C = 3000 × log₂(1+1000) = 3000 × 9.967 ≈ <strong>29,901 bps ≈ 29.9Kbps</strong>
-        </div>
-    </div>
-
-    <h3 class="sub-heading">6. 데시벨 (dB)</h3>
-    <div class="formula-box">
-        <div class="formula">dB = 10 log₁₀(P₂/P₁)</div>
-        <div class="formula-desc">전력비. 전압/전류의 경우: dB = 20 log₁₀(V₂/V₁)</div>
-    </div>
-
-    <h3 class="sub-heading">7. 전송 장애 ⭐</h3>
-    <div class="keyword-box cyan-box">
-        <div class="term">① 감쇠 (Attenuation)</div>
-        <div class="def">
-            신호가 전송매체를 통과하면서 <strong>에너지가 손실</strong>되어 약해지는 현상.<br>
-            - <strong>증폭기(Amplifier)</strong>: 아날로그 신호 증폭<br>
-            - <strong>리피터(Repeater)</strong>: 디지털 신호 재생<br>
-            - 예) P₂ = 0.5×P₁ → 10×log₁₀(0.5) = <strong>-3dB</strong>
-        </div>
-    </div>
-    <div class="keyword-box cyan-box">
-        <div class="term">② 왜곡 (Distortion)</div>
-        <div class="def">
-            신호의 형태가 변하는 현상<br>
-            - <strong>지연 왜곡</strong>: 주파수마다 전파 속도가 달라 신호 형태가 변형<br>
-            - <strong>등화기(Equalizer)</strong>: 왜곡을 보상하는 장치<br>
-            - <strong>감쇠 왜곡</strong>: 주파수에 따라 감쇠 정도가 달라 발생
-        </div>
-    </div>
-    <div class="keyword-box cyan-box">
-        <div class="term">③ 잡음 (Noise)</div>
-        <div class="def">
-            원래 신호에 포함되지 않은 불필요한 신호<br>
-            - <strong>열잡음(Thermal noise)</strong>: 전자의 무작위 운동으로 발생. 백색잡음(White noise). <strong>N = KTW</strong><br>
-            - <strong>상호변조 잡음</strong>: 서로 다른 주파수 신호가 합쳐질 때 발생<br>
-            - <strong>누화(Crosstalk)</strong>: 인접 회선 간 신호 간섭<br>
-            - <strong>충격 잡음(Impulse noise)</strong>: 번개, 전원 장애 등으로 순간적으로 발생. 디지털 데이터에 큰 영향
-        </div>
-    </div>
-</section>
-
-<!-- ==================== 4장: 신호 변환 ==================== -->
-<section class="section-card amber" id="ch4">
-    <h2 class="section-title">📕 4장 — 신호 변환</h2>
-
-    <h3 class="sub-heading">1. 신호 변환의 4가지 유형</h3>
-    <div class="highlight-box">
-        <div class="hl-title">4가지 변환 유형을 구분하고, 각각의 대표 기술을 정리!</div>
-    </div>
-    <div class="compare-grid">
-        <div class="compare-card" style="border-top:3px solid #2563eb;">
-            <h3>디지털→디지털</h3>
-            <span class="compare-tag" style="background:rgba(37,99,235,0.1);color:#2563eb;">회선 부호화</span>
-            <p>디지털 데이터를 디지털 신호로 변환. NRZ, RZ, Biphase, AMI 등</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #7c3aed;">
-            <h3>디지털→아날로그</h3>
-            <span class="compare-tag" style="background:rgba(124,58,237,0.1);color:#7c3aed;">디지털 변조</span>
-            <p>디지털 데이터를 아날로그 신호로 변환. ASK, FSK, PSK, QAM</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #dc2626;">
-            <h3>아날로그→디지털</h3>
-            <span class="compare-tag" style="background:rgba(220,38,38,0.1);color:#dc2626;">PCM</span>
-            <p>아날로그 데이터를 디지털 신호로 변환. 표본화→양자화→부호화</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #16a34a;">
-            <h3>아날로그→아날로그</h3>
-            <span class="compare-tag" style="background:rgba(22,163,74,0.1);color:#16a34a;">아날로그 변조</span>
-            <p>아날로그 데이터를 아날로그 신호로 변환. AM, FM, PM</p>
-        </div>
-    </div>
-
-    <h3 class="sub-heading">2. 디지털→디지털: 회선 부호화 (Line Coding)</h3>
-
-    <div class="keyword-box amber-box">
-        <div class="term">단극성 (Unipolar)</div>
-        <div class="def">
-            0과 1을 한 방향의 전압만으로 표현 (예: 0=0V, 1=+5V)<br>
-            <strong>문제점:</strong> DC 성분 발생, 동기화 문제
-        </div>
-    </div>
-    <div class="keyword-box amber-box">
-        <div class="term">극성 (Polar) — NRZ</div>
-        <div class="def">
-            <strong>NRZ (Non-Return to Zero)</strong>: 0과 1을 (+)와 (-) 전압으로 표현<br>
-            - NRZ-L: 0=양전압, 1=음전압 (레벨에 의해 구분)<br>
-            - NRZ-I: 1일 때만 전압이 반전 (반전에 의해 구분)<br>
-            <strong>문제점:</strong> 같은 비트가 연속되면 동기화 문제 발생
-        </div>
-    </div>
-    <div class="keyword-box amber-box">
-        <div class="term">극성 (Polar) — RZ (Return to Zero)</div>
-        <div class="def">
-            0은 (-)→0, 1은 (+)→0으로 표현. 비트 중간에 항상 0으로 돌아감.<br>
-            동기화 문제는 해결되지만, NRZ보다 <strong>대역폭이 2배</strong> 필요.
-        </div>
-    </div>
-    <div class="keyword-box amber-box">
-        <div class="term">극성 (Polar) — Biphase (맨체스터)</div>
-        <div class="def">
-            <strong>맨체스터(Manchester)</strong>: 비트 중간에 반드시 전이. 양→음=0, 음→양=1. <strong>LAN(CSMA/CD, 이더넷)</strong>에서 사용.<br>
-            <strong>차동 맨체스터(Differential Manchester)</strong>: 0이면 비트 시작에서 전이, 1이면 비트 시작에서 전이 없음. 비트 중간에는 항상 전이. <strong>토큰링(Token Ring)</strong>에서 사용.
-        </div>
-    </div>
-    <div class="keyword-box amber-box">
-        <div class="term">양극성 (Bipolar) — AMI</div>
-        <div class="def">
-            <strong>AMI (Alternate Mark Inversion)</strong>: (+), (-), 0 세 가지 레벨 사용<br>
-            - 0: 전압 없음 (0V)<br>
-            - 1: (+)와 (-) 전압을 교대로 사용<br>
-            <strong>문제점:</strong> 0이 연속되면 동기화 문제 → <strong>스크램블링</strong>으로 해결
-        </div>
-    </div>
-    <div class="keyword-box amber-box">
-        <div class="term">B8ZS (Bipolar 8-Zero Substitution)</div>
-        <div class="def">
-            <strong>T-1 회선</strong>에서 사용. AMI의 0이 8개 연속되면 특수 패턴으로 대체.<br>
-            - 이전 1이 (+): 00000000 → 000<strong>+</strong>-0-<strong>+</strong><br>
-            - 이전 1이 (-): 00000000 → 000<strong>-</strong>+0+<strong>-</strong>
-        </div>
-    </div>
-    <div class="keyword-box amber-box">
-        <div class="term">HDB3 (High Density Bipolar 3)</div>
-        <div class="def">
-            <strong>E-1 회선</strong>에서 사용. AMI의 0이 4개 연속되면 특수 패턴으로 대체. 이전 1의 수가 홀수인지 짝수인지에 따라 달라짐.<br>
-            - 홀수: +0000 → +000+, -0000 → -000-<br>
-            - 짝수: +0000 → +-00-, -0000 → -+00+
-        </div>
-    </div>
-    <div class="keyword-box amber-box">
-        <div class="term">mB/nB 부호화</div>
-        <div class="def">
-            m비트를 n비트 패턴으로 변환 (n > m)<br>
-            - <strong>4B/5B</strong>: 4비트를 5비트로. 0이 3개 이상 연속 불가. NRZ-I와 함께 사용. 100Base-FX (이더넷)<br>
-            - <strong>8B/10B</strong>: 8비트를 10비트로. 1000Base-X, USB 3.0에서 사용
-        </div>
-    </div>
-
-    <h3 class="sub-heading">3. 디지털→아날로그: 디지털 변조 방식 ⭐⭐</h3>
-    <div class="highlight-box">
-        <div class="hl-title">ASK, FSK, PSK, QAM 각각의 정의와 특징을 정리해서 암기!</div>
-    </div>
-
-    <div class="keyword-box amber-box">
-        <div class="term">보 레이트 (Baud Rate) vs 비트 레이트 (Bit Rate)</div>
-        <div class="def">
-            <strong>비트율(Bit rate)</strong>: 1초당 전송되는 비트 수 (bps)<br>
-            <strong>보 레이트(Baud rate)</strong>: 1초당 전송되는 신호 변화 횟수 (Baud)<br>
-            <strong>비트율 = n × 보 레이트</strong> (n = 한 신호당 비트 수)
-        </div>
-    </div>
-
-    <div class="keyword-box" style="border-left-color:#dc2626; background:rgba(220,38,38,0.06);">
-        <div class="term" style="color:#dc2626;">① ASK (Amplitude Shift Keying, 진폭 편이 변조)</div>
-        <div class="def">
-            반송파의 <strong>진폭(크기)을 변화</strong>시켜 디지털 데이터를 표현.<br>
-            1=신호 있음, 0=신호 없음 → <strong>OOK (On-Off Keying)</strong><br>
-            잡음에 가장 취약.
-        </div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#dc2626; background:rgba(220,38,38,0.06);">
-        <div class="term" style="color:#dc2626;">② FSK (Frequency Shift Keying, 주파수 편이 변조)</div>
-        <div class="def">
-            반송파의 <strong>주파수를 변화</strong>시켜 디지털 데이터를 표현.<br>
-            1=높은 주파수(f₁), 0=낮은 주파수(f₀)<br>
-            ASK보다 잡음에 강함.
-        </div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#dc2626; background:rgba(220,38,38,0.06);">
-        <div class="term" style="color:#dc2626;">③ PSK (Phase Shift Keying, 위상 편이 변조)</div>
-        <div class="def">
-            반송파의 <strong>위상을 변화</strong>시켜 디지털 데이터를 표현.<br>
-            - <strong>BPSK (2-PSK)</strong>: 1=0°, 0=180° → 1비트/신호<br>
-            - <strong>QPSK (4-PSK)</strong>: 00=135°, 01=45°, 10=-135°, 11=-45° → <strong>2비트/신호</strong><br>
-            예) QPSK, 2400baud → 비트율 = 2×2400 = <strong>4800bps</strong>
-        </div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#dc2626; background:rgba(220,38,38,0.06);">
-        <div class="term" style="color:#dc2626;">④ QAM (Quadrature Amplitude Modulation, 직교 진폭 변조)</div>
-        <div class="def">
-            <strong>ASK + PSK</strong>를 결합. 진폭과 위상을 동시에 변화.<br>
-            s(t) = A_i sin(2πf_c t + φ_i)<br>
-            5G, LTE, Wi-Fi(6/7) 등에서 광범위하게 사용.
-        </div>
-    </div>
-
-    <h3 class="sub-heading">4. 아날로그→디지털: PCM ⭐⭐⭐</h3>
-    <div class="highlight-box">
-        <div class="hl-title">PCM 과정(표본화→양자화→부호화)을 서술형으로 설명할 수 있어야 함!</div>
-    </div>
-
-    <div class="flow-diagram">
-        <div class="flow-step">아날로그 신호</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step" style="background:rgba(220,38,38,0.1);color:#dc2626;">① 표본화<br>(Sampling)</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step" style="background:rgba(124,58,237,0.1);color:#7c3aed;">② 양자화<br>(Quantization)</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step" style="background:rgba(22,163,74,0.1);color:#16a34a;">③ 부호화<br>(Encoding)</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">디지털 신호</div>
-    </div>
-
-    <div class="keyword-box" style="border-left-color:#dc2626; background:rgba(220,38,38,0.06);">
-        <div class="term" style="color:#dc2626;">① 표본화 (Sampling)</div>
-        <div class="def">
-            아날로그 신호를 일정 간격으로 추출(샘플링)하여 <strong>PAM(Pulse Amplitude Modulation)</strong> 신호로 변환.<br>
-            <strong>나이퀴스트 정리</strong>: 원래 신호의 최대 주파수(f_m)의 <strong>2배 이상</strong>으로 표본화해야 원래 신호를 복원할 수 있다.<br>
-        </div>
-    </div>
-    <div class="formula-box">
-        <div class="formula">f_s ≥ 2f_m (표본화 주파수 ≥ 2 × 최대 주파수)</div>
-        <div class="formula-desc">T_s = 1/(2f_m). 예) 음성(4KHz) → f_s ≥ 8KHz, 즉 1초에 8000번 표본화</div>
-    </div>
-
-    <div class="keyword-box" style="border-left-color:#7c3aed; background:rgba(124,58,237,0.06);">
-        <div class="term" style="color:#7c3aed;">② 양자화 (Quantization)</div>
-        <div class="def">
-            표본화된 값을 <strong>유한한 정수값으로 근사</strong>하는 과정.<br>
-            - <strong>양자화 잡음(Quantization noise)</strong>: 원래 값과 양자화된 값의 차이 → <strong>양자화 오차</strong><br>
-            - 양자화 레벨이 많을수록 오차가 줄어듦<br>
-            - <strong>비균일 양자화(Non-linear quantization)</strong>: 작은 신호에 더 세밀한 양자화 적용
-        </div>
-    </div>
-    <div class="formula-box">
-        <div class="formula">SNR(dB) = 6.02n_b + 1.76 dB</div>
-        <div class="formula-desc">n_b: 양자화 비트 수. 예) SNR ≥ 40dB → 40 = 6.02n_b + 1.76 → n_b = 6.35 → 최소 7비트(실제 8비트 사용)</div>
-    </div>
-
-    <div class="keyword-box" style="border-left-color:#16a34a; background:rgba(22,163,74,0.06);">
-        <div class="term" style="color:#16a34a;">③ 부호화 (Encoding)</div>
-        <div class="def">
-            양자화된 값을 <strong>2진수(이진 코드)</strong>로 변환.<br>
-            - 양자화 레벨 8개 → 3비트 (2³=8)<br>
-            - 양자화 레벨 16개 → 4비트 (2⁴=16)<br>
-            - 양자화 레벨 128개 → 7비트 (2⁷=128)
-        </div>
-    </div>
-
-    <div class="keyword-box amber-box">
-        <div class="term">PCM 계산 예제 ⭐</div>
-        <div class="def">
-            음성 신호(최대 주파수 4KHz)를 PCM으로 변환, 양자화 레벨 128개:<br>
-            1. 표본화 주파수: f_s = 2 × 4000 = <strong>8000Hz = 8KHz</strong><br>
-            2. 양자화 비트 수: 2⁷ = 128 → <strong>7비트</strong><br>
-            3. 비트율 = 8000 × 7 = <strong>56Kbps</strong>
-        </div>
-    </div>
-
-    <h3 class="sub-heading">5. 델타 변조 (DM, Delta Modulation)</h3>
-    <div class="keyword-box amber-box">
-        <div class="term">델타 변조 (Delta Modulation)</div>
-        <div class="def">
-            PCM을 간소화한 방식. 이전 표본값과의 <strong>차이(증가/감소)</strong>만을 1비트로 부호화.<br>
-            - <strong>경사 과부하 잡음(Slope overload noise)</strong>: 급격한 변화를 따라가지 못할 때 발생<br>
-            - <strong>입자 잡음(Granular noise)</strong>: 변화가 거의 없을 때 불필요한 변동 발생<br>
-            예) 표본화 주파수 8000Hz, 1비트/표본 → 비트율 = <strong>8Kbps</strong>
-        </div>
-    </div>
-
-    <h3 class="sub-heading">6. 아날로그→아날로그 변조</h3>
-    <div class="keyword-box amber-box">
-        <div class="term">AM (Amplitude Modulation, 진폭 변조)</div>
-        <div class="def">반송파의 <strong>진폭</strong>을 변화시켜 아날로그 신호 전송. 대역폭 B_AM = 2B</div>
-    </div>
-    <div class="keyword-box amber-box">
-        <div class="term">FM (Frequency Modulation, 주파수 변조)</div>
-        <div class="def">반송파의 <strong>주파수</strong>를 변화시켜 아날로그 신호 전송. 대역폭 B_FM = 2(1+β)B (β=변조지수, 보통 β=4)</div>
-    </div>
-    <div class="keyword-box amber-box">
-        <div class="term">PM (Phase Modulation, 위상 변조)</div>
-        <div class="def">반송파의 <strong>위상</strong>을 변화시켜 아날로그 신호 전송. FM과 유사.</div>
-    </div>
-</section>
-
-<!-- ==================== 5장: 데이터 통신 기초 ==================== -->
-<section class="section-card orange" id="ch5">
-    <h2 class="section-title">📒 5장 — 데이터 통신 기초</h2>
-
-    <h3 class="sub-heading">1. 통신회선 이용방식 ⭐</h3>
-    <div class="highlight-box">
-        <div class="hl-title">단방향, 반이중, 전이중의 정의와 예시를 정확히 구분!</div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#ea580c; background:rgba(234,88,12,0.06);">
-        <div class="term" style="color:#ea580c;">① 단방향 (Simplex)</div>
-        <div class="def">
-            한 방향으로만 데이터 전송 가능. 역방향 전송 불가.<br>
-            예) TV, 라디오 방송. 키보드 → 모니터 방향의 on/off 제어.
-        </div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#ea580c; background:rgba(234,88,12,0.06);">
-        <div class="term" style="color:#ea580c;">② 반이중 (Half-duplex)</div>
-        <div class="def">
-            양방향 전송 가능하지만 <strong>동시에는 불가</strong>. 한 번에 한 방향만.<br>
-            예) 무전기. 한 쪽이 말하면 다른 쪽은 들어야 함.
-        </div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#ea580c; background:rgba(234,88,12,0.06);">
-        <div class="term" style="color:#ea580c;">③ 전이중 (Full-duplex)</div>
-        <div class="def">
-            양방향 <strong>동시 전송</strong> 가능.<br>
-            예) 전화. 양쪽이 동시에 말하고 들을 수 있음.
-        </div>
-    </div>
-
-    <h3 class="sub-heading">2. 데이터 전송방식 ⭐</h3>
-    <div class="compare-grid">
-        <div class="compare-card" style="border-top:3px solid #ea580c;">
-            <h3>직렬 전송 (Serial Transmission)</h3>
-            <span class="compare-tag" style="background:rgba(234,88,12,0.1);color:#ea580c;">한 비트씩</span>
-            <p>비트를 <strong>하나의 통신 회선</strong>을 통해 한 비트씩 순차적으로 전송.</p>
-            <div class="compare-examples">
-                <div class="label">특징</div>
-                <ul>
-                    <li>장거리 전송에 적합 (원거리 통신)</li>
-                    <li>회선 비용이 저렴</li>
-                    <li>시프트 레지스터 사용</li>
-                    <li>예: RS-232C, USB</li>
-                </ul>
+            <div class="flash">
+                <div class="q">Q. 통신이란?</div>
+                <div class="a">송신자에서 전송매체를 통해 수신자에게 정보를 전달하는 것</div>
             </div>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #2563eb;">
-            <h3>병렬 전송 (Parallel Transmission)</h3>
-            <span class="compare-tag" style="background:rgba(37,99,235,0.1);color:#2563eb;">여러 비트 동시</span>
-            <p><strong>여러 개의 통신 회선</strong>을 통해 여러 비트를 동시에 전송.</p>
-            <div class="compare-examples">
-                <div class="label">특징</div>
-                <ul>
-                    <li>고속 전송 (직렬의 n배)</li>
-                    <li>근거리에서만 사용 (회선 비용 높음)</li>
-                    <li>타이밍 동기화 문제 존재</li>
-                    <li>예: 프린터 케이블, 컴퓨터 내부 버스</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#ea580c; background:rgba(234,88,12,0.06);">
-        <div class="term" style="color:#ea580c;">병렬 전송 계산 예제</div>
-        <div class="def">8비트 데이터를 병렬로 전송 → 8개 회선 동시 사용 → 직렬 대비 <strong>8배 빠름</strong></div>
-    </div>
-
-    <h3 class="sub-heading">3. 동기 전송 vs 비동기 전송</h3>
-    <div class="compare-grid">
-        <div class="compare-card" style="border-top:3px solid #7c3aed;">
-            <h3>비동기 전송 (Asynchronous)</h3>
-            <span class="compare-tag" style="background:rgba(124,58,237,0.1);color:#7c3aed;">Start-Stop</span>
-            <p>각 문자 앞에 <strong>시작 비트(Start bit)</strong>, 뒤에 <strong>정지 비트(Stop bit, 1~2비트)</strong>를 붙여 전송.</p>
-            <div class="compare-examples">
-                <div class="label">특징</div>
-                <ul>
-                    <li>유휴 상태(Idle)에서 1 유지</li>
-                    <li>오버헤드 20~30%</li>
-                    <li>저속 전송에 적합</li>
-                </ul>
-            </div>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #0891b2;">
-            <h3>동기 전송 (Synchronous)</h3>
-            <span class="compare-tag" style="background:rgba(8,145,178,0.1);color:#0891b2;">블록 단위</span>
-            <p>데이터를 <strong>블록 단위</strong>로 전송. 시작/정지 비트 없이 연속 전송.</p>
-            <div class="compare-examples">
-                <div class="label">두 가지 방식</div>
-                <ul>
-                    <li><strong>문자 지향</strong>: SYN, STX, ETX 사용</li>
-                    <li><strong>비트 지향</strong>: 플래그(Flag) 사용, 프레임 단위</li>
-                    <li>고속 전송에 적합, 효율 높음</li>
-                </ul>
+            <div class="flash">
+                <div class="q">Q. 데이터통신 정의 ⭐</div>
+                <div class="a">컴퓨터와 컴퓨터 간 또는 컴퓨터와 단말장치 사이에서 통신회선을 이용하여 데이터를 송수신하는 것. <strong>데이터통신 = 데이터처리 + 통신</strong></div>
             </div>
         </div>
     </div>
 
-    <div class="keyword-box" style="border-left-color:#7c3aed; background:rgba(124,58,237,0.06);">
-        <div class="term" style="color:#7c3aed;">비동기 전송 효율 계산 예제</div>
-        <div class="def">
-            7비트 데이터 + 1비트 시작 + 1비트 정지 = 9비트<br>
-            효율 = 7/9 × 100 = <strong>77.78%</strong>
+    <!-- 주제 2: 구성요소 5가지 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>데이터통신 시스템 구성요소 5가지 ⭐⭐⭐</div>
+        <div class="memo-hook d1">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">송 · 수 · 전 · 메 · 프</div>
+            <div class="hook-desc">송신자 · 수신자 · 전송매체 · 메시지 · 프로토콜</div>
         </div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#0891b2; background:rgba(8,145,178,0.06);">
-        <div class="term" style="color:#0891b2;">동기 전송 효율 계산 예제</div>
-        <div class="def">
-            STX 8비트 + 데이터 100문자×8비트 + ETX 8비트 = 816비트<br>
-            효율 = 800/816 × 100 = <strong>98%</strong><br>
-            오류 검출 포함 시(100비트): 800/1000 × 100 = <strong>80%</strong>
-        </div>
-    </div>
-
-    <h3 class="sub-heading">4. 회선 구성</h3>
-    <div class="keyword-box" style="border-left-color:#ea580c; background:rgba(234,88,12,0.06);">
-        <div class="term" style="color:#ea580c;">점대점 (Point-to-Point)</div>
-        <div class="def">두 장치를 전용 회선으로 1:1 연결. 예: PPP (Point-to-Point Protocol)</div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#ea580c; background:rgba(234,88,12,0.06);">
-        <div class="term" style="color:#ea580c;">다중점 (Multipoint, Multi-drop)</div>
-        <div class="def">3개 이상의 장치가 하나의 회선을 공유. 폴링(Polling)과 셀렉션(Selection) 방식 사용.</div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#ea580c; background:rgba(234,88,12,0.06);">
-        <div class="term" style="color:#ea580c;">회선 집중 (Line Concentration)</div>
-        <div class="def">집중기(Concentrator)를 사용하여 여러 저속 회선을 소수 고속 회선으로 집중. 단말 m대, 회선 n개 (m > n).</div>
-    </div>
-    <div class="keyword-box" style="border-left-color:#ea580c; background:rgba(234,88,12,0.06);">
-        <div class="term" style="color:#ea580c;">다중화 (Multiplexing)</div>
-        <div class="def">하나의 고속 회선을 여러 저속 채널이 공유. 시분할(TDM), 주파수분할(FDM) 등.</div>
-    </div>
-
-    <h3 class="sub-heading">5. 전송 형태 (캐스팅)</h3>
-    <div class="compare-grid">
-        <div class="compare-card" style="border-top:3px solid #2563eb;">
-            <h3>유니캐스트 (Unicast)</h3>
-            <p>하나의 송신자 → <strong>하나의 수신자</strong></p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #7c3aed;">
-            <h3>애니캐스트 (Anycast)</h3>
-            <p>하나의 송신자 → <strong>가장 가까운 하나</strong>의 수신자</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #0891b2;">
-            <h3>멀티캐스트 (Multicast)</h3>
-            <p>하나의 송신자 → <strong>특정 그룹</strong>의 수신자</p>
-        </div>
-        <div class="compare-card" style="border-top:3px solid #d97706;">
-            <h3>브로드캐스트 (Broadcast)</h3>
-            <p>하나의 송신자 → <strong>모든</strong> 수신자</p>
+        <div class="memo-list">
+            <ol>
+                <li><strong>송신자 (Sender)</strong> — 데이터를 보내는 장치 (컴퓨터, 전화기)</li>
+                <li><strong>수신자 (Receiver)</strong> — 데이터를 받는 장치</li>
+                <li><strong>전송매체 (Medium)</strong> — 데이터가 이동하는 물리적 통로 (꼬임쌍선·동축·광섬유·무선)</li>
+                <li><strong>메시지 (Message)</strong> — 전달하려는 데이터 (텍스트·숫자·이미지·오디오·비디오)</li>
+                <li><strong>프로토콜 (Protocol)</strong> — 데이터 통신을 지배하는 규칙의 집합</li>
+            </ol>
         </div>
     </div>
 
-    <h3 class="sub-heading">6. 인터페이스 표준</h3>
-    <div class="keyword-box" style="border-left-color:#ea580c; background:rgba(234,88,12,0.06);">
-        <div class="term" style="color:#ea580c;">EIA-232 (RS-232C)</div>
-        <div class="def">DTE와 DCE 간 인터페이스 표준. 25핀(IBM 9핀 사용). 15m 이내, 20Kbps 이하. 기계적, 전기적, 기능적, 절차적 특성 정의.</div>
+    <!-- 주제 3: 프로토콜 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>프로토콜 정의 + 3가지 구성요소 ⭐⭐⭐</div>
+        <div class="flash">
+            <div class="q">프로토콜 정의</div>
+            <div class="a">통신을 위해 통신 양단 간에 약속된 규칙의 집합</div>
+        </div>
+        <div class="memo-hook d1">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">구 · 의 · 타</div>
+            <div class="hook-desc">구문(Syntax) · 의미(Semantics) · 타이밍(Timing)</div>
+        </div>
+        <div class="memo-list">
+            <ol>
+                <li><strong>구문 (Syntax)</strong> — 데이터의 <u>형식·구조·부호화</u>를 정의</li>
+                <li><strong>의미 (Semantics)</strong> — 데이터의 <u>의미·해석·제어 정보</u>를 정의</li>
+                <li><strong>타이밍 (Timing)</strong> — 데이터의 <u>전송 속도와 순서</u>를 정의 (예: 100Mbps vs 10Mbps)</li>
+            </ol>
+        </div>
     </div>
-    <div class="keyword-box" style="border-left-color:#ea580c; background:rgba(234,88,12,0.06);">
-        <div class="term" style="color:#ea580c;">Null MODEM</div>
-        <div class="def">모뎀 없이 DTE 간 직접 연결. Crossover cable 사용. 15m 이내, 20Kbps 이하.</div>
+
+    <!-- 주제 4: OSI 7계층 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>OSI 7계층 나열 ⭐⭐⭐</div>
+        <div class="flash">
+            <div class="q">OSI 참조 모델이란?</div>
+            <div class="a">1984년 ISO(국제표준화기구)가 제정한 네트워크 통신의 7계층 표준 모델. 서로 다른 시스템 간 상호 연결을 위한 참조 모델.</div>
+        </div>
+        <div class="memo-hook d1">
+            <div class="hook-label">아래 → 위 (1계층 → 7계층)</div>
+            <div class="mnemonic">물 · 데 · 네 · 전 · 세 · 표 · 응</div>
+            <div class="hook-desc">물리 · 데이터링크 · 네트워크 · 전송 · 세션 · 표현 · 응용</div>
+        </div>
+        <div class="flash" style="margin:14px 0;">
+            <div class="q">PDU란? (Protocol Data Unit)</div>
+            <div class="a"><strong>각 계층에서 전송되는 데이터의 단위 (= 처리 단위)</strong><br>PDU = SDU(상위에서 내려온 원본 데이터) + 헤더(제어정보)<br>계층마다 부르는 이름이 다름 → 아래 참고</div>
+        </div>
+
+        <div class="memo-hook d1">
+            <div class="hook-label">각 계층 PDU (1~4계층만 고유 이름 있음)</div>
+            <div class="mnemonic">비 · 프 · 패 · 세</div>
+            <div class="hook-desc">1.비트 · 2.프레임 · 3.패킷 · 4.세그먼트<br>※ 5·6·7계층은 고유 이름이 없고 모두 "데이터/메시지"라고 부름</div>
+        </div>
+
+        <table class="osi-table">
+            <thead><tr><th>계층</th><th>이름</th><th>PDU</th><th>한 줄 기능</th></tr></thead>
+            <tbody>
+                <tr><td class="highlight"><strong>7</strong></td><td><strong>응용</strong></td><td>데이터</td><td>사용자에게 네트워크 서비스 제공 (이메일·FTAM)</td></tr>
+                <tr><td class="highlight"><strong>6</strong></td><td><strong>표현</strong></td><td>데이터</td><td><strong>변환·암호화·압축</strong> (ASCII↔EBCDIC, JPEG, MPEG)</td></tr>
+                <tr><td class="highlight"><strong>5</strong></td><td><strong>세션</strong></td><td>데이터</td><td>세션 설정·유지·종료, 동기화, 대화 제어(반/전이중)</td></tr>
+                <tr><td class="highlight"><strong>4</strong></td><td><strong>전송</strong></td><td><strong>세그먼트</strong></td><td><strong>프로세스↔프로세스</strong> End-to-End, <strong>포트 주소</strong></td></tr>
+                <tr><td class="highlight"><strong>3</strong></td><td><strong>네트워크</strong></td><td><strong>패킷</strong></td><td><strong>논리 주소·라우팅</strong>, End-to-End 전달</td></tr>
+                <tr><td class="highlight"><strong>2</strong></td><td><strong>데이터링크</strong></td><td><strong>프레임</strong></td><td>프레임화·물리주소·흐름제어·오류제어, <strong>Hop-by-hop</strong></td></tr>
+                <tr><td class="highlight"><strong>1</strong></td><td><strong>물리</strong></td><td><strong>비트</strong></td><td>비트 전송, 전기·기계·기능·절차적 특성, DTE↔DCE</td></tr>
+            </tbody>
+        </table>
     </div>
-    <div class="keyword-box" style="border-left-color:#ea580c; background:rgba(234,88,12,0.06);">
-        <div class="term" style="color:#ea580c;">USB (Universal Serial Bus)</div>
-        <div class="def">
-            범용 직렬 버스. 최대 127개 장치 연결. Plug-and-Play, Hot-plugging 지원.<br>
-            USB 1.0: 12Mbps / USB 2.0: 480Mbps / USB 3.0: 5Gbps
+
+    <!-- 주제 5: 계층별 포인트 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>계층별 서술 포인트 (시험 빈출)</div>
+        <div class="memo-list">
+            <div class="memo-list-title">⭐ 물리(1)의 4가지 특성</div>
+            <ul>
+                <li><strong>전기적</strong>: 전압 레벨·임피던스</li>
+                <li><strong>기계적</strong>: 커넥터 모양·핀 배치</li>
+                <li><strong>기능적</strong>: 각 핀의 기능 정의</li>
+                <li><strong>절차적</strong>: 비트 전송 순서·타이밍</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">⭐ 데이터링크(2) 기능 = Hop-by-hop</div>
+            <ul>
+                <li>프레임화 · 물리주소(MAC) · 흐름제어(Stop-and-wait / Sliding window) · 오류제어 · 접근제어</li>
+                <li>대표 프로토콜: HDLC · BSC · PPP · LLC</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">⭐ 네트워크(3) vs 전송(4)</div>
+            <ul>
+                <li><strong>네트워크</strong>: 호스트↔호스트 End-to-End, <u>논리 주소</u>(IP), 라우팅</li>
+                <li><strong>전송</strong>: 프로세스↔프로세스 End-to-End, <u>포트 주소</u></li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">⭐ 표현(6)의 3대 기능</div>
+            <ul>
+                <li><strong>변환</strong>: 코드 변환 (ASCII ↔ EBCDIC)</li>
+                <li><strong>암호화</strong>: 대칭키(DES·AES·SEED) / 공개키(RSA)</li>
+                <li><strong>압축</strong>: JPEG · MPEG · DVI · H.261</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 6: 캡슐화 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">6</span>캡슐화 · SDU · PDU</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">캡슐화 (Encapsulation)</div>
+                <div class="a">상위 계층 데이터에 헤더를 붙여 하위 계층으로 전달. 2계층은 트레일러도 추가.</div>
+            </div>
+            <div class="flash">
+                <div class="q">SDU vs PDU</div>
+                <div class="a"><strong>SDU</strong>: 상위에서 내려온 원본 데이터<br><strong>PDU = SDU + 헤더</strong> (프로토콜 데이터 단위)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DAY 1 퀴즈 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">Q</span>DAY 1 체크 퀴즈</div>
+
+        <div class="quiz-item" id="d1q1">
+            <p class="quiz-q"><span class="q-num">Q1.</span> 데이터통신 시스템의 5가지 구성요소가 아닌 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d1q1',0,3,'')">① 송신자</button></li>
+                <li><button onclick="checkQuiz('d1q1',1,3,'')">② 전송매체</button></li>
+                <li><button onclick="checkQuiz('d1q1',2,3,'')">③ 프로토콜</button></li>
+                <li><button onclick="checkQuiz('d1q1',3,3,'5가지 = 송·수·전·메·프. 라우터는 해당 없음.')">④ 라우터</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d1q1-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d1q2">
+            <p class="quiz-q"><span class="q-num">Q2.</span> 프로토콜의 3요소에 포함되지 않는 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d1q2',0,2,'')">① 구문(Syntax)</button></li>
+                <li><button onclick="checkQuiz('d1q2',1,2,'')">② 의미(Semantics)</button></li>
+                <li><button onclick="checkQuiz('d1q2',2,2,'3요소는 구·의·타. 보안은 포함되지 않음.')">③ 보안(Security)</button></li>
+                <li><button onclick="checkQuiz('d1q2',3,2,'')">④ 타이밍(Timing)</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d1q2-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d1q3">
+            <p class="quiz-q"><span class="q-num">Q3.</span> 처리 단위가 '프레임'인 OSI 계층은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d1q3',0,1,'물리=비트')">① 물리</button></li>
+                <li><button onclick="checkQuiz('d1q3',1,1,'정답! 데이터링크(2)의 PDU는 프레임.')">② 데이터링크</button></li>
+                <li><button onclick="checkQuiz('d1q3',2,1,'네트워크=패킷')">③ 네트워크</button></li>
+                <li><button onclick="checkQuiz('d1q3',3,1,'전송=세그먼트')">④ 전송</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d1q3-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d1q4">
+            <p class="quiz-q"><span class="q-num">Q4.</span> 프로세스 대 프로세스 통신을 담당하고, 포트 주소를 사용하는 계층은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d1q4',0,2,'데이터링크=hop-by-hop')">① 데이터링크</button></li>
+                <li><button onclick="checkQuiz('d1q4',1,2,'네트워크는 호스트↔호스트')">② 네트워크</button></li>
+                <li><button onclick="checkQuiz('d1q4',2,2,'정답! 전송 계층은 포트 주소로 프로세스 식별.')">③ 전송</button></li>
+                <li><button onclick="checkQuiz('d1q4',3,2,'')">④ 세션</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d1q4-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d1s1">
+            <p class="quiz-q"><span class="q-num">S1.</span> OSI 7계층을 1→7계층 순서로 써보세요.</p>
+            <div class="short-answer">
+                <input type="text" id="d1s1-input" placeholder="예: 물리, 데이터링크, ...">
+                <button onclick="showShortAnswer('d1s1','① 물리 → ② 데이터링크 → ③ 네트워크 → ④ 전송 → ⑤ 세션 → ⑥ 표현 → ⑦ 응용')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d1s1-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d1s2">
+            <p class="quiz-q"><span class="q-num">S2.</span> 1~4계층의 PDU(처리 단위)를 순서대로 쓰세요.</p>
+            <div class="short-answer">
+                <input type="text" id="d1s2-input" placeholder="예: 비트, 프레임, ...">
+                <button onclick="showShortAnswer('d1s2','① 비트(Bit) → ② 프레임(Frame) → ③ 패킷(Packet) → ④ 세그먼트(Segment)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d1s2-answer"></div>
         </div>
     </div>
 </section>
 
-<!-- ==================== 토폴로지 ==================== -->
-<section class="section-card indigo" id="topology">
-    <h2 class="section-title">🔗 토폴로지 (Topology) ⭐</h2>
-
-    <div class="keyword-box">
-        <div class="term">토폴로지 (Topology) 정의</div>
-        <div class="def">네트워크를 구성하는 장치들의 물리적 또는 논리적 연결 구조. 네트워크의 성능, 확장성, 신뢰성을 결정.</div>
+<!-- ==================== DAY 2 ==================== -->
+<section class="section-card d2" id="day2">
+    <div class="day-header">
+        <span class="day-badge">DAY 2</span>
+        <div class="day-title">3장 신호 + 4장 신호 변환</div>
     </div>
 
-    <div class="topo-grid">
-        <div class="topo-card" style="border-top:3px solid #2563eb;">
-            <div class="topo-icon">📊</div>
-            <h3>버스형 (Bus)</h3>
-            <p>하나의 공유 회선(버스)에 모든 장치를 연결. LAN에서 주로 사용. <strong>탭(Tap)과 드롭 라인(Drop line)</strong>으로 연결.</p>
-            <div class="topo-pros"><strong>장점:</strong> 설치 용이, 케이블 비용 저렴, 장치 추가/제거 용이, 장치 고장이 다른 장치에 영향 없음</div>
-            <div class="topo-cons"><strong>단점:</strong> 한 곳이 끊어지면 전체 통신 불가, 장치가 많아지면 성능 저하, 결함 탐지 어려움</div>
-        </div>
-        <div class="topo-card" style="border-top:3px solid #7c3aed;">
-            <div class="topo-icon">⭐</div>
-            <h3>성형 (Star)</h3>
-            <p>중앙 장치(허브/스위치)에 모든 장치를 개별적으로 연결.</p>
-            <div class="topo-pros"><strong>장점:</strong> 개별 장치 고장이 전체에 영향 없음, 장치 추가/제거 쉬움, 결함 탐지 용이, 보안성 높음</div>
-            <div class="topo-cons"><strong>단점:</strong> 중앙 장치 고장 시 전체 마비, 케이블 비용 많음, 중앙 장치 필요</div>
-        </div>
-        <div class="topo-card" style="border-top:3px solid #0891b2;">
-            <div class="topo-icon">🔄</div>
-            <h3>링형 (Ring)</h3>
-            <p>각 장치가 양옆 장치와 연결되어 원형 구조 형성. 단방향 전송.</p>
-            <div class="topo-pros"><strong>장점:</strong> 설치 쉬움, 케이블 사용량 적음, 결함 탐지 비교적 쉬움, 신호 재생으로 거리 연장</div>
-            <div class="topo-cons"><strong>단점:</strong> 한 장치 고장 시 전체 통신 마비, 장치 추가/제거 시 전체 중단 필요</div>
-        </div>
-        <div class="topo-card" style="border-top:3px solid #dc2626;">
-            <div class="topo-icon">🕸️</div>
-            <h3>메쉬형 (Mesh) ⭐</h3>
-            <p>모든 장치가 서로 직접 연결. <strong>n개 장치 → n(n-1)/2 링크, 각 장치에 (n-1)개 포트</strong></p>
-            <div class="topo-pros"><strong>장점:</strong> 높은 신뢰성(이중화), 보안성 우수, 한 회선 고장 시 다른 경로 사용 가능</div>
-            <div class="topo-cons"><strong>단점:</strong> 케이블 비용 매우 높음, 설치·관리 복잡</div>
-        </div>
-        <div class="topo-card" style="border-top:3px solid #d97706;">
-            <div class="topo-icon">🌳</div>
-            <h3>트리형 (Tree)</h3>
-            <p>성형의 확장. 허브를 계층적으로 연결. 2차 허브 사용(능동 허브 + 수동 허브).</p>
-            <div class="topo-pros"><strong>장점:</strong> 확장 용이, 허브 하나 고장 시 해당 하위만 영향, 2차 허브로 거리 연장 가능</div>
-            <div class="topo-cons"><strong>단점:</strong> 루트 허브 고장 시 전체 마비, 버스형 백본 고장 시 전체 분리</div>
-        </div>
-        <div class="topo-card" style="border-top:3px solid #16a34a;">
-            <div class="topo-icon">🔀</div>
-            <h3>혼합형 (Hybrid)</h3>
-            <p>버스, 성형, 링형 등을 결합. 대규모 LAN, MAN, WAN 구성에 사용.</p>
-            <div class="topo-pros"><strong>장점:</strong> 유연한 구성, 각 토폴로지의 장점 활용 가능</div>
-            <div class="topo-cons"><strong>단점:</strong> 구성이 복잡, 비용이 높을 수 있음</div>
+    <div class="checklist">
+        <div class="checklist-title">📌 내일 외워야 할 것</div>
+        <label><input type="checkbox"> 아날로그 vs 디지털 신호 구분</label>
+        <label><input type="checkbox"> 대역폭·비트율 정의</label>
+        <label><input type="checkbox"> 나이퀴스트 공식 · 샤논 공식</label>
+        <label><input type="checkbox"> 전송장애 3가지 (감·왜·잡)</label>
+        <label><input type="checkbox"> PCM 3단계 (표·양·부)</label>
+        <label><input type="checkbox"> 디지털 변조 4가지 (A·F·P·Q)</label>
+    </div>
+
+    <!-- 주제 1: 신호 정의 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>아날로그 신호 vs 디지털 신호</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">아날로그 데이터/신호</div>
+                <div class="a"><strong>연속적</strong>인 값. 음성·영상·오디오·비디오. 무한히 많은 값을 가짐.</div>
+            </div>
+            <div class="flash">
+                <div class="q">디지털 데이터/신호</div>
+                <div class="a"><strong>이산적</strong>인 값. 0과 1. 유한한 수의 값만 가짐.</div>
+            </div>
+            <div class="flash">
+                <div class="q">주기 vs 비주기 신호</div>
+                <div class="a"><strong>주기 신호</strong>: 일정 시간마다 반복 (사이클)<br><strong>비주기 신호</strong>: 반복되지 않음</div>
+            </div>
+            <div class="flash">
+                <div class="q">사인파 3요소</div>
+                <div class="a">s(t) = A sin(2πft + φ) — <strong>진폭(A)</strong>·<strong>주파수(f)</strong>·<strong>위상(φ)</strong></div>
+            </div>
         </div>
     </div>
 
-    <div class="formula-box">
-        <div class="formula">메쉬형 링크 수 = n(n-1)/2</div>
-        <div class="formula-desc">예) n=120 → 120×119/2 = 7,140개 링크 필요</div>
+    <!-- 주제 2: 대역폭 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>대역폭·비트율·주기·주파수</div>
+        <div class="memo-list">
+            <ul>
+                <li><strong>대역폭 (Bandwidth)</strong> = 최고 주파수 − 최저 주파수 (Hz)</li>
+                <li>예) 1000Hz~5000Hz → 대역폭 = <strong>4000Hz</strong></li>
+                <li>유효 대역폭 (전화): 300~3300Hz → <strong>3000Hz</strong></li>
+                <li><strong>주기 T = 1/f</strong>, <strong>주파수 f = 1/T</strong></li>
+                <li><strong>비트율</strong>: 1초당 전송 비트 수 (bps)</li>
+                <li><strong>비트 간격</strong>: 1비트 전송 시간. 8bps → 1/8 = 0.125초</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 3: 채널 용량 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>채널 용량 공식 ⭐⭐</div>
+
+        <div class="formula-box">
+            <div class="formula">나이퀴스트: C = 2W log₂L</div>
+            <div class="formula-desc">잡음 없는 환경. W=대역폭(Hz), L=신호 레벨 수</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">나이퀴스트 예제</div>
+            <ul>
+                <li>W=1KHz, L=8 → C = 2×1000×log₂8 = 2000×3 = <strong>6Kbps</strong></li>
+                <li>W=400Hz, C=3200bps → 3200=800×log₂L → L = <strong>16</strong></li>
+            </ul>
+        </div>
+
+        <div class="formula-box">
+            <div class="formula">샤논: C = W log₂(1 + S/N)</div>
+            <div class="formula-desc">잡음 있는 환경. S/N=신호대잡음비</div>
+        </div>
+        <div class="formula-box">
+            <div class="formula">SNR(dB) = 10 log₁₀(S/N)</div>
+            <div class="formula-desc">20dB→S/N=100, 30dB→S/N=1000</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">샤논 예제</div>
+            <ul>
+                <li>W=3KHz, SNR=30dB → S/N=1000</li>
+                <li>C = 3000 × log₂(1001) ≈ 3000×9.967 ≈ <strong>29.9Kbps</strong></li>
+            </ul>
+        </div>
+
+        <div class="formula-box">
+            <div class="formula">dB = 10 log₁₀(P₂/P₁)</div>
+            <div class="formula-desc">전력비. 전압·전류는 20 log₁₀(V₂/V₁)</div>
+        </div>
+    </div>
+
+    <!-- 주제 4: 전송장애 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>전송 장애 3가지 ⭐</div>
+        <div class="memo-hook d2">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">감 · 왜 · 잡</div>
+            <div class="hook-desc">감쇠 · 왜곡 · 잡음</div>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">① 감쇠 (Attenuation)</div>
+                <div class="a">신호가 전송매체를 통과하며 <strong>에너지가 손실</strong>되어 약해지는 현상.<br>→ <strong>증폭기</strong>(아날로그) / <strong>리피터</strong>(디지털)로 보상<br>예) P₂=0.5P₁ → <strong>-3dB</strong></div>
+            </div>
+            <div class="flash">
+                <div class="q">② 왜곡 (Distortion)</div>
+                <div class="a">신호의 <strong>형태가 변하는</strong> 현상.<br>- 지연 왜곡: 주파수마다 전파 속도 다름<br>- 감쇠 왜곡: 주파수마다 감쇠 정도 다름<br>→ <strong>등화기(Equalizer)</strong>로 보상</div>
+            </div>
+            <div class="flash">
+                <div class="q">③ 잡음 (Noise) — 종류</div>
+                <div class="a">- <strong>열잡음</strong> (전자의 무작위 운동, 백색잡음, N=KTW)<br>- <strong>상호변조 잡음</strong> (서로 다른 주파수 혼합)<br>- <strong>누화(Crosstalk)</strong> (인접 회선 간 간섭)<br>- <strong>충격 잡음</strong> (번개·전원장애, 디지털에 큰 영향)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 주제 5: 신호 변환 4유형 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>신호 변환 4가지 유형</div>
+        <div class="memo-list">
+            <ul>
+                <li><strong>디지털 → 디지털</strong>: 회선 부호화 (NRZ·RZ·Biphase·AMI)</li>
+                <li><strong>디지털 → 아날로그</strong>: 디지털 변조 (<u>ASK·FSK·PSK·QAM</u>)</li>
+                <li><strong>아날로그 → 디지털</strong>: <u>PCM</u> (표본화·양자화·부호화)</li>
+                <li><strong>아날로그 → 아날로그</strong>: 아날로그 변조 (AM·FM·PM)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 6: PCM -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">6</span>PCM 3단계 ⭐⭐⭐</div>
+        <div class="memo-hook d2">
+            <div class="hook-label">아날로그 → 디지털 (PCM)</div>
+            <div class="mnemonic">표 · 양 · 부</div>
+            <div class="hook-desc">표본화(Sampling) · 양자화(Quantization) · 부호화(Encoding)</div>
+        </div>
+        <div class="memo-list">
+            <ol>
+                <li>
+                    <strong>① 표본화 (Sampling)</strong><br>
+                    아날로그 신호를 일정 간격으로 추출 → PAM 신호.<br>
+                    <strong>나이퀴스트 정리: f_s ≥ 2f_m</strong> (최대 주파수의 2배 이상 표본화)
+                </li>
+                <li>
+                    <strong>② 양자화 (Quantization)</strong><br>
+                    표본값을 <strong>유한한 정수값</strong>으로 근사.<br>
+                    <strong>양자화 잡음(오차)</strong> 발생. 레벨 많을수록 오차↓<br>
+                    <strong>SNR(dB) = 6.02n_b + 1.76</strong>
+                </li>
+                <li>
+                    <strong>③ 부호화 (Encoding)</strong><br>
+                    양자화 값을 <strong>이진 코드</strong>로 변환.<br>
+                    레벨 128개 → 7비트(2⁷=128), 256개 → 8비트(2⁸=256)
+                </li>
+            </ol>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">PCM 계산 예제</div>
+            <ul>
+                <li>음성(4KHz), 양자화 레벨 128개</li>
+                <li>→ 표본화 주파수 = 2×4000 = <strong>8KHz</strong></li>
+                <li>→ 2⁷=128 → <strong>7비트</strong></li>
+                <li>→ 비트율 = 8000 × 7 = <strong>56Kbps</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 7: 델타 변조 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">7</span>델타 변조 (DM)</div>
+        <div class="flash">
+            <div class="q">델타 변조</div>
+            <div class="a">PCM 간소화. 이전 표본과의 <strong>차이(증가/감소)</strong>만 1비트로 부호화.<br>- <strong>경사 과부하 잡음</strong>: 급변을 못 따라감<br>- <strong>입자 잡음</strong>: 변화 없을 때 불필요한 변동</div>
+        </div>
+    </div>
+
+    <!-- 주제 8: 디지털 변조 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">8</span>디지털 변조 4가지 ⭐⭐⭐</div>
+        <div class="memo-hook d2">
+            <div class="hook-label">디지털 → 아날로그</div>
+            <div class="mnemonic">A · F · P · Q</div>
+            <div class="hook-desc">ASK · FSK · PSK · QAM</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">무엇을 변화시키는가?</div>
+            <ul>
+                <li><strong>A</strong>SK → <strong>진폭(Amplitude)</strong> 변화</li>
+                <li><strong>F</strong>SK → <strong>주파수(Frequency)</strong> 변화</li>
+                <li><strong>P</strong>SK → <strong>위상(Phase)</strong> 변화</li>
+                <li><strong>Q</strong>AM → <strong>진폭+위상</strong> 둘 다 변화</li>
+            </ul>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">ASK (진폭 편이 변조)</div>
+                <div class="a">1=신호 있음, 0=신호 없음 → <strong>OOK(On-Off Keying)</strong><br>잡음에 가장 <strong>취약</strong></div>
+            </div>
+            <div class="flash">
+                <div class="q">FSK (주파수 편이 변조)</div>
+                <div class="a">1=f₁(높음), 0=f₀(낮음)<br>ASK보다 잡음에 강함</div>
+            </div>
+            <div class="flash">
+                <div class="q">PSK (위상 편이 변조)</div>
+                <div class="a"><strong>BPSK(2-PSK)</strong>: 0°/180° → 1비트<br><strong>QPSK(4-PSK)</strong>: 45°·135°·-45°·-135° → <strong>2비트/신호</strong></div>
+            </div>
+            <div class="flash">
+                <div class="q">QAM (직교 진폭 변조)</div>
+                <div class="a"><strong>ASK + PSK</strong> 결합. 진폭·위상 동시 변화.<br>5G·LTE·Wi-Fi(6/7)에서 사용</div>
+            </div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">보 레이트 vs 비트 레이트</div>
+            <ul>
+                <li><strong>비트율(bps)</strong> = 1초당 비트 수</li>
+                <li><strong>보 레이트(Baud)</strong> = 1초당 신호 변화 수</li>
+                <li><strong>비트율 = n × 보 레이트</strong> (n=한 신호당 비트 수)</li>
+                <li>예) QPSK, 2400baud → 비트율 = 2×2400 = <strong>4800bps</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 9: 회선 부호화 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">9</span>회선 부호화 (디지털→디지털)</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">단극성 (Unipolar)</div>
+                <div class="a">한 방향 전압만 사용. DC 성분 발생, 동기화 문제</div>
+            </div>
+            <div class="flash">
+                <div class="q">NRZ (Non-Return to Zero)</div>
+                <div class="a">0과 1을 (+)·(-)로. NRZ-L(레벨), NRZ-I(반전).<br>같은 비트 연속 시 동기화 문제</div>
+            </div>
+            <div class="flash">
+                <div class="q">RZ (Return to Zero)</div>
+                <div class="a">0=(-)→0, 1=(+)→0. 비트 중간에 항상 0으로.<br>NRZ보다 대역폭 2배 필요</div>
+            </div>
+            <div class="flash">
+                <div class="q">맨체스터 / 차동 맨체스터</div>
+                <div class="a"><strong>맨체스터</strong>: 비트 중간 전이. LAN(CSMA/CD·이더넷)<br><strong>차동 맨체스터</strong>: 토큰링</div>
+            </div>
+            <div class="flash">
+                <div class="q">AMI (Bipolar)</div>
+                <div class="a">(+)·(-)·0 세 레벨. 1은 +/-교대, 0은 0V<br>0 연속 시 동기화 문제 → 스크램블링</div>
+            </div>
+            <div class="flash">
+                <div class="q">B8ZS / HDB3</div>
+                <div class="a"><strong>B8ZS</strong>: T-1에서 0이 8개 연속 시 특수패턴<br><strong>HDB3</strong>: E-1에서 0이 4개 연속 시 특수패턴</div>
+            </div>
+            <div class="flash">
+                <div class="q">4B/5B</div>
+                <div class="a">4비트 → 5비트 (NRZ-I 함께). 100Base-FX</div>
+            </div>
+            <div class="flash">
+                <div class="q">8B/10B</div>
+                <div class="a">8비트 → 10비트. 1000Base-X, USB 3.0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 주제 10: 아날로그 변조 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">10</span>아날로그 변조 (AM·FM·PM)</div>
+        <div class="memo-list">
+            <ul>
+                <li><strong>AM</strong> (진폭 변조): 반송파 진폭 변화. B_AM = 2B</li>
+                <li><strong>FM</strong> (주파수 변조): 반송파 주파수 변화. B_FM = 2(1+β)B</li>
+                <li><strong>PM</strong> (위상 변조): 반송파 위상 변화. FM과 유사</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- DAY 2 퀴즈 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">Q</span>DAY 2 체크 퀴즈</div>
+
+        <div class="quiz-item" id="d2q1">
+            <p class="quiz-q"><span class="q-num">Q1.</span> PCM 과정의 올바른 순서는?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d2q1',0,0,'정답! 표본화 → 양자화 → 부호화')">① 표본화 → 양자화 → 부호화</button></li>
+                <li><button onclick="checkQuiz('d2q1',1,0,'표·양·부 순서')">② 양자화 → 표본화 → 부호화</button></li>
+                <li><button onclick="checkQuiz('d2q1',2,0,'')">③ 부호화 → 양자화 → 표본화</button></li>
+                <li><button onclick="checkQuiz('d2q1',3,0,'')">④ 표본화 → 부호화 → 양자화</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d2q1-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d2q2">
+            <p class="quiz-q"><span class="q-num">Q2.</span> 반송파의 위상을 변화시키는 디지털 변조 방식은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d2q2',0,2,'ASK=진폭')">① ASK</button></li>
+                <li><button onclick="checkQuiz('d2q2',1,2,'FSK=주파수')">② FSK</button></li>
+                <li><button onclick="checkQuiz('d2q2',2,2,'정답! PSK=위상')">③ PSK</button></li>
+                <li><button onclick="checkQuiz('d2q2',3,2,'QAM=진폭+위상')">④ QAM</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d2q2-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d2q3">
+            <p class="quiz-q"><span class="q-num">Q3.</span> 나이퀴스트 공식으로 W=500Hz, L=4일 때 채널 용량은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d2q3',0,1,'C=2×500×log₂4=2000bps')">① 1Kbps</button></li>
+                <li><button onclick="checkQuiz('d2q3',1,1,'정답! C=2×500×log₂4=2×500×2=2000bps=2Kbps')">② 2Kbps</button></li>
+                <li><button onclick="checkQuiz('d2q3',2,1,'')">③ 4Kbps</button></li>
+                <li><button onclick="checkQuiz('d2q3',3,1,'')">④ 8Kbps</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d2q3-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d2q4">
+            <p class="quiz-q"><span class="q-num">Q4.</span> 음성 신호(4KHz)를 양자화 레벨 256으로 PCM 변환한 비트율은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d2q4',0,2,'f_s=8KHz, 2⁸=256→8비트, 8000×8=64Kbps')">① 56Kbps</button></li>
+                <li><button onclick="checkQuiz('d2q4',1,2,'')">② 48Kbps</button></li>
+                <li><button onclick="checkQuiz('d2q4',2,2,'정답! f_s=2×4KHz=8KHz, 2⁸=256→8비트, 비트율=8000×8=64Kbps')">③ 64Kbps</button></li>
+                <li><button onclick="checkQuiz('d2q4',3,2,'')">④ 128Kbps</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d2q4-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d2s1">
+            <p class="quiz-q"><span class="q-num">S1.</span> 전송 장애 3가지를 쓰세요.</p>
+            <div class="short-answer">
+                <input type="text" id="d2s1-input" placeholder="예: 감쇠, ...">
+                <button onclick="showShortAnswer('d2s1','① 감쇠(Attenuation) ② 왜곡(Distortion) ③ 잡음(Noise)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d2s1-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d2s2">
+            <p class="quiz-q"><span class="q-num">S2.</span> SNR이 30dB일 때 S/N 값은?</p>
+            <div class="short-answer">
+                <input type="text" id="d2s2-input" placeholder="S/N 값">
+                <button onclick="showShortAnswer('d2s2','S/N = 1000\n풀이: 30 = 10 × log₁₀(S/N) → S/N = 10³ = 1000')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d2s2-answer"></div>
+        </div>
     </div>
 </section>
 
-<!-- ==================== 표준화 기구 ==================== -->
-<section class="section-card green" id="standards">
-    <h2 class="section-title">🏛️ 주요 표준화 기구</h2>
-    <div class="compare-grid">
-        <div class="compare-card" style="border-top:3px solid #16a34a;">
-            <h3>ISO</h3>
-            <p>국제표준화기구. 1947년 설립. 163개국. <strong>OSI 7계층 모델</strong> 제정.</p>
+<!-- ==================== DAY 3 ==================== -->
+<section class="section-card d3" id="day3">
+    <div class="day-header">
+        <span class="day-badge">DAY 3</span>
+        <div class="day-title">5장 기초 + 토폴로지 + 전체 복습</div>
+    </div>
+
+    <div class="checklist">
+        <div class="checklist-title">📌 모레 외워야 할 것</div>
+        <label><input type="checkbox"> 통신 방식 3가지 (단·반·전)</label>
+        <label><input type="checkbox"> 전송방식 2가지 (직·병)</label>
+        <label><input type="checkbox"> 동기 vs 비동기 전송</label>
+        <label><input type="checkbox"> 토폴로지 6가지 (버·성·링·메·트·혼)</label>
+        <label><input type="checkbox"> 메쉬 링크 공식 n(n-1)/2</label>
+        <label><input type="checkbox"> DAY 1·2 최종 복습</label>
+    </div>
+
+    <!-- 주제 1: 통신 방식 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>통신회선 이용방식 ⭐</div>
+        <div class="memo-hook d3">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">단 · 반 · 전</div>
+            <div class="hook-desc">단방향 · 반이중 · 전이중</div>
         </div>
-        <div class="compare-card" style="border-top:3px solid #2563eb;">
-            <h3>ITU</h3>
-            <p>국제전기통신연합. 1956년 CCITT → 1993년 ITU 개칭. ITU-T(전기통신표준), ITU-R(무선통신), ITU-D(개발)</p>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">① 단방향 (Simplex)</div>
+                <div class="a"><strong>한 방향으로만</strong> 전송.<br>예) TV, 라디오 방송</div>
+            </div>
+            <div class="flash">
+                <div class="q">② 반이중 (Half-duplex)</div>
+                <div class="a">양방향 가능, <strong>동시는 불가</strong>.<br>예) 무전기</div>
+            </div>
+            <div class="flash">
+                <div class="q">③ 전이중 (Full-duplex)</div>
+                <div class="a"><strong>양방향 동시</strong> 전송.<br>예) 전화</div>
+            </div>
         </div>
-        <div class="compare-card" style="border-top:3px solid #7c3aed;">
-            <h3>IEEE</h3>
-            <p>전기전자기술자학회. 1963년 설립. <strong>IEEE 802</strong> — LAN 관련 표준 제정.</p>
+    </div>
+
+    <!-- 주제 2: 전송 방식 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>데이터 전송방식 ⭐</div>
+        <div class="memo-hook d3">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">직 · 병</div>
+            <div class="hook-desc">직렬 · 병렬</div>
         </div>
-        <div class="compare-card" style="border-top:3px solid #d97706;">
-            <h3>EIA</h3>
-            <p>전자공업협회. <strong>RS-232-C, RS-449</strong> 등 인터페이스 표준.</p>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">직렬 전송 (Serial)</div>
+                <div class="a"><strong>하나의 회선</strong>으로 한 비트씩 순차 전송.<br>- 장거리에 적합<br>- 회선 비용 저렴<br>- 시프트 레지스터 사용<br>- 예) RS-232C, USB</div>
+            </div>
+            <div class="flash">
+                <div class="q">병렬 전송 (Parallel)</div>
+                <div class="a"><strong>여러 회선</strong>으로 여러 비트 동시 전송.<br>- 고속 (직렬의 n배)<br>- 근거리에만 사용 (비용 높음)<br>- 타이밍 동기화 필요<br>- 예) 프린터 케이블, 내부 버스</div>
+            </div>
         </div>
-        <div class="compare-card" style="border-top:3px solid #0891b2;">
-            <h3>ANSI</h3>
-            <p>미국국가표준협회. 1918년 설립. ISO·IEC의 미국 대표. ANSI-C 표준.</p>
+    </div>
+
+    <!-- 주제 3: 동기 vs 비동기 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>동기 vs 비동기 전송</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">비동기 전송 (Asynchronous)</div>
+                <div class="a">문자 앞 <strong>시작 비트</strong> + 뒤 <strong>정지 비트</strong>(1, 1.5, 2비트).<br>유휴 상태는 1 유지. 2~3비트 오버헤드 발생. 저속.</div>
+            </div>
+            <div class="flash">
+                <div class="q">동기 전송 (Synchronous)</div>
+                <div class="a"><strong>블록 단위</strong> 연속 전송.<br>- 문자 지향: SYN·STX·ETX<br>- 비트 지향: Flag, 프레임. 고속·고효율</div>
+            </div>
         </div>
-        <div class="compare-card" style="border-top:3px solid #ea580c;">
-            <h3>IETF</h3>
-            <p>인터넷 기술 표준화 기구. 1986년 설립. RFC(Request For Comments) 문서로 표준 발행.</p>
+        <div class="memo-list">
+            <div class="memo-list-title">효율 계산 예제</div>
+            <ul>
+                <li>비동기: 7데이터 + 1시작 + 1정지 = 9비트 → 효율 = 7/9 = <strong>77.78%</strong></li>
+                <li>동기: STX 8 + 100문자×8 + ETX 8 = 816비트 → 효율 = 800/816 = <strong>98%</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 4: 회선 구성 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>회선 구성 4가지</div>
+        <div class="memo-list">
+            <ul>
+                <li><strong>점대점 (Point-to-Point)</strong> — 1:1 전용 회선. PPP 프로토콜</li>
+                <li><strong>다중점 (Multipoint)</strong> — 3개 이상 공유. 폴링·셀렉션·경쟁</li>
+                <li><strong>회선 집중 (Concentration)</strong> — 여러 저속 → 소수 고속. m&gt;n</li>
+                <li><strong>다중화 (Multiplexing)</strong> — 하나의 고속을 여러 저속이 공유. TDM·FDM</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 5: 전송 형태(캐스팅) -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>전송 형태 (캐스팅)</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">유니캐스트</div>
+                <div class="a">1:1 (하나 → 하나)</div>
+            </div>
+            <div class="flash">
+                <div class="q">애니캐스트</div>
+                <div class="a">1 : 가장 가까운 하나</div>
+            </div>
+            <div class="flash">
+                <div class="q">멀티캐스트</div>
+                <div class="a">1 : 특정 그룹</div>
+            </div>
+            <div class="flash">
+                <div class="q">브로드캐스트</div>
+                <div class="a">1 : 모든 수신자</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 주제 6: 토폴로지 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">6</span>토폴로지 6가지 ⭐⭐</div>
+        <div class="memo-hook d3">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">버 · 성 · 링 · 메 · 트 · 혼</div>
+            <div class="hook-desc">버스 · 성형 · 링형 · 메쉬 · 트리 · 혼합</div>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">① 버스형 (Bus)</div>
+                <div class="a">공유 회선에 모든 장치 연결. 탭·드롭 라인.<br>✔ 설치 쉬움, 케이블 저렴<br>✘ 한 곳 끊기면 전체 중단</div>
+            </div>
+            <div class="flash">
+                <div class="q">② 성형 (Star)</div>
+                <div class="a">중앙 장치(허브)에 모든 장치 연결.<br>✔ 개별 고장이 전체 영향 없음<br>✘ 중앙 고장 시 전체 마비</div>
+            </div>
+            <div class="flash">
+                <div class="q">③ 링형 (Ring)</div>
+                <div class="a">원형 연결, 단방향 전송.<br>✔ 설치 쉬움, 신호 재생<br>✘ 한 장치 고장 시 전체 마비</div>
+            </div>
+            <div class="flash">
+                <div class="q">④ 메쉬형 (Mesh) ⭐</div>
+                <div class="a">모든 장치가 서로 직접 연결.<br><strong>n개 → n(n-1)/2 링크</strong><br>각 장치 (n-1) 포트<br>✔ 높은 신뢰성 ✘ 케이블 비용 큼</div>
+            </div>
+            <div class="flash">
+                <div class="q">⑤ 트리형 (Tree)</div>
+                <div class="a">성형의 확장. 허브 계층적 연결. 2차 허브.<br>✔ 확장 쉬움<br>✘ 루트 고장 시 전체 마비</div>
+            </div>
+            <div class="flash">
+                <div class="q">⑥ 혼합형 (Hybrid)</div>
+                <div class="a">여러 토폴로지 결합. 대규모 LAN·MAN·WAN.<br>✔ 유연함 ✘ 복잡함</div>
+            </div>
+        </div>
+        <div class="formula-box">
+            <div class="formula">메쉬형 링크 수 = n(n-1)/2</div>
+            <div class="formula-desc">예) n=120 → 120×119/2 = <strong>7,140개</strong></div>
+        </div>
+    </div>
+
+    <!-- 주제 7: 네트워크 분류 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">7</span>네트워크 분류 (LAN·MAN·WAN)</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">LAN</div>
+                <div class="a">건물·사무실 등 근거리. 수 Km 이내, Mbps 수준. 사설 네트워크.</div>
+            </div>
+            <div class="flash">
+                <div class="q">MAN</div>
+                <div class="a">LAN과 WAN 중간. 도시 내. IEEE DQDB 표준.</div>
+            </div>
+            <div class="flash">
+                <div class="q">WAN</div>
+                <div class="a">국가·대륙 간. 공중망. X.25·ATM. LAN보다 느리고 에러율 높음.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 주제 8: 인터페이스 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">8</span>인터페이스 표준</div>
+        <div class="memo-list">
+            <ul>
+                <li><strong>EIA-232 (RS-232C)</strong>: DTE↔DCE. 25핀. 15m·20Kbps 이하</li>
+                <li><strong>Null MODEM</strong>: 모뎀 없이 DTE간 직접. Crossover cable</li>
+                <li><strong>EIA-449 / EIA-530 / X.21 / V.35</strong>: 고속·장거리 확장</li>
+                <li><strong>USB</strong>: 최대 127개 장치. Plug-and-play, Hot plugging<br>USB 1.0=12Mbps, 2.0=480Mbps, 3.0=5Gbps</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- DAY 3 퀴즈 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">Q</span>DAY 3 체크 퀴즈</div>
+
+        <div class="quiz-item" id="d3q1">
+            <p class="quiz-q"><span class="q-num">Q1.</span> 양방향 전송이 가능하지만 동시 전송은 불가한 방식은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d3q1',0,1,'단방향=한방향만')">① 단방향</button></li>
+                <li><button onclick="checkQuiz('d3q1',1,1,'정답! 반이중 = 양방향 가능, 동시 불가 (무전기)')">② 반이중</button></li>
+                <li><button onclick="checkQuiz('d3q1',2,1,'전이중=양방향 동시')">③ 전이중</button></li>
+                <li><button onclick="checkQuiz('d3q1',3,1,'')">④ 다중화</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d3q1-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d3q2">
+            <p class="quiz-q"><span class="q-num">Q2.</span> 메쉬형 토폴로지에서 10개 장치 완전 연결 시 링크 수는?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d3q2',0,1,'n(n-1)/2 = 10×9/2 = 45')">① 30개</button></li>
+                <li><button onclick="checkQuiz('d3q2',1,1,'정답! 10×9/2 = 45개')">② 45개</button></li>
+                <li><button onclick="checkQuiz('d3q2',2,1,'90은 n(n-1)이지 n(n-1)/2가 아님')">③ 90개</button></li>
+                <li><button onclick="checkQuiz('d3q2',3,1,'')">④ 100개</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d3q2-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d3q3">
+            <p class="quiz-q"><span class="q-num">Q3.</span> 직렬 전송의 특징이 아닌 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d3q3',0,2,'')">① 하나의 회선 사용</button></li>
+                <li><button onclick="checkQuiz('d3q3',1,2,'')">② 장거리 전송 적합</button></li>
+                <li><button onclick="checkQuiz('d3q3',2,2,'정답! 병렬이 직렬의 n배 빠름. 직렬은 느림.')">③ 병렬보다 빠름</button></li>
+                <li><button onclick="checkQuiz('d3q3',3,2,'')">④ 시프트 레지스터 사용</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d3q3-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d3s1">
+            <p class="quiz-q"><span class="q-num">S1.</span> 토폴로지 6가지를 쓰세요.</p>
+            <div class="short-answer">
+                <input type="text" id="d3s1-input" placeholder="예: 버스, 성형, ...">
+                <button onclick="showShortAnswer('d3s1','버스 · 성형 · 링형 · 메쉬 · 트리 · 혼합')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d3s1-answer"></div>
         </div>
     </div>
 </section>
 
-<!-- ==================== 퀴즈 ==================== -->
-<section class="section-card red" id="quiz">
-    <h2 class="section-title">✏️ 시험 대비 연습문제 (단답 + 객관 + 서술)</h2>
-
-    <h3 class="sub-heading">📝 객관식 문제</h3>
-
-    <div class="quiz-item" id="q1">
-        <p class="quiz-q"><span class="q-num">Q1.</span> 데이터통신 시스템의 5가지 구성요소에 해당하지 않는 것은?</p>
-        <ul class="quiz-options">
-            <li><button onclick="checkQuiz('q1',0,3,'데이터통신 시스템의 5가지 구성요소는 송신자, 수신자, 전송매체, 메시지, 프로토콜입니다. 라우터는 네트워크 장비이지 구성요소가 아닙니다.')">① 송신자 (Sender)</button></li>
-            <li><button onclick="checkQuiz('q1',1,3,'데이터통신 시스템의 5가지 구성요소는 송신자, 수신자, 전송매체, 메시지, 프로토콜입니다.')">② 전송매체 (Medium)</button></li>
-            <li><button onclick="checkQuiz('q1',2,3,'데이터통신 시스템의 5가지 구성요소는 송신자, 수신자, 전송매체, 메시지, 프로토콜입니다.')">③ 프로토콜 (Protocol)</button></li>
-            <li><button onclick="checkQuiz('q1',3,3,'데이터통신 시스템의 5가지 구성요소는 송신자, 수신자, 전송매체, 메시지, 프로토콜입니다. 라우터는 구성요소가 아닙니다.')">④ 라우터 (Router)</button></li>
-        </ul>
-        <div class="quiz-feedback" id="q1-feedback"></div>
+<!-- ==================== 최종 정리 (전체 복습) ==================== -->
+<section class="section-card d3" id="final">
+    <div class="day-header">
+        <span class="day-badge" style="background:#dc2626;">최종 암기</span>
+        <div class="day-title">시험 전날 · 백지 테스트용 최종 요약</div>
     </div>
 
-    <div class="quiz-item" id="q2">
-        <p class="quiz-q"><span class="q-num">Q2.</span> OSI 7계층 중 데이터 처리 단위가 '프레임(Frame)'인 계층은?</p>
-        <ul class="quiz-options">
-            <li><button onclick="checkQuiz('q2',0,1,'데이터링크 계층(2계층)의 PDU가 프레임입니다. 물리=비트, 네트워크=패킷, 전송=세그먼트.')">① 물리 계층</button></li>
-            <li><button onclick="checkQuiz('q2',1,1,'정답! 데이터링크 계층(2계층)의 PDU는 프레임(Frame)입니다.')">② 데이터링크 계층</button></li>
-            <li><button onclick="checkQuiz('q2',2,1,'네트워크 계층의 PDU는 패킷(Packet)입니다. 프레임은 데이터링크 계층(2계층)입니다.')">③ 네트워크 계층</button></li>
-            <li><button onclick="checkQuiz('q2',3,1,'전송 계층의 PDU는 세그먼트(Segment)입니다. 프레임은 데이터링크 계층(2계층)입니다.')">④ 전송 계층</button></li>
-        </ul>
-        <div class="quiz-feedback" id="q2-feedback"></div>
+    <div class="memo-hook d1">
+        <div class="hook-label">데이터통신 시스템 구성요소 5가지</div>
+        <div class="mnemonic">송 · 수 · 전 · 메 · 프</div>
+        <div class="hook-desc">송신자 · 수신자 · 전송매체 · 메시지 · 프로토콜</div>
     </div>
 
-    <div class="quiz-item" id="q3">
-        <p class="quiz-q"><span class="q-num">Q3.</span> 프로토콜의 3가지 구성요소가 아닌 것은?</p>
-        <ul class="quiz-options">
-            <li><button onclick="checkQuiz('q3',0,2,'프로토콜의 3요소: 구문(Syntax), 의미(Semantics), 타이밍(Timing). 보안은 포함되지 않습니다.')">① 구문 (Syntax)</button></li>
-            <li><button onclick="checkQuiz('q3',1,2,'프로토콜의 3요소: 구문(Syntax), 의미(Semantics), 타이밍(Timing). 보안은 포함되지 않습니다.')">② 의미 (Semantics)</button></li>
-            <li><button onclick="checkQuiz('q3',2,2,'정답! 프로토콜의 3요소는 구문(Syntax), 의미(Semantics), 타이밍(Timing)이며 보안(Security)은 포함되지 않습니다.')">③ 보안 (Security)</button></li>
-            <li><button onclick="checkQuiz('q3',3,2,'프로토콜의 3요소: 구문(Syntax), 의미(Semantics), 타이밍(Timing). 보안은 포함되지 않습니다.')">④ 타이밍 (Timing)</button></li>
-        </ul>
-        <div class="quiz-feedback" id="q3-feedback"></div>
+    <div class="memo-hook d1">
+        <div class="hook-label">프로토콜 3요소</div>
+        <div class="mnemonic">구 · 의 · 타</div>
+        <div class="hook-desc">구문(형식/구조) · 의미(해석/제어) · 타이밍(속도/순서)</div>
     </div>
 
-    <div class="quiz-item" id="q4">
-        <p class="quiz-q"><span class="q-num">Q4.</span> 양방향 동시 전송이 가능한 통신 방식은?</p>
-        <ul class="quiz-options">
-            <li><button onclick="checkQuiz('q4',0,2,'단방향(Simplex)은 한 방향만, 반이중(Half-duplex)은 번갈아서, 전이중(Full-duplex)이 양방향 동시 전송입니다.')">① 단방향 (Simplex)</button></li>
-            <li><button onclick="checkQuiz('q4',1,2,'반이중(Half-duplex)은 양방향이지만 동시에는 불가합니다. 전이중(Full-duplex)이 정답입니다.')">② 반이중 (Half-duplex)</button></li>
-            <li><button onclick="checkQuiz('q4',2,2,'정답! 전이중(Full-duplex)은 양방향 동시 전송이 가능합니다. 예: 전화.')">③ 전이중 (Full-duplex)</button></li>
-            <li><button onclick="checkQuiz('q4',3,2,'다중화는 통신 방식이 아니라 회선 공유 기술입니다. 정답은 전이중(Full-duplex)입니다.')">④ 다중화 (Multiplexing)</button></li>
-        </ul>
-        <div class="quiz-feedback" id="q4-feedback"></div>
+    <div class="memo-hook d1">
+        <div class="hook-label">OSI 7계층 (아래→위)</div>
+        <div class="mnemonic">물 · 데 · 네 · 전 · 세 · 표 · 응</div>
+        <div class="hook-desc">물리 · 데이터링크 · 네트워크 · 전송 · 세션 · 표현 · 응용</div>
     </div>
 
-    <div class="quiz-item" id="q5">
-        <p class="quiz-q"><span class="q-num">Q5.</span> PCM에서 음성 신호(최대 주파수 4KHz)를 양자화 레벨 256으로 변환할 때의 비트율은?</p>
-        <ul class="quiz-options">
-            <li><button onclick="checkQuiz('q5',0,2,'f_s = 2×4000 = 8000Hz, 2^8=256이므로 8비트, 비트율 = 8000×8 = 64Kbps.')">① 56 Kbps</button></li>
-            <li><button onclick="checkQuiz('q5',1,2,'f_s = 2×4000 = 8000Hz, 2^8=256이므로 8비트, 비트율 = 8000×8 = 64Kbps.')">② 48 Kbps</button></li>
-            <li><button onclick="checkQuiz('q5',2,2,'정답! 표본화 주파수 = 2×4KHz = 8KHz, 양자화 레벨 256 = 2^8 → 8비트, 비트율 = 8000×8 = 64Kbps.')">③ 64 Kbps</button></li>
-            <li><button onclick="checkQuiz('q5',3,2,'f_s = 2×4000 = 8000Hz, 2^8=256이므로 8비트, 비트율 = 8000×8 = 64Kbps.')">④ 128 Kbps</button></li>
-        </ul>
-        <div class="quiz-feedback" id="q5-feedback"></div>
+    <div class="memo-hook d1">
+        <div class="hook-label">각 계층 PDU (1~4계층만 고유)</div>
+        <div class="mnemonic">비 · 프 · 패 · 세</div>
+        <div class="hook-desc">1.비트 → 2.프레임 → 3.패킷 → 4.세그먼트<br>※ 5·6·7계층은 고유 이름 없음 (데이터/메시지)</div>
     </div>
 
-    <div class="quiz-item" id="q6">
-        <p class="quiz-q"><span class="q-num">Q6.</span> 디지털→아날로그 변조에서 반송파의 위상을 변화시키는 방식은?</p>
-        <ul class="quiz-options">
-            <li><button onclick="checkQuiz('q6',0,2,'ASK=진폭, FSK=주파수, PSK=위상, QAM=진폭+위상.')">① ASK</button></li>
-            <li><button onclick="checkQuiz('q6',1,2,'FSK는 주파수를 변화시킵니다. 위상을 변화시키는 것은 PSK입니다.')">② FSK</button></li>
-            <li><button onclick="checkQuiz('q6',2,2,'정답! PSK(Phase Shift Keying)는 반송파의 위상을 변화시켜 디지털 데이터를 표현합니다.')">③ PSK</button></li>
-            <li><button onclick="checkQuiz('q6',3,2,'QAM은 진폭+위상을 동시에 변화시킵니다. 위상만 변화시키는 것은 PSK입니다.')">④ QAM</button></li>
-        </ul>
-        <div class="quiz-feedback" id="q6-feedback"></div>
+    <div class="memo-hook d2">
+        <div class="hook-label">전송 장애 3가지</div>
+        <div class="mnemonic">감 · 왜 · 잡</div>
+        <div class="hook-desc">감쇠 · 왜곡 · 잡음</div>
     </div>
 
-    <div class="quiz-item" id="q7">
-        <p class="quiz-q"><span class="q-num">Q7.</span> 메쉬형(Mesh) 토폴로지에서 10개의 장치를 완전 연결할 때 필요한 링크 수는?</p>
-        <ul class="quiz-options">
-            <li><button onclick="checkQuiz('q7',0,1,'n(n-1)/2 = 10×9/2 = 45개입니다.')">① 30개</button></li>
-            <li><button onclick="checkQuiz('q7',1,1,'정답! n(n-1)/2 = 10×9/2 = 45개의 링크가 필요합니다.')">② 45개</button></li>
-            <li><button onclick="checkQuiz('q7',2,1,'n(n-1)/2 = 10×9/2 = 45개입니다. 90은 n(n-1)로 포트 수의 합입니다.')">③ 90개</button></li>
-            <li><button onclick="checkQuiz('q7',3,1,'n(n-1)/2 = 10×9/2 = 45개입니다.')">④ 100개</button></li>
-        </ul>
-        <div class="quiz-feedback" id="q7-feedback"></div>
+    <div class="memo-hook d2">
+        <div class="hook-label">PCM 3단계 (아날로그→디지털)</div>
+        <div class="mnemonic">표 · 양 · 부</div>
+        <div class="hook-desc">표본화 · 양자화 · 부호화</div>
     </div>
 
-    <div class="quiz-item" id="q8">
-        <p class="quiz-q"><span class="q-num">Q8.</span> OSI 7계층 중 '프로세스 대 프로세스(Process-to-process)' 통신을 담당하는 계층은?</p>
-        <ul class="quiz-options">
-            <li><button onclick="checkQuiz('q8',0,2,'데이터링크 계층은 hop-by-hop(node-to-node) 전달입니다.')">① 데이터링크 계층</button></li>
-            <li><button onclick="checkQuiz('q8',1,2,'네트워크 계층은 end-to-end(호스트 간) 전달입니다. 프로세스 간은 전송 계층.')">② 네트워크 계층</button></li>
-            <li><button onclick="checkQuiz('q8',2,2,'정답! 전송 계층(4계층)은 포트 주소를 사용하여 프로세스 대 프로세스 통신을 담당합니다.')">③ 전송 계층</button></li>
-            <li><button onclick="checkQuiz('q8',3,2,'응용 계층은 사용자에게 서비스를 제공합니다. 프로세스 간 전달은 전송 계층.')">④ 응용 계층</button></li>
-        </ul>
-        <div class="quiz-feedback" id="q8-feedback"></div>
+    <div class="memo-hook d2">
+        <div class="hook-label">디지털 변조 4가지</div>
+        <div class="mnemonic">A · F · P · Q</div>
+        <div class="hook-desc">ASK(진폭) · FSK(주파수) · PSK(위상) · QAM(진폭+위상)</div>
     </div>
 
-    <div class="quiz-item" id="q9">
-        <p class="quiz-q"><span class="q-num">Q9.</span> 나이퀴스트 공식에서 대역폭 500Hz, 신호 레벨 수 4일 때의 채널 용량은?</p>
-        <ul class="quiz-options">
-            <li><button onclick="checkQuiz('q9',0,1,'C = 2W log₂L = 2×500×log₂4 = 2×500×2 = 2000bps = 2Kbps.')">① 1 Kbps</button></li>
-            <li><button onclick="checkQuiz('q9',1,1,'정답! C = 2×500×log₂4 = 2×500×2 = 2000bps = 2Kbps.')">② 2 Kbps</button></li>
-            <li><button onclick="checkQuiz('q9',2,1,'C = 2×500×log₂4 = 2×500×2 = 2000bps = 2Kbps.')">③ 4 Kbps</button></li>
-            <li><button onclick="checkQuiz('q9',3,1,'C = 2×500×log₂4 = 2×500×2 = 2000bps = 2Kbps.')">④ 8 Kbps</button></li>
-        </ul>
-        <div class="quiz-feedback" id="q9-feedback"></div>
+    <div class="memo-hook d3">
+        <div class="hook-label">통신 방식</div>
+        <div class="mnemonic">단 · 반 · 전</div>
+        <div class="hook-desc">단방향 · 반이중 · 전이중</div>
     </div>
 
-    <div class="quiz-item" id="q10">
-        <p class="quiz-q"><span class="q-num">Q10.</span> 표현 계층(6계층)의 기능에 해당하지 않는 것은?</p>
-        <ul class="quiz-options">
-            <li><button onclick="checkQuiz('q10',0,3,'변환, 암호화, 압축은 모두 표현 계층의 기능입니다. 라우팅은 네트워크 계층(3계층)의 기능입니다.')">① 변환 (Translation)</button></li>
-            <li><button onclick="checkQuiz('q10',1,3,'변환, 암호화, 압축은 표현 계층 기능입니다. 라우팅은 네트워크 계층 기능.')">② 암호화 (Encryption)</button></li>
-            <li><button onclick="checkQuiz('q10',2,3,'압축은 표현 계층 기능입니다. 라우팅은 네트워크 계층(3계층)에서 담당합니다.')">③ 압축 (Compression)</button></li>
-            <li><button onclick="checkQuiz('q10',3,3,'정답! 라우팅(경로 설정)은 네트워크 계층(3계층)의 기능입니다. 표현 계층은 변환·암호화·압축을 담당합니다.')">④ 라우팅 (Routing)</button></li>
-        </ul>
-        <div class="quiz-feedback" id="q10-feedback"></div>
+    <div class="memo-hook d3">
+        <div class="hook-label">데이터 전송방식</div>
+        <div class="mnemonic">직 · 병</div>
+        <div class="hook-desc">직렬(한 회선·장거리) · 병렬(여러 회선·고속·근거리)</div>
     </div>
 
-    <h3 class="sub-heading">📝 단답형 문제</h3>
+    <div class="memo-hook d3">
+        <div class="hook-label">토폴로지 6가지</div>
+        <div class="mnemonic">버 · 성 · 링 · 메 · 트 · 혼</div>
+        <div class="hook-desc">버스 · 성형 · 링형 · 메쉬 · 트리 · 혼합</div>
+    </div>
 
-    <div class="quiz-item" id="s1">
-        <p class="quiz-q"><span class="q-num">S1.</span> 데이터통신 시스템의 5가지 구성요소를 모두 쓰시오.</p>
-        <div class="short-answer">
-            <input type="text" id="s1-input" placeholder="쉼표로 구분하여 입력">
-            <button onclick="showShortAnswer('s1','송신자(Sender), 수신자(Receiver), 전송매체(Medium), 메시지(Message), 프로토콜(Protocol)')">정답 확인</button>
+    <div class="memo-hook d2">
+        <div class="hook-label">핵심 공식</div>
+        <div class="mnemonic" style="font-size:1.1rem;">C=2W log₂L &nbsp;&nbsp; C=W log₂(1+S/N) &nbsp;&nbsp; n(n-1)/2</div>
+        <div class="hook-desc">나이퀴스트 · 샤논 · 메쉬 링크 수</div>
+    </div>
+
+    <!-- 최종 서술형 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">📝</span>최종 서술형 연습</div>
+
+        <div class="quiz-item" id="ds1">
+            <p class="quiz-q"><span class="q-num">D1.</span> PCM 과정(아날로그→디지털)을 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea id="ds1-input" placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('ds1')">모범답안</button>
+            </div>
+            <div class="model-answer" id="ds1-answer">
+                <strong>모범답안:</strong><br>
+                PCM은 아날로그 신호를 디지털 신호로 변환하는 기술로 3단계로 구성된다.<br>
+                ① <strong>표본화(Sampling)</strong>: 아날로그 신호를 일정 간격으로 추출해 PAM 신호로 변환. 나이퀴스트 정리에 의해 최대 주파수의 2배 이상(f_s ≥ 2f_m)으로 표본화해야 원 신호 복원 가능.<br>
+                ② <strong>양자화(Quantization)</strong>: 표본값을 유한한 정수값으로 근사. 양자화 잡음(오차) 발생. 레벨이 많을수록 오차 감소.<br>
+                ③ <strong>부호화(Encoding)</strong>: 양자화된 값을 이진 코드로 변환. L개 레벨 → log₂L 비트.
+            </div>
         </div>
-        <div class="model-answer" id="s1-answer"></div>
-    </div>
 
-    <div class="quiz-item" id="s2">
-        <p class="quiz-q"><span class="q-num">S2.</span> 프로토콜의 3가지 구성요소를 쓰고 각각의 의미를 간단히 쓰시오.</p>
-        <div class="short-answer">
-            <input type="text" id="s2-input" placeholder="구성요소 입력">
-            <button onclick="showShortAnswer('s2','① 구문(Syntax): 데이터의 형식, 구조, 부호화를 정의\n② 의미(Semantics): 데이터의 의미, 해석, 제어 정보를 정의\n③ 타이밍(Timing): 데이터의 전송 속도와 순서를 정의')">정답 확인</button>
+        <div class="quiz-item" id="ds2">
+            <p class="quiz-q"><span class="q-num">D2.</span> ASK·FSK·PSK·QAM을 각각 정의하시오.</p>
+            <div class="desc-answer">
+                <textarea id="ds2-input" placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('ds2')">모범답안</button>
+            </div>
+            <div class="model-answer" id="ds2-answer">
+                <strong>모범답안:</strong><br>
+                ① <strong>ASK(진폭 편이 변조)</strong>: 반송파의 진폭을 변화시켜 디지털 데이터를 표현. 1=신호 있음, 0=신호 없음(OOK). 잡음에 가장 취약.<br>
+                ② <strong>FSK(주파수 편이 변조)</strong>: 반송파의 주파수를 변화. 1=f₁, 0=f₀. ASK보다 잡음에 강함.<br>
+                ③ <strong>PSK(위상 편이 변조)</strong>: 반송파의 위상을 변화. BPSK는 0°/180°, QPSK는 4위상으로 2비트씩 전송.<br>
+                ④ <strong>QAM(직교 진폭 변조)</strong>: ASK+PSK 결합. 진폭과 위상을 동시에 변화. 5G·LTE·Wi-Fi에서 사용.
+            </div>
         </div>
-        <div class="model-answer" id="s2-answer"></div>
-    </div>
 
-    <div class="quiz-item" id="s3">
-        <p class="quiz-q"><span class="q-num">S3.</span> OSI 7계층을 아래에서 위 순서(1→7)로 나열하시오.</p>
-        <div class="short-answer">
-            <input type="text" id="s3-input" placeholder="쉼표로 구분하여 입력" style="width:80%;">
-            <button onclick="showShortAnswer('s3','① 물리 계층 (Physical)\n② 데이터링크 계층 (Data Link)\n③ 네트워크 계층 (Network)\n④ 전송 계층 (Transport)\n⑤ 세션 계층 (Session)\n⑥ 표현 계층 (Presentation)\n⑦ 응용 계층 (Application)')">정답 확인</button>
-        </div>
-        <div class="model-answer" id="s3-answer"></div>
-    </div>
-
-    <div class="quiz-item" id="s4">
-        <p class="quiz-q"><span class="q-num">S4.</span> ~ 전송방식은 무엇인가: 양방향 전송이 가능하지만 동시에는 불가능한 통신 방식을 쓰시오.</p>
-        <div class="short-answer">
-            <input type="text" id="s4-input" placeholder="전송방식 입력">
-            <button onclick="showShortAnswer('s4','반이중 (Half-duplex). 양방향 전송이 가능하지만 동시에 양방향 전송은 불가. 예: 무전기.')">정답 확인</button>
-        </div>
-        <div class="model-answer" id="s4-answer"></div>
-    </div>
-
-    <div class="quiz-item" id="s5">
-        <p class="quiz-q"><span class="q-num">S5.</span> SNR이 30dB일 때 S/N 값을 구하시오.</p>
-        <div class="short-answer">
-            <input type="text" id="s5-input" placeholder="S/N 값 입력">
-            <button onclick="showShortAnswer('s5','S/N = 1000.\n풀이: 30 = 10 × log₁₀(S/N) → log₁₀(S/N) = 3 → S/N = 10³ = 1000')">정답 확인</button>
-        </div>
-        <div class="model-answer" id="s5-answer"></div>
-    </div>
-
-    <div class="quiz-item" id="s6">
-        <p class="quiz-q"><span class="q-num">S6.</span> 디지털→아날로그 변조 방식 4가지를 쓰시오.</p>
-        <div class="short-answer">
-            <input type="text" id="s6-input" placeholder="변조 방식 입력">
-            <button onclick="showShortAnswer('s6','① ASK (Amplitude Shift Keying, 진폭 편이 변조)\n② FSK (Frequency Shift Keying, 주파수 편이 변조)\n③ PSK (Phase Shift Keying, 위상 편이 변조)\n④ QAM (Quadrature Amplitude Modulation, 직교 진폭 변조)')">정답 확인</button>
-        </div>
-        <div class="model-answer" id="s6-answer"></div>
-    </div>
-
-    <h3 class="sub-heading">📝 서술형 문제</h3>
-
-    <div class="quiz-item" id="d1">
-        <p class="quiz-q"><span class="q-num">D1.</span> 아날로그 신호를 디지털 신호로 변환하는 PCM(Pulse Code Modulation) 과정을 단계별로 설명하시오.</p>
-        <div class="desc-answer">
-            <textarea id="d1-input" placeholder="서술형 답안을 작성하세요..."></textarea>
-            <button onclick="showDescAnswer('d1')">모범답안 확인</button>
-        </div>
-        <div class="model-answer" id="d1-answer">
-            <strong>모범답안:</strong><br><br>
-            PCM은 아날로그 신호를 디지털 신호로 변환하는 기술로, 3단계로 진행된다.<br><br>
-            <strong>① 표본화(Sampling)</strong>: 아날로그 신호를 일정 시간 간격으로 표본을 추출하여 PAM(Pulse Amplitude Modulation) 신호로 변환하는 과정이다. 나이퀴스트 정리에 의해 원래 신호의 최대 주파수(f_m)의 2배 이상의 주파수(f_s ≥ 2f_m)로 표본화해야 원래 신호를 완벽하게 복원할 수 있다.<br><br>
-            <strong>② 양자화(Quantization)</strong>: 표본화된 아날로그 값을 유한한 개수의 정수값으로 근사하는 과정이다. 이 과정에서 원래 값과 양자화된 값의 차이인 양자화 잡음(양자화 오차)이 발생한다. 양자화 레벨(단계 수)이 많을수록 오차가 줄어든다.<br><br>
-            <strong>③ 부호화(Encoding)</strong>: 양자화된 정수값을 이진 코드(2진수)로 변환하는 과정이다. 양자화 레벨이 L개이면 log₂L 비트가 필요하다. 예를 들어 양자화 레벨 128개 → 7비트(2⁷=128), 256개 → 8비트(2⁸=256)가 필요하다.<br><br>
-            <strong>예시:</strong> 음성 신호(최대 4KHz)를 128단계로 양자화 → 표본화 주파수 8KHz, 7비트 부호화 → 비트율 = 8000×7 = 56Kbps.
+        <div class="quiz-item" id="ds3">
+            <p class="quiz-q"><span class="q-num">D3.</span> 감쇠·왜곡·잡음을 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea id="ds3-input" placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('ds3')">모범답안</button>
+            </div>
+            <div class="model-answer" id="ds3-answer">
+                <strong>모범답안:</strong><br>
+                ① <strong>감쇠</strong>: 신호가 전송매체를 통과하며 에너지가 손실되어 약해지는 현상. 증폭기(아날로그)·리피터(디지털)로 보상.<br>
+                ② <strong>왜곡</strong>: 신호의 형태가 변하는 현상. 지연 왜곡(주파수별 전파 속도 차이), 감쇠 왜곡(주파수별 감쇠 차이). 등화기로 보상.<br>
+                ③ <strong>잡음</strong>: 원 신호에 없던 불필요한 신호. 열잡음(백색잡음), 상호변조 잡음, 누화, 충격 잡음.
+            </div>
         </div>
     </div>
-
-    <div class="quiz-item" id="d2">
-        <p class="quiz-q"><span class="q-num">D2.</span> OSI 7계층 모델의 각 계층별 이름, 처리 단위(PDU), 핵심 기능을 설명하시오.</p>
-        <div class="desc-answer">
-            <textarea id="d2-input" placeholder="서술형 답안을 작성하세요..."></textarea>
-            <button onclick="showDescAnswer('d2')">모범답안 확인</button>
-        </div>
-        <div class="model-answer" id="d2-answer">
-            <strong>모범답안:</strong><br><br>
-            <strong>1계층 물리 계층(Physical)</strong> — PDU: 비트(Bit). 전기적·기계적·기능적·절차적 특성을 정의하여 비트를 전송매체를 통해 전달한다.<br><br>
-            <strong>2계층 데이터링크 계층(Data Link)</strong> — PDU: 프레임(Frame). 인접 노드 간(hop-by-hop) 프레임 전달을 담당하며, 프레임화, 물리 주소 지정(MAC), 흐름 제어, 오류 제어, 접근 제어 기능을 수행한다.<br><br>
-            <strong>3계층 네트워크 계층(Network)</strong> — PDU: 패킷(Packet). 발신지에서 목적지까지(end-to-end) 패킷을 전달하며, 논리 주소 지정(IP)과 라우팅(경로 설정)을 수행한다.<br><br>
-            <strong>4계층 전송 계층(Transport)</strong> — PDU: 세그먼트(Segment). 프로세스 대 프로세스(process-to-process) End-to-end 전달을 담당하며, 포트 주소로 프로세스를 식별한다.<br><br>
-            <strong>5계층 세션 계층(Session)</strong> — PDU: 데이터. 통신 세션의 설정·유지·종료를 관리하고, 동기화 및 대화 제어(반이중/전이중)를 담당한다.<br><br>
-            <strong>6계층 표현 계층(Presentation)</strong> — PDU: 데이터. 데이터의 변환(Translation, ASCII↔EBCDIC), 암호화(Encryption), 압축(Compression)을 담당한다.<br><br>
-            <strong>7계층 응용 계층(Application)</strong> — PDU: 데이터. 사용자에게 네트워크 서비스를 직접 제공한다. 이메일(X.400), 파일 전송(FTAM), 디렉토리 서비스(X.500) 등.
-        </div>
-    </div>
-
-    <div class="quiz-item" id="d3">
-        <p class="quiz-q"><span class="q-num">D3.</span> 디지털→아날로그 변조 방식의 종류(ASK, FSK, PSK, QAM)를 각각 정의하고 특징을 설명하시오.</p>
-        <div class="desc-answer">
-            <textarea id="d3-input" placeholder="서술형 답안을 작성하세요..."></textarea>
-            <button onclick="showDescAnswer('d3')">모범답안 확인</button>
-        </div>
-        <div class="model-answer" id="d3-answer">
-            <strong>모범답안:</strong><br><br>
-            디지털 데이터를 아날로그 신호로 변환하는 변조 방식에는 4가지가 있다.<br><br>
-            <strong>① ASK (진폭 편이 변조, Amplitude Shift Keying)</strong>: 반송파의 진폭(크기)을 변화시켜 디지털 데이터를 표현하는 방식이다. 1일 때 신호가 있고 0일 때 신호가 없는 OOK(On-Off Keying) 방식이 대표적이다. 잡음에 가장 취약하다는 단점이 있다.<br><br>
-            <strong>② FSK (주파수 편이 변조, Frequency Shift Keying)</strong>: 반송파의 주파수를 변화시켜 디지털 데이터를 표현하는 방식이다. 1이면 높은 주파수(f₁), 0이면 낮은 주파수(f₀)를 사용한다. ASK보다 잡음에 강하다.<br><br>
-            <strong>③ PSK (위상 편이 변조, Phase Shift Keying)</strong>: 반송파의 위상을 변화시켜 디지털 데이터를 표현하는 방식이다. BPSK(2-PSK)는 0°와 180°로 1비트를 표현하고, QPSK(4-PSK)는 4개의 위상으로 2비트를 동시에 표현한다.<br><br>
-            <strong>④ QAM (직교 진폭 변조, Quadrature Amplitude Modulation)</strong>: ASK와 PSK를 결합한 방식으로, 진폭과 위상을 동시에 변화시킨다. 8-QAM, 16-QAM 등으로 한 번에 더 많은 비트를 전송할 수 있다. 5G, LTE, Wi-Fi 등에서 광범위하게 사용된다.
-        </div>
-    </div>
-
-    <div class="quiz-item" id="d4">
-        <p class="quiz-q"><span class="q-num">D4.</span> 감쇠(Attenuation), 왜곡(Distortion), 잡음(Noise)을 각각 설명하시오.</p>
-        <div class="desc-answer">
-            <textarea id="d4-input" placeholder="서술형 답안을 작성하세요..."></textarea>
-            <button onclick="showDescAnswer('d4')">모범답안 확인</button>
-        </div>
-        <div class="model-answer" id="d4-answer">
-            <strong>모범답안:</strong><br><br>
-            <strong>① 감쇠(Attenuation)</strong>: 신호가 전송매체를 통과하면서 에너지가 손실되어 신호의 세기가 약해지는 현상이다. 감쇠를 보상하기 위해 아날로그 신호에는 증폭기(Amplifier), 디지털 신호에는 리피터(Repeater)를 사용한다.<br><br>
-            <strong>② 왜곡(Distortion)</strong>: 신호의 형태(모양)가 변하는 현상이다. 지연 왜곡은 주파수마다 전파 속도가 달라 발생하며, 감쇠 왜곡은 주파수에 따른 감쇠 정도의 차이로 발생한다. 등화기(Equalizer)를 사용하여 보상한다.<br><br>
-            <strong>③ 잡음(Noise)</strong>: 원래 신호에 포함되지 않은 불필요한 신호이다. 종류로는 열잡음(전자의 무작위 운동, 백색잡음), 상호변조 잡음(서로 다른 주파수 혼합), 누화(인접 회선 간 간섭), 충격 잡음(번개, 전원 장애 등 순간적 발생)이 있다.
-        </div>
-    </div>
-
 </section>
 
 </main>
 
 <footer>
-    <p>데이터통신 중간고사 대비 학습자료 · PDF 강의자료 기반</p>
+    <p>데이터통신 3일 암기 플랜 · PDF 강의자료 기반</p>
 </footer>
 
 <script>
-// Dark Mode
 const html = document.documentElement;
 const btn = document.getElementById('themeToggle');
 const saved = localStorage.getItem('theme') || 'light';
@@ -1436,7 +1177,26 @@ btn.addEventListener('click', () => {
     localStorage.setItem('theme', next);
 });
 
-// Quiz (multiple choice)
+// Checklist: strike-through when checked
+document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', (e) => {
+        const label = e.target.parentElement;
+        label.classList.toggle('done', e.target.checked);
+        // Save state
+        const all = document.querySelectorAll('.checklist input[type="checkbox"]');
+        const states = Array.from(all).map(c => c.checked);
+        localStorage.setItem('checklist', JSON.stringify(states));
+    });
+});
+// Restore checklist
+const cl = JSON.parse(localStorage.getItem('checklist') || '[]');
+document.querySelectorAll('.checklist input[type="checkbox"]').forEach((cb, i) => {
+    if (cl[i]) {
+        cb.checked = true;
+        cb.parentElement.classList.add('done');
+    }
+});
+
 function checkQuiz(qId, selected, correct, explanation) {
     const item = document.getElementById(qId);
     const buttons = item.querySelectorAll('.quiz-options button');
@@ -1450,24 +1210,20 @@ function checkQuiz(qId, selected, correct, explanation) {
         fb.innerHTML = '✅ <strong>정답!</strong> ' + explanation;
     } else {
         fb.classList.add('wrong-fb');
-        fb.innerHTML = '❌ <strong>오답.</strong> 정답은 <strong>' + (correct+1) + '번</strong>입니다. ' + explanation;
+        fb.innerHTML = '❌ <strong>오답.</strong> 정답 <strong>' + (correct+1) + '번</strong>. ' + explanation;
     }
 }
 
-// Short answer
 function showShortAnswer(qId, answer) {
     const el = document.getElementById(qId + '-answer');
     el.innerHTML = '<strong>정답:</strong><br>' + answer.replace(/\n/g, '<br>');
     el.classList.add('show');
 }
 
-// Descriptive answer
 function showDescAnswer(qId) {
-    const el = document.getElementById(qId + '-answer');
-    el.classList.add('show');
+    document.getElementById(qId + '-answer').classList.add('show');
 }
 
-// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
         e.preventDefault();
