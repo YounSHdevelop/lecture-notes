@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e-비즈니스의 이해 중간고사 3일 암기 플랜</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #2563eb; --primary-dark: #1e3a8a;
+    --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+    --bg: #f3f4f6; --card-bg: #ffffff;
+    --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+    --nav-bg: rgba(255,255,255,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
+    --day1: #2563eb;
+    --day2: #7c3aed;
+    --day3: #ea580c;
+}
+[data-theme="dark"] {
+    --bg: #0f172a; --card-bg: #1e293b;
+    --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+    --nav-bg: rgba(15,23,42,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; padding-top:64px; }
+
+.nav { position:fixed; top:0; left:0; right:0; height:60px; background:var(--nav-bg); backdrop-filter:blur(12px); display:flex; align-items:center; padding:0 24px; z-index:1000; border-bottom:1px solid var(--border); }
+.nav-logo { font-weight:700; color:var(--primary); text-decoration:none; font-size:1rem; }
+.nav-links { display:flex; gap:10px; margin-left:24px; flex-wrap:wrap; }
+.nav-links a { text-decoration:none; color:var(--text-muted); font-size:0.85rem; padding:6px 12px; border-radius:8px; font-weight:600; }
+.nav-links a.day1 { color:var(--day1); background:rgba(37,99,235,0.1); }
+.nav-links a.day2 { color:var(--day2); background:rgba(124,58,237,0.1); }
+.nav-links a.day3 { color:var(--day3); background:rgba(234,88,12,0.1); }
+.nav-right { margin-left:auto; display:flex; gap:10px; align-items:center; }
+.nav-home { text-decoration:none; color:var(--text-muted); font-size:0.85rem; }
+.btn-theme { background:none; border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; }
+
+.page-header { background:linear-gradient(135deg, #1e3a8a, #2563eb); color:white; padding:56px 24px 48px; text-align:center; }
+.week-badge { display:inline-block; background:rgba(255,255,255,0.2); padding:6px 18px; border-radius:20px; font-size:0.85rem; margin-bottom:16px; }
+.page-header h1 { font-size:2rem; font-weight:900; margin-bottom:10px; }
+.page-header .subtitle { font-size:1rem; opacity:0.9; }
+.exam-info { display:flex; justify-content:center; gap:10px; margin-top:18px; flex-wrap:wrap; }
+.exam-info span { background:rgba(255,255,255,0.15); padding:5px 14px; border-radius:14px; font-size:0.82rem; }
+
+.plan-overview { max-width:960px; margin:32px auto; padding:0 16px; }
+.plan-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.plan-card { padding:24px; border-radius:16px; background:var(--card-bg); box-shadow:var(--shadow); }
+.plan-card.d1 { border-top:5px solid var(--day1); }
+.plan-card.d2 { border-top:5px solid var(--day2); }
+.plan-card.d3 { border-top:5px solid var(--day3); }
+.plan-card .day-tag { font-size:0.8rem; font-weight:700; letter-spacing:1px; }
+.plan-card.d1 .day-tag { color:var(--day1); }
+.plan-card.d2 .day-tag { color:var(--day2); }
+.plan-card.d3 .day-tag { color:var(--day3); }
+.plan-card h3 { font-size:1.1rem; margin:6px 0 10px; }
+.plan-card ul { list-style:none; font-size:0.88rem; }
+.plan-card ul li { padding:4px 0; color:var(--text-muted); }
+.plan-card ul li::before { content:"▸ "; color:var(--text-muted); }
+
+.section-card { max-width:960px; margin:32px auto; padding:32px; background:var(--card-bg); border-radius:16px; box-shadow:var(--shadow); }
+.section-card.d1 { border-top:5px solid var(--day1); }
+.section-card.d2 { border-top:5px solid var(--day2); }
+.section-card.d3 { border-top:5px solid var(--day3); }
+.day-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:16px; border-bottom:2px solid var(--border); }
+.day-badge { font-size:0.85rem; font-weight:900; letter-spacing:1px; padding:6px 14px; border-radius:20px; color:white; }
+.d1 .day-badge { background:var(--day1); }
+.d2 .day-badge { background:var(--day2); }
+.d3 .day-badge { background:var(--day3); }
+.day-title { font-size:1.5rem; font-weight:700; }
+
+.memo-hook { padding:20px 24px; border-radius:14px; margin:16px 0; text-align:center; font-weight:700; }
+.memo-hook.d1 { background:linear-gradient(135deg, rgba(37,99,235,0.1), rgba(37,99,235,0.05)); border:2px solid var(--day1); color:var(--day1); }
+.memo-hook.d2 { background:linear-gradient(135deg, rgba(124,58,237,0.1), rgba(124,58,237,0.05)); border:2px solid var(--day2); color:var(--day2); }
+.memo-hook.d3 { background:linear-gradient(135deg, rgba(234,88,12,0.1), rgba(234,88,12,0.05)); border:2px solid var(--day3); color:var(--day3); }
+.memo-hook .mnemonic { font-size:1.8rem; font-weight:900; letter-spacing:4px; margin:10px 0; }
+.memo-hook .hook-label { font-size:0.78rem; opacity:0.8; letter-spacing:2px; }
+.memo-hook .hook-desc { font-size:0.88rem; opacity:0.9; margin-top:6px; font-weight:500; }
+
+.topic { margin:28px 0 14px; }
+.topic-title { font-size:1.15rem; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.topic-num { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:var(--primary); color:white; font-size:0.85rem; font-weight:700; }
+.d1 .topic-num { background:var(--day1); }
+.d2 .topic-num { background:var(--day2); }
+.d3 .topic-num { background:var(--day3); }
+
+.flash-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0; }
+.flash { padding:14px 16px; border-radius:10px; background:var(--bg); border-left:4px solid var(--primary); }
+.d1 .flash { border-left-color:var(--day1); }
+.d2 .flash { border-left-color:var(--day2); }
+.d3 .flash { border-left-color:var(--day3); }
+.flash .q { font-weight:700; font-size:0.9rem; margin-bottom:6px; }
+.flash .a { font-size:0.88rem; color:var(--text-muted); line-height:1.65; }
+
+.memo-list { margin:12px 0; padding:16px 20px; background:var(--bg); border-radius:10px; }
+.memo-list-title { font-weight:700; font-size:0.95rem; margin-bottom:8px; }
+.memo-list ol, .memo-list ul { padding-left:24px; }
+.memo-list li { padding:3px 0; font-size:0.92rem; }
+.memo-list li strong { color:var(--primary); }
+
+.cmp-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.88rem; }
+.cmp-table th, .cmp-table td { padding:10px 12px; border:1px solid var(--border); text-align:left; vertical-align:top; }
+.cmp-table th { background:rgba(37,99,235,0.08); font-weight:700; }
+.cmp-table td.highlight { background:rgba(220,38,38,0.05); font-weight:600; }
+
+.timeline { position:relative; margin:20px 0; padding-left:24px; border-left:3px solid var(--day1); }
+.timeline-item { margin-bottom:18px; position:relative; }
+.timeline-item::before { content:""; position:absolute; left:-32px; top:4px; width:14px; height:14px; border-radius:50%; background:var(--day1); border:3px solid var(--card-bg); box-shadow:0 0 0 2px var(--day1); }
+.timeline-year { font-weight:700; color:var(--day1); font-size:0.92rem; }
+.timeline-title { font-weight:700; margin:2px 0 4px; font-size:1rem; }
+.timeline-desc { font-size:0.88rem; color:var(--text-muted); line-height:1.7; }
+
+.checklist { background:var(--bg); border-radius:12px; padding:18px 22px; margin:14px 0; }
+.checklist-title { font-weight:700; margin-bottom:10px; font-size:1rem; }
+.checklist label { display:flex; align-items:flex-start; gap:10px; padding:6px 0; cursor:pointer; font-size:0.92rem; }
+.checklist input[type="checkbox"] { margin-top:4px; width:18px; height:18px; cursor:pointer; }
+.checklist label.done { text-decoration:line-through; color:var(--text-muted); }
+
+.quiz-item { margin-bottom:18px; padding:18px; border-radius:12px; border:1px solid var(--border); }
+.quiz-q { font-weight:600; margin-bottom:10px; font-size:0.95rem; }
+.q-num { color:var(--primary); font-weight:700; margin-right:6px; }
+.quiz-options { list-style:none; }
+.quiz-options li { margin-bottom:6px; }
+.quiz-options button { width:100%; text-align:left; padding:9px 14px; border:1px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); cursor:pointer; font-size:0.9rem; font-family:inherit; }
+.quiz-options button:hover:not(:disabled) { border-color:var(--primary); }
+.quiz-options button.correct { background:rgba(22,163,74,0.12); border-color:#16a34a; color:#16a34a; font-weight:600; }
+.quiz-options button.wrong { background:rgba(220,38,38,0.12); border-color:#dc2626; color:#dc2626; }
+.quiz-feedback { display:none; margin-top:10px; padding:10px 14px; border-radius:8px; font-size:0.88rem; }
+.quiz-feedback.show { display:block; }
+.quiz-feedback.correct-fb { background:rgba(22,163,74,0.08); color:#16a34a; }
+.quiz-feedback.wrong-fb { background:rgba(220,38,38,0.08); color:#dc2626; }
+
+.short-answer input { padding:8px 12px; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:var(--card-bg); color:var(--text); width:60%; min-width:180px; }
+.short-answer button { padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.88rem; margin-left:6px; }
+.model-answer { display:none; margin-top:10px; padding:12px 16px; border-radius:8px; background:rgba(37,99,235,0.06); border-left:4px solid var(--primary); font-size:0.88rem; line-height:1.75; }
+.model-answer.show { display:block; }
+.desc-answer textarea { width:100%; min-height:70px; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:var(--card-bg); color:var(--text); resize:vertical; }
+.desc-answer button { margin-top:6px; padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.88rem; }
+
+footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.85rem; }
+
+@media (max-width:680px) {
+    .plan-grid, .flash-grid { grid-template-columns:1fr; }
+    .nav-links { display:none; }
+    .page-header h1 { font-size:1.4rem; }
+    .section-card { margin:16px 10px; padding:20px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="index.html" class="nav-logo">e-비즈니스의 이해</a>
+    <div class="nav-links">
+        <a href="#day1" class="day1">DAY 1</a>
+        <a href="#day2" class="day2">DAY 2</a>
+        <a href="#day3" class="day3">DAY 3</a>
+        <a href="#final">최종정리</a>
+    </div>
+    <div class="nav-right">
+        <a href="index.html" class="nav-home">홈</a>
+        <button class="btn-theme" id="themeToggle">🌙</button>
+    </div>
+</nav>
+
+<header class="page-header">
+    <div class="week-badge">중간고사 3일 암기 플랜</div>
+    <h1>e-비즈니스의 이해 완성본</h1>
+    <p class="subtitle">1장 전자상거래 입문 · 2장 등장과 발전 · 3장 모델·영향 · 4장 소비자 전자상거래</p>
+    <div class="exam-info">
+        <span>📅 4월 21일(화) 13:30</span>
+        <span>📍 18523 강의실</span>
+        <span>📝 서술형 20점 + 단답형 10점 = 30점</span>
+    </div>
+</header>
+
+<!-- ==================== PLAN OVERVIEW ==================== -->
+<div class="plan-overview">
+    <div class="plan-grid">
+        <div class="plan-card d1">
+            <div class="day-tag">DAY 1 · 첫째날</div>
+            <h3>1장 + 2장(인터넷)</h3>
+            <ul>
+                <li>e-Commerce 정의</li>
+                <li>e-Commerce vs e-Business</li>
+                <li>전자상거래 발전사(EDI~)</li>
+                <li>인터넷 특성 4가지</li>
+                <li>TCP/IP · WWW · 하이퍼텍스트</li>
+            </ul>
+        </div>
+        <div class="plan-card d2">
+            <div class="day-tag">DAY 2 · 둘째날</div>
+            <h3>2·3장 모델·유형</h3>
+            <ul>
+                <li>패러다임 변화 4가지</li>
+                <li>메트카프 법칙 · 수확체증</li>
+                <li>B2B·B2C·B2G·C2B·C2C</li>
+                <li>e-비즈 모델 5유형</li>
+                <li>전자상거래 영향</li>
+            </ul>
+        </div>
+        <div class="plan-card d3">
+            <div class="day-tag">DAY 3 · 시험전날</div>
+            <h3>4장 소비자 전자상거래</h3>
+            <ul>
+                <li>B2C · C2C · G4C · C2B</li>
+                <li>포털(수평·수직·EIP)</li>
+                <li>이러닝·전자책·음악·게임</li>
+                <li>인터넷뱅킹·사이버증권</li>
+                <li>서술형 모범답안 훑기</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<main>
+
+<!-- ==================== DAY 1 ==================== -->
+<section class="section-card d1" id="day1">
+    <div class="day-header">
+        <span class="day-badge">DAY 1</span>
+        <div class="day-title">제1장 전자상거래란 무엇인가 + 인터넷의 등장</div>
+    </div>
+
+    <div class="checklist">
+        <div class="checklist-title">📌 오늘 외워야 할 것 (체크하며 공부)</div>
+        <label><input type="checkbox"> e-Commerce와 e-Business 차이를 한 문장으로 말하기</label>
+        <label><input type="checkbox"> 전자상거래 역사 5단계 (EDI → CALS → WWW → 아마존 → 소셜·모바일)</label>
+        <label><input type="checkbox"> ARPANET 1969년 / 인터넷 특성 4가지 외우기</label>
+        <label><input type="checkbox"> 기술적 배경 3가지 (TCP/IP · WWW · 하이퍼텍스트)</label>
+        <label><input type="checkbox"> 경제적 배경 한 문장 — 사용자 많을수록 비용↓ 수익↑</label>
+        <label><input type="checkbox"> 비즈니스 패러다임 이동 3효과 (범세계성 · 쌍방향 · 장소시간 해소)</label>
+    </div>
+
+    <!-- 주제 1: e-Commerce 정의 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>e-Commerce의 정의 ⭐⭐⭐</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">Q. 'e'의 어원은?</div>
+                <div class="a">어원적으로 <strong>electronic</strong>을 의미하며, <strong>전자매체를 통한 상거래</strong>를 뜻함</div>
+            </div>
+            <div class="flash">
+                <div class="q">Q. 전자상거래 정의 (원문)</div>
+                <div class="a">인터넷 또는 정보통신기술을 적용하여 전통적인 상거래나 비즈니스 방식을 <strong>향상시키거나 대체하는 것</strong>. 인터넷과 같은 정보통신 네트워크 기술을 이용하여 상거래가 이루어지는 것.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 주제 2: e-Commerce vs e-Business -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>e-Commerce vs e-Business 차이 ⭐⭐⭐</div>
+        <div class="memo-hook d1">
+            <div class="hook-label">핵심 한 줄</div>
+            <div class="mnemonic" style="font-size:1.3rem;">e-Business ⊃ e-Commerce</div>
+            <div class="hook-desc">e-Business는 e-Commerce를 <strong>포괄</strong>하는 광범위한 개념</div>
+        </div>
+        <table class="cmp-table">
+            <thead><tr><th style="width:18%">구분</th><th>e-Commerce</th><th>e-Business</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td class="highlight"><strong>범위</strong></td>
+                    <td>전자매체를 기반으로 한 <strong>상거래</strong>(판매·마케팅 중심)</td>
+                    <td>e-Commerce를 <strong>포괄</strong>하는 광범위한 개념 — 기업 전반의 가치활동까지 확대</td>
+                </tr>
+                <tr>
+                    <td class="highlight"><strong>예시</strong></td>
+                    <td>쇼핑몰 온라인 상품판매, 온라인 주식매매, 인터넷 매매</td>
+                    <td>온라인 공급망 관리(SCM), 온라인 주문처리, 온라인 고객관계 서비스(CRM)</td>
+                </tr>
+                <tr>
+                    <td class="highlight"><strong>초점</strong></td>
+                    <td>마케팅 및 판매활동</td>
+                    <td>가치활동 전반(구매·생산·물류·고객관리 등)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 주제 3: 전자상거래 출현과 발전 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>전자상거래의 출현과 발전사 ⭐⭐⭐</div>
+        <div class="memo-hook d1">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">E · C · W · 아 · 소모</div>
+            <div class="hook-desc">EDI → CALS → WWW → 아마존 → 소셜·모바일커머스</div>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-year">1970년대</div>
+                <div class="timeline-title">EDI (Electronic Data Interchange)</div>
+                <div class="timeline-desc">전자적 문서 교환 — 종이 문서 대신 <strong>구조화·표준화된 데이터</strong>를 전산 네트워크를 통해 교환·처리. 네트워크는 인터넷이 아니고 <strong>VAN(일종의 인트라넷)</strong>을 사용.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">1980년대</div>
+                <div class="timeline-title">전자메시징 · IOS · CALS</div>
+                <div class="timeline-desc">e-mail 등 전자메시징 기술 발달. <strong>조직 간 정보시스템(IOS: Inter-organization System)</strong> 기반으로 전자상거래 이루어짐. 미국의 군수물자 공급 기반 정부 조달 프로세스 <strong>CALS(Computer Aided Logistic Support)</strong> 등장.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">1990년대 초</div>
+                <div class="timeline-title">WWW 등장</div>
+                <div class="timeline-desc">World Wide Web의 등장으로 <strong>오늘날과 같은 인터넷 기반의 전자상거래</strong>가 시작됨.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">1994년 7월</div>
+                <div class="timeline-title">아마존닷컴 등장 (미국)</div>
+                <div class="timeline-desc">온라인 <strong>도서 전문 판매점</strong>으로 출발한 미국 최초의 대표 온라인 쇼핑몰.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">1996년 12월</div>
+                <div class="timeline-title">인터파크 등장 (한국)</div>
+                <div class="timeline-desc">우리나라 <strong>최초의 종합쇼핑몰</strong>. G마켓을 자회사로 창업했으며, <strong>2025년 12월 파산</strong>.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2000년대 이후</div>
+                <div class="timeline-title">다양한 형태로 발전</div>
+                <div class="timeline-desc">인터넷 쇼핑이 생활의 일부로 자리매김. 소비자의 적극적인 참여가 가능해지면서 <strong>소셜커머스(social commerce)</strong> 등장. 스마트폰 대중화로 <strong>모바일커머스(M-commerce)</strong>의 비중이 빠르게 증가.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 주제 4: 인터넷 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>인터넷의 등장과 ARPANET ⭐⭐</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">Q. 인터넷이란?</div>
+                <div class="a">전세계에 흩어져 있는 컴퓨터 네트워크들을 <strong>상호 연결한 네트워크들의 집합체</strong>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">Q. 세계 최초의 인터넷 ⭐</div>
+                <div class="a"><strong>ARPANET(1969년)</strong>. 미국 국방성 산하 <strong>첨단연구 프로젝트</strong>와 스탠포드·유타·UCLA·캘리포니아 등의 대학이 개발한 통신망을 연결한 네트워크.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 주제 5: 인터넷의 특성 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>인터넷의 특성 4가지 ⭐⭐⭐</div>
+        <div class="memo-hook d1">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">개 · 멀 · 용 · 해</div>
+            <div class="hook-desc">개방성 · 멀티미디어 송신능력 · 네트워크 용량 확대 · 지역/시간 장벽 해소</div>
+        </div>
+        <div class="memo-list">
+            <ol>
+                <li><strong>개방성</strong> — 누구나 접속·이용 가능한 열린 네트워크</li>
+                <li><strong>멀티미디어 정보 송신 능력</strong> — 텍스트, 음성, 이미지, 동영상 전송</li>
+                <li><strong>네트워크 용량의 지속적인 확대</strong> — 대역폭의 확장</li>
+                <li><strong>지역적·시간적 장벽의 해소</strong> — 어디서든 언제든 접근 가능</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- 주제 6: 인터넷 성공 배경 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">6</span>인터넷의 성공 배경 — 기술적 · 경제적 ⭐⭐⭐</div>
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 기술적 배경</div>
+            <ul>
+                <li><strong>TCP/IP (Transmission Control Protocol / Internet Protocol)</strong><br>인터넷을 통하여 컴퓨터들 간 의사소통을 할 수 있도록 하는 <strong>프로토콜(통신 표준 체계)</strong></li>
+                <li><strong>WWW (World Wide Web)</strong><br>하이퍼텍스트와 멀티미디어를 기반으로 <strong>모든 인터넷 서비스를 통합하여 제공</strong>할 수 있는 인터넷 통합 서비스. 텍스트·그림·음성·동화상 등 다양한 멀티미디어를 편리하게 전송 → 노인·어린이 등 <strong>누구든지 쉽고 편리하게 이용</strong> 가능한 환경 제공</li>
+                <li><strong>하이퍼텍스트 (Hypertext)</strong><br>첫 페이지부터 마지막 페이지까지 <strong>단순히 순서대로 나열하지 않는다</strong>는 점에서 일반적인 텍스트와 다름</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 경제적 배경</div>
+            <ul>
+                <li>인터넷은 정보 기술의 집약체로서 <strong>사용자가 많으면 많을수록 비용이 적어지고 수익성은 증가</strong>하는 경제적 속성</li>
+                <li>사용자 증가 → <strong>비용 분담 효과 증가</strong> → 최저의 비용(최저의 원가)으로 비즈니스 환경 제공</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 7: 비즈니스 패러다임 이동 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">7</span>비즈니스 패러다임 이동 3효과 ⭐⭐</div>
+        <div class="memo-hook d1">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">범 · 쌍 · 해</div>
+            <div class="hook-desc">범세계적 의사소통 · 실시간 쌍방향 상호작용 · 장소·시간 제약 해소</div>
+        </div>
+        <div class="memo-list">
+            <ol>
+                <li><strong>범세계적 의사소통</strong> — 비즈니스 인터넷을 전개할 때 범세계적인 의사소통 가능</li>
+                <li><strong>실시간 쌍방향 상호작용</strong> — 의사소통 당사자 간 실시간 쌍방향으로 상호작용 지원</li>
+                <li><strong>장소·시간 제약 해소</strong> — 장소와 시간적 제약을 완전히 해소 → 자연스럽게 <strong>고객에게 정보의 주권이 이양</strong>되는 결과 초래</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- DAY 1 퀴즈 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">✓</span>DAY 1 체크 퀴즈</div>
+
+        <!-- 단답형 1 -->
+        <div class="quiz-item" id="d1s1">
+            <p class="quiz-q"><span class="q-num">단1.</span> e-Commerce를 포괄하는 광범위한 개념으로, 인터넷 및 정보기술의 적용 대상이 기업 전반의 가치활동들로 확대된 것을 무엇이라 하는가?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d1s1', 'e-Business (이비즈니스)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d1s1-answer"></div>
+        </div>
+
+        <!-- 단답형 2 -->
+        <div class="quiz-item" id="d1s2">
+            <p class="quiz-q"><span class="q-num">단2.</span> 1970년대에 등장한, 종이 문서 대신 구조화되고 표준화된 데이터를 전산 네트워크를 통해 교환하고 처리하는 방식을 영문 약어로 쓰시오.</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d1s2', 'EDI (Electronic Data Interchange · 전자문서교환)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d1s2-answer"></div>
+        </div>
+
+        <!-- 단답형 3 -->
+        <div class="quiz-item" id="d1s3">
+            <p class="quiz-q"><span class="q-num">단3.</span> 세계 최초의 인터넷으로, 1969년 미국 국방성 산하 첨단연구 프로젝트와 여러 대학의 통신망을 연결한 네트워크의 이름은?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d1s3', 'ARPANET (아파넷)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d1s3-answer"></div>
+        </div>
+
+        <!-- 객관식 1 -->
+        <div class="quiz-item" id="d1q1">
+            <p class="quiz-q"><span class="q-num">객1.</span> EDI가 사용한 네트워크로 옳은 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d1q1', 0, 2, 'EDI는 인터넷이 아닌 VAN(Value Added Network, 일종의 인트라넷)을 사용했다.')">① 인터넷</button></li>
+                <li><button onclick="checkQuiz('d1q1', 1, 2, 'EDI는 인터넷이 아닌 VAN(Value Added Network, 일종의 인트라넷)을 사용했다.')">② ARPANET</button></li>
+                <li><button onclick="checkQuiz('d1q1', 2, 2, 'EDI는 인터넷이 아닌 VAN(Value Added Network, 일종의 인트라넷)을 사용했다.')">③ VAN</button></li>
+                <li><button onclick="checkQuiz('d1q1', 3, 2, 'EDI는 인터넷이 아닌 VAN(Value Added Network, 일종의 인트라넷)을 사용했다.')">④ TCP/IP 오픈망</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d1q1-feedback"></div>
+        </div>
+
+        <!-- 객관식 2 -->
+        <div class="quiz-item" id="d1q2">
+            <p class="quiz-q"><span class="q-num">객2.</span> 인터넷의 특성 4가지에 해당하지 <strong>않는</strong> 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d1q2', 0, 2, '인터넷의 4가지 특성: 개방성 · 멀티미디어 송신능력 · 네트워크 용량의 지속적 확대 · 지역적/시간적 장벽 해소.')">① 개방성</button></li>
+                <li><button onclick="checkQuiz('d1q2', 1, 2, '인터넷의 4가지 특성: 개방성 · 멀티미디어 송신능력 · 네트워크 용량의 지속적 확대 · 지역적/시간적 장벽 해소.')">② 멀티미디어 정보 송신 능력</button></li>
+                <li><button onclick="checkQuiz('d1q2', 2, 2, '인터넷의 4가지 특성: 개방성 · 멀티미디어 송신능력 · 네트워크 용량의 지속적 확대 · 지역적/시간적 장벽 해소.')">③ 수확체감의 경제성</button></li>
+                <li><button onclick="checkQuiz('d1q2', 3, 2, '인터넷의 4가지 특성: 개방성 · 멀티미디어 송신능력 · 네트워크 용량의 지속적 확대 · 지역적/시간적 장벽 해소.')">④ 지역적·시간적 장벽의 해소</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d1q2-feedback"></div>
+        </div>
+
+        <!-- 서술형 -->
+        <div class="quiz-item" id="d1ds1">
+            <p class="quiz-q"><span class="q-num">서1.</span> e-Commerce와 e-Business의 차이점을 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('d1ds1')">모범답안</button>
+            </div>
+            <div class="model-answer" id="d1ds1-answer">
+                <strong>모범답안:</strong><br>
+                ① <strong>e-Commerce</strong>는 전자매체를 기반으로 한 <strong>상거래</strong>를 의미하며, 쇼핑몰에서의 온라인 상품판매, 온라인 주식매매, 인터넷 매매 등 <strong>마케팅 및 판매활동에 초점</strong>이 맞춰져 있다.<br>
+                ② <strong>e-Business</strong>는 e-Commerce를 <strong>포괄</strong>하는 광범위한 개념으로, 인터넷 및 정보기술의 적용 대상이 <strong>기업 전반의 가치활동들로 확대</strong>된 것이다. 온라인 공급망 관리, 온라인 주문처리, 온라인 고객관계 서비스 등이 포함된다.<br>
+                ③ 즉, <strong>e-Business ⊃ e-Commerce</strong>의 관계이다.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== DAY 2 ==================== -->
+<section class="section-card d2" id="day2">
+    <div class="day-header">
+        <span class="day-badge">DAY 2</span>
+        <div class="day-title">전자상거래 발전 · 패러다임 · 유형 · 비즈니스 모델</div>
+    </div>
+
+    <div class="checklist">
+        <div class="checklist-title">📌 오늘 외워야 할 것 (체크하며 공부)</div>
+        <label><input type="checkbox"> e-biz · m-biz · u-biz로의 발전 순서 외우기</label>
+        <label><input type="checkbox"> 패러다임 변화 4가지 (소·메·무·수)</label>
+        <label><input type="checkbox"> 메트카프의 법칙 정의 한 문장으로</label>
+        <label><input type="checkbox"> 경제주체별 유형 5가지 (B2B·B2C·B2G·C2B·C2C)</label>
+        <label><input type="checkbox"> 비즈니스 모델 vs 수익 모델 차이</label>
+        <label><input type="checkbox"> e-비즈 모델 5유형 (소·중·콘·광·커)과 각 예시 1개씩</label>
+        <label><input type="checkbox"> 전자상거래 3대 영향 (공급자-소비자·비즈프로세스·산업)</label>
+    </div>
+
+    <!-- 주제 1: 전자상거래 용어 및 발전 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>전자상거래 용어의 등장과 발전 ⭐⭐</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">Q. '전자상거래(EC)' 용어 최초 사용</div>
+                <div class="a"><strong>1989년 미국의 LLNL(Lawrence Livermore National Laboratory)</strong>이 미 국방성 프로젝트 수행 중 처음 사용. 당시 목적: 거래의 전 과정에 <strong>서류를 사용하지 않는 기업 환경</strong>을 ICT로 달성</div>
+            </div>
+            <div class="flash">
+                <div class="q">Q. 2000년대 이후 발전</div>
+                <div class="a">무선 인터넷 기술 발전 → <strong>모바일 상거래(m-commerce)</strong>, RFID 비즈니스 활용 → <strong>유비쿼터스 상거래(u-commerce)</strong></div>
+            </div>
+        </div>
+        <div class="memo-hook d2">
+            <div class="hook-label">발전 순서</div>
+            <div class="mnemonic" style="font-size:1.2rem;">e-비즈 → m-비즈 → u-비즈</div>
+            <div class="hook-desc">유선 인터넷 → 무선·모바일 → 유비쿼터스(RFID·IoT)</div>
+        </div>
+        <div class="memo-list">
+            <ul>
+                <li>최근 무게 중심이 <strong>B2C에서 B2B로 전이</strong></li>
+                <li>무선인터넷·유비쿼터스 기술의 비약적 발전 → e-비즈니스 고도화, m-비즈니스·u-비즈니스 등장 및 발전</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 2: 비즈니스 패러다임 변화 4가지 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>비즈니스 패러다임 변화 4가지 ⭐⭐⭐</div>
+        <div class="memo-hook d2">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">소 · 메 · 무 · 수</div>
+            <div class="hook-desc">소비자 주도시장 · 메트카프의 법칙 · 무형자산 · 수확체증의 법칙</div>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ① 소비자 주도시장</div>
+            <ul>
+                <li>소비자가 정보를 기반으로 <strong>시장에서 주도권 확보</strong>, 공급자는 이에 따라 행동</li>
+                <li>판매되는 물건·서비스를 둘러싼 <strong>정보 자체가 소비가치</strong>를 갖게 됨</li>
+                <li><strong>특징 4가지</strong>:
+                    <ul>
+                        <li>소비자가 공급자보다 시장의 주도권을 가짐</li>
+                        <li>구입 전에 <strong>상호 커뮤니케이션</strong>이 이루어짐</li>
+                        <li>정보가 소비가치를 가짐</li>
+                        <li>서비스의 <strong>맞춤화</strong>가 이루어짐</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ② 메트카프의 법칙 (Metcalfe's Law · 네트워크의 효과) ⭐⭐⭐</div>
+            <ul>
+                <li>"네트워크 가치는 <strong>가입자 수에 비례해 증가</strong>하며 어느 시점부터 그 가치는 <strong>비약적으로 높아진다</strong>"</li>
+                <li>쓰리컴사의 설립자 <strong>밥 메트카프</strong>가 1995년에 제창</li>
+                <li>패러다임 변화의 <strong>키워드</strong>가 됨</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ③ 무형자산</div>
+            <ul>
+                <li><strong>눈에 보이지 않는 자산</strong>으로서 유형 자산에 비해 그 중요성이 더욱 높아짐</li>
+                <li>예: 브랜드, 지식, 데이터, 고객 관계</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ④ 수확체증의 메커니즘 ⭐⭐⭐</div>
+            <ul>
+                <li><strong>수확체증</strong>: 사업 규모가 두 배가 되면 생산이 더욱 효율적으로 이루어져 산출량은 <strong>두 배 이상</strong>이 된다는 규모의 경제</li>
+                <li><strong>수확체감</strong>: 어떤 사업이 일정 규모를 초과하면 <strong>수익성이 급격히 저하</strong>한다는 원리</li>
+                <li>수확체감은 <strong>전통적인 제조업</strong>에 적용 / 수확체증은 <strong>지식 주도형 산업(새로운 분야)</strong>에 적용</li>
+                <li>예: 소프트웨어 개발 — 초기에는 많은 비용 투자, 한번 개발된 이후는 대량 복사 가능하여 <strong>대량 생산할수록 비용은 상품화 원가에 가까워짐</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 3: 전자상거래 정의 (여러 관점) -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>전자상거래 정의 — 보는 관점에 따라 ⭐⭐</div>
+        <table class="cmp-table">
+            <thead><tr><th style="width:28%">관점</th><th>정의</th></tr></thead>
+            <tbody>
+                <tr><td class="highlight"><strong>Kalakota &amp; Whinston</strong></td><td><strong>네트워크를 통한 상품의 구매와 판매</strong></td></tr>
+                <tr><td class="highlight"><strong>미 국방부</strong></td><td>종이에 의한 문서를 사용하지 않고 <strong>전자문서교환, 전자우편, 전자게시판, 팩스, 전자자금이체(EFT)</strong> 등 IT를 이용한 상거래</td></tr>
+                <tr><td class="highlight"><strong>OECD</strong></td><td>문자, 소리, 시각 이미지를 포함하여 <strong>디지털화된 정보의 전송·처리</strong>에 기초하여 이루어지는 모든 형태의 상업적 거래</td></tr>
+                <tr><td class="highlight"><strong>전자상거래 기본법</strong></td><td>재화나 용역을 거래함에 있어서 그 <strong>전부 또는 일부가 전자문서에 의하여 처리</strong>되는 거래</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 주제 4: 전자상거래 장단점 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>전자상거래의 장단점 ⭐⭐</div>
+        <table class="cmp-table">
+            <thead><tr><th style="width:18%">구분</th><th>소비자 측면</th><th>공급자/사업자 측면</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td class="highlight"><strong>장점</strong></td>
+                    <td>정보의 신속·정확한 검색 및 비교 · <strong>저렴한 탐색비용</strong> · <strong>원스톱 구매</strong> · 시공간 한계를 넘는 정보 가용성</td>
+                    <td>유통비용 절감(효율성 제고) · 거래시간 단축 · 유통채널 갈등 최소화 · 현실적 고객정보 획득 · 관계 마케팅(유대 강화) · 프로세스 일원화 · 오류·재작업 감소</td>
+                </tr>
+                <tr>
+                    <td class="highlight"><strong>단점</strong></td>
+                    <td>—</td>
+                    <td>낮은 <strong>진입장벽 → 치열한 경쟁</strong> · 상품 규격의 비표준화 · <strong>안전한 대금 지불 방식</strong> 요구 · 효율적 물류·배달 체계 필요 · 품질보증 문제</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 주제 5: 경제주체별 유형 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>경제주체별 전자상거래 유형 ⭐⭐⭐</div>
+        <div class="memo-hook d2">
+            <div class="hook-label">5대 유형</div>
+            <div class="mnemonic" style="font-size:1.3rem;">B2B · B2C · B2G · C2B · C2C</div>
+            <div class="hook-desc">주체는 <strong>개인(C) · 기업(B) · 정부(G)</strong>, 거래 방향에 따라 구분</div>
+        </div>
+        <table class="cmp-table">
+            <thead><tr><th style="width:16%">유형</th><th style="width:30%">이름</th><th>설명 및 대표 예시</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td class="highlight"><strong>B2B</strong></td>
+                    <td>기업 ↔ 기업</td>
+                    <td>원료 공급자와 수요 기업 간 거래, 기업과 금융기업 간 자금결제 등을 포함</td>
+                </tr>
+                <tr>
+                    <td class="highlight"><strong>B2C</strong></td>
+                    <td>기업 ↔ 개인</td>
+                    <td>기업이 <strong>인터넷 쇼핑몰 등을 통해 최종 소비자에게</strong> 전자적으로 상품·서비스 판매</td>
+                </tr>
+                <tr>
+                    <td class="highlight"><strong>B2G</strong></td>
+                    <td>기업 ↔ 정부</td>
+                    <td><strong>조달청</strong>과 같은 정부기관과 기업 간의 전자상거래</td>
+                </tr>
+                <tr>
+                    <td class="highlight"><strong>C2B</strong></td>
+                    <td>개인 ↔ 기업</td>
+                    <td><strong>동호회나 포털 사이트를 통해 필요한 상품을 공동구매</strong>하는 유형 (역경매·공동구매)</td>
+                </tr>
+                <tr>
+                    <td class="highlight"><strong>C2C</strong></td>
+                    <td>개인 ↔ 개인</td>
+                    <td><strong>경매와 같이 서버를 통해</strong> 상품·서비스·정보 등을 가상공간에서 거래하는 유형</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 최근 등장한 3가지 (TV · 모바일 · SNS)</div>
+            <ul>
+                <li><strong>TV 전자상거래 (IPTV)</strong> — TV에 의해 전자상거래가 이루어지는 새로운 형태. TV를 통해 인터넷 이용, 은행·주식 등 금융 업무와 오락·쇼핑·교육 등 일상생활 문제 해결</li>
+                <li><strong>모바일 상거래(m-commerce)</strong> — 이동전화나 휴대 단말기를 이용해 지불처리가 가능한 모바일 전자상거래. PC 전자상거래의 한계를 넘어 <strong>이동성과 휴대성</strong> 부여</li>
+                <li><strong>SNS 상거래</strong> — 온라인에서 재화·서비스를 사고파는 행위에 있어서 소셜 미디어 및 온라인 미디어를 연계하여 <strong>소비자의 인맥을 마케팅에 활용</strong>하는 것</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 6: 비즈니스 모델 vs 수익 모델 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">6</span>비즈니스 모델 vs 수익 모델 ⭐⭐⭐</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">Q. 비즈니스 모델(Business Model)</div>
+                <div class="a">기업이 창출한 가치를 <strong>어떻게 고객에게 전달하여 수익을 획득할 것인가</strong>와 관련된 <strong>일련의 활동</strong>, 즉 수익모델로 정의됨</div>
+            </div>
+            <div class="flash">
+                <div class="q">Q. 수익 모델(Revenue Model)</div>
+                <div class="a">기업이 비즈니스를 통해 <strong>수입을 발생시키고 이윤을 내며, 투자자본에 대해 높은 수익을 낼 수 있는 방법</strong>. 아무리 창의적이고 탁월한 비즈니스 모델도 <strong>수익 모델이 애매하거나 결여</strong>되어 있다면 의미가 없음</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 주제 7: e-비즈니스 모델 5유형 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">7</span>e-비즈니스 모델 5유형 ⭐⭐⭐</div>
+        <div class="memo-hook d2">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">소 · 중 · 콘 · 광 · 커</div>
+            <div class="hook-desc">소매 · 중개 · 콘텐츠서비스 · 광고 · 커뮤니티</div>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ① 소매 모델 (Retail)</div>
+            <ul>
+                <li>최종 소비자를 대상으로 <strong>온라인상에서 제품을 판매</strong>하는 사이트</li>
+                <li><strong>온라인 소매</strong>: 웹 상에서만 판매 (예: <strong>아마존, 인터파크</strong>)</li>
+                <li><strong>온-오프 병행 소매</strong>: 오프라인 상점과 웹사이트 상점 병행 (예: <strong>롯데쇼핑, 교보문고</strong>)</li>
+                <li><strong>직판</strong>: 제조업체가 중간유통 없이 직접 웹으로 판매 (예: <strong>델컴퓨터</strong>)</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ② 중개 모델 (Brokerage)</div>
+            <ul>
+                <li>중개자(broker): <strong>구매자와 판매자를 서로 소개해주고 거래를 촉진</strong>. 거래 성사 시 <strong>수수료 창출</strong></li>
+                <li><strong>e-마켓플레이스</strong>: B2B 거래 공간 (예: <strong>컴덱스, 아이마켓코리아</strong>)</li>
+                <li><strong>경매중개</strong>: 판매자 경매 진행, 거래가격 비례 수수료 (예: <strong>이베이, 옥션</strong>)</li>
+                <li><strong>거래중개</strong>: 지불서비스·정보서비스 등 제공 (예: <strong>페이팔, 에스크로우</strong>)</li>
+                <li><strong>검색 에이전트</strong>: 가격·재고를 자동으로 찾는 소프트웨어 에이전트 (예: <strong>네이버쇼핑</strong>)</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ③ 콘텐츠서비스 모델 (Content Service)</div>
+            <ul>
+                <li><strong>관심 콘텐츠를 구축</strong>하고 이를 이용자의 사이트 방문 유도 수단으로 삼는 사이트</li>
+                <li><strong>포털</strong>: 검색엔진 + 뉴스·엔터테인먼트 콘텐츠, <strong>광고 판매로 수입</strong> (예: <strong>다음, 네이버, 구글</strong>)</li>
+                <li><strong>온라인 구독</strong>: 연회비·구독료를 지불한 이용자가 음악·사진·동영상 등을 무제한 접근 (예: <strong>외국신문, 아이튠</strong>)</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ④ 광고 모델 (Advertising)</div>
+            <ul>
+                <li>인터넷이 존재하는 <strong>가장 중요한 이유 중 하나</strong>로 인식됨</li>
+                <li><strong>배너광고</strong>: 콘텐츠 이용 방문자에게 배너 모양 광고 노출 (예: <strong>다음, 네이버</strong>)</li>
+                <li><strong>키워드 검색광고</strong>: 키워드 검색결과 화면에서 해당 키워드 타겟 광고 링크 (예: <strong>네이버, 구글</strong>)</li>
+                <li><strong>매체삽입 광고</strong>: 동영상 시작·끝 부분에 광고 삽입 (예: <strong>CNN, 유튜브, 판도라TV</strong>)</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ⑤ 커뮤니티 모델 (Community)</div>
+            <ul>
+                <li><strong>사용자 충성도에 기초</strong>. 사용자가 많은 시간과 노력을 투자. 수익은 <strong>부수적인 제품·서비스 판매나 문맥광고·고급 서비스 판매</strong>로 발생</li>
+                <li><strong>오픈 소스</strong>: 소프트웨어는 무료 제공, 부수적 서비스(시스템 통합, 지원 사용설명서) 판매 (예: <strong>카카오, 밴드</strong>)</li>
+                <li><strong>오픈 콘텐츠</strong>: 자발적 기여자 협력으로 콘텐츠 개발, 아무나 접근 가능 (예: <strong>위키피디아</strong>)</li>
+                <li><strong>사회적 네트워킹</strong>: 공통 관심을 가진 개인들이 사회적 상호작용 (예: <strong>페이스북, 다음카페</strong>)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 8: 전자상거래 영향 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">8</span>전자상거래의 영향 3가지 ⭐⭐</div>
+        <div class="memo-hook d2">
+            <div class="hook-label">영향 3분야</div>
+            <div class="mnemonic" style="font-size:1.3rem;">공-소 · 비즈프로세스 · 산업</div>
+            <div class="hook-desc">공급자-소비자 관계 · 비즈니스 형태 · 산업</div>
+        </div>
+        <div class="memo-list">
+            <ol>
+                <li><strong>공급자와 소비자의 관계에 미치는 영향</strong>
+                    <ul>
+                        <li>인터넷에 의한 공급자-소비자 상호 커뮤니케이션 환경에서 <strong>소비자의 주도권이 점점 더 증대</strong></li>
+                        <li>e-비즈니스 비즈니스 형태의 진화과정에서 <strong>소비자 주도권이 더욱 강화</strong></li>
+                    </ul>
+                </li>
+                <li><strong>비즈니스 형태에 미치는 영향</strong>
+                    <ul>
+                        <li>기존의 <strong>구매 사이클·조달 사이클의 모든 비즈니스 프로세스</strong>에 영향</li>
+                    </ul>
+                </li>
+                <li><strong>산업에 미치는 영향</strong>
+                    <ul>
+                        <li>가장 큰 영향을 받는 업종: <strong>금융, 엔터테인먼트, 여행</strong> 등 <strong>제품과 서비스가 주로 정보 자체인 산업</strong>이나 <strong>서비스 지향적인 산업</strong></li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- DAY 2 퀴즈 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">✓</span>DAY 2 체크 퀴즈</div>
+
+        <div class="quiz-item" id="d2s1">
+            <p class="quiz-q"><span class="q-num">단1.</span> "네트워크 가치는 가입자 수에 비례해 증가하며 어느 시점부터 그 가치는 비약적으로 높아진다"는 법칙의 이름은?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d2s1', '메트카프의 법칙 (Metcalfe\\'s Law) · 네트워크 효과')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d2s1-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d2s2">
+            <p class="quiz-q"><span class="q-num">단2.</span> 사업 규모가 두 배가 되면 산출량이 두 배 이상이 된다는 규모의 경제로, 지식 주도형 산업에 적용되는 원리는?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d2s2', '수확체증 (수확체증의 메커니즘 · 수확체증의 법칙)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d2s2-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d2s3">
+            <p class="quiz-q"><span class="q-num">단3.</span> 조달청과 같은 정부기관과 기업 간에 이루어지는 전자상거래 유형의 약어는?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d2s3', 'B2G (Business-to-Government)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d2s3-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d2s4">
+            <p class="quiz-q"><span class="q-num">단4.</span> 전자상거래(EC)라는 용어를 1989년 처음 사용한 미국의 기관 이름을 약어로 쓰시오.</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d2s4', 'LLNL (Lawrence Livermore National Laboratory)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d2s4-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d2q1">
+            <p class="quiz-q"><span class="q-num">객1.</span> 다음 중 e-비즈니스 모델 5유형에 속하지 <strong>않는</strong> 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d2q1', 0, 1, '5유형: 소매·중개·콘텐츠서비스·광고·커뮤니티. 결제(Payment)는 별도 모델이 아니다.')">① 소매</button></li>
+                <li><button onclick="checkQuiz('d2q1', 1, 1, '5유형: 소매·중개·콘텐츠서비스·광고·커뮤니티. 결제(Payment)는 별도 모델이 아니다.')">② 결제</button></li>
+                <li><button onclick="checkQuiz('d2q1', 2, 1, '5유형: 소매·중개·콘텐츠서비스·광고·커뮤니티. 결제(Payment)는 별도 모델이 아니다.')">③ 중개</button></li>
+                <li><button onclick="checkQuiz('d2q1', 3, 1, '5유형: 소매·중개·콘텐츠서비스·광고·커뮤니티. 결제(Payment)는 별도 모델이 아니다.')">④ 커뮤니티</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d2q1-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d2q2">
+            <p class="quiz-q"><span class="q-num">객2.</span> 다음 중 <strong>중개 모델</strong>의 대표 예시로 적절하지 <strong>않은</strong> 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d2q2', 0, 2, '아마존은 대표적인 소매(온라인 소매) 모델이다. 중개 모델: 컴덱스·이베이·옥션·페이팔·네이버쇼핑 등.')">① 이베이</button></li>
+                <li><button onclick="checkQuiz('d2q2', 1, 2, '아마존은 대표적인 소매(온라인 소매) 모델이다. 중개 모델: 컴덱스·이베이·옥션·페이팔·네이버쇼핑 등.')">② 페이팔</button></li>
+                <li><button onclick="checkQuiz('d2q2', 2, 2, '아마존은 대표적인 소매(온라인 소매) 모델이다. 중개 모델: 컴덱스·이베이·옥션·페이팔·네이버쇼핑 등.')">③ 아마존</button></li>
+                <li><button onclick="checkQuiz('d2q2', 3, 2, '아마존은 대표적인 소매(온라인 소매) 모델이다. 중개 모델: 컴덱스·이베이·옥션·페이팔·네이버쇼핑 등.')">④ 네이버쇼핑</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d2q2-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d2ds1">
+            <p class="quiz-q"><span class="q-num">서1.</span> 인터넷 기반 비즈니스에서 나타나는 비즈니스 패러다임 변화 4가지를 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('d2ds1')">모범답안</button>
+            </div>
+            <div class="model-answer" id="d2ds1-answer">
+                <strong>모범답안:</strong><br>
+                ① <strong>소비자 주도시장</strong>: 소비자가 정보를 기반으로 시장에서 주도권을 확보하고 공급자가 이에 따라 행동해야 하는 환경. 정보 자체가 소비가치를 가지며 상호 커뮤니케이션과 서비스 맞춤화가 이루어진다.<br>
+                ② <strong>메트카프의 법칙(네트워크 효과)</strong>: 네트워크 가치는 가입자 수에 비례해 증가하며 어느 시점부터 비약적으로 높아진다는 법칙. 1995년 밥 메트카프가 제창했다.<br>
+                ③ <strong>무형자산</strong>: 눈에 보이지 않는 자산(브랜드·지식·데이터 등)의 중요성이 유형 자산보다 더욱 높아진다.<br>
+                ④ <strong>수확체증의 메커니즘</strong>: 규모가 두 배가 되면 산출이 두 배 이상이 되는 원리로, 전통 제조업의 수확체감과 달리 지식 주도형 산업에 적용된다. 소프트웨어처럼 초기비용 투자 후 복제 비용이 거의 0에 가까운 경우가 대표적이다.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="d2ds2">
+            <p class="quiz-q"><span class="q-num">서2.</span> e-비즈니스 모델 5가지 유형을 각각 정의하고 대표 예시를 1개 이상씩 제시하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('d2ds2')">모범답안</button>
+            </div>
+            <div class="model-answer" id="d2ds2-answer">
+                <strong>모범답안:</strong><br>
+                ① <strong>소매 모델</strong>: 최종 소비자를 대상으로 온라인에서 제품을 판매하는 모델. 온라인 소매(아마존·인터파크), 온-오프 병행 소매(롯데쇼핑·교보문고), 직판(델컴퓨터)으로 구분.<br>
+                ② <strong>중개 모델</strong>: 구매자와 판매자를 소개·중개하고 거래 성사 시 수수료를 받는 모델. e-마켓플레이스(컴덱스), 경매중개(이베이·옥션), 거래중개(페이팔·에스크로우), 검색 에이전트(네이버쇼핑).<br>
+                ③ <strong>콘텐츠서비스 모델</strong>: 관심을 끌 콘텐츠를 구축해 방문을 유도하는 모델. 포털(네이버·다음·구글)과 온라인 구독(아이튠·외국신문)이 대표.<br>
+                ④ <strong>광고 모델</strong>: 인터넷 존재의 핵심 이유 중 하나. 배너광고(다음·네이버), 키워드 검색광고(네이버·구글), 매체삽입 광고(유튜브·CNN).<br>
+                ⑤ <strong>커뮤니티 모델</strong>: 사용자 충성도에 기초하며 부수 서비스·문맥광고로 수익. 오픈 소스(카카오·밴드), 오픈 콘텐츠(위키피디아), 사회적 네트워킹(페이스북·다음카페).
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== DAY 3 ==================== -->
+<section class="section-card d3" id="day3">
+    <div class="day-header">
+        <span class="day-badge">DAY 3</span>
+        <div class="day-title">제2장(책) 소비자 전자상거래 — 개념·기반·사업·금융</div>
+    </div>
+
+    <div class="checklist">
+        <div class="checklist-title">📌 오늘 외워야 할 것 (체크하며 공부)</div>
+        <label><input type="checkbox"> 소비자 전자상거래 4유형 (B2C·C2C·G4C·C2B)와 각 예시</label>
+        <label><input type="checkbox"> 2025년 온라인쇼핑 272조 / 모바일 77% 수치 기억</label>
+        <label><input type="checkbox"> C2B 2대 사례 (역경매·공동구매)</label>
+        <label><input type="checkbox"> 포털 분류 (수평·수직 / EIP·KEP·EAP)</label>
+        <label><input type="checkbox"> 서비스 사업 모델 6가지 (이·책·영·음·게·만)</label>
+        <label><input type="checkbox"> 이러닝 장단점 외우기</label>
+        <label><input type="checkbox"> 금융 모델 3가지 (뱅킹·증권·보험)</label>
+    </div>
+
+    <!-- 주제 1: 소비자 전자상거래 개념 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>소비자 전자상거래의 개념과 현황 ⭐⭐</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">Q. 전자상거래 큰 분류</div>
+                <div class="a">크게 <strong>소비자 전자상거래</strong>와 <strong>조직간 전자상거래</strong>로 분류</div>
+            </div>
+            <div class="flash">
+                <div class="q">Q. 소비자 전자상거래 정의</div>
+                <div class="a">공급자와 소비자 간에 인터넷상에서 행해지는 다양한 유형의 상거래를 포괄<br>(B2C · C2C · C2B · G4C 포함)</div>
+            </div>
+            <div class="flash">
+                <div class="q">Q. 2025년 온라인쇼핑 규모 ⭐</div>
+                <div class="a">연간 <strong>272조 398억 원</strong>, 전년도 259조 대비 <strong>10% 증가</strong><br><strong>모바일 거래 비중 77%</strong></div>
+            </div>
+            <div class="flash">
+                <div class="q">Q. 전체 소매판매액에서 B2C 비중</div>
+                <div class="a"><strong>42%대</strong>에 도달. 매년 지속 확대 추세.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 주제 2: 경제주체별 소비자 전자상거래 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>경제주체별 소비자 전자상거래 4유형 ⭐⭐⭐</div>
+        <div class="memo-hook d3">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">B2C · C2C · G4C · C2B</div>
+            <div class="hook-desc">쇼핑몰 · 개인 직거래 · 정부→시민 · 역경매·공동구매</div>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ① B2C (Business-to-Customer) — 기업-개인</div>
+            <ul>
+                <li>쇼핑몰과 같은 형태로 기업-고객 간 거래관계. <strong>공급 주체는 기업</strong></li>
+                <li>인터넷상 광고·상품정보·가격정보를 보고 주문·거래하는 시스템</li>
+                <li>대표 사례: <strong>사이버 쇼핑몰, 홈쇼핑, 홈뱅킹, 온라인 광고</strong></li>
+                <li><strong>소비자 이점</strong>: 시공간 제약 ↓, 제품/가격 실시간 검색·비교, 최소 시간·경비로 합리적 구매</li>
+                <li><strong>기업 이점</strong>: 유통·광고 비용 절감, 쌍방향성으로 소비자 요구 파악, 효율적 고객관리</li>
+                <li><strong>소비자가 꺼리는 이유</strong>: 정보기회 부족, 제품 불신, 제품정보 부족, 제품 다양성 부족, <strong>개인정보 유출 우려</strong>(계좌번호·카드번호·주민등록번호·주소 등)</li>
+                <li>활성화를 위해 <strong>제도적 보호 장치의 보완과 활용</strong>이 중요</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ② C2C (Customer-to-Customer) — 개인-개인</div>
+            <ul>
+                <li>개인 간 <strong>일대일 거래</strong>가 이루어지는 것. <strong>중간의 매개 서버</strong>를 통해 상품·서비스·정보를 사이버 공간에서 거래</li>
+                <li>개인이 구매·소비의 주체인 <strong>동시에 공급의 주체</strong></li>
+                <li>대표 사례: <strong>e-bay, 옥션, G마켓</strong> 같은 인터넷 경매사이트, 최근 선풍적 인기인 <strong>당근마켓</strong></li>
+                <li>인터넷 경매 매출 급증: <strong>저가 구매·대량 판매</strong>가 가장 큰 요인</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ③ G4C (Government for Customer) — 정부-시민</div>
+            <ul>
+                <li>UN은 한국을 <strong>전자정부 선진국</strong>으로 평가</li>
+                <li>전자정부 = 사이버 공간에서의 정부 서비스. 경제주체에 따라 <strong>G2B, G2C, G2G</strong> 등으로 분류. G2C는 <strong>G4C(G for C)</strong>로도 불림</li>
+                <li>다양한 행정서비스를 <strong>전자화·온라인화</strong>하여 언제 어디서나 접근·이용 가능한 <strong>서비스형 정부</strong></li>
+                <li>사례: 민원안내·민원처리(구직·여권신청), 전자 투표 지원, 세무행정, <strong>정부24(https://plus.gov.kr)</strong>를 통한 민원처리</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ④ C2B (Customer-to-Business) — 개인-기업</div>
+            <ul>
+                <li><strong>소비자·소비자 집단이 주도권</strong>을 가지고 거래하는 형태</li>
+                <li>소비자가 개인·단체로 필요한 상품을 <strong>가격과 부대조건을 결정해서 기업에 제시</strong>, 합의 시 구매</li>
+                <li>다양한 욕구를 가진 소비자들이 공동의 목표로 <strong>공동체 형성</strong>, 공동의견 수렴을 위한 의사소통 수단 제공 중요</li>
+                <li><strong>대표 사례 2가지</strong>:
+                    <ul>
+                        <li><strong>인터넷 역경매</strong> — 고객이 구매하고 싶은 상품을 기업에 제시, 판매업자들이 <strong>가격 경쟁</strong>을 통해 최저가로 공급</li>
+                        <li><strong>인터넷 공동구매</strong> — 다수의 소비자가 <strong>단체로 주문</strong>하여 구입가격을 낮추는 방식. 공동구매 전문사이트도 등장</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 3: 기반 서비스 (포털) -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>기반 서비스 — 포털 ⭐⭐</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">Q. 웹 기반 서비스의 발전</div>
+                <div class="a">한국의 웹 기반 서비스는 21세기 들어 <strong>인터넷 포털 중심</strong>으로 발전. 대표 서비스는 <strong>커뮤니티·검색·게임</strong>, 최근 <strong>SNS·모바일 웹/앱</strong>, 향후 <strong>사물웹 시대</strong> 예상</div>
+            </div>
+            <div class="flash">
+                <div class="q">Q. 포털(Portal) 정의</div>
+                <div class="a">WWW에서 인터넷에 접속할 때 <strong>기본적으로 거쳐가도록 만들어진 사이트</strong>. 사용자가 필요로 하는 정보 또는 메타 데이터를 종합 제공<br>검색·전자 메일·온라인 DB·뉴스·홈쇼핑·블로그 등 다양한 서비스 제공</div>
+            </div>
+        </div>
+
+        <div class="memo-hook d3">
+            <div class="hook-label">포털 분류 2가지 축</div>
+            <div class="mnemonic" style="font-size:1.2rem;">수평 · 수직 / EIP · KEP · EAP</div>
+            <div class="hook-desc">영역 범위 기준 + 엔터프라이즈 기능 기준</div>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 포털 사이트 분류</div>
+            <ul>
+                <li><strong>수평 포털</strong>: 다양한 분야를 다룸</li>
+                <li><strong>수직 포털</strong>: <strong>특정 영역에 치중</strong></li>
+            </ul>
+            <div class="memo-list-title" style="margin-top:10px;">🔹 엔터프라이즈 포털 분류 (기능 기준)</div>
+            <ul>
+                <li><strong>EIP (Enterprise Information Portal)</strong> — 기업 정보 포털</li>
+                <li><strong>KEP (Knowledge based Enterprise Portal)</strong> — 지식 기반 기업 포털</li>
+                <li><strong>EAP (Enterprise Application Portal)</strong> — 기업 응용 포털</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 국내 포털 사이트 & 현황</div>
+            <ul>
+                <li>정보검색·커뮤니티와 같은 서비스로 <strong>고정 방문객 확보</strong> → 인터넷 비즈니스 연결 → <strong>광고수입 + 마케팅 수입</strong></li>
+                <li>한국의 대표 포털: <strong>네이버, 다음</strong></li>
+                <li>DMC미디어(2025) 검색 점유율: <strong>네이버 64% · 구글 28% · 다음 3%</strong></li>
+                <li>최근 전통 포털 사업성 악화, <strong>구글·페이스북 등 소셜 네트워크 개인 맞춤서비스(휴먼 웹)</strong> 강세</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 4: 서비스 사업 모델 6가지 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>서비스 사업 모델 6가지 ⭐⭐⭐</div>
+        <div class="memo-hook d3">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">이 · 책 · 영 · 음 · 게 · 만</div>
+            <div class="hook-desc">이러닝 · 전자책 · 온라인 영화 · 디지털 음악 · 온라인 게임 · 디지털 만화</div>
+        </div>
+        <div class="memo-list">
+            <ul>
+                <li>인터넷 서비스 사업은 <strong>온라인 정보 서비스(on-line information service)</strong>에서 출발</li>
+                <li>대표 성공사례: <strong>온라인 게임, 엔터테인먼트(온라인 멀티미디어 콘텐츠), 이러닝</strong></li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ① 이러닝 (e-Learning) ⭐⭐⭐</div>
+            <ul>
+                <li>정보통신기술을 활용하여 <strong>언제(anytime), 어디서나(anywhere), 누구나(anyone)</strong> 원하는 수준별 <strong>맞춤형 학습</strong>을 할 수 있는 체제</li>
+                <li>교육 공간의 확장: 오프라인→온라인 / 교실→가정·사회</li>
+                <li><strong>장점</strong>: 자기주도적 학습 지원, 시간·공간 제약 완화, 자기주도적 학습설계 가능, <strong>교육비용 절감</strong>, 멀티미디어 콘텐츠로 정보 공유 용이, <strong>반복 학습 가능</strong></li>
+                <li><strong>단점</strong>: 교육효과 부정적 시각 존재. 전자적 도구가 <strong>교사의 몸짓·표정·뉘앙스·음색</strong>을 잘 전달하지 못함. <strong>학습자 통제가 어려움</strong></li>
+                <li>활용 분야: 한의학·패션/미용·건강관리 등 교양, 초중고등 교육, 학위 과정, 자격시험 대비, 외국어, 온라인 과외, 국제공인자격증 등</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ② 전자책 (e-book)</div>
+            <ul>
+                <li>디지털로 처리된 <strong>출판 콘텐츠</strong>를 컴퓨터·휴대폰·PMP·전자사전·전용 단말기에서 볼 수 있게 만든 것</li>
+                <li>단말기: <strong>전용단말기</strong>와 <strong>범용단말기</strong></li>
+                <li>장점: 인쇄·물류 비용이 없어 <strong>종이책보다 대개 50% 이상 저렴</strong>, 멀티미디어 기능, <strong>신속한 업데이트</strong>로 최신 정보 유지</li>
+                <li>e-Book 비즈니스는 <strong>출판 콘텐츠 기반 비즈니스 블루오션</strong></li>
+                <li><strong>아마존 킨들 성공 이유</strong>: <strong>전자 잉크(e-ink)</strong> 사용 → LCD/LED 모니터보다 <strong>눈의 피로 적음</strong>, 한번 충전으로 7일 사용, <strong>무료 무선통신 제공</strong>(별도 통신비 X), 책값 <strong>종이책의 1/2~1/3</strong>, 단말기 399달러 판매</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ③ 온라인 영화</div>
+            <ul>
+                <li>IT 콘텐츠 중 <strong>가장 성장 가능성 높은 부분</strong></li>
+                <li>기존 콘텐츠를 온라인상에서 <strong>스트리밍</strong>으로 서비스 제공</li>
+                <li>네이버·다음에 영화사가 정식 서비스 개시, <strong>넷플릭스 2016년 1월 한국 진출</strong></li>
+                <li>2018년 디지털 온라인 시장 매출 4,739억 원(전년 대비 8.6% 증가), IPTV·디지털케이블TV VOD 성장</li>
+                <li>사례: 월마트+할리우드 대형 영화사 스트리밍, <strong>씨네폭스(PC·노트북·스마트폰·스마트패드)</strong></li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ④ 디지털 음악</div>
+            <ul>
+                <li>기록 음악을 디지털화한 파일 형태로 <strong>다운로드·스트리밍</strong> 등으로 유통</li>
+                <li>월정액(Subscription) 수익이나 <strong>광고 베이스 무료 서비스</strong> 포함</li>
+                <li>대표 서비스 형태 3가지: <strong>다운로드 · 스트리밍 · 클라우드</strong></li>
+                <li>스트리밍 저작권자는 <strong>공연권(performance rights)</strong>을 통해 로열티(기록 음악의 매출) 수령</li>
+                <li>수익의 많은 부분이 <strong>저작권 권리</strong>에서 발생 → 글로벌 유통 시 저작권·로열티 숙지 필수</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ⑤ 온라인 게임</div>
+            <ul>
+                <li>한국에서 <strong>가장 큰 시장 확대</strong>가 이루어지는 분야 = <strong>웹 게임</strong></li>
+                <li><strong>웹 게임(브라우저 게임)</strong>: 웹 브라우저로 즐기는 게임. 게임 구조가 간단 → <strong>컴퓨터 사양 제약 적음</strong></li>
+                <li>무선인터넷·핸드폰 기반 모바일 환경 발전으로 접속 플랫폼 다양화</li>
+                <li>온라인 게임: 네트워크로 하는 <strong>멀티 플레이 게임</strong>. 컴퓨터·휴대전화·휴대용 게임기 등 다양한 기기 지원</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ⑥ 디지털 만화</div>
+            <ul>
+                <li>태블릿 같은 디지털 도구로 창작되거나 스캐너로 <strong>디지털화(디지털 라이징)</strong>한 만화</li>
+                <li>유통 측면: 데이터 형태로 저장 매체·네트워크를 통해 복제·전송</li>
+                <li>감상 단말기별: 웹·모바일·전자책·TV 수상기</li>
+                <li><strong>수익모델 3가지</strong>: <strong>콘텐츠 과금 · 광고 · 관련 상품</strong>. 콘텐츠 성격과 타겟층 소비성향에 따라 혼용</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 주제 5: 금융 모델 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>금융 모델 3가지 ⭐⭐⭐</div>
+        <div class="memo-hook d3">
+            <div class="hook-label">앞글자 암기법</div>
+            <div class="mnemonic">뱅 · 증 · 보</div>
+            <div class="hook-desc">인터넷 뱅킹 · 사이버 증권거래 · 온라인 보험</div>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ① 인터넷 뱅킹 (e-Banking / Online Banking)</div>
+            <ul>
+                <li>전자 금융의 일종으로 <strong>전화 회선·인터넷 회선</strong>을 이용하여 은행과 사용자 간 금융 업무를 처리</li>
+                <li>유의어: 온라인 뱅킹, <strong>인터넷 뱅킹, 폰 뱅킹, 홈 뱅킹(가정은행업무)</strong></li>
+                <li>이용 절차: <strong>은행 창구에 신청</strong> → 공인인증서 발급(필수) → 비밀번호·보안카드 / <strong>OTP(일회용 비밀번호) 생성기</strong> 권장</li>
+                <li><strong>문제점</strong>:
+                    <ul>
+                        <li>모든 보안 솔루션이 <strong>마이크로소프트 윈도우에 맞게 작성</strong> → 다른 OS는 이용 불가</li>
+                        <li><strong>피싱·파밍 피해 사례 급증</strong></li>
+                    </ul>
+                </li>
+                <li>활용 기기: PC·PDA·스마트폰·인터넷 TV·인터넷 냉장고 등</li>
+                <li><strong>모바일 뱅킹</strong>: 스마트폰 보급으로 이용자 증가. <strong>수수료 저렴</strong>, 직접 결제 수단 활용. 단, <strong>보안성 문제</strong>는 계속 과제</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ② 사이버 증권거래</div>
+            <ul>
+                <li>유사 용어: 온라인 증권거래, 인터넷 증권거래, <strong>홈 트레이딩</strong>, e-Trading, Cyber Trading</li>
+                <li>인터넷·스마트폰을 이용해 <strong>객장에 나가지 않고</strong> 가정·사무실에서 증권을 사고파는 거래</li>
+                <li>주가·시세 실시간 확인, 주식·<strong>선물 옵션</strong>도 거래 가능</li>
+                <li>증권사들이 <strong>사이버 거래 수수료 인하</strong> → 이용자 급증, 대부분 투자자가 사이버로 주식투자</li>
+                <li>부가 서비스 경쟁: <strong>재테크 상담·이메일 서비스</strong> 등</li>
+            </ul>
+        </div>
+
+        <div class="memo-list">
+            <div class="memo-list-title">🔹 ③ 온라인 보험</div>
+            <ul>
+                <li><strong>보험설계사 없이</strong> 자기 스스로 보험을 설계하고 온라인으로 직접 가입하는 보험</li>
+                <li>별도의 <strong>점포 운영비·설계사 수수료가 발생하지 않음</strong> → 보험료 낮출 수 있음</li>
+                <li>2012년 11월 <strong>기존 종합보험사가 전문화·특화된 형태의 보험사를 자회사로 설립하는 경우 신규진입 허용</strong> 발표</li>
+                <li>가입절차 간편, 사업비 절감으로 <strong>보험료 10~15% 저렴</strong></li>
+                <li>인터넷·스마트폰 이용자 급증 → <strong>젊은 고객층 공략</strong> 보험사 증가</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- DAY 3 퀴즈 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">✓</span>DAY 3 체크 퀴즈</div>
+
+        <div class="quiz-item" id="d3s1">
+            <p class="quiz-q"><span class="q-num">단1.</span> 정부가 일반 시민들에게 민원·행정 서비스를 전자적으로 제공하는 전자상거래 유형을 G for C의 형태로 쓴 약어는?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d3s1', 'G4C (G2C로도 표기)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d3s1-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d3s2">
+            <p class="quiz-q"><span class="q-num">단2.</span> 소비자나 소비자 집단이 주도권을 가지고 기업에 가격·조건을 제시하는 전자상거래 유형으로, 인터넷 역경매·공동구매가 대표 사례인 것은?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d3s2', 'C2B (Customer-to-Business)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d3s2-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d3s3">
+            <p class="quiz-q"><span class="q-num">단3.</span> 이러닝이 제공하는 3대 학습 환경(anytime, anywhere 외에 하나 더)은?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d3s3', 'anyone (누구나) — Anytime · Anywhere · Anyone')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d3s3-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d3s4">
+            <p class="quiz-q"><span class="q-num">단4.</span> 아마존 킨들이 LCD/LED 모니터보다 눈의 피로가 적은 것은 어떤 기술을 사용했기 때문인가?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d3s4', '전자 잉크 (e-ink)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d3s4-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d3s5">
+            <p class="quiz-q"><span class="q-num">단5.</span> 엔터프라이즈 포털 3가지 분류의 약어를 모두 쓰시오.</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d3s5', 'EIP(기업 정보 포털) · KEP(지식 기반 기업 포털) · EAP(기업 응용 포털)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d3s5-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d3q1">
+            <p class="quiz-q"><span class="q-num">객1.</span> 다음 중 <strong>C2C</strong> 전자상거래의 대표 사례가 <strong>아닌</strong> 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d3q1', 0, 3, '당근마켓·이베이·옥션은 개인-개인 경매/중고거래 사이트. 정부24는 G4C(정부-시민) 서비스다.')">① 당근마켓</button></li>
+                <li><button onclick="checkQuiz('d3q1', 1, 3, '당근마켓·이베이·옥션은 개인-개인 경매/중고거래 사이트. 정부24는 G4C(정부-시민) 서비스다.')">② 이베이</button></li>
+                <li><button onclick="checkQuiz('d3q1', 2, 3, '당근마켓·이베이·옥션은 개인-개인 경매/중고거래 사이트. 정부24는 G4C(정부-시민) 서비스다.')">③ 옥션</button></li>
+                <li><button onclick="checkQuiz('d3q1', 3, 3, '당근마켓·이베이·옥션은 개인-개인 경매/중고거래 사이트. 정부24는 G4C(정부-시민) 서비스다.')">④ 정부24</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d3q1-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d3q2">
+            <p class="quiz-q"><span class="q-num">객2.</span> 이러닝의 <strong>단점</strong>으로 가장 적절한 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d3q2', 0, 2, '이러닝은 교사의 몸짓·표정·뉘앙스·음색 등 비언어적 요소 전달이 어렵고 학습자 통제가 힘들다는 것이 단점이다.')">① 교육비용이 높다</button></li>
+                <li><button onclick="checkQuiz('d3q2', 1, 2, '이러닝은 교사의 몸짓·표정·뉘앙스·음색 등 비언어적 요소 전달이 어렵고 학습자 통제가 힘들다는 것이 단점이다.')">② 반복 학습이 어렵다</button></li>
+                <li><button onclick="checkQuiz('d3q2', 2, 2, '이러닝은 교사의 몸짓·표정·뉘앙스·음색 등 비언어적 요소 전달이 어렵고 학습자 통제가 힘들다는 것이 단점이다.')">③ 교사의 몸짓·표정·음색 전달이 어렵고 학습자 통제가 힘들다</button></li>
+                <li><button onclick="checkQuiz('d3q2', 3, 2, '이러닝은 교사의 몸짓·표정·뉘앙스·음색 등 비언어적 요소 전달이 어렵고 학습자 통제가 힘들다는 것이 단점이다.')">④ 시간·공간 제약이 크다</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d3q2-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d3ds1">
+            <p class="quiz-q"><span class="q-num">서1.</span> 소비자 전자상거래의 4가지 유형(B2C · C2C · G4C · C2B)을 각각 정의하고 대표 사례를 1개 이상씩 제시하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('d3ds1')">모범답안</button>
+            </div>
+            <div class="model-answer" id="d3ds1-answer">
+                <strong>모범답안:</strong><br>
+                ① <strong>B2C (기업-개인)</strong>: 기업이 인터넷 쇼핑몰 등을 통해 최종 소비자에게 전자적으로 상품·서비스를 판매하는 유형. 사이버 쇼핑몰, 홈쇼핑, 홈뱅킹, 온라인 광고가 대표 사례다.<br>
+                ② <strong>C2C (개인-개인)</strong>: 개인 간 일대일 거래가 이루어지며, 중간 매개 서버를 통해 사이버 공간에서 상품·서비스·정보를 거래한다. 개인이 구매·소비의 주체인 동시에 공급의 주체다. e-bay, 옥션, G마켓, 당근마켓이 대표 사례다.<br>
+                ③ <strong>G4C (정부-시민)</strong>: 다양한 행정서비스를 전자화·온라인화하여 언제 어디서나 접근·이용을 가능하게 하는 서비스형 정부. 민원안내·민원처리(구직·여권신청), 전자 투표, 세무행정이 해당하며, 정부24가 대표 사례다.<br>
+                ④ <strong>C2B (개인-기업)</strong>: 소비자나 소비자 집단이 주도권을 가지고 가격·부대조건을 결정해 기업에 제시하는 형태. 인터넷 역경매와 인터넷 공동구매가 대표 사례다.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="d3ds2">
+            <p class="quiz-q"><span class="q-num">서2.</span> 이러닝(e-Learning)의 개념을 정의하고 장점과 단점을 각각 3가지 이상 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('d3ds2')">모범답안</button>
+            </div>
+            <div class="model-answer" id="d3ds2-answer">
+                <strong>모범답안:</strong><br>
+                <strong>[정의]</strong> 이러닝은 정보통신기술을 활용하여 언제(anytime), 어디서나(anywhere), 누구나(anyone) 원하는 수준별 맞춤형 학습을 할 수 있는 체제이다. 교실에서 가정·사회로 교육 공간을 확장한다.<br>
+                <strong>[장점]</strong> ① 자기주도적 학습활동을 효과적으로 지원하여 학습 시간·공간적 제약을 완화한다. ② 자기주도적 학습설계가 가능하고 <strong>교육비용을 절감</strong>할 수 있다. ③ 멀티미디어 콘텐츠로 정보 제공·공유가 용이하고 <strong>반복 학습이 가능</strong>하다.<br>
+                <strong>[단점]</strong> ① 전자적 도구가 <strong>교사의 몸짓·표정·뉘앙스·음색을 잘 전달하지 못한다</strong>. ② 직접 의사소통이 어려워 교사로부터의 자극을 받기 어렵다. ③ <strong>학습자를 일일이 통제하기가 어렵다</strong>.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== FINAL ==================== -->
+<section class="section-card" id="final" style="border-top:5px solid var(--success);">
+    <div class="day-header" style="border-bottom:2px solid var(--success);">
+        <span class="day-badge" style="background:var(--success);">FINAL</span>
+        <div class="day-title">최종 정리 — 앞글자 암기법 총정리 + 서술형 총복습</div>
+    </div>
+
+    <div class="memo-hook d1">
+        <div class="hook-label">전자상거래 발전사 (DAY 1)</div>
+        <div class="mnemonic">E · C · W · 아 · 소모</div>
+        <div class="hook-desc">EDI → CALS → WWW → 아마존 → 소셜·모바일커머스</div>
+    </div>
+
+    <div class="memo-hook d1">
+        <div class="hook-label">인터넷 특성 4가지 (DAY 1)</div>
+        <div class="mnemonic">개 · 멀 · 용 · 해</div>
+        <div class="hook-desc">개방성 · 멀티미디어 송신능력 · 용량 확대 · 지역/시간 장벽 해소</div>
+    </div>
+
+    <div class="memo-hook d1">
+        <div class="hook-label">비즈니스 패러다임 이동 3효과 (DAY 1)</div>
+        <div class="mnemonic">범 · 쌍 · 해</div>
+        <div class="hook-desc">범세계적 의사소통 · 실시간 쌍방향 상호작용 · 장소/시간 제약 해소</div>
+    </div>
+
+    <div class="memo-hook d2">
+        <div class="hook-label">비즈니스 패러다임 변화 4가지 (DAY 2)</div>
+        <div class="mnemonic">소 · 메 · 무 · 수</div>
+        <div class="hook-desc">소비자 주도시장 · 메트카프의 법칙 · 무형자산 · 수확체증</div>
+    </div>
+
+    <div class="memo-hook d2">
+        <div class="hook-label">경제주체별 유형 5가지 (DAY 2)</div>
+        <div class="mnemonic" style="font-size:1.2rem;">B2B · B2C · B2G · C2B · C2C</div>
+        <div class="hook-desc">주체는 개인(C) · 기업(B) · 정부(G)</div>
+    </div>
+
+    <div class="memo-hook d2">
+        <div class="hook-label">e-비즈니스 모델 5유형 (DAY 2)</div>
+        <div class="mnemonic">소 · 중 · 콘 · 광 · 커</div>
+        <div class="hook-desc">소매 · 중개 · 콘텐츠서비스 · 광고 · 커뮤니티</div>
+    </div>
+
+    <div class="memo-hook d3">
+        <div class="hook-label">소비자 전자상거래 4유형 (DAY 3)</div>
+        <div class="mnemonic" style="font-size:1.2rem;">B2C · C2C · G4C · C2B</div>
+        <div class="hook-desc">쇼핑몰 · 개인직거래 · 정부→시민 · 역경매·공동구매</div>
+    </div>
+
+    <div class="memo-hook d3">
+        <div class="hook-label">서비스 사업 모델 6가지 (DAY 3)</div>
+        <div class="mnemonic">이 · 책 · 영 · 음 · 게 · 만</div>
+        <div class="hook-desc">이러닝 · 전자책 · 온라인영화 · 디지털음악 · 온라인게임 · 디지털만화</div>
+    </div>
+
+    <div class="memo-hook d3">
+        <div class="hook-label">금융 모델 3가지 (DAY 3)</div>
+        <div class="mnemonic">뱅 · 증 · 보</div>
+        <div class="hook-desc">인터넷 뱅킹 · 사이버 증권거래 · 온라인 보험</div>
+    </div>
+
+    <!-- 최종 서술형 연습 -->
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">📝</span>최종 서술형 연습 (시험 직전용)</div>
+
+        <div class="quiz-item" id="fs1">
+            <p class="quiz-q"><span class="q-num">F1.</span> 전자상거래의 출현과 발전 과정을 시대 순으로 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('fs1')">모범답안</button>
+            </div>
+            <div class="model-answer" id="fs1-answer">
+                <strong>모범답안:</strong><br>
+                전자상거래는 인터넷이 상용화되기 훨씬 이전인 1970년대부터 시작되었다.<br>
+                ① <strong>1970년대</strong>: <strong>EDI(Electronic Data Interchange · 전자문서교환)</strong>가 출현하여 종이 문서 대신 구조화·표준화된 데이터를 전산 네트워크(VAN 기반 인트라넷)를 통해 교환·처리했다.<br>
+                ② <strong>1980년대</strong>: e-mail 등 전자메시징 기술이 발달하고 <strong>조직간 정보시스템(IOS)</strong> 기반 전자상거래가 이루어졌으며, 미국 군수물자 공급을 기반으로 한 정부조달 프로세스 <strong>CALS</strong>가 등장했다.<br>
+                ③ <strong>1990년대 초반</strong>: <strong>WWW</strong>이 등장하면서 오늘날과 같은 인터넷 기반 전자상거래가 시작되었다.<br>
+                ④ <strong>1994년 7월</strong> 미국 아마존닷컴, <strong>1996년 12월</strong> 한국 인터파크(최초 종합쇼핑몰)가 등장했다.<br>
+                ⑤ <strong>2000년대 이후</strong>: 다양한 형태로 발전하며 <strong>소셜커머스</strong>와 <strong>모바일커머스(m-commerce)</strong>가 빠르게 증가했다.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="fs2">
+            <p class="quiz-q"><span class="q-num">F2.</span> 인터넷의 성공 배경을 기술적 배경과 경제적 배경으로 나누어 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('fs2')">모범답안</button>
+            </div>
+            <div class="model-answer" id="fs2-answer">
+                <strong>모범답안:</strong><br>
+                <strong>[기술적 배경]</strong><br>
+                ① <strong>TCP/IP</strong>: 컴퓨터들 간 의사소통을 가능하게 하는 프로토콜(통신 표준 체계).<br>
+                ② <strong>WWW(World Wide Web)</strong>: 하이퍼텍스트와 멀티미디어를 기반으로 모든 인터넷 서비스를 통합하여 제공하는 인터넷 통합 서비스. 텍스트·그림·음성·동화상 등 다양한 멀티미디어를 편리하게 전송하여 누구든지 쉽고 편리하게 이용할 수 있다.<br>
+                ③ <strong>하이퍼텍스트</strong>: 첫 페이지부터 마지막 페이지까지 단순히 순서대로 나열하지 않는 점에서 일반 텍스트와 다르다.<br>
+                <strong>[경제적 배경]</strong><br>
+                인터넷은 가장 최근의 발전된 정보 기술의 집약체로서 <strong>사용자가 많으면 많을수록 비용이 적어지고 수익성은 증가</strong>하는 경제적 속성을 갖는다. 사용자가 증가할수록 비용 분담 효과가 커져 최저 비용·최저 원가로 비즈니스를 할 수 있는 환경을 제공한다.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="fs3">
+            <p class="quiz-q"><span class="q-num">F3.</span> 전자상거래의 장점과 단점을 소비자 측면과 공급자 측면에서 각각 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('fs3')">모범답안</button>
+            </div>
+            <div class="model-answer" id="fs3-answer">
+                <strong>모범답안:</strong><br>
+                <strong>[장점 · 소비자 측면]</strong> 정보의 신속·정확한 검색과 비교, 저렴한 탐색비용, 원스톱 구매, 시공간 한계를 넘는 정보의 가용성.<br>
+                <strong>[장점 · 공급자 측면]</strong> 유통비용 절감으로 효율성 제고, 거래시간 단축, 유통채널 갈등 최소화, 현실적인 고객정보 획득, 내부·외부 의사소통의 효율적 수행, 관계 마케팅을 통한 소비자와의 유대 강화, 프로세스 일원화, 오류·재작업 감소.<br>
+                <strong>[단점 · 사업자 측면]</strong> 진입장벽이 낮아 경쟁이 치열하며 소비자 선택을 받지 못하면 살아남지 못한다. 상품 규격의 비표준화, 안전한 대금 지불 방식 요구, 효율적 물류·배달 체계 구축 필요, 품질보증 문제가 있다.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="fs4">
+            <p class="quiz-q"><span class="q-num">F4.</span> 전자상거래가 공급자-소비자 관계, 비즈니스 형태, 산업에 미치는 영향을 각각 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('fs4')">모범답안</button>
+            </div>
+            <div class="model-answer" id="fs4-answer">
+                <strong>모범답안:</strong><br>
+                ① <strong>공급자-소비자 관계</strong>: 인터넷에 의한 상호 커뮤니케이션 환경에서 <strong>소비자의 주도권이 점점 증대</strong>하고 있으며, e-비즈니스 형태의 진화 과정에서도 소비자 주도권이 더욱 강화되고 있다.<br>
+                ② <strong>비즈니스 형태</strong>: 전자상거래는 기존 <strong>구매 사이클이나 조달 사이클의 모든 비즈니스 프로세스</strong>에 영향을 미치고 있다.<br>
+                ③ <strong>산업</strong>: 가장 큰 영향을 받는 업종은 <strong>금융·엔터테인먼트·여행</strong> 등 <strong>제품과 서비스가 주로 정보 자체인 산업이나 서비스 지향적인 산업</strong>이다.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="fs5">
+            <p class="quiz-q"><span class="q-num">F5.</span> 포털의 정의와 분류(수평·수직 / EIP·KEP·EAP)를 설명하고 국내 주요 포털 현황을 서술하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('fs5')">모범답안</button>
+            </div>
+            <div class="model-answer" id="fs5-answer">
+                <strong>모범답안:</strong><br>
+                <strong>[정의]</strong> 포털은 WWW에서 인터넷 접속 시 기본적으로 거쳐가도록 만들어진 사이트로, 사용자가 필요로 하는 정보 또는 메타 데이터를 종합적으로 제공한다. 검색·전자 메일·온라인 DB·뉴스·홈쇼핑·블로그 등 다양한 서비스를 제공한다.<br>
+                <strong>[분류]</strong> ① 영역 기준: <strong>수평 포털</strong>(다양한 분야)과 <strong>수직 포털</strong>(특정 영역에 치중). ② 엔터프라이즈 포털은 기능 기준으로 <strong>EIP(기업 정보 포털) · KEP(지식 기반 기업 포털) · EAP(기업 응용 포털)</strong>로 나뉜다.<br>
+                <strong>[국내 현황]</strong> 한국의 대표 포털은 네이버와 다음이다. DMC미디어(2025)에 따르면 검색 점유율은 <strong>네이버 64% · 구글 28% · 다음 3%</strong>이다. 최근 전통 포털의 사업성이 악화되고 구글·페이스북 등 소셜 네트워크 기반 개인 맞춤서비스(휴먼 웹)가 강세를 보이고 있다.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="fs6">
+            <p class="quiz-q"><span class="q-num">F6.</span> 인터넷 뱅킹의 개념과 주요 문제점을 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('fs6')">모범답안</button>
+            </div>
+            <div class="model-answer" id="fs6-answer">
+                <strong>모범답안:</strong><br>
+                <strong>[개념]</strong> 인터넷 뱅킹(e-Banking · 온라인 뱅킹)은 전자 금융의 일종으로 전화 회선이나 인터넷 회선을 이용하여 은행과 사용자 간의 금융 업무를 처리하는 금융 시스템이다. 폰 뱅킹·홈 뱅킹(가정은행업무)도 유의어다. 이용을 위해서는 은행 창구에 신청해야 하며, <strong>공인인증서</strong> 발급이 필수이고 비밀번호·보안카드·<strong>OTP(일회용 비밀번호) 생성기</strong>가 권장된다.<br>
+                <strong>[문제점]</strong> ① 현재 모든 보안 솔루션이 <strong>마이크로소프트 윈도우에 맞게 작성</strong>되어 다른 운영체제에서 접속 시 인터넷 뱅킹을 이용할 수 없다. ② <strong>피싱과 파밍 피해 사례가 급증</strong>하고 있다. ③ 모바일 뱅킹은 수수료가 저렴하고 편리하지만 <strong>보안성 문제</strong>가 여전히 존재하여 기술 개발과 법제도적 보완이 강구되고 있다.
+            </div>
+        </div>
+    </div>
+
+    <div class="memo-list" style="background:rgba(22,163,74,0.06); border-left:4px solid var(--success); padding:18px 22px;">
+        <div class="memo-list-title" style="color:var(--success);">🎯 시험 당일 체크</div>
+        <ul>
+            <li>서술형은 <strong>3문제 중 2문제 선택</strong> — 가장 자신 있는 2개를 먼저 고르고 서론-본론-결론 구조로 작성</li>
+            <li>단답형 10문제 — <strong>영문 약어는 풀네임까지</strong> 함께 쓰면 확실 (예: "EDI(Electronic Data Interchange)")</li>
+            <li>헷갈릴 때는 <strong>앞글자 암기법</strong>으로 돌아가기 (소·메·무·수 / 소·중·콘·광·커 / 이·책·영·음·게·만 등)</li>
+            <li>시간 배분: 서술형 2문제 × 15분 + 단답형 10문제 × 1분 = 40분 목표</li>
+        </ul>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <p>e-비즈니스의 이해 · 중간고사 3일 암기 플랜 · 4월 21일(화) 13:30 · 18523 강의실</p>
+</footer>
+
+<script>
+const html = document.documentElement;
+const btn = document.getElementById('themeToggle');
+const saved = localStorage.getItem('ebiz-mid-theme') || 'light';
+html.setAttribute('data-theme', saved);
+btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    btn.textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('ebiz-mid-theme', next);
+});
+
+// Checklist: strike-through when checked
+document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', (e) => {
+        const label = e.target.parentElement;
+        label.classList.toggle('done', e.target.checked);
+        const all = document.querySelectorAll('.checklist input[type="checkbox"]');
+        const states = Array.from(all).map(c => c.checked);
+        localStorage.setItem('ebiz-mid-checklist', JSON.stringify(states));
+    });
+});
+// Restore checklist
+const cl = JSON.parse(localStorage.getItem('ebiz-mid-checklist') || '[]');
+document.querySelectorAll('.checklist input[type="checkbox"]').forEach((cb, i) => {
+    if (cl[i]) {
+        cb.checked = true;
+        cb.parentElement.classList.add('done');
+    }
+});
+
+function checkQuiz(qId, selected, correct, explanation) {
+    const item = document.getElementById(qId);
+    const buttons = item.querySelectorAll('.quiz-options button');
+    buttons.forEach(b => b.disabled = true);
+    buttons[selected].classList.add(selected === correct ? 'correct' : 'wrong');
+    if (selected !== correct) buttons[correct].classList.add('correct');
+    const fb = document.getElementById(qId + '-feedback');
+    fb.classList.add('show');
+    if (selected === correct) {
+        fb.classList.add('correct-fb');
+        fb.innerHTML = '✅ <strong>정답!</strong> ' + explanation;
+    } else {
+        fb.classList.add('wrong-fb');
+        fb.innerHTML = '❌ <strong>오답.</strong> 정답 <strong>' + (correct+1) + '번</strong>. ' + explanation;
+    }
+}
+
+function showShortAnswer(qId, answer) {
+    const el = document.getElementById(qId + '-answer');
+    el.innerHTML = '<strong>정답:</strong><br>' + answer.replace(/\n/g, '<br>');
+    el.classList.add('show');
+}
+
+function showDescAnswer(qId) {
+    document.getElementById(qId + '-answer').classList.add('show');
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+});
+</script>
+
+</body>
+</html>
