@@ -449,6 +449,50 @@ footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.8
             <div class="quiz-feedback" id="d1q2-feedback"></div>
         </div>
 
+        <!-- 객관식 3 -->
+        <div class="quiz-item" id="d1q3">
+            <p class="quiz-q"><span class="q-num">객3.</span> 인터넷의 성공 배경 중 <strong>기술적 배경</strong>에 해당하지 <strong>않는</strong> 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d1q3', 0, 3, '기술적 배경 3가지: TCP/IP · WWW · 하이퍼텍스트. 사용자 증가에 따른 비용 분담 효과는 경제적 배경에 해당.')">① TCP/IP</button></li>
+                <li><button onclick="checkQuiz('d1q3', 1, 3, '기술적 배경 3가지: TCP/IP · WWW · 하이퍼텍스트. 사용자 증가에 따른 비용 분담 효과는 경제적 배경에 해당.')">② WWW</button></li>
+                <li><button onclick="checkQuiz('d1q3', 2, 3, '기술적 배경 3가지: TCP/IP · WWW · 하이퍼텍스트. 사용자 증가에 따른 비용 분담 효과는 경제적 배경에 해당.')">③ 하이퍼텍스트</button></li>
+                <li><button onclick="checkQuiz('d1q3', 3, 3, '기술적 배경 3가지: TCP/IP · WWW · 하이퍼텍스트. 사용자 증가에 따른 비용 분담 효과는 경제적 배경에 해당.')">④ 사용자 증가에 따른 비용 분담 효과</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d1q3-feedback"></div>
+        </div>
+
+        <!-- 객관식 4 -->
+        <div class="quiz-item" id="d1q4">
+            <p class="quiz-q"><span class="q-num">객4.</span> 전자상거래 발전 순서를 시대순으로 <strong>옳게</strong> 나열한 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d1q4', 0, 1, '발전 순서: EDI(1970s) → CALS(1980s) → WWW(1990s 초) → 아마존(1994) → 소셜·모바일커머스(2000s).')">① WWW → EDI → CALS → 아마존 → 소셜·모바일커머스</button></li>
+                <li><button onclick="checkQuiz('d1q4', 1, 1, '발전 순서: EDI(1970s) → CALS(1980s) → WWW(1990s 초) → 아마존(1994) → 소셜·모바일커머스(2000s).')">② EDI → CALS → WWW → 아마존 → 소셜·모바일커머스</button></li>
+                <li><button onclick="checkQuiz('d1q4', 2, 1, '발전 순서: EDI(1970s) → CALS(1980s) → WWW(1990s 초) → 아마존(1994) → 소셜·모바일커머스(2000s).')">③ EDI → WWW → CALS → 아마존 → 소셜·모바일커머스</button></li>
+                <li><button onclick="checkQuiz('d1q4', 3, 1, '발전 순서: EDI(1970s) → CALS(1980s) → WWW(1990s 초) → 아마존(1994) → 소셜·모바일커머스(2000s).')">④ CALS → EDI → WWW → 아마존 → 소셜·모바일커머스</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d1q4-feedback"></div>
+        </div>
+
+        <!-- 단답형 4 -->
+        <div class="quiz-item" id="d1s4">
+            <p class="quiz-q"><span class="q-num">단4.</span> 하이퍼텍스트와 멀티미디어를 기반으로 모든 인터넷 서비스를 통합 제공하는 인터넷 통합 서비스의 정식 영문 명칭(풀네임)을 쓰시오.</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d1s4', 'World Wide Web (WWW)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d1s4-answer"></div>
+        </div>
+
+        <!-- 단답형 5 -->
+        <div class="quiz-item" id="d1s5">
+            <p class="quiz-q"><span class="q-num">단5.</span> 인터넷을 통하여 컴퓨터들 간 의사소통을 가능하게 하는 통신 표준 체계(프로토콜)의 약어는?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d1s5', 'TCP/IP (Transmission Control Protocol / Internet Protocol)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d1s5-answer"></div>
+        </div>
+
         <!-- 서술형 -->
         <div class="quiz-item" id="d1ds1">
             <p class="quiz-q"><span class="q-num">서1.</span> e-Commerce와 e-Business의 차이점을 설명하시오.</p>
@@ -461,6 +505,21 @@ footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.8
                 ① <strong>e-Commerce</strong>는 전자매체를 기반으로 한 <strong>상거래</strong>를 의미하며, 쇼핑몰에서의 온라인 상품판매, 온라인 주식매매, 인터넷 매매 등 <strong>마케팅 및 판매활동에 초점</strong>이 맞춰져 있다.<br>
                 ② <strong>e-Business</strong>는 e-Commerce를 <strong>포괄</strong>하는 광범위한 개념으로, 인터넷 및 정보기술의 적용 대상이 <strong>기업 전반의 가치활동들로 확대</strong>된 것이다. 온라인 공급망 관리, 온라인 주문처리, 온라인 고객관계 서비스 등이 포함된다.<br>
                 ③ 즉, <strong>e-Business ⊃ e-Commerce</strong>의 관계이다.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="d1ds2">
+            <p class="quiz-q"><span class="q-num">서2.</span> 인터넷의 4가지 특성을 모두 쓰고 각각을 간단히 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('d1ds2')">모범답안</button>
+            </div>
+            <div class="model-answer" id="d1ds2-answer">
+                <strong>모범답안:</strong><br>
+                ① <strong>개방성</strong> — 누구나 접속하고 이용할 수 있는 열린 네트워크다.<br>
+                ② <strong>멀티미디어 정보 송신 능력</strong> — 텍스트, 음성, 이미지, 동영상 등 다양한 형태의 정보를 전송할 수 있다.<br>
+                ③ <strong>네트워크 용량의 지속적 확대</strong> — 대역폭이 계속 확장되어 더 많은 정보를 빠르게 처리할 수 있다.<br>
+                ④ <strong>지역적·시간적 장벽의 해소</strong> — 어디서든 언제든 접근이 가능하여 공급자와 소비자의 시공간 제약을 없앤다.
             </div>
         </div>
     </div>
@@ -758,7 +817,7 @@ footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.8
             <p class="quiz-q"><span class="q-num">단1.</span> "네트워크 가치는 가입자 수에 비례해 증가하며 어느 시점부터 그 가치는 비약적으로 높아진다"는 법칙의 이름은?</p>
             <div class="short-answer">
                 <input type="text" placeholder="정답 입력...">
-                <button onclick="showShortAnswer('d2s1', '메트카프의 법칙 (Metcalfe\\'s Law) · 네트워크 효과')">정답 확인</button>
+                <button onclick="showShortAnswer('d2s1', '메트카프의 법칙 (Metcalfe\u0027s Law) · 네트워크 효과')">정답 확인</button>
             </div>
             <div class="model-answer" id="d2s1-answer"></div>
         </div>
@@ -802,14 +861,54 @@ footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.8
         </div>
 
         <div class="quiz-item" id="d2q2">
-            <p class="quiz-q"><span class="q-num">객2.</span> 다음 중 <strong>중개 모델</strong>의 대표 예시로 적절하지 <strong>않은</strong> 것은?</p>
+            <p class="quiz-q"><span class="q-num">객2.</span> 비즈니스 모델과 수익 모델에 대한 설명으로 <strong>옳은</strong> 것은?</p>
             <ul class="quiz-options">
-                <li><button onclick="checkQuiz('d2q2', 0, 2, '아마존은 대표적인 소매(온라인 소매) 모델이다. 중개 모델: 컴덱스·이베이·옥션·페이팔·네이버쇼핑 등.')">① 이베이</button></li>
-                <li><button onclick="checkQuiz('d2q2', 1, 2, '아마존은 대표적인 소매(온라인 소매) 모델이다. 중개 모델: 컴덱스·이베이·옥션·페이팔·네이버쇼핑 등.')">② 페이팔</button></li>
-                <li><button onclick="checkQuiz('d2q2', 2, 2, '아마존은 대표적인 소매(온라인 소매) 모델이다. 중개 모델: 컴덱스·이베이·옥션·페이팔·네이버쇼핑 등.')">③ 아마존</button></li>
-                <li><button onclick="checkQuiz('d2q2', 3, 2, '아마존은 대표적인 소매(온라인 소매) 모델이다. 중개 모델: 컴덱스·이베이·옥션·페이팔·네이버쇼핑 등.')">④ 네이버쇼핑</button></li>
+                <li><button onclick="checkQuiz('d2q2', 0, 2, '비즈니스 모델은 기업이 창출한 가치를 어떻게 고객에게 전달하여 수익을 획득할 것인가와 관련된 일련의 활동(즉 수익모델)으로 정의된다. 수익 모델이 결여된 비즈니스 모델은 의미가 없다.')">① 비즈니스 모델은 거래 방향(B2B·B2C)을 분류한 것이다</button></li>
+                <li><button onclick="checkQuiz('d2q2', 1, 2, '비즈니스 모델은 기업이 창출한 가치를 어떻게 고객에게 전달하여 수익을 획득할 것인가와 관련된 일련의 활동(즉 수익모델)으로 정의된다. 수익 모델이 결여된 비즈니스 모델은 의미가 없다.')">② 비즈니스 모델이 탁월하면 수익 모델이 결여되어도 의미가 있다</button></li>
+                <li><button onclick="checkQuiz('d2q2', 2, 2, '비즈니스 모델은 기업이 창출한 가치를 어떻게 고객에게 전달하여 수익을 획득할 것인가와 관련된 일련의 활동(즉 수익모델)으로 정의된다. 수익 모델이 결여된 비즈니스 모델은 의미가 없다.')">③ 비즈니스 모델은 가치를 고객에게 전달해 수익을 획득하는 일련의 활동을 의미한다</button></li>
+                <li><button onclick="checkQuiz('d2q2', 3, 2, '비즈니스 모델은 기업이 창출한 가치를 어떻게 고객에게 전달하여 수익을 획득할 것인가와 관련된 일련의 활동(즉 수익모델)으로 정의된다. 수익 모델이 결여된 비즈니스 모델은 의미가 없다.')">④ 수익 모델은 비즈니스 모델보다 항상 상위 개념이다</button></li>
             </ul>
             <div class="quiz-feedback" id="d2q2-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d2q3">
+            <p class="quiz-q"><span class="q-num">객3.</span> 비즈니스 패러다임 변화 4가지에 해당하지 <strong>않는</strong> 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d2q3', 0, 3, '패러다임 변화 4가지: 소비자 주도시장 · 메트카프의 법칙(네트워크 효과) · 무형자산 · 수확체증의 메커니즘. 수확체감은 전통 제조업에 적용되는 반대 개념이다.')">① 소비자 주도시장</button></li>
+                <li><button onclick="checkQuiz('d2q3', 1, 3, '패러다임 변화 4가지: 소비자 주도시장 · 메트카프의 법칙(네트워크 효과) · 무형자산 · 수확체증의 메커니즘. 수확체감은 전통 제조업에 적용되는 반대 개념이다.')">② 메트카프의 법칙</button></li>
+                <li><button onclick="checkQuiz('d2q3', 2, 3, '패러다임 변화 4가지: 소비자 주도시장 · 메트카프의 법칙(네트워크 효과) · 무형자산 · 수확체증의 메커니즘. 수확체감은 전통 제조업에 적용되는 반대 개념이다.')">③ 무형자산</button></li>
+                <li><button onclick="checkQuiz('d2q3', 3, 3, '패러다임 변화 4가지: 소비자 주도시장 · 메트카프의 법칙(네트워크 효과) · 무형자산 · 수확체증의 메커니즘. 수확체감은 전통 제조업에 적용되는 반대 개념이다.')">④ 수확체감의 메커니즘</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d2q3-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d2q4">
+            <p class="quiz-q"><span class="q-num">객4.</span> 전자상거래 영향 중 <strong>가장 큰 영향을 받는 업종</strong>으로 옳지 <strong>않은</strong> 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d2q4', 0, 3, '제품·서비스가 주로 정보 자체인 산업이나 서비스 지향적인 산업(금융·엔터테인먼트·여행)이 가장 큰 영향을 받는다. 광업은 제조·자원 산업으로 영향이 상대적으로 작다.')">① 금융</button></li>
+                <li><button onclick="checkQuiz('d2q4', 1, 3, '제품·서비스가 주로 정보 자체인 산업이나 서비스 지향적인 산업(금융·엔터테인먼트·여행)이 가장 큰 영향을 받는다. 광업은 제조·자원 산업으로 영향이 상대적으로 작다.')">② 엔터테인먼트</button></li>
+                <li><button onclick="checkQuiz('d2q4', 2, 3, '제품·서비스가 주로 정보 자체인 산업이나 서비스 지향적인 산업(금융·엔터테인먼트·여행)이 가장 큰 영향을 받는다. 광업은 제조·자원 산업으로 영향이 상대적으로 작다.')">③ 여행</button></li>
+                <li><button onclick="checkQuiz('d2q4', 3, 3, '제품·서비스가 주로 정보 자체인 산업이나 서비스 지향적인 산업(금융·엔터테인먼트·여행)이 가장 큰 영향을 받는다. 광업은 제조·자원 산업으로 영향이 상대적으로 작다.')">④ 광업</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d2q4-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d2s5">
+            <p class="quiz-q"><span class="q-num">단5.</span> 1980년대 미국에서 등장한 군수물자 공급 기반의 정부 조달 프로세스의 영문 약어는?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d2s5', 'CALS (Computer Aided Logistic Support)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d2s5-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d2s6">
+            <p class="quiz-q"><span class="q-num">단6.</span> 무선 인터넷 기술 발전으로 등장한 모바일 상거래의 약어와 RFID 기반 유비쿼터스 상거래의 약어를 순서대로 쓰시오.</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d2s6', 'm-commerce(모바일 상거래) · u-commerce(유비쿼터스 상거래) — 발전 순서: e-비즈 → m-비즈 → u-비즈')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d2s6-answer"></div>
         </div>
 
         <div class="quiz-item" id="d2ds1">
@@ -840,6 +939,36 @@ footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.8
                 ③ <strong>콘텐츠서비스 모델</strong>: 관심을 끌 콘텐츠를 구축해 방문을 유도하는 모델. 포털(네이버·다음·구글)과 온라인 구독(아이튠·외국신문)이 대표.<br>
                 ④ <strong>광고 모델</strong>: 인터넷 존재의 핵심 이유 중 하나. 배너광고(다음·네이버), 키워드 검색광고(네이버·구글), 매체삽입 광고(유튜브·CNN).<br>
                 ⑤ <strong>커뮤니티 모델</strong>: 사용자 충성도에 기초하며 부수 서비스·문맥광고로 수익. 오픈 소스(카카오·밴드), 오픈 콘텐츠(위키피디아), 사회적 네트워킹(페이스북·다음카페).
+            </div>
+        </div>
+
+        <div class="quiz-item" id="d2ds3">
+            <p class="quiz-q"><span class="q-num">서3.</span> 경제주체별 전자상거래 5가지 유형(B2B·B2C·B2G·C2B·C2C)을 각각 정의하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('d2ds3')">모범답안</button>
+            </div>
+            <div class="model-answer" id="d2ds3-answer">
+                <strong>모범답안:</strong> 전자상거래의 주체는 개인(C)·기업(B)·정부(G)이며 거래 방향에 따라 5가지로 구분된다.<br>
+                ① <strong>B2B</strong>: 기업과 기업 간 전자상거래로, 원료 공급자와 수요 기업 간 거래, 기업과 금융기업 간 자금결제 등을 포함한다.<br>
+                ② <strong>B2C</strong>: 기업과 개인(최종 소비자) 간 전자상거래로, 기업이 인터넷 쇼핑몰 등을 통해 소비자에게 상품·서비스를 판매한다.<br>
+                ③ <strong>B2G</strong>: 기업과 정부 간 전자상거래로, 조달청과 같은 정부기관과 기업 간의 거래가 해당한다.<br>
+                ④ <strong>C2B</strong>: 개인이 기업에 가격·조건을 제시하는 거래로, 동호회나 포털 사이트를 통해 필요한 상품을 공동구매하거나 역경매하는 형태다.<br>
+                ⑤ <strong>C2C</strong>: 개인과 개인 간 거래로, 경매와 같이 매개 서버를 통해 가상공간에서 상품·서비스·정보를 거래한다.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="d2ds4">
+            <p class="quiz-q"><span class="q-num">서4.</span> 수확체증과 수확체감의 차이를 설명하고, 각각 어떤 산업에 적용되는지 예와 함께 서술하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('d2ds4')">모범답안</button>
+            </div>
+            <div class="model-answer" id="d2ds4-answer">
+                <strong>모범답안:</strong><br>
+                ① <strong>수확체증의 메커니즘</strong>은 사업 규모가 두 배가 되면 생산이 더욱 효율적으로 이루어져 산출량은 <strong>두 배 이상</strong>이 된다는 규모의 경제다. 주로 <strong>지식 주도형 산업(소프트웨어 등 새로운 분야)</strong>에 적용된다. 예를 들어 소프트웨어는 초기에 많은 비용이 투자되지만 한번 개발된 이후 대량 복사가 가능하므로 대량 생산할수록 비용이 상품화 원가에 가까워진다.<br>
+                ② <strong>수확체감</strong>은 어떤 사업이 일정 규모를 초과하면 <strong>수익성이 급격히 저하</strong>한다는 원리로, 주로 <strong>전통적인 제조업</strong>에 적용된다.<br>
+                ③ 즉 인터넷 기반의 새로운 산업은 수확체증이 적용되어 패러다임 변화의 핵심 동력이 된다.
             </div>
         </div>
     </div>
@@ -1189,6 +1318,66 @@ footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.8
             <div class="quiz-feedback" id="d3q2-feedback"></div>
         </div>
 
+        <div class="quiz-item" id="d3q3">
+            <p class="quiz-q"><span class="q-num">객3.</span> 엔터프라이즈 포털의 기능 기준 분류 3가지에 해당하지 <strong>않는</strong> 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d3q3', 0, 3, '엔터프라이즈 포털: EIP(기업 정보 포털) · KEP(지식 기반 기업 포털) · EAP(기업 응용 포털). ERP는 전사적 자원관리 시스템으로 별개 개념이다.')">① EIP (Enterprise Information Portal)</button></li>
+                <li><button onclick="checkQuiz('d3q3', 1, 3, '엔터프라이즈 포털: EIP(기업 정보 포털) · KEP(지식 기반 기업 포털) · EAP(기업 응용 포털). ERP는 전사적 자원관리 시스템으로 별개 개념이다.')">② KEP (Knowledge based Enterprise Portal)</button></li>
+                <li><button onclick="checkQuiz('d3q3', 2, 3, '엔터프라이즈 포털: EIP(기업 정보 포털) · KEP(지식 기반 기업 포털) · EAP(기업 응용 포털). ERP는 전사적 자원관리 시스템으로 별개 개념이다.')">③ EAP (Enterprise Application Portal)</button></li>
+                <li><button onclick="checkQuiz('d3q3', 3, 3, '엔터프라이즈 포털: EIP(기업 정보 포털) · KEP(지식 기반 기업 포털) · EAP(기업 응용 포털). ERP는 전사적 자원관리 시스템으로 별개 개념이다.')">④ ERP (Enterprise Resource Planning)</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d3q3-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d3q4">
+            <p class="quiz-q"><span class="q-num">객4.</span> 인터넷 뱅킹의 <strong>문제점</strong>으로 옳지 <strong>않은</strong> 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d3q4', 0, 3, '인터넷 뱅킹의 문제점: ① 보안 솔루션이 윈도우에 맞춰 작성되어 타 OS 사용 곤란, ② 피싱·파밍 피해 급증, ③ 모바일 뱅킹 보안성 문제. OTP 생성기 사용은 보안 강화책으로 권장된다.')">① 보안 솔루션이 마이크로소프트 윈도우에 맞게 작성되어 타 OS 이용이 어렵다</button></li>
+                <li><button onclick="checkQuiz('d3q4', 1, 3, '인터넷 뱅킹의 문제점: ① 보안 솔루션이 윈도우에 맞춰 작성되어 타 OS 사용 곤란, ② 피싱·파밍 피해 급증, ③ 모바일 뱅킹 보안성 문제. OTP 생성기 사용은 보안 강화책으로 권장된다.')">② 피싱·파밍 피해 사례가 급증하고 있다</button></li>
+                <li><button onclick="checkQuiz('d3q4', 2, 3, '인터넷 뱅킹의 문제점: ① 보안 솔루션이 윈도우에 맞춰 작성되어 타 OS 사용 곤란, ② 피싱·파밍 피해 급증, ③ 모바일 뱅킹 보안성 문제. OTP 생성기 사용은 보안 강화책으로 권장된다.')">③ 모바일 뱅킹의 보안성 문제가 여전히 과제다</button></li>
+                <li><button onclick="checkQuiz('d3q4', 3, 3, '인터넷 뱅킹의 문제점: ① 보안 솔루션이 윈도우에 맞춰 작성되어 타 OS 사용 곤란, ② 피싱·파밍 피해 급증, ③ 모바일 뱅킹 보안성 문제. OTP 생성기 사용은 보안 강화책으로 권장된다.')">④ OTP 생성기를 권장하여 보안을 강화한다</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d3q4-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d3q5">
+            <p class="quiz-q"><span class="q-num">객5.</span> 서비스 사업 모델 6가지(이·책·영·음·게·만)에 포함되지 <strong>않는</strong> 것은?</p>
+            <ul class="quiz-options">
+                <li><button onclick="checkQuiz('d3q5', 0, 1, '6가지: 이러닝·전자책·온라인 영화·디지털 음악·온라인 게임·디지털 만화. 인터넷 뱅킹은 금융 모델에 속한다.')">① 이러닝</button></li>
+                <li><button onclick="checkQuiz('d3q5', 1, 1, '6가지: 이러닝·전자책·온라인 영화·디지털 음악·온라인 게임·디지털 만화. 인터넷 뱅킹은 금융 모델에 속한다.')">② 인터넷 뱅킹</button></li>
+                <li><button onclick="checkQuiz('d3q5', 2, 1, '6가지: 이러닝·전자책·온라인 영화·디지털 음악·온라인 게임·디지털 만화. 인터넷 뱅킹은 금융 모델에 속한다.')">③ 디지털 음악</button></li>
+                <li><button onclick="checkQuiz('d3q5', 3, 1, '6가지: 이러닝·전자책·온라인 영화·디지털 음악·온라인 게임·디지털 만화. 인터넷 뱅킹은 금융 모델에 속한다.')">④ 온라인 게임</button></li>
+            </ul>
+            <div class="quiz-feedback" id="d3q5-feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="d3s6">
+            <p class="quiz-q"><span class="q-num">단6.</span> 사이버 증권거래의 다른 명칭으로, 객장에 나가지 않고 가정·사무실에서 주식을 사고파는 거래를 의미하는 영문 용어 1가지를 쓰시오.</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d3s6', '홈 트레이딩 (Home Trading) — 유사 용어: e-Trading · Cyber Trading · 온라인 증권거래 · 인터넷 증권거래')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d3s6-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d3s7">
+            <p class="quiz-q"><span class="q-num">단7.</span> 인터넷 뱅킹 이용 시 비밀번호·보안카드와 함께 권장되는 일회용 비밀번호 생성기의 약어는?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d3s7', 'OTP (One-Time Password)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d3s7-answer"></div>
+        </div>
+
+        <div class="quiz-item" id="d3s8">
+            <p class="quiz-q"><span class="q-num">단8.</span> 보험설계사 없이 자기 스스로 보험을 설계해 직접 가입함으로써 보험료가 10~15% 저렴해지는 보험 형태는?</p>
+            <div class="short-answer">
+                <input type="text" placeholder="정답 입력...">
+                <button onclick="showShortAnswer('d3s8', '온라인 보험 (Online Insurance)')">정답 확인</button>
+            </div>
+            <div class="model-answer" id="d3s8-answer"></div>
+        </div>
+
         <div class="quiz-item" id="d3ds1">
             <p class="quiz-q"><span class="q-num">서1.</span> 소비자 전자상거래의 4가지 유형(B2C · C2C · G4C · C2B)을 각각 정의하고 대표 사례를 1개 이상씩 제시하시오.</p>
             <div class="desc-answer">
@@ -1215,6 +1404,20 @@ footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.8
                 <strong>[정의]</strong> 이러닝은 정보통신기술을 활용하여 언제(anytime), 어디서나(anywhere), 누구나(anyone) 원하는 수준별 맞춤형 학습을 할 수 있는 체제이다. 교실에서 가정·사회로 교육 공간을 확장한다.<br>
                 <strong>[장점]</strong> ① 자기주도적 학습활동을 효과적으로 지원하여 학습 시간·공간적 제약을 완화한다. ② 자기주도적 학습설계가 가능하고 <strong>교육비용을 절감</strong>할 수 있다. ③ 멀티미디어 콘텐츠로 정보 제공·공유가 용이하고 <strong>반복 학습이 가능</strong>하다.<br>
                 <strong>[단점]</strong> ① 전자적 도구가 <strong>교사의 몸짓·표정·뉘앙스·음색을 잘 전달하지 못한다</strong>. ② 직접 의사소통이 어려워 교사로부터의 자극을 받기 어렵다. ③ <strong>학습자를 일일이 통제하기가 어렵다</strong>.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="d3ds3">
+            <p class="quiz-q"><span class="q-num">서3.</span> 금융 분야 e-비즈니스 3가지 모델(인터넷 뱅킹·사이버 증권거래·온라인 보험)의 개념과 특징을 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('d3ds3')">모범답안</button>
+            </div>
+            <div class="model-answer" id="d3ds3-answer">
+                <strong>모범답안:</strong><br>
+                ① <strong>인터넷 뱅킹(e-Banking)</strong>: 전자 금융의 일종으로 전화·인터넷 회선을 이용하여 은행과 사용자 간 금융 업무를 처리하는 시스템. 이용 시 <strong>공인인증서 발급이 필수</strong>이고, 비밀번호·보안카드와 함께 <strong>OTP(일회용 비밀번호) 생성기</strong>가 권장된다.<br>
+                ② <strong>사이버 증권거래(홈 트레이딩)</strong>: 인터넷·스마트폰을 이용해 객장에 나가지 않고 가정·사무실에서 증권을 사고파는 거래. 주가·시세 실시간 확인 및 <strong>주식·선물 옵션</strong> 거래도 가능하며, 증권사들의 <strong>수수료 인하</strong>로 이용자가 급증했다.<br>
+                ③ <strong>온라인 보험</strong>: <strong>보험설계사 없이</strong> 자기 스스로 보험을 설계하고 직접 가입한다. 점포 운영비·설계사 수수료가 발생하지 않아 <strong>보험료가 10~15% 저렴</strong>하며, 인터넷·스마트폰 이용자 급증으로 젊은 고객층 공략 보험사가 증가하고 있다.
             </div>
         </div>
     </div>
@@ -1371,6 +1574,35 @@ footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.8
                 <strong>모범답안:</strong><br>
                 <strong>[개념]</strong> 인터넷 뱅킹(e-Banking · 온라인 뱅킹)은 전자 금융의 일종으로 전화 회선이나 인터넷 회선을 이용하여 은행과 사용자 간의 금융 업무를 처리하는 금융 시스템이다. 폰 뱅킹·홈 뱅킹(가정은행업무)도 유의어다. 이용을 위해서는 은행 창구에 신청해야 하며, <strong>공인인증서</strong> 발급이 필수이고 비밀번호·보안카드·<strong>OTP(일회용 비밀번호) 생성기</strong>가 권장된다.<br>
                 <strong>[문제점]</strong> ① 현재 모든 보안 솔루션이 <strong>마이크로소프트 윈도우에 맞게 작성</strong>되어 다른 운영체제에서 접속 시 인터넷 뱅킹을 이용할 수 없다. ② <strong>피싱과 파밍 피해 사례가 급증</strong>하고 있다. ③ 모바일 뱅킹은 수수료가 저렴하고 편리하지만 <strong>보안성 문제</strong>가 여전히 존재하여 기술 개발과 법제도적 보완이 강구되고 있다.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="fs7">
+            <p class="quiz-q"><span class="q-num">F7.</span> 비즈니스 모델(Business Model)과 수익 모델(Revenue Model)의 개념을 정의하고 둘의 관계를 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('fs7')">모범답안</button>
+            </div>
+            <div class="model-answer" id="fs7-answer">
+                <strong>모범답안:</strong><br>
+                <strong>[비즈니스 모델]</strong> 기업이 창출한 가치를 어떻게 고객에게 전달하여 수익을 획득할 것인가와 관련된 <strong>일련의 활동</strong>이며, 즉 <strong>수익모델로 정의</strong>된다.<br>
+                <strong>[수익 모델]</strong> 기업이 비즈니스를 통해 수입을 발생시키고 이윤을 내며, 투자자본에 대해 높은 수익을 낼 수 있는 방법이다.<br>
+                <strong>[관계]</strong> 비즈니스 모델은 곧 수익모델로 정의되므로 두 개념은 밀접하게 연결되어 있다. 아무리 창의적이고 탁월한 비즈니스 모델이라도 <strong>수익 모델이 애매하거나 결여되어 있다면 의미가 없다</strong>는 점이 핵심이다.
+            </div>
+        </div>
+
+        <div class="quiz-item" id="fs8">
+            <p class="quiz-q"><span class="q-num">F8.</span> 인터넷의 비즈니스 패러다임 변화 4가지(소비자 주도시장·메트카프의 법칙·무형자산·수확체증)를 모두 설명하시오.</p>
+            <div class="desc-answer">
+                <textarea placeholder="답안 작성..."></textarea>
+                <button onclick="showDescAnswer('fs8')">모범답안</button>
+            </div>
+            <div class="model-answer" id="fs8-answer">
+                <strong>모범답안:</strong><br>
+                ① <strong>소비자 주도시장</strong>: 소비자가 정보를 기반으로 시장의 주도권을 확보하고 공급자가 이에 따라 행동한다. 정보 자체가 소비가치를 가지며, 구입 전 상호 커뮤니케이션과 서비스 맞춤화가 이루어진다.<br>
+                ② <strong>메트카프의 법칙(네트워크 효과)</strong>: "네트워크 가치는 가입자 수에 비례해 증가하며 어느 시점부터 그 가치는 비약적으로 높아진다"는 법칙으로, 1995년 쓰리컴사 설립자 밥 메트카프가 제창했다.<br>
+                ③ <strong>무형자산</strong>: 브랜드·지식·데이터·고객 관계 등 눈에 보이지 않는 자산이 유형 자산보다 더욱 중요해진다.<br>
+                ④ <strong>수확체증의 메커니즘</strong>: 사업 규모가 두 배가 되면 산출량이 두 배 이상이 되는 규모의 경제로, <strong>지식 주도형 산업</strong>에 적용된다. 전통 제조업의 수확체감과 반대 개념이며, 소프트웨어처럼 초기 투자 후 복제 비용이 거의 0에 가까운 산업이 대표적이다.
             </div>
         </div>
     </div>
