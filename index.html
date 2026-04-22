@@ -155,15 +155,19 @@
     .card-body { flex: 1; min-width: 0; }
     .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
     .card-desc { font-size: 0.82rem; color: var(--gray-700); }
+    .card-badges { margin-top: 0.4rem; display: flex; flex-wrap: wrap; gap: 0.3rem; }
     .card-badge {
       display: inline-block;
-      margin-top: 0.35rem;
       font-size: 0.7rem;
       padding: 0.15rem 0.55rem;
       border-radius: 20px;
       font-weight: 600;
       background: var(--success-light);
       color: var(--success);
+    }
+    .card-badge.midterm {
+      background: var(--warning-light);
+      color: var(--warning);
     }
     .card.disabled .card-badge {
       background: var(--gray-100);
@@ -233,8 +237,8 @@
       <div class="card-icon">🇩🇪</div>
       <div class="card-body">
         <div class="card-title">독일 히든챔피언과 창업</div>
-        <div class="card-desc">독일 경제의 역사적 배경, 히든챔피언의 정의와 특징, 독일 산업구조</div>
-        <span class="card-badge">노트 있음</span>
+        <div class="card-desc">독일 경제의 역사적 배경, 히든챔피언의 정의와 특징, 2~5주차 학습자료</div>
+        <div class="card-badges"><span class="card-badge">노트 있음</span></div>
       </div>
       <span class="card-arrow">›</span>
     </a>
@@ -243,8 +247,8 @@
       <div class="card-icon">💻</div>
       <div class="card-body">
         <div class="card-title">e-비지니스의 이해</div>
-        <div class="card-desc">e-비지니스 개념과 전략, 디지털 트랜스포메이션</div>
-        <span class="card-badge">노트 있음</span>
+        <div class="card-desc">전자상거래 입문, 소비자·조직간 전자상거래, 모바일 상거래 (1~4장)</div>
+        <div class="card-badges"><span class="card-badge">노트 있음</span><span class="card-badge midterm">중간고사 대비</span></div>
       </div>
       <span class="card-arrow">›</span>
     </a>
@@ -253,8 +257,8 @@
       <div class="card-icon">🌐</div>
       <div class="card-body">
         <div class="card-title">데이터통신</div>
-        <div class="card-desc">네트워크와 데이터 통신 원리</div>
-        <span class="card-badge">노트 있음</span>
+        <div class="card-desc">데이터 통신 개요, OSI 참조모델, 신호와 변환, 전송 매체 (1~6장)</div>
+        <div class="card-badges"><span class="card-badge">노트 있음</span><span class="card-badge midterm">중간고사 대비</span></div>
       </div>
       <span class="card-arrow">›</span>
     </a>
@@ -264,7 +268,7 @@
       <div class="card-body">
         <div class="card-title">AIoT 설계입문</div>
         <div class="card-desc">AIoT 시스템 설계 기초</div>
-        <span class="card-badge">준비 중</span>
+        <div class="card-badges"><span class="card-badge">준비 중</span></div>
       </div>
       <span class="card-arrow">›</span>
     </a>
@@ -274,7 +278,7 @@
       <div class="card-body">
         <div class="card-title">데이터사이언스 입문</div>
         <div class="card-desc">데이터 사이언스 개념, 파이썬 기초, NumPy·Pandas 데이터 분석 라이브러리</div>
-        <span class="card-badge">노트 있음</span>
+        <div class="card-badges"><span class="card-badge">노트 있음</span><span class="card-badge midterm">중간고사 대비</span></div>
       </div>
       <span class="card-arrow">›</span>
     </a>
@@ -284,7 +288,7 @@
       <div class="card-body">
         <div class="card-title">자료구조</div>
         <div class="card-desc">알고리즘 복잡도, 빅O 표기법, 순환함수 개념과 연습문제</div>
-        <span class="card-badge">노트 있음</span>
+        <div class="card-badges"><span class="card-badge">노트 있음</span><span class="card-badge midterm">중간고사 대비</span></div>
       </div>
       <span class="card-arrow">›</span>
     </a>
@@ -294,7 +298,7 @@
       <div class="card-body">
         <div class="card-title">자바프로그래밍</div>
         <div class="card-desc">Java 프로그래밍 기초와 객체지향</div>
-        <span class="card-badge">준비 중</span>
+        <div class="card-badges"><span class="card-badge">준비 중</span></div>
       </div>
       <span class="card-arrow">›</span>
     </a>
