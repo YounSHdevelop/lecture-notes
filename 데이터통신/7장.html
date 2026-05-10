@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터통신 7장 — 다중화 학습자료</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #2563eb; --primary-dark: #1e3a8a;
+    --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+    --purple: #7c3aed; --orange: #ea580c; --teal: #0d9488; --pink: #db2777;
+    --bg: #f3f4f6; --card-bg: #ffffff;
+    --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+    --nav-bg: rgba(255,255,255,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
+    --soft-bg: #f8fafc;
+}
+[data-theme="dark"] {
+    --bg: #0f172a; --card-bg: #1e293b;
+    --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+    --nav-bg: rgba(15,23,42,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --soft-bg: #0b1224;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; padding-top:64px; }
+
+.nav { position:fixed; top:0; left:0; right:0; height:60px; background:var(--nav-bg); backdrop-filter:blur(12px); display:flex; align-items:center; padding:0 24px; z-index:1000; border-bottom:1px solid var(--border); }
+.nav-logo { font-weight:700; color:var(--primary); text-decoration:none; font-size:1rem; }
+.nav-links { display:flex; gap:8px; margin-left:24px; flex-wrap:wrap; }
+.nav-links a { text-decoration:none; color:var(--text-muted); font-size:0.85rem; padding:6px 10px; border-radius:8px; font-weight:600; }
+.nav-links a:hover { color:var(--primary); background:rgba(37,99,235,0.08); }
+.nav-right { margin-left:auto; display:flex; gap:10px; align-items:center; }
+.nav-home { text-decoration:none; color:var(--text-muted); font-size:0.85rem; }
+.btn-theme { background:none; border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; color:var(--text); }
+
+.page-header { background:linear-gradient(135deg, #1e3a8a, #2563eb); color:white; padding:64px 24px 56px; text-align:center; }
+.week-badge { display:inline-block; background:rgba(255,255,255,0.2); padding:6px 18px; border-radius:20px; font-size:0.85rem; margin-bottom:16px; letter-spacing:1px; }
+.page-header h1 { font-size:2rem; font-weight:900; margin-bottom:10px; }
+.page-header .subtitle { font-size:1rem; opacity:0.9; }
+
+.plan-overview { max-width:960px; margin:32px auto; padding:0 16px; }
+.plan-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.plan-card { padding:22px; border-radius:16px; background:var(--card-bg); box-shadow:var(--shadow); border-top:5px solid var(--primary); }
+.plan-card.p2 { border-top-color:var(--purple); }
+.plan-card.p3 { border-top-color:var(--orange); }
+.plan-card .day-tag { font-size:0.78rem; font-weight:700; letter-spacing:1.5px; color:var(--primary); }
+.plan-card.p2 .day-tag { color:var(--purple); }
+.plan-card.p3 .day-tag { color:var(--orange); }
+.plan-card h3 { font-size:1.1rem; margin:6px 0 10px; }
+.plan-card ul { list-style:none; font-size:0.88rem; }
+.plan-card ul li { padding:4px 0; color:var(--text-muted); }
+.plan-card ul li::before { content:"▸ "; color:var(--text-muted); }
+
+.section-card { max-width:960px; margin:32px auto; padding:32px; background:var(--card-bg); border-radius:16px; box-shadow:var(--shadow); border-top:5px solid var(--primary); }
+.section-card.s2 { border-top-color:var(--purple); }
+.section-card.s3 { border-top-color:var(--orange); }
+.section-card.s4 { border-top-color:var(--teal); }
+.section-card.s5 { border-top-color:var(--pink); }
+.section-head { display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:16px; border-bottom:2px solid var(--border); }
+.section-badge { font-size:0.78rem; font-weight:900; letter-spacing:1.5px; padding:6px 14px; border-radius:20px; color:white; background:var(--primary); }
+.section-card.s2 .section-badge { background:var(--purple); }
+.section-card.s3 .section-badge { background:var(--orange); }
+.section-card.s4 .section-badge { background:var(--teal); }
+.section-card.s5 .section-badge { background:var(--pink); }
+.section-title { font-size:1.5rem; font-weight:700; }
+
+.topic { margin:28px 0 14px; }
+.topic-title { font-size:1.12rem; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.topic-num { display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:28px; padding:0 8px; border-radius:14px; background:var(--primary); color:white; font-size:0.82rem; font-weight:700; }
+.section-card.s2 .topic-num { background:var(--purple); }
+.section-card.s3 .topic-num { background:var(--orange); }
+.section-card.s4 .topic-num { background:var(--teal); }
+.section-card.s5 .topic-num { background:var(--pink); }
+
+.memo-hook { padding:22px 24px; border-radius:14px; margin:16px 0; text-align:center; background:linear-gradient(135deg, rgba(37,99,235,0.10), rgba(37,99,235,0.04)); border:2px solid var(--primary); color:var(--primary); }
+.section-card.s2 .memo-hook { background:linear-gradient(135deg, rgba(124,58,237,0.10), rgba(124,58,237,0.04)); border-color:var(--purple); color:var(--purple); }
+.section-card.s3 .memo-hook { background:linear-gradient(135deg, rgba(234,88,12,0.10), rgba(234,88,12,0.04)); border-color:var(--orange); color:var(--orange); }
+.section-card.s4 .memo-hook { background:linear-gradient(135deg, rgba(13,148,136,0.10), rgba(13,148,136,0.04)); border-color:var(--teal); color:var(--teal); }
+.section-card.s5 .memo-hook { background:linear-gradient(135deg, rgba(219,39,119,0.10), rgba(219,39,119,0.04)); border-color:var(--pink); color:var(--pink); }
+.memo-hook .hook-label { font-size:0.78rem; opacity:0.85; letter-spacing:2px; font-weight:700; }
+.memo-hook .mnemonic { font-size:1.7rem; font-weight:900; letter-spacing:3px; margin:10px 0; }
+.memo-hook .hook-desc { font-size:0.88rem; opacity:0.95; margin-top:6px; font-weight:500; }
+
+.flash-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0; }
+.flash { padding:14px 16px; border-radius:10px; background:var(--soft-bg); border-left:4px solid var(--primary); }
+.section-card.s2 .flash { border-left-color:var(--purple); }
+.section-card.s3 .flash { border-left-color:var(--orange); }
+.section-card.s4 .flash { border-left-color:var(--teal); }
+.section-card.s5 .flash { border-left-color:var(--pink); }
+.flash .q { font-weight:700; font-size:0.92rem; margin-bottom:6px; }
+.flash .a { font-size:0.88rem; color:var(--text-muted); line-height:1.7; }
+
+.memo-list { margin:12px 0; padding:16px 20px; background:var(--soft-bg); border-radius:10px; }
+.memo-list-title { font-weight:700; font-size:0.95rem; margin-bottom:8px; color:var(--primary); }
+.section-card.s2 .memo-list-title { color:var(--purple); }
+.section-card.s3 .memo-list-title { color:var(--orange); }
+.section-card.s4 .memo-list-title { color:var(--teal); }
+.section-card.s5 .memo-list-title { color:var(--pink); }
+.memo-list ol, .memo-list ul { padding-left:24px; }
+.memo-list li { padding:3px 0; font-size:0.92rem; }
+.memo-list li strong { color:var(--primary); }
+
+.std-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.88rem; }
+.std-table th, .std-table td { padding:10px 12px; border:1px solid var(--border); text-align:left; }
+.std-table th { background:rgba(37,99,235,0.08); font-weight:700; }
+.std-table td.hl { background:rgba(220,38,38,0.05); font-weight:600; }
+.section-card.s2 .std-table th { background:rgba(124,58,237,0.08); }
+.section-card.s3 .std-table th { background:rgba(234,88,12,0.08); }
+.section-card.s4 .std-table th { background:rgba(13,148,136,0.08); }
+.section-card.s5 .std-table th { background:rgba(219,39,119,0.08); }
+.tbl-wrap { overflow-x:auto; }
+
+.formula-box { background:rgba(124,58,237,0.06); border:1px solid rgba(124,58,237,0.25); border-radius:10px; padding:14px 18px; margin:12px 0; text-align:center; }
+.formula { font-size:1.05rem; font-weight:700; color:var(--purple); font-family:'Courier New',monospace; }
+.formula-desc { font-size:0.83rem; color:var(--text-muted); margin-top:6px; }
+
+.checklist { background:var(--soft-bg); border-radius:12px; padding:18px 22px; margin:14px 0; border-left:4px solid var(--primary); }
+.checklist-title { font-weight:700; margin-bottom:10px; font-size:1rem; }
+.checklist label { display:flex; align-items:flex-start; gap:10px; padding:6px 0; cursor:pointer; font-size:0.92rem; }
+.checklist input[type="checkbox"] { margin-top:5px; width:18px; height:18px; cursor:pointer; flex-shrink:0; }
+.checklist label.done { text-decoration:line-through; color:var(--text-muted); }
+
+.quiz-item { margin-bottom:18px; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--card-bg); }
+.quiz-q { font-weight:600; margin-bottom:10px; font-size:0.95rem; }
+.q-num { color:var(--primary); font-weight:700; margin-right:6px; }
+.quiz-options { list-style:none; }
+.quiz-options li { margin-bottom:6px; }
+.quiz-options button { width:100%; text-align:left; padding:9px 14px; border:1px solid var(--border); border-radius:8px; background:var(--soft-bg); color:var(--text); cursor:pointer; font-size:0.9rem; font-family:inherit; }
+.quiz-options button:hover:not(:disabled) { border-color:var(--primary); }
+.quiz-options button.correct { background:rgba(22,163,74,0.12); border-color:var(--success); color:var(--success); font-weight:600; }
+.quiz-options button.wrong { background:rgba(220,38,38,0.12); border-color:var(--danger); color:var(--danger); }
+.quiz-feedback { display:none; margin-top:10px; padding:10px 14px; border-radius:8px; font-size:0.88rem; }
+.quiz-feedback.show { display:block; }
+.quiz-feedback.correct-fb { background:rgba(22,163,74,0.08); color:var(--success); }
+.quiz-feedback.wrong-fb { background:rgba(220,38,38,0.08); color:var(--danger); }
+
+.short-answer input { padding:8px 12px; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:var(--card-bg); color:var(--text); width:60%; min-width:180px; }
+.short-answer button { padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.88rem; margin-left:6px; }
+.model-answer { display:none; margin-top:10px; padding:12px 16px; border-radius:8px; background:rgba(37,99,235,0.06); border-left:4px solid var(--primary); font-size:0.88rem; line-height:1.75; }
+.model-answer.show { display:block; }
+.desc-answer textarea { width:100%; min-height:70px; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:var(--card-bg); color:var(--text); resize:vertical; }
+.desc-answer button { margin-top:6px; padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.88rem; }
+
+.final-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:14px; }
+.final-card { padding:16px 18px; border-radius:12px; background:var(--soft-bg); border-left:4px solid var(--primary); }
+.final-card.c2 { border-left-color:var(--purple); }
+.final-card.c3 { border-left-color:var(--orange); }
+.final-card.c4 { border-left-color:var(--teal); }
+.final-card.c5 { border-left-color:var(--pink); }
+.final-card .fc-title { font-weight:700; font-size:0.95rem; margin-bottom:6px; }
+.final-card .fc-mn { font-size:1.25rem; font-weight:900; letter-spacing:2px; color:var(--primary); margin:6px 0; }
+.final-card.c2 .fc-mn { color:var(--purple); }
+.final-card.c3 .fc-mn { color:var(--orange); }
+.final-card.c4 .fc-mn { color:var(--teal); }
+.final-card.c5 .fc-mn { color:var(--pink); }
+.final-card .fc-desc { font-size:0.85rem; color:var(--text-muted); }
+
+footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.85rem; }
+
+@media (max-width:680px) {
+    .plan-grid, .flash-grid, .final-grid { grid-template-columns:1fr; }
+    .nav-links { display:none; }
+    .page-header h1 { font-size:1.4rem; }
+    .section-card { margin:16px 10px; padding:20px; }
+    .memo-hook .mnemonic { font-size:1.3rem; letter-spacing:2px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="index.html" class="nav-logo">데이터통신</a>
+    <div class="nav-links">
+        <a href="#overview">개요</a>
+        <a href="#mux">다중화</a>
+        <a href="#fdm">FDM/WDM</a>
+        <a href="#tdm">TDM</a>
+        <a href="#cdm">CDM</a>
+        <a href="#sonet">SONET</a>
+        <a href="#quiz">체크퀴즈</a>
+        <a href="#final">최종정리</a>
+    </div>
+    <div class="nav-right">
+        <a href="index.html" class="nav-home">홈</a>
+        <button class="btn-theme" id="themeToggle">🌙</button>
+    </div>
+</nav>
+
+<header class="page-header">
+    <div class="week-badge">제07장 · 다중화</div>
+    <h1>데이터통신 7장 — 다중화 (Multiplexing)</h1>
+    <p class="subtitle">FDM · WDM · TDM(동기/비동기) · CDM(스펙트럼 확산) · SONET/SDH</p>
+</header>
+
+<!-- ==================== PLAN OVERVIEW ==================== -->
+<div class="plan-overview" id="overview">
+    <div class="plan-grid">
+        <div class="plan-card">
+            <div class="day-tag">PART 1 · 기본 + 아날로그</div>
+            <h3>다중화 vs 역다중화 + FDM·WDM</h3>
+            <ul>
+                <li>다중화/역다중화 정의</li>
+                <li>FDM (보호 대역, 변조)</li>
+                <li>OFDM (LTE/5G)</li>
+                <li>아날로그 계층 구조</li>
+                <li>WDM (광섬유, 프리즘)</li>
+            </ul>
+        </div>
+        <div class="plan-card p2">
+            <div class="day-tag">PART 2 · 디지털 다중화</div>
+            <h3>TDM (동기 + 비동기)</h3>
+            <ul>
+                <li>동기 TDM = STDM</li>
+                <li>인터리빙 (비트/문자)</li>
+                <li>프레임 비트 + 비트 채우기</li>
+                <li>비동기 TDM = 통계적 = 지능적</li>
+                <li>T 계층(북미) vs E 계층(유럽/한국)</li>
+            </ul>
+        </div>
+        <div class="plan-card p3">
+            <div class="day-tag">PART 3 · CDM + 광동기</div>
+            <h3>코드 분할 + SONET/SDH</h3>
+            <ul>
+                <li>CDM = FDM+TDM 혼합</li>
+                <li>스펙트럼 확산 (FHSS/DSSS)</li>
+                <li>SONET(ANSI) / SDH(ITU-T)</li>
+                <li>STS-1 = 51.84Mbps</li>
+                <li>STS-3 = STM-1 = 155.52Mbps</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 학습 체크리스트 ==================== -->
+<section class="section-card" id="checklist">
+    <div class="section-head">
+        <span class="section-badge">START</span>
+        <span class="section-title">📋 오늘 외워야 할 것</span>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:6px;">아래 항목들을 다 체크하면 7장 한 바퀴 완료입니다. 체크 상태는 새로고침해도 저장됩니다.</p>
+    <div class="checklist">
+        <div class="checklist-title">✓ 학습 체크포인트</div>
+        <label><input type="checkbox" data-key="ck1"> <span>다중화의 정의(단일 링크 ↔ 여러 신호 동시 전송)와 링크 vs 채널 차이를 안다</span></label>
+        <label><input type="checkbox" data-key="ck2"> <span>다중화 4종(FDM·WDM·TDM·CDM)과 각각의 신호 종류(아날로그·디지털·혼합)를 외웠다</span></label>
+        <label><input type="checkbox" data-key="ck3"> <span>역다중화의 정의와 사용 이유(서로 다른 전송 속도 요구)를 안다</span></label>
+        <label><input type="checkbox" data-key="ck4"> <span>FDM의 보호 대역 개념과 5채널 예제 270KHz 계산을 할 수 있다</span></label>
+        <label><input type="checkbox" data-key="ck5"> <span>OFDM이 사용되는 표준(IEEE 802.11a, WiMAX, LTE 4G, 5G)을 외웠다</span></label>
+        <label><input type="checkbox" data-key="ck6"> <span>WDM이 광섬유에서 프리즘으로 빛을 결합/분리한다는 것을 안다</span></label>
+        <label><input type="checkbox" data-key="ck7"> <span>동기 TDM의 프레임 구조와 동기화 패턴(10101)을 안다</span></label>
+        <label><input type="checkbox" data-key="ck8"> <span>인터리빙 2종(비트·문자)과 비트 채우기(Bit stuffing)의 목적을 설명할 수 있다</span></label>
+        <label><input type="checkbox" data-key="ck9"> <span>비동기 TDM = 통계적 TDM = 지능적 TDM이 같은 것임을 안다</span></label>
+        <label><input type="checkbox" data-key="ck10"> <span>T-1 = 1.544Mbps, E-1 = 2.048Mbps, T-1 프레임 193비트의 유래를 안다</span></label>
+        <label><input type="checkbox" data-key="ck11"> <span>CDM이 FDM+TDM 혼합이며 군사·위성 통신에 쓰임을 안다</span></label>
+        <label><input type="checkbox" data-key="ck12"> <span>스펙트럼 확산 2종(FHSS, DSSS)과 현재 주류(DSSS)를 외웠다</span></label>
+        <label><input type="checkbox" data-key="ck13"> <span>SONET(ANSI 미국) vs SDH(ITU-T 국제)를 구분할 수 있다</span></label>
+        <label><input type="checkbox" data-key="ck14"> <span>STS-1 = 51.84Mbps, STS-3 = STM-1 = 155.52Mbps를 외웠다</span></label>
+        <label><input type="checkbox" data-key="ck15"> <span>SONET 4계층(광학/구간/회선/경로)과 장비별 계층(STS=4, ADM=3, 재생기=2)을 안다</span></label>
+    </div>
+</section>
+
+<!-- ==================== 01. 다중화와 역다중화 ==================== -->
+<section class="section-card" id="mux">
+    <div class="section-head">
+        <span class="section-badge">01</span>
+        <span class="section-title">🔀 다중화와 역다중화</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>다중화(Multiplexing)의 개념</div>
+        <div class="memo-hook">
+            <div class="hook-label">한 줄 요약</div>
+            <div class="mnemonic">단일 링크 → 여러 신호 동시</div>
+            <div class="hook-desc">전송 효율을 향상시키는 기술. 링크 1개에 채널 n개.</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>다중화 = <strong>단일 링크</strong>를 통하여 <strong>여러 개의 신호를 동시에 전송</strong>하는 기술 (전송 효율 향상)</li>
+                <li>링크의 전송 용량이 연결된 장치들의 전송량보다 큰 경우 사용</li>
+                <li>하나의 링크에 여러 개의 채널이 있을 수 있음
+                    <ul>
+                        <li><strong>링크(Link)</strong>: 물리적인 경로(Physical path)</li>
+                        <li><strong>채널(Channel)</strong>: 링크의 한 부분으로 논리적 경로(Logical path)</li>
+                    </ul>
+                </li>
+                <li>왼쪽의 n개 장치 → <strong>다중화기(Multiplexer)</strong>로 묶어 하나의 링크로 전송 → <strong>다중복구기(Demultiplexer)</strong>로 분리</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>다중화의 종류 (4가지)</div>
+        <div class="memo-hook">
+            <div class="hook-label">앞글자 암기 ★</div>
+            <div class="mnemonic">FDM · WDM · TDM · CDM</div>
+            <div class="hook-desc">아날로그 / 아날로그(광) / 디지털 / 혼합(아날로그+디지털)</div>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">FDM (주파수 분할)</div>
+                <div class="a"><b>아날로그</b> 신호를 다중화. Frequency Division Multiplexing.</div>
+            </div>
+            <div class="flash">
+                <div class="q">WDM (파장 분할)</div>
+                <div class="a"><b>아날로그</b> 신호를 다중화. <b>광통신</b>에 사용. Wavelength Division Multiplexing.</div>
+            </div>
+            <div class="flash">
+                <div class="q">TDM (시분할)</div>
+                <div class="a"><b>디지털</b> 신호를 다중화. Time Division Multiplexing.</div>
+            </div>
+            <div class="flash">
+                <div class="q">CDM (코드 분할)</div>
+                <div class="a"><b>FDM과 TDM을 혼합</b>한 방식. <b>확산 대역(Spread Spectrum)</b>을 이용하여 다중화.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>역다중화 (Inverse Multiplexing)</div>
+        <div class="memo-hook">
+            <div class="hook-label">한 줄 요약</div>
+            <div class="mnemonic">고속 1개 → 저속 여러 개</div>
+            <div class="hook-desc">다중화의 반대 과정. 음성(64Kbps) + 디지털(128Kbps) 등 다른 속도 동시 전송용.</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 역다중화 핵심</div>
+            <ul>
+                <li><strong>1개의 고속 회선</strong>에서 데이터를 받아서 <strong>여러 개의 저속 회선</strong>으로 나누어 전송</li>
+                <li>다중화의 반대 과정</li>
+                <li>서로 다른 데이터 전송 속도를 요구하는 <strong>음성(64Kbps)과 디지털 데이터(128Kbps)</strong>를 전송하려는 경우, 저속 채널을 여러 개 사용하는 개념</li>
+                <li>만일 통신 회선 하나가 고장 난다 해도 <strong>회선 경로를 변경해서 계속 전송</strong>할 수 있다 (장애 복구성)</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 02. FDM + WDM ==================== -->
+<section class="section-card s2" id="fdm">
+    <div class="section-head">
+        <span class="section-badge">02</span>
+        <span class="section-title">📻 주파수 분할 다중화 (FDM) + 파장 분할 다중화 (WDM)</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>FDM (Frequency Division Multiplexing)</div>
+        <div class="memo-hook">
+            <div class="hook-label">FDM 핵심</div>
+            <div class="mnemonic">변조 + 보호 대역</div>
+            <div class="hook-desc">각기 다른 반송파로 변조(Modulation) 후 다중화. 채널 간 간섭 방지용 보호 대역(Guard Band) 필수.</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>각기 다른 반송파로 <strong>변조(Modulation)</strong> → 아날로그 다중화 기술</li>
+                <li><strong>보호 대역(Guard Band) 필요</strong>
+                    <ul>
+                        <li>반송 주파수들은 변조 신호들을 수용할 수 있도록 <strong>서로 떨어져 있음</strong></li>
+                        <li><strong>인접한 채널 간의 간섭을 방지</strong>하기 위한 대역</li>
+                    </ul>
+                </li>
+                <li>링크의 전송 용량이 연결된 장치들의 전송량보다 큰 경우</li>
+                <li>FDM은 매우 쉽게 구현 가능 — 각기 다른 주파수의 반송파로 변조하면 곧바로 다중화</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>FDM 보호 대역 계산 예제</div>
+        <div class="formula-box">
+            <div class="formula">최소 대역폭 = N × 채널폭 + (N−1) × 보호 대역</div>
+            <div class="formula-desc">N개 채널을 다중화할 때 최소 대역폭</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">📐 예제 7-1</div>
+            <ul>
+                <li>50KHz 대역폭의 5개 채널 + 5KHz 보호 대역 → <strong>5개 채널 간섭 피하려면 최소 4개의 보호 대역</strong> 필요</li>
+                <li>최소 대역폭 = 5 × 50KHz + 4 × 5KHz = <strong>270KHz</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>FDM의 사용 예 + 아날로그 계층 구조</div>
+        <div class="memo-hook">
+            <div class="hook-label">앞글자 암기</div>
+            <div class="mnemonic">G · S · M · J</div>
+            <div class="hook-desc">Group → Super group → Master group → Jumbo group (전화회사 채널 분류 단위)</div>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">AM 라디오</div>
+                <div class="a">530KHz ~ 1700KHz 대역. 각 방송국 <b>10KHz 대역폭</b>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">FM 라디오</div>
+                <div class="a">88MHz ~ 108MHz 대역. 각 방송국 <b>200KHz 대역폭</b>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">아날로그 계층</div>
+                <div class="a">12채널/4KHz → <b>그룹</b>(48KHz·12채널) → <b>슈퍼그룹</b>(240KHz·60채널) → <b>마스터그룹</b>(2.52MHz·600채널) → <b>점보그룹</b>(16.984MHz·3,600채널).</div>
+            </div>
+            <div class="flash">
+                <div class="q">왜 FDM이 쉬운가?</div>
+                <div class="a">각기 다른 주파수의 반송파를 사용하여 변조하면 <b>곧바로 다중화</b>가 된다.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>OFDM (Orthogonal FDM, 직교 주파수 분할 다중화)</div>
+        <div class="memo-hook">
+            <div class="hook-label">OFDM 사용 표준 ★</div>
+            <div class="mnemonic">802.11a · WiMAX · LTE · 5G</div>
+            <div class="hook-desc">IEEE 802.11a · WiMAX(고정 4G) · LTE(모바일 4G) · 5G에서 사용</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 OFDM 핵심</div>
+            <ul>
+                <li>다수의 주파수에 <strong>직각으로 교차하는 신호</strong>를 이용하여 다중화하는 방식</li>
+                <li>직각으로 교차하는 신호는 서로 <strong>겹치더라도 수신 측에서 분리할 수 있음</strong></li>
+                <li>무선 LAN 프로토콜인 <strong>IEEE 802.11a</strong>, <strong>WiMAX(고정 4G)</strong>, <strong>LTE(모바일 4G)</strong>, <strong>5G</strong>에서 사용</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>WDM (Wavelength Division Multiplexing, 파장 분할 다중화)</div>
+        <div class="memo-hook">
+            <div class="hook-label">WDM 핵심</div>
+            <div class="mnemonic">광섬유 · 프리즘</div>
+            <div class="hook-desc">광섬유 고속 전송을 위한 아날로그 다중화. 빛 결합·분리는 프리즘이 담당.</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li><strong>광섬유의 고속 전송</strong>을 이용하기 위한 아날로그 다중화 기술</li>
+                <li>다중화기에서 여러 빛들을 하나의 빛으로 <strong>결합</strong>하고, 다중복구기를 통하여 역의 동작(<strong>분리</strong>)을 수행</li>
+                <li>빛들을 결합하고 분리하는 것은 <strong>프리즘</strong>에 의해 수행됨</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 03. TDM ==================== -->
+<section class="section-card s3" id="tdm">
+    <div class="section-head">
+        <span class="section-badge">03</span>
+        <span class="section-title">⏱️ 시분할 다중화 (TDM)</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>TDM 기본 개념</div>
+        <div class="memo-hook">
+            <div class="hook-label">FDM vs TDM</div>
+            <div class="mnemonic">FDM = 주파수 / TDM = 시간</div>
+            <div class="hook-desc">FDM은 주파수를 공유, TDM은 시간을 공유 (디지털 다중화)</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 TDM (Time Division Multiplexing)</div>
+            <ul>
+                <li>높은 대역폭을 갖는 링크 하나를 여러 회선이 공유하는 <strong>디지털 다중화 방식</strong></li>
+                <li>주파수 분할 다중화에서는 주파수를 공유하지만, <strong>시분할 다중화에서는 시간을 공유</strong>한다</li>
+                <li>분류: <strong>동기 TDM (STDM)</strong> / <strong>비동기 TDM</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>동기 시분할 다중화 (Synchronous TDM, STDM)</div>
+        <div class="memo-hook">
+            <div class="hook-label">동기 TDM 키워드</div>
+            <div class="mnemonic">고정 슬롯 · 빈 슬롯 낭비</div>
+            <div class="hook-desc">각 장치에 고정 타임 슬롯 할당 → 데이터 안 보내면 슬롯 낭비</div>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">동기 TDM 정의</div>
+                <div class="a">각 장치에 대해 <b>고정적인 타임 슬롯(Time slot)</b>을 할당하는 방식.</div>
+            </div>
+            <div class="flash">
+                <div class="q">프레임 구성</div>
+                <div class="a">한 프레임은 <b>각 장치에 할당된 타임 슬롯들 + 프레임 구분 비트</b>로 구성.</div>
+            </div>
+            <div class="flash">
+                <div class="q">단점 (슬롯 낭비)</div>
+                <div class="a">장치가 데이터를 보내지 않으면 <b>해당 시간 슬롯은 낭비</b>됨.</div>
+            </div>
+            <div class="flash">
+                <div class="q">인터리빙 (Interleaving)</div>
+                <div class="a">동기 TDM은 고속으로 동작하는 <b>스위치에 비유</b>. 비트 삽입식(Bit interleaving)과 문자 삽입식(Character interleaving)으로 분류.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>프레임 구성 비트 + 비트 채우기</div>
+        <div class="memo-hook">
+            <div class="hook-label">동기화 패턴</div>
+            <div class="mnemonic">10101</div>
+            <div class="hook-desc">0과 1을 교대로 매 프레임에 하나씩 추가하여 프레임을 구분</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 프레임 구성 비트(Framing bit)</div>
+            <ul>
+                <li>프레임을 구분하기 위한 <strong>동기화 정보</strong></li>
+                <li><strong>0과 1을 교대</strong>로 매 프레임에 하나씩 추가 → 동기화 패턴 <strong>10101...</strong></li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 비트 채우기 (Bit stuffing)</div>
+            <ul>
+                <li>각 장치의 전송속도가 다른 경우, 고속 장치에 더 많은 시간 슬롯을 할당</li>
+                <li>각 장치의 데이터 전송 속도가 <strong>정수배가 되지 않는 경우, 정수배로 만들기 위해 여분의 비트를 채워 넣는 것</strong></li>
+                <li>예) 다른 장치 대비 2.5배 전송률을 요구하는 장치에 3개 슬롯 할당하면 부족한 0.5개에는 여분의 비트를 채워 전송</li>
+            </ul>
+        </div>
+        <div class="formula-box">
+            <div class="formula">전송 효율 = 순수 데이터 / (순수 데이터 + 오버헤드) × 100</div>
+            <div class="formula-desc">예) 4 장치 × 1문자 × 8비트 + 1 프레임 비트 = 33비트, 250프레임/초 → 8,250 bps 중 8,000 bps 데이터 → 97.0%</div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>비동기 시분할 다중화 (Asynchronous TDM)</div>
+        <div class="memo-hook">
+            <div class="hook-label">비동기 TDM 별칭 ★</div>
+            <div class="mnemonic">통계적 = 지능적 = 비동기</div>
+            <div class="hook-desc">Statistical TDM = Intelligent TDM = Asynchronous TDM (모두 같은 것)</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 비동기 TDM 핵심</div>
+            <ul>
+                <li>실제 보낼 데이터가 있는 장치에게만 시간 슬롯을 배정 (<strong>시간 슬롯을 동적으로 할당</strong>)</li>
+                <li>프레임은 장치의 수 n보다 적은 시간 슬롯 m을 가질 수도 있음 (<strong>n ≥ m</strong>)</li>
+                <li>비동기 TDM = <strong>통계적 TDM(Statistical TDM)</strong> = <strong>지능적 TDM(Intelligent TDM)</strong></li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 주소 지정과 오버헤드</div>
+            <ul>
+                <li>비동기 TDM은 입력과 출력이 <strong>고정되어 있지 않으므로 수신 주소를 타임 슬롯에 삽입</strong></li>
+                <li>입력이 n개인 경우, <strong>N = log₂n</strong> 개 비트를 주소로 사용</li>
+                <li>주소는 다중화기에 의해 부착되고 다중복구기에 의해 제거</li>
+                <li>동기 TDM에 비하여 <strong>오버헤드가 증가</strong>됨</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 가변 길이 시간 슬롯 (Variable length Time Slot)</div>
+            <ul>
+                <li>빠른 속도로 데이터를 전송하는 장치에는 <strong>더 긴 시간 슬롯</strong>을 배정</li>
+                <li>모든 시간 슬롯 앞에 데이터의 <strong>길이를 알려주는 제어비트</strong>가 필요</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>디지털 계층 구조 (DS, T, E)</div>
+        <div class="memo-hook">
+            <div class="hook-label">DS-0 기본 단위</div>
+            <div class="mnemonic">64Kbps · 표본화 8000회 · 8비트</div>
+            <div class="hook-desc">125μs(=1/8000)마다 8비트 측정값 → 64Kbps</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 디지털 신호(DS) 0~4 구성</div>
+            <ul>
+                <li>64Kbps × 24 + 8Kbps = <strong>1.544Mbps</strong></li>
+                <li>64Kbps × 96 + 168Kbps = <strong>6.312Mbps</strong></li>
+                <li>64Kbps × 672 + 1728Kbps = <strong>44.736Mbps</strong></li>
+                <li>64Kbps × 4032 + 16128Kbps = <strong>274.176Mbps</strong></li>
+            </ul>
+        </div>
+        <div class="formula-box">
+            <div class="formula">T-1: (24 슬롯 × 8비트 + 1 프레임 비트) / 125μs = 1.544Mbps</div>
+            <div class="formula-desc">1 프레임 = 193비트 (24×8 + 1)</div>
+        </div>
+        <div class="formula-box">
+            <div class="formula">E-1: (32 슬롯 × 8비트) / 125μs = 2.048Mbps</div>
+            <div class="formula-desc">음성 30채널 + 프레임 동기 1채널 + 신호용 1채널 = 32채널</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">📞 T 디지털 계층 (북미·NAS 방식)</div>
+            <ul>
+                <li>DS 서비스를 구축하기 위해 사용하는 선로</li>
+            </ul>
+        </div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>서비스</th><th>회선</th><th>전송 속도</th><th>데이터 채널 수</th></tr></thead>
+            <tbody>
+                <tr><td>DS-1</td><td><b>T-1</b></td><td><b>1.544 Mbps</b></td><td>24</td></tr>
+                <tr><td>DS-2</td><td>T-2</td><td>6.312 Mbps</td><td>96</td></tr>
+                <tr><td>DS-3</td><td>T-3</td><td>44.736 Mbps</td><td>672</td></tr>
+                <tr><td>DS-4</td><td>T-4</td><td>274.176 Mbps</td><td>4,032</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">📞 E 디지털 계층 (유럽/한국·CEPT 방식)</div>
+        </div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>회선</th><th>전송 속도</th><th>데이터 채널 수</th></tr></thead>
+            <tbody>
+                <tr><td><b>E-1</b></td><td><b>2.048 Mbps</b></td><td>30</td></tr>
+                <tr><td>E-2</td><td>8.448 Mbps</td><td>120</td></tr>
+                <tr><td>E-3</td><td>34.368 Mbps</td><td>480</td></tr>
+                <tr><td>E-4</td><td>139.264 Mbps</td><td>1,920</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 04. CDM ==================== -->
+<section class="section-card s4" id="cdm">
+    <div class="section-head">
+        <span class="section-badge">04</span>
+        <span class="section-title">📡 코드 분할 다중화 (CDM)</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>CDM 기본 개념</div>
+        <div class="memo-hook">
+            <div class="hook-label">CDM 한 줄 요약</div>
+            <div class="mnemonic">FDM + TDM 혼합 / 직교 코드</div>
+            <div class="hook-desc">서로 다른 코드(언어)를 부여 → 군사 통신·위성 통신(보안 + 잡음 대처)</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 CDM 핵심</div>
+            <ul>
+                <li>모든 사람이 같은 장소에서 <strong>서로 다른 언어를 사용하여 이야기</strong>하는 것에 비유</li>
+                <li>각 사용자에게 서로 다른 <strong>코드(언어)</strong>를 부여하여 <strong>신호와 코드를 곱해서 전송</strong>, 수신 시 송신과 동일한 코드를 곱해 원래 신호를 복구</li>
+                <li><strong>FDM과 TDM의 혼합 다중화 방식</strong></li>
+                <li>각 사용자에게 할당되는 코드는 상호 <strong>직교 관계(Orthogonal)</strong>에 있어 서로 영향을 미치지 않음</li>
+                <li>활용: <strong>군사 통신, 위성 통신</strong> (보안 + 잡음 대처)</li>
+            </ul>
+        </div>
+        <div class="formula-box">
+            <div class="formula">cᵢ(t) × cⱼ(t) = 0 (i ≠ j) / cᵢ(t) × cⱼ(t) = 1 (i = j)</div>
+            <div class="formula-desc">코드의 직교 관계: 다른 코드 곱 = 0, 같은 코드 곱 = 1</div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>스펙트럼 확산 (Spread Spectrum)</div>
+        <div class="memo-hook">
+            <div class="hook-label">스펙트럼 확산 = ?</div>
+            <div class="mnemonic">신호 → 넓은 대역으로 확산</div>
+            <div class="hook-desc">전송하려는 신호를 그 주파수 대역보다 훨씬 넓은 대역으로 확산 → 잡음에 강해짐</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>코드 분할 다중화는 <strong>대역 확산(Spread spectrum)</strong>을 이용</li>
+                <li>전송하려는 신호를 그 주파수 대역보다 <strong>훨씬 넓은 주파수 대역으로 확산시켜 전송</strong></li>
+                <li>넓은 주파수 대역에서 다수 사용자가 서로 다른 코드를 사용 → 동일 주파수로 동시에 접속 가능</li>
+                <li>대역 확산 기술을 사용하면 <strong>잡음에 강해진다</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>스펙트럼 확산 2종 (FHSS / DSSS)</div>
+        <div class="memo-hook">
+            <div class="hook-label">현재 주류 ★</div>
+            <div class="mnemonic">FHSS → DSSS</div>
+            <div class="hook-desc">초기에는 FHSS, <b>현재는 반도체 소자 고속화로 DSSS가 주로 사용</b></div>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">FHSS (주파수 도약)</div>
+                <div class="a"><b>Frequency Hopping Spread Spectrum</b>. 시간을 <b>홉 주기(Hopping period)</b>로 나누고, 홉 주기에 따라 <b>다른 반송 주파수</b>로 변조해 전송. 도약 패턴은 <b>슈도랜덤 코드 발생기</b>의 난수 알고리즘으로 결정.</div>
+            </div>
+            <div class="flash">
+                <div class="q">DSSS (직접 순열 대역 확산)</div>
+                <div class="a"><b>Direct Sequence Spread Spectrum</b>. <b>칩(Chip)</b>이라는 n비트 코드를 데이터의 각 비트에 곱해 비트율을 n배 증가 → <b>대역폭도 n배 확산</b>. 무선 LAN에서 사용하는 <b>바커 순열(Barker Sequence) n=11</b>이 대표 예.</div>
+            </div>
+            <div class="flash">
+                <div class="q">FHSS vs DSSS 결론</div>
+                <div class="a">초기에는 FHSS가 많이 사용되었으나, <b>현재는 DSSS가 주로 사용</b>됨 (반도체 소자 고속화).</div>
+            </div>
+            <div class="flash">
+                <div class="q">DSSS 코드 검증</div>
+                <div class="a">수신된 확산 신호에 <b>송신 시와 동일한 확산 코드</b>를 곱해야 원래 데이터 복구 가능. 다른 코드를 곱하면 복구 X.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>다중화 기술 적용 예 (요약 표)</div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>다중화 기술</th><th>적용 예</th></tr></thead>
+            <tbody>
+                <tr><td>FDM (주파수 분할)</td><td>구식 아날로그 전화망, 아날로그 이동 전화(AMPS 등)</td></tr>
+                <tr><td>TDM (시분할)</td><td>전화망(PSTN), 전용 회선(T-1, E-1 등), 동기 디지털 계위 전송망(SDH), 유럽 디지털 이동 통신(GSM)</td></tr>
+                <tr><td>통계적 시분할 (비동기 TDM)</td><td>LAN 등, 인터넷(IP), 초고속 국가망(ATM, 프레임 릴레이)</td></tr>
+                <tr><td>CDM (코드 분할)</td><td><b>한국 디지털 이동 통신</b>, 군용 무선 통신(미국)</td></tr>
+                <tr><td>OFDM (직교 주파수 분할)</td><td>WiBro, WiMAX, LTE, LTE-A</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 05. SONET / SDH ==================== -->
+<section class="section-card s5" id="sonet">
+    <div class="section-head">
+        <span class="section-badge">05</span>
+        <span class="section-title">🌐 SONET / SDH</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>SONET / SDH 정의</div>
+        <div class="memo-hook">
+            <div class="hook-label">국가 표준 vs 국제 표준 ★</div>
+            <div class="mnemonic">SONET = ANSI / SDH = ITU-T</div>
+            <div class="hook-desc">SONET(미국 ANSI 국가 표준) → SDH(ITU-T 국제 표준)로 발전</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li><strong>광통신을 위한 디지털 신호의 동기 다중화 계층과 속도 체계</strong>, 인터페이스를 정의한 표준</li>
+                <li><strong>SONET (Synchronous Optical Network)</strong>: ANSI 미국 표준의 동기식 광전송 시스템을 위한 접속 규격</li>
+                <li><strong>SDH (Synchronous Digital Hierarchy)</strong>: ITU-T 국제 표준. 광 기반으로 미국이 개발한 국제 표준</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">📊 SONET / SDH 신호 체계 (주요)</div>
+        </div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>SONET 명칭</th><th>SDH 명칭</th><th>비율 (Mbps)</th></tr></thead>
+            <tbody>
+                <tr><td class="hl"><b>STS-1</b></td><td class="hl">STS-1</td><td class="hl"><b>51.84</b></td></tr>
+                <tr><td class="hl"><b>STS-3</b></td><td class="hl"><b>STM-1</b></td><td class="hl"><b>155.52</b></td></tr>
+                <tr><td>STS-12</td><td>STM-4</td><td>622.080</td></tr>
+                <tr><td>STS-48</td><td>STM-16</td><td>2,488.320</td></tr>
+                <tr><td>STS-192</td><td>STM-64</td><td>9,953.280</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>SONET 물리적 구성 (3가지 장비)</div>
+        <div class="memo-hook">
+            <div class="hook-label">앞글자 암기</div>
+            <div class="mnemonic">STS · ADM · 재생기</div>
+            <div class="hook-desc">STS 다중화기(전→광 + 다중화) / 추가삭제 다중화기(ADM) / 재생기(Repeater)</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 3가지 장비</div>
+            <ul>
+                <li><strong>STS 다중화기</strong>: 전기 신호를 광 신호로 변환하는 기능 + 들어온 신호를 다중화하는 역할</li>
+                <li><strong>재생기 (Repeater)</strong>: 수신된 광 신호를 재생하는 리피터 역할</li>
+                <li><strong>추가/삭제 다중화기 (ADM)</strong>: 다른 발신지에서 들어온 신호를 한 경로에 추가하거나 요구받은 신호를 경로에서 삭제</li>
+                <li>SONET 연결의 3가지 계층: <strong>구간(Section), 회선(Line), 경로(Path)</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>SONET 계층 구조</div>
+        <div class="memo-hook">
+            <div class="hook-label">앞글자 암기 ★</div>
+            <div class="mnemonic">광 · 구 · 회 · 경</div>
+            <div class="hook-desc">광학 계층 → 구간 계층 → 회선 계층 → 경로 계층 (4계층)</div>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">광학 계층 (1)</div>
+                <div class="a">신호는 <b>NRZ 부호화</b>를 이용. 빛이 있으면 1, 빛이 없으면 0.</div>
+            </div>
+            <div class="flash">
+                <div class="q">구간 계층 (2)</div>
+                <div class="a">프레임 구성, 스크램블링, 오류 제어를 처리.</div>
+            </div>
+            <div class="flash">
+                <div class="q">회선 계층 (3)</div>
+                <div class="a"><b>STS 다중화기</b>와 <b>추가/삭제 다중화기(ADM)</b>가 회선 계층 기능을 제공.</div>
+            </div>
+            <div class="flash">
+                <div class="q">경로 계층 (4)</div>
+                <div class="a"><b>종단 발신지에서 종단 목적지까지 신호 전달</b>을 담당. STS 다중화기가 경로 계층 기능을 제공.</div>
+            </div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">🔗 SONET 장비와 계층의 관계</div>
+            <ul>
+                <li><strong>STS 다중화기</strong> = <strong>4계층</strong> 장치 (경로까지 모두)</li>
+                <li><strong>추가/삭제 다중화기(ADM)</strong> = <strong>3계층</strong> 장치 (회선까지)</li>
+                <li><strong>재생기</strong> = <strong>2계층</strong> 장치 (구간까지)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>SONET 프레임 구조</div>
+        <div class="memo-hook">
+            <div class="hook-label">STS-1 프레임 ★</div>
+            <div class="mnemonic">9행 × 90바이트 = 810바이트</div>
+            <div class="hook-desc">STS-1 신호는 초당 8,000개 프레임 전송 → 음성 디지털화 비율과 동일</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 STS-1 / STS-3 프레임</div>
+            <ul>
+                <li><strong>STS-1 프레임</strong>: 810바이트 (= 9행 × 90바이트)</li>
+                <li><strong>STS-3 프레임</strong>: 2,430바이트 (= 9행 × 270바이트)</li>
+                <li>STS-1 신호는 초당 <strong>8,000개 프레임</strong>을 전송 → 음성이 디지털화되는 비율과 같음</li>
+            </ul>
+        </div>
+        <div class="formula-box">
+            <div class="formula">STS-1: 8000 × 9 × 90 × 8 = 51.84 Mbps</div>
+            <div class="formula-desc">초당 프레임 × 행 × 열 × 비트</div>
+        </div>
+        <div class="formula-box">
+            <div class="formula">STS-3: 8000 × 9 × (90 × 3) × 8 = 155.52 Mbps</div>
+            <div class="formula-desc">STS-3 = STS-1 3개를 다중화 = STM-1과 동일</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 STS-1 프레임 오버헤드 (3종)</div>
+            <ul>
+                <li><strong>구간 오버헤드(Section Overhead)</strong></li>
+                <li><strong>회선 오버헤드(Line Overhead)</strong></li>
+                <li><strong>경로 오버헤드(Path Overhead)</strong></li>
+                <li>프레임 전송 순서: 왼쪽 → 오른쪽, 맨 위쪽 → 맨 아래쪽, MSB → LSB 순으로</li>
+                <li>사용자 데이터 전송률(STS-1): 774 × 8 × 8000 = <strong>49.536 Mbps</strong></li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 STM-1 프레임 (SDH)</div>
+            <ul>
+                <li>SDH의 STM-1 프레임의 전체 구조는 SONET의 STS-3과 유사 (세부적인 면에서 차이 있음)</li>
+                <li>구성: 재생기 구간 오버헤드, AU 포인터, 다중화 구간 오버헤드, 경로 오버헤드, 사용자 데이터(페이로드), 관리 유닛(AU)</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 체크 퀴즈 ==================== -->
+<section class="section-card" id="quiz">
+    <div class="section-head">
+        <span class="section-badge">QUIZ</span>
+        <span class="section-title">📝 체크 퀴즈</span>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:14px;">객관식과 단답형으로 핵심 개념을 빠르게 점검하세요.</p>
+
+    <h3 style="font-size:1.05rem; margin:18px 0 10px; color:var(--primary);">▪ 객관식</h3>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q1.</span>하나의 링크에 대한 정의로 올바른 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,true,'fb1')">① 물리적인 경로(Physical path)</button></li>
+            <li><button onclick="ans(this,false,'fb1')">② 논리적인 경로(Logical path)</button></li>
+            <li><button onclick="ans(this,false,'fb1')">③ 시간 슬롯의 집합</button></li>
+            <li><button onclick="ans(this,false,'fb1')">④ 코드의 직교 관계</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb1"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q2.</span>다음 중 디지털 신호를 다중화하는 방식은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb2')">① FDM</button></li>
+            <li><button onclick="ans(this,false,'fb2')">② WDM</button></li>
+            <li><button onclick="ans(this,true,'fb2')">③ TDM</button></li>
+            <li><button onclick="ans(this,false,'fb2')">④ CDM (혼합)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb2"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q3.</span>FDM에서 인접한 채널 간의 간섭을 방지하기 위한 대역의 이름은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb3')">① 변조 대역</button></li>
+            <li><button onclick="ans(this,true,'fb3')">② 보호 대역(Guard Band)</button></li>
+            <li><button onclick="ans(this,false,'fb3')">③ 확산 대역(Spread Spectrum)</button></li>
+            <li><button onclick="ans(this,false,'fb3')">④ 반송 대역</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb3"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q4.</span>다음 중 OFDM이 사용되지 <b>않는</b> 표준은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb4')">① IEEE 802.11a</button></li>
+            <li><button onclick="ans(this,false,'fb4')">② WiMAX</button></li>
+            <li><button onclick="ans(this,false,'fb4')">③ LTE</button></li>
+            <li><button onclick="ans(this,true,'fb4')">④ AMPS (아날로그 이동 전화)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb4"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q5.</span>WDM에서 빛들을 결합하고 분리하는 데 사용되는 광학 소자는?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb5')">① LED</button></li>
+            <li><button onclick="ans(this,false,'fb5')">② Photo Diode</button></li>
+            <li><button onclick="ans(this,true,'fb5')">③ 프리즘</button></li>
+            <li><button onclick="ans(this,false,'fb5')">④ 반사경</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb5"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q6.</span>동기 TDM의 가장 큰 단점은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb6')">① 주소 지정 오버헤드가 크다</button></li>
+            <li><button onclick="ans(this,true,'fb6')">② 장치가 데이터를 보내지 않으면 시간 슬롯이 낭비된다</button></li>
+            <li><button onclick="ans(this,false,'fb6')">③ 보호 대역이 필요하다</button></li>
+            <li><button onclick="ans(this,false,'fb6')">④ 코드의 직교 관계가 깨진다</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb6"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q7.</span>비동기 TDM의 다른 이름이 <b>아닌</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb7')">① 통계적 TDM (Statistical TDM)</button></li>
+            <li><button onclick="ans(this,false,'fb7')">② 지능적 TDM (Intelligent TDM)</button></li>
+            <li><button onclick="ans(this,false,'fb7')">③ Asynchronous TDM</button></li>
+            <li><button onclick="ans(this,true,'fb7')">④ Synchronous TDM (STDM)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb7"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q8.</span>T-1 회선의 전송 속도는?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb8')">① 64 Kbps</button></li>
+            <li><button onclick="ans(this,true,'fb8')">② 1.544 Mbps</button></li>
+            <li><button onclick="ans(this,false,'fb8')">③ 2.048 Mbps</button></li>
+            <li><button onclick="ans(this,false,'fb8')">④ 6.312 Mbps</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb8"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q9.</span>유럽 및 한국에서 사용하는 E-1 회선의 전송 속도는?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb9')">① 1.544 Mbps</button></li>
+            <li><button onclick="ans(this,true,'fb9')">② 2.048 Mbps</button></li>
+            <li><button onclick="ans(this,false,'fb9')">③ 8.448 Mbps</button></li>
+            <li><button onclick="ans(this,false,'fb9')">④ 34.368 Mbps</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb9"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q10.</span>CDM에서 각 사용자에게 할당되는 코드의 관계는?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb10')">① 동기 관계</button></li>
+            <li><button onclick="ans(this,false,'fb10')">② 종속 관계</button></li>
+            <li><button onclick="ans(this,true,'fb10')">③ 직교 관계 (Orthogonal)</button></li>
+            <li><button onclick="ans(this,false,'fb10')">④ 병렬 관계</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb10"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q11.</span>현재 스펙트럼 확산에서 주로 사용되는 방식은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb11')">① FHSS (주파수 도약)</button></li>
+            <li><button onclick="ans(this,true,'fb11')">② DSSS (직접 순열)</button></li>
+            <li><button onclick="ans(this,false,'fb11')">③ FDM</button></li>
+            <li><button onclick="ans(this,false,'fb11')">④ OFDM</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb11"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q12.</span>SONET과 SDH 표준의 제정 기관 매칭이 올바른 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,true,'fb12')">① SONET = ANSI / SDH = ITU-T</button></li>
+            <li><button onclick="ans(this,false,'fb12')">② SONET = ITU-T / SDH = ANSI</button></li>
+            <li><button onclick="ans(this,false,'fb12')">③ SONET = IEEE / SDH = ANSI</button></li>
+            <li><button onclick="ans(this,false,'fb12')">④ SONET = ISO / SDH = IEEE</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb12"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q13.</span>SONET의 STS-3에 해당하는 SDH 명칭과 전송 속도는?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb13')">① STM-1, 51.84 Mbps</button></li>
+            <li><button onclick="ans(this,true,'fb13')">② STM-1, 155.52 Mbps</button></li>
+            <li><button onclick="ans(this,false,'fb13')">③ STM-3, 155.52 Mbps</button></li>
+            <li><button onclick="ans(this,false,'fb13')">④ STM-4, 622.08 Mbps</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb13"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q14.</span>SONET 장비 중 4계층(경로 계층까지) 모두 처리하는 장비는?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb14')">① 재생기 (Repeater)</button></li>
+            <li><button onclick="ans(this,false,'fb14')">② 추가/삭제 다중화기 (ADM)</button></li>
+            <li><button onclick="ans(this,true,'fb14')">③ STS 다중화기</button></li>
+            <li><button onclick="ans(this,false,'fb14')">④ 광섬유 케이블</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb14"></div>
+    </div>
+
+    <h3 style="font-size:1.05rem; margin:24px 0 10px; color:var(--primary);">▪ 단답형</h3>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q15.</span>50KHz 대역폭의 채널 5개를 5KHz 보호 대역으로 FDM 다중화할 때, 전송에 필요한 최소 대역폭은?</div>
+        <div class="short-answer">
+            <input type="text" id="sa1" placeholder="답 입력 (KHz)">
+            <button onclick="checkShort('sa1', ['270','270KHz','270kHz','270 KHz','270 kHz'], 'mfb1')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb1">270 KHz — 5개 채널 간섭 피하려면 최소 4개의 보호 대역 필요. <b>5 × 50KHz + 4 × 5KHz = 270KHz</b>.</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q16.</span>비동기 TDM에서 입력이 16개일 때 주소 지정에 필요한 비트 수는?</div>
+        <div class="short-answer">
+            <input type="text" id="sa2" placeholder="답 입력 (비트)">
+            <button onclick="checkShort('sa2', ['4','4비트','4 비트','4bit','4 bit'], 'mfb2')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb2">4비트 — 입력이 n개인 경우 <b>N = log₂n</b> 비트가 필요. log₂16 = 4.</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q17.</span>4개 장치가 1문자(8비트)씩 인터리빙하고 초당 250 프레임을 전송할 때 한 프레임의 비트 수는? (프레임 비트 1개 포함)</div>
+        <div class="short-answer">
+            <input type="text" id="sa3" placeholder="답 입력 (비트)">
+            <button onclick="checkShort('sa3', ['33','33비트','33 비트','33bit','33 bit'], 'mfb3')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb3">33비트 — <b>4 × 8 + 1 = 33 비트</b>. 초당 250 프레임 전송 시 250 × 33 = 8,250 bps. 전송 효율 = 8,000 / 8,250 ≈ 97.0%.</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q18.</span>T-1 프레임 1개의 비트 수는?</div>
+        <div class="short-answer">
+            <input type="text" id="sa4" placeholder="답 입력 (비트)">
+            <button onclick="checkShort('sa4', ['193','193비트','193 비트','193bit'], 'mfb4')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb4">193 비트 — <b>24 타임 슬롯 × 8 비트 + 1 프레임 동기 비트 = 193 비트</b>. 125μs 단위 → 1.544 Mbps.</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q19.</span>SONET STS-1의 전송 속도는? (Mbps)</div>
+        <div class="short-answer">
+            <input type="text" id="sa5" placeholder="답 입력 (Mbps)">
+            <button onclick="checkShort('sa5', ['51.84','51.84Mbps','51.84 Mbps'], 'mfb5')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb5">51.84 Mbps — STS-1 프레임 = 9행 × 90바이트 = 810바이트, 초당 8,000 프레임 → <b>8000 × 9 × 90 × 8 = 51.84 Mbps</b>.</div>
+    </div>
+
+    <h3 style="font-size:1.05rem; margin:24px 0 10px; color:var(--primary);">▪ 서술형 연습</h3>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q20.</span>다중화의 4가지 종류를 신호의 종류와 함께 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da1" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d1')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d1">
+            ① <b>FDM (주파수 분할)</b>: 아날로그 신호 다중화. 각기 다른 반송파로 변조하여 다중화하며, 보호 대역(Guard Band)이 필요하다.<br>
+            ② <b>WDM (파장 분할)</b>: 아날로그 신호 다중화. 광통신에 사용되며, 프리즘으로 빛을 결합·분리한다.<br>
+            ③ <b>TDM (시분할)</b>: 디지털 신호 다중화. 시간을 공유하는 방식이며 동기/비동기로 분류된다.<br>
+            ④ <b>CDM (코드 분할)</b>: FDM과 TDM을 혼합한 방식. 확산 대역(Spread Spectrum)을 이용하며 직교 코드로 다중화한다.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q21.</span>동기 TDM과 비동기 TDM을 비교 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da2" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d2')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d2">
+            ▸ <b>동기 TDM (STDM)</b>: 각 장치에 <b>고정적인 타임 슬롯</b>을 할당. 한 프레임은 각 장치에 할당된 슬롯 + 프레임 구분 비트로 구성. <b>장치가 데이터를 보내지 않으면 슬롯이 낭비</b>되는 단점.<br>
+            ▸ <b>비동기 TDM</b>: 실제 보낼 데이터가 있는 장치에만 시간 슬롯을 동적으로 배정 (n ≥ m). 입력과 출력이 고정되어 있지 않으므로 <b>수신 주소를 타임 슬롯에 삽입</b>해야 하므로 동기 TDM보다 오버헤드가 증가. <b>통계적 TDM = 지능적 TDM</b>이라고도 함.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q22.</span>스펙트럼 확산 방식 2가지(FHSS, DSSS)를 비교 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da3" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d3')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d3">
+            ▸ <b>FHSS (주파수 도약)</b>: 시간을 홉 주기로 나누고, 홉 주기에 따라 이전과 다른 반송 주파수를 사용해 데이터를 변조해서 전송. 도약 패턴은 슈도랜덤 코드 발생기의 난수 알고리즘에 의해 결정.<br>
+            ▸ <b>DSSS (직접 순열 대역 확산)</b>: 칩(Chip)이라는 n비트 코드를 데이터의 각 비트에 곱해 비트율을 n배 증가시켜 변조하므로 신호 대역폭도 n배 확산. 무선 LAN의 바커 순열(n=11) 등이 대표 예.<br>
+            ▸ 결론: 초기에는 FHSS가 많이 사용되었으나, <b>현재는 반도체 소자의 고속화에 따라 DSSS가 주로 사용</b>됨.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q23.</span>SONET의 4계층 구조를 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da4" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d4')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d4">
+            ① <b>광학 계층</b>: 신호는 NRZ 부호화를 이용. 빛이 있으면 1, 빛이 없으면 0.<br>
+            ② <b>구간 계층</b>: 프레임 구성, 스크램블링, 오류 제어를 처리.<br>
+            ③ <b>회선 계층</b>: STS 다중화기와 추가/삭제 다중화기(ADM)가 회선 계층 기능을 제공.<br>
+            ④ <b>경로 계층</b>: 종단 발신지에서 종단 목적지까지 신호 전달을 담당. STS 다중화기가 경로 계층 기능을 제공.<br>
+            장비별 처리 계층: <b>STS 다중화기 = 4계층 / ADM = 3계층 / 재생기 = 2계층</b>.
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 최종 정리 ==================== -->
+<section class="section-card s2" id="final">
+    <div class="section-head">
+        <span class="section-badge">FINAL</span>
+        <span class="section-title">🎯 최종 정리 — 시험 직전 훑어보기</span>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:14px;">아래 앞글자 암기법만 마지막에 한 번 훑으면 7장 핵심은 거의 다 챙긴 것입니다.</p>
+
+    <div class="final-grid">
+        <div class="final-card">
+            <div class="fc-title">다중화 vs 역다중화</div>
+            <div class="fc-mn">단일 → 多 / 多 → 단일</div>
+            <div class="fc-desc">다중화 = 단일 링크에 여러 신호 / 역다중화 = 1 고속 회선을 여러 저속으로.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">다중화 4종 ★</div>
+            <div class="fc-mn">FDM · WDM · TDM · CDM</div>
+            <div class="fc-desc">아날로그 / 아날로그(광) / 디지털 / 혼합. 신호 종류로 외우기.</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">FDM 보호 대역</div>
+            <div class="fc-mn">N채널·(N−1)보호</div>
+            <div class="fc-desc">예제: 5×50K + 4×5K = 270KHz. 채널 간섭 방지용.</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">아날로그 계층</div>
+            <div class="fc-mn">G · S · M · J</div>
+            <div class="fc-desc">Group(12) → Super(60) → Master(600) → Jumbo(3,600 채널).</div>
+        </div>
+        <div class="final-card c5">
+            <div class="fc-title">OFDM 사용 표준</div>
+            <div class="fc-mn">802.11a · WiMAX · LTE · 5G</div>
+            <div class="fc-desc">직각 교차 신호로 겹쳐도 분리 가능. 무선 LAN/이동 통신.</div>
+        </div>
+        <div class="final-card">
+            <div class="fc-title">WDM = 광 + 프리즘</div>
+            <div class="fc-mn">광섬유 결합·분리</div>
+            <div class="fc-desc">광섬유 고속 전송용 아날로그 다중화. 프리즘이 빛을 결합/분리.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">TDM 분류</div>
+            <div class="fc-mn">동기 / 비동기</div>
+            <div class="fc-desc">동기(고정 슬롯, 빈 슬롯 낭비) vs 비동기(동적 할당, 주소 필요).</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">동기화 패턴</div>
+            <div class="fc-mn">10101</div>
+            <div class="fc-desc">0과 1을 교대로 매 프레임에 1비트 추가하여 프레임 구분.</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">비동기 TDM 별칭 ★</div>
+            <div class="fc-mn">통계적 = 지능적 = 비동기</div>
+            <div class="fc-desc">Statistical = Intelligent = Asynchronous TDM 모두 같은 것.</div>
+        </div>
+        <div class="final-card c5">
+            <div class="fc-title">T 계층 (북미)</div>
+            <div class="fc-mn">T-1 = 1.544 Mbps</div>
+            <div class="fc-desc">24 슬롯 × 8 비트 + 1 = 193 비트 / 125μs. T-2 = 6.312, T-3 = 44.736.</div>
+        </div>
+        <div class="final-card">
+            <div class="fc-title">E 계층 (유럽/한국)</div>
+            <div class="fc-mn">E-1 = 2.048 Mbps</div>
+            <div class="fc-desc">32 슬롯 × 8 비트 / 125μs. 음성 30 + 동기 1 + 신호 1 채널.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">CDM 활용</div>
+            <div class="fc-mn">군사 · 위성 · 한국 이동</div>
+            <div class="fc-desc">FDM+TDM 혼합. 직교 코드로 보안 + 잡음에 강함.</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">스펙트럼 확산 ★</div>
+            <div class="fc-mn">FHSS → DSSS</div>
+            <div class="fc-desc">초기 FHSS, 현재 주류는 DSSS (반도체 고속화).</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">SONET vs SDH ★</div>
+            <div class="fc-mn">ANSI(미국) / ITU-T(국제)</div>
+            <div class="fc-desc">SONET = 미국 표준 / SDH = 국제 표준. 광통신 동기 다중화.</div>
+        </div>
+        <div class="final-card c5">
+            <div class="fc-title">SONET 핵심 속도 ★</div>
+            <div class="fc-mn">STS-1 = 51.84 / STS-3 = 155.52</div>
+            <div class="fc-desc">STS-3 = STM-1 = 155.52 Mbps. 8000 × 9 × 90 × 8 = STS-1.</div>
+        </div>
+        <div class="final-card">
+            <div class="fc-title">SONET 4계층</div>
+            <div class="fc-mn">광 · 구 · 회 · 경</div>
+            <div class="fc-desc">광학 → 구간 → 회선 → 경로. 위로 갈수록 고급 기능.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">SONET 장비별 계층</div>
+            <div class="fc-mn">STS=4 / ADM=3 / 재생=2</div>
+            <div class="fc-desc">STS 다중화기(경로까지) / ADM(회선까지) / 재생기(구간까지).</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">STS-1 프레임 구조</div>
+            <div class="fc-mn">9행 × 90바이트 = 810</div>
+            <div class="fc-desc">초당 8,000 프레임 → 음성 디지털화 비율과 같음.</div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    데이터통신 7장 — 다중화 · 학습자료 · 참고: 제07장 PDF (주용호 교수)
+</footer>
+
+<script>
+// 다크모드
+const themeToggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+const savedTheme = localStorage.getItem('theme-ch07') || 'light';
+html.setAttribute('data-theme', savedTheme);
+themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+themeToggle.addEventListener('click', () => {
+    const cur = html.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme-ch07', next);
+    themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+});
+
+// 체크리스트 (localStorage)
+document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+    const key = 'ch07-' + cb.dataset.key;
+    if (localStorage.getItem(key) === '1') {
+        cb.checked = true;
+        cb.parentElement.classList.add('done');
+    }
+    cb.addEventListener('change', () => {
+        if (cb.checked) {
+            cb.parentElement.classList.add('done');
+            localStorage.setItem(key, '1');
+        } else {
+            cb.parentElement.classList.remove('done');
+            localStorage.removeItem(key);
+        }
+    });
+});
+
+// 객관식 정답 처리
+function ans(btn, isCorrect, fbId) {
+    const parent = btn.closest('.quiz-options');
+    parent.querySelectorAll('button').forEach(b => b.disabled = true);
+    const fb = document.getElementById(fbId);
+    fb.classList.add('show');
+    if (isCorrect) {
+        btn.classList.add('correct');
+        fb.className = 'quiz-feedback show correct-fb';
+        fb.textContent = '✅ 정답입니다!';
+    } else {
+        btn.classList.add('wrong');
+        parent.querySelectorAll('button').forEach(b => {
+            if (b.getAttribute('onclick').includes('true')) {
+                b.classList.add('correct');
+            }
+        });
+        fb.className = 'quiz-feedback show wrong-fb';
+        fb.textContent = '❌ 오답입니다. 정답은 위에 초록색으로 표시되었습니다.';
+    }
+}
+
+// 단답형 정답 처리
+function checkShort(inputId, answers, modelId) {
+    const val = document.getElementById(inputId).value.trim();
+    const model = document.getElementById(modelId);
+    const isCorrect = answers.some(a => val === a || val.toLowerCase() === a.toLowerCase());
+    model.classList.add('show');
+    if (isCorrect) {
+        model.style.borderLeftColor = 'var(--success)';
+        model.style.background = 'rgba(22,163,74,0.06)';
+        model.innerHTML = '✅ 정답입니다! ' + model.innerHTML.replace(/^[✅❌]\s/, '');
+    } else if (val.length > 0) {
+        model.style.borderLeftColor = 'var(--danger)';
+        model.style.background = 'rgba(220,38,38,0.06)';
+        if (!model.innerHTML.startsWith('❌')) {
+            model.innerHTML = '❌ 정답을 다시 확인하세요. — ' + model.innerHTML;
+        }
+    }
+}
+
+// 서술형 모범답안 토글
+function showModel(id) {
+    document.getElementById(id).classList.toggle('show');
+}
+</script>
+</body>
+</html>
