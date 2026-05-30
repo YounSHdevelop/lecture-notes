@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터통신 9장 — 데이터링크 프로토콜 학습자료</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #2563eb; --primary-dark: #1e3a8a;
+    --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+    --purple: #7c3aed; --orange: #ea580c; --teal: #0d9488; --pink: #db2777;
+    --bg: #f3f4f6; --card-bg: #ffffff;
+    --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+    --nav-bg: rgba(255,255,255,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
+    --soft-bg: #f8fafc;
+}
+[data-theme="dark"] {
+    --bg: #0f172a; --card-bg: #1e293b;
+    --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+    --nav-bg: rgba(15,23,42,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --soft-bg: #0b1224;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; padding-top:64px; }
+
+.nav { position:fixed; top:0; left:0; right:0; height:60px; background:var(--nav-bg); backdrop-filter:blur(12px); display:flex; align-items:center; padding:0 24px; z-index:1000; border-bottom:1px solid var(--border); }
+.nav-logo { font-weight:700; color:var(--primary); text-decoration:none; font-size:1rem; }
+.nav-links { display:flex; gap:8px; margin-left:24px; flex-wrap:wrap; }
+.nav-links a { text-decoration:none; color:var(--text-muted); font-size:0.85rem; padding:6px 10px; border-radius:8px; font-weight:600; }
+.nav-links a:hover { color:var(--primary); background:rgba(37,99,235,0.08); }
+.nav-right { margin-left:auto; display:flex; gap:10px; align-items:center; }
+.nav-home { text-decoration:none; color:var(--text-muted); font-size:0.85rem; }
+.btn-theme { background:none; border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; color:var(--text); }
+
+.page-header { background:linear-gradient(135deg, #1e3a8a, #2563eb); color:white; padding:64px 24px 56px; text-align:center; }
+.week-badge { display:inline-block; background:rgba(255,255,255,0.2); padding:6px 18px; border-radius:20px; font-size:0.85rem; margin-bottom:16px; letter-spacing:1px; }
+.page-header h1 { font-size:2rem; font-weight:900; margin-bottom:10px; }
+.page-header .subtitle { font-size:1rem; opacity:0.9; }
+
+.plan-overview { max-width:960px; margin:32px auto; padding:0 16px; }
+.plan-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.plan-card { padding:22px; border-radius:16px; background:var(--card-bg); box-shadow:var(--shadow); border-top:5px solid var(--primary); }
+.plan-card.p2 { border-top-color:var(--purple); }
+.plan-card.p3 { border-top-color:var(--orange); }
+.plan-card.p4 { border-top-color:var(--teal); }
+.plan-card .day-tag { font-size:0.78rem; font-weight:700; letter-spacing:1.5px; color:var(--primary); }
+.plan-card.p2 .day-tag { color:var(--purple); }
+.plan-card.p3 .day-tag { color:var(--orange); }
+.plan-card.p4 .day-tag { color:var(--teal); }
+.plan-card h3 { font-size:1.05rem; margin:6px 0 10px; }
+.plan-card ul { list-style:none; font-size:0.86rem; }
+.plan-card ul li { padding:3px 0; color:var(--text-muted); }
+.plan-card ul li::before { content:"▸ "; color:var(--text-muted); }
+
+.section-card { max-width:960px; margin:32px auto; padding:32px; background:var(--card-bg); border-radius:16px; box-shadow:var(--shadow); border-top:5px solid var(--primary); }
+.section-card.s2 { border-top-color:var(--purple); }
+.section-card.s3 { border-top-color:var(--orange); }
+.section-card.s4 { border-top-color:var(--teal); }
+.section-card.s5 { border-top-color:var(--pink); }
+.section-head { display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:16px; border-bottom:2px solid var(--border); }
+.section-badge { font-size:0.78rem; font-weight:900; letter-spacing:1.5px; padding:6px 14px; border-radius:20px; color:white; background:var(--primary); }
+.section-card.s2 .section-badge { background:var(--purple); }
+.section-card.s3 .section-badge { background:var(--orange); }
+.section-card.s4 .section-badge { background:var(--teal); }
+.section-card.s5 .section-badge { background:var(--pink); }
+.section-title { font-size:1.5rem; font-weight:700; }
+
+.topic { margin:28px 0 14px; }
+.topic-title { font-size:1.12rem; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.topic-num { display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:28px; padding:0 8px; border-radius:14px; background:var(--primary); color:white; font-size:0.82rem; font-weight:700; }
+.section-card.s2 .topic-num { background:var(--purple); }
+.section-card.s3 .topic-num { background:var(--orange); }
+.section-card.s4 .topic-num { background:var(--teal); }
+.section-card.s5 .topic-num { background:var(--pink); }
+
+.memo-hook { padding:22px 24px; border-radius:14px; margin:16px 0; text-align:center; background:linear-gradient(135deg, rgba(37,99,235,0.10), rgba(37,99,235,0.04)); border:2px solid var(--primary); color:var(--primary); }
+.section-card.s2 .memo-hook { background:linear-gradient(135deg, rgba(124,58,237,0.10), rgba(124,58,237,0.04)); border-color:var(--purple); color:var(--purple); }
+.section-card.s3 .memo-hook { background:linear-gradient(135deg, rgba(234,88,12,0.10), rgba(234,88,12,0.04)); border-color:var(--orange); color:var(--orange); }
+.section-card.s4 .memo-hook { background:linear-gradient(135deg, rgba(13,148,136,0.10), rgba(13,148,136,0.04)); border-color:var(--teal); color:var(--teal); }
+.section-card.s5 .memo-hook { background:linear-gradient(135deg, rgba(219,39,119,0.10), rgba(219,39,119,0.04)); border-color:var(--pink); color:var(--pink); }
+.memo-hook .hook-label { font-size:0.78rem; opacity:0.85; letter-spacing:2px; font-weight:700; }
+.memo-hook .mnemonic { font-size:1.7rem; font-weight:900; letter-spacing:3px; margin:10px 0; }
+.memo-hook .hook-desc { font-size:0.88rem; opacity:0.95; margin-top:6px; font-weight:500; }
+
+.flash-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0; }
+.flash { padding:14px 16px; border-radius:10px; background:var(--soft-bg); border-left:4px solid var(--primary); }
+.section-card.s2 .flash { border-left-color:var(--purple); }
+.section-card.s3 .flash { border-left-color:var(--orange); }
+.section-card.s4 .flash { border-left-color:var(--teal); }
+.section-card.s5 .flash { border-left-color:var(--pink); }
+.flash .q { font-weight:700; font-size:0.92rem; margin-bottom:6px; }
+.flash .a { font-size:0.88rem; color:var(--text-muted); line-height:1.7; }
+
+.memo-list { margin:12px 0; padding:16px 20px; background:var(--soft-bg); border-radius:10px; }
+.memo-list-title { font-weight:700; font-size:0.95rem; margin-bottom:8px; color:var(--primary); }
+.section-card.s2 .memo-list-title { color:var(--purple); }
+.section-card.s3 .memo-list-title { color:var(--orange); }
+.section-card.s4 .memo-list-title { color:var(--teal); }
+.section-card.s5 .memo-list-title { color:var(--pink); }
+.memo-list ol, .memo-list ul { padding-left:24px; }
+.memo-list li { padding:3px 0; font-size:0.92rem; }
+.memo-list li strong { color:var(--primary); }
+
+.std-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.88rem; }
+.std-table th, .std-table td { padding:10px 12px; border:1px solid var(--border); text-align:left; }
+.std-table th { background:rgba(37,99,235,0.08); font-weight:700; }
+.std-table td.hl { background:rgba(220,38,38,0.05); font-weight:600; }
+.section-card.s2 .std-table th { background:rgba(124,58,237,0.08); }
+.section-card.s3 .std-table th { background:rgba(234,88,12,0.08); }
+.section-card.s4 .std-table th { background:rgba(13,148,136,0.08); }
+.section-card.s5 .std-table th { background:rgba(219,39,119,0.08); }
+.tbl-wrap { overflow-x:auto; }
+
+.formula-box { background:rgba(124,58,237,0.06); border:1px solid rgba(124,58,237,0.25); border-radius:10px; padding:14px 18px; margin:12px 0; text-align:center; }
+.formula { font-size:1.05rem; font-weight:700; color:var(--purple); font-family:'Courier New',monospace; }
+.formula-desc { font-size:0.83rem; color:var(--text-muted); margin-top:6px; }
+
+.frame-box { display:flex; gap:0; flex-wrap:nowrap; margin:14px 0; overflow-x:auto; border-radius:10px; }
+.frame-cell { padding:14px 10px; border:1px solid var(--border); flex:1; text-align:center; font-size:0.82rem; font-weight:600; background:var(--soft-bg); min-width:80px; }
+.frame-cell.flag { background:rgba(37,99,235,0.12); color:var(--primary); }
+.frame-cell.data { background:rgba(13,148,136,0.10); color:var(--teal); flex:3; }
+.frame-cell.fcs { background:rgba(220,38,38,0.10); color:var(--danger); }
+.frame-cell.ctrl { background:rgba(234,88,12,0.10); color:var(--orange); }
+
+.code-block { background:#1e293b; color:#e2e8f0; padding:14px 18px; border-radius:10px; font-family:'Courier New',monospace; font-size:0.9rem; margin:12px 0; white-space:pre; overflow-x:auto; line-height:1.5; }
+
+.checklist { background:var(--soft-bg); border-radius:12px; padding:18px 22px; margin:14px 0; border-left:4px solid var(--primary); }
+.checklist-title { font-weight:700; margin-bottom:10px; font-size:1rem; }
+.checklist label { display:flex; align-items:flex-start; gap:10px; padding:6px 0; cursor:pointer; font-size:0.92rem; }
+.checklist input[type="checkbox"] { margin-top:5px; width:18px; height:18px; cursor:pointer; flex-shrink:0; }
+.checklist label.done { text-decoration:line-through; color:var(--text-muted); }
+
+.quiz-item { margin-bottom:18px; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--card-bg); }
+.quiz-q { font-weight:600; margin-bottom:10px; font-size:0.95rem; }
+.q-num { color:var(--primary); font-weight:700; margin-right:6px; }
+.quiz-options { list-style:none; }
+.quiz-options li { margin-bottom:6px; }
+.quiz-options button { width:100%; text-align:left; padding:9px 14px; border:1px solid var(--border); border-radius:8px; background:var(--soft-bg); color:var(--text); cursor:pointer; font-size:0.9rem; font-family:inherit; }
+.quiz-options button:hover:not(:disabled) { border-color:var(--primary); }
+.quiz-options button.correct { background:rgba(22,163,74,0.12); border-color:var(--success); color:var(--success); font-weight:600; }
+.quiz-options button.wrong { background:rgba(220,38,38,0.12); border-color:var(--danger); color:var(--danger); }
+.quiz-feedback { display:none; margin-top:10px; padding:10px 14px; border-radius:8px; font-size:0.88rem; }
+.quiz-feedback.show { display:block; }
+.quiz-feedback.correct-fb { background:rgba(22,163,74,0.08); color:var(--success); }
+.quiz-feedback.wrong-fb { background:rgba(220,38,38,0.08); color:var(--danger); }
+
+.short-answer input { padding:8px 12px; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:var(--card-bg); color:var(--text); width:60%; min-width:180px; }
+.short-answer button { padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.88rem; margin-left:6px; }
+.model-answer { display:none; margin-top:10px; padding:12px 16px; border-radius:8px; background:rgba(37,99,235,0.06); border-left:4px solid var(--primary); font-size:0.88rem; line-height:1.75; }
+.model-answer.show { display:block; }
+.desc-answer textarea { width:100%; min-height:70px; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:var(--card-bg); color:var(--text); resize:vertical; }
+.desc-answer button { margin-top:6px; padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.88rem; }
+
+.final-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:14px; }
+.final-card { padding:16px 18px; border-radius:12px; background:var(--soft-bg); border-left:4px solid var(--primary); }
+.final-card.c2 { border-left-color:var(--purple); }
+.final-card.c3 { border-left-color:var(--orange); }
+.final-card.c4 { border-left-color:var(--teal); }
+.final-card.c5 { border-left-color:var(--pink); }
+.final-card .fc-title { font-weight:700; font-size:0.95rem; margin-bottom:6px; }
+.final-card .fc-mn { font-size:1.2rem; font-weight:900; letter-spacing:2px; color:var(--primary); margin:6px 0; }
+.final-card.c2 .fc-mn { color:var(--purple); }
+.final-card.c3 .fc-mn { color:var(--orange); }
+.final-card.c4 .fc-mn { color:var(--teal); }
+.final-card.c5 .fc-mn { color:var(--pink); }
+.final-card .fc-desc { font-size:0.85rem; color:var(--text-muted); }
+
+footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.85rem; }
+
+@media (max-width:680px) {
+    .plan-grid, .flash-grid, .final-grid { grid-template-columns:1fr; }
+    .nav-links { display:none; }
+    .page-header h1 { font-size:1.4rem; }
+    .section-card { margin:16px 10px; padding:20px; }
+    .memo-hook .mnemonic { font-size:1.3rem; letter-spacing:2px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="../index.html" class="nav-logo">데이터통신</a>
+    <div class="nav-links">
+        <a href="#overview">개요</a>
+        <a href="#classify">분류</a>
+        <a href="#bsc">BSC</a>
+        <a href="#hdlc">HDLC</a>
+        <a href="#ppp">PPP</a>
+        <a href="#quiz">체크퀴즈</a>
+        <a href="#final">최종정리</a>
+    </div>
+    <div class="nav-right">
+        <a href="../index.html" class="nav-home">홈</a>
+        <button class="btn-theme" id="themeToggle">🌙</button>
+    </div>
+</nav>
+
+<header class="page-header">
+    <div class="week-badge">제09장 · 데이터링크 프로토콜</div>
+    <h1>데이터통신 9장 — 데이터링크 프로토콜</h1>
+    <p class="subtitle">데이터링크 프로토콜 분류 · BSC · HDLC · PPP</p>
+</header>
+
+<!-- ==================== PLAN OVERVIEW ==================== -->
+<div class="plan-overview" id="overview">
+    <div class="plan-grid">
+        <div class="plan-card">
+            <div class="day-tag">PART 1 · 분류</div>
+            <h3>비동기식 vs 동기식</h3>
+            <ul>
+                <li>비동기식: XMODEM 류</li>
+                <li>동기·문자위주: BSC</li>
+                <li>동기·비트위주: HDLC</li>
+                <li>LAPB / LAPD / LAPM</li>
+            </ul>
+        </div>
+        <div class="plan-card p2">
+            <div class="day-tag">PART 2 · BSC</div>
+            <h3>1964 IBM 문자위주</h3>
+            <ul>
+                <li>점대점+다중점</li>
+                <li>정지-대기 ARQ + 반이중</li>
+                <li>SYN·SOH·STX·ETX·BCC</li>
+                <li>DLE = 데이터 투명성</li>
+            </ul>
+        </div>
+        <div class="plan-card p3">
+            <div class="day-tag">PART 3 · HDLC</div>
+            <h3>1979 ISO 비트위주</h3>
+            <ul>
+                <li>주국·보조국·복합국</li>
+                <li>NRM · ARM · ABM</li>
+                <li>I · S · U 프레임</li>
+                <li>비트 스터핑 (5개+0)</li>
+            </ul>
+        </div>
+        <div class="plan-card p4">
+            <div class="day-tag">PART 4 · PPP</div>
+            <h3>점대점 인터넷 접속</h3>
+            <ul>
+                <li>SLIP(IP만) vs PPP(IETF)</li>
+                <li>바이트 스터핑 (0x7D)</li>
+                <li>LCP · AP(PAP/CHAP) · NCP</li>
+                <li>흐름·재전송 X</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 학습 체크리스트 ==================== -->
+<section class="section-card" id="checklist">
+    <div class="section-head">
+        <span class="section-badge">START</span>
+        <span class="section-title">📋 오늘 외워야 할 것</span>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:6px;">아래 항목들을 다 체크하면 9장 한 바퀴 완료입니다.</p>
+    <div class="checklist">
+        <div class="checklist-title">✓ 학습 체크포인트</div>
+        <label><input type="checkbox" data-key="ck1"> <span>데이터링크 프로토콜 = 전송 제어 프로토콜 (회선·흐름·오류 제어 규칙)</span></label>
+        <label><input type="checkbox" data-key="ck2"> <span>분류 트리: 비동기식(XMODEM 류) / 동기식 → 문자위주(BSC) · 비트위주(SDLC/HDLC/LAPs/PPP)</span></label>
+        <label><input type="checkbox" data-key="ck3"> <span>LAP 3종: LAPB(X.25·ISDN B), LAPD(ISDN D), LAPM(Modem)</span></label>
+        <label><input type="checkbox" data-key="ck4"> <span>BSC = 1964 IBM 문자위주 / 점대점+다중점 / 정지-대기 ARQ + 반이중</span></label>
+        <label><input type="checkbox" data-key="ck5"> <span>BSC는 전이중 X, 연속적 ARQ X</span></label>
+        <label><input type="checkbox" data-key="ck6"> <span>BSC 프레임: SYN-SYN-SOH-Header-STX-Data-ETX-BCC</span></label>
+        <label><input type="checkbox" data-key="ck7"> <span>BSC 제어문자 코드: SYN=16H, SOH=01H, STX=02H, ETX=03H, ENQ=05H, DLE=10H, ACK=06H, NAK=15H</span></label>
+        <label><input type="checkbox" data-key="ck8"> <span>BSC 데이터 투명성 = DLE 사용. STX·ETX 앞 DLE 삽입, DLE는 DLE 추가</span></label>
+        <label><input type="checkbox" data-key="ck9"> <span>HDLC = 1979 ISO 비트위주 (SDLC 기반, 1975 IBM)</span></label>
+        <label><input type="checkbox" data-key="ck10"> <span>HDLC 통신국: 주국(1차) / 보조국(2차) / 복합국 (조합국)</span></label>
+        <label><input type="checkbox" data-key="ck11"> <span>HDLC 구성: 불균형(주종)·대칭·균형(점대점 양쪽 복합국)</span></label>
+        <label><input type="checkbox" data-key="ck12"> <span>HDLC 3가지 동작모드: NRM·ARM·ABM</span></label>
+        <label><input type="checkbox" data-key="ck13"> <span>HDLC 프레임 3종: I(정보)·S(감시)·U(무번호)</span></label>
+        <label><input type="checkbox" data-key="ck14"> <span>HDLC Flag = 01111110 (8비트 동기화 패턴)</span></label>
+        <label><input type="checkbox" data-key="ck15"> <span>S프레임 코드: 00=RR · 01=REJ · 10=RNR · 11=SREJ</span></label>
+        <label><input type="checkbox" data-key="ck16"> <span>HDLC 비트 스터핑: 연속 5개 1 다음에 0 삽입 (Flag 01111110 충돌 방지)</span></label>
+        <label><input type="checkbox" data-key="ck17"> <span>HDLC 흐름제어 = 슬라이딩 윈도 / 오류제어 = Go-back-N + 선택적 ARQ</span></label>
+        <label><input type="checkbox" data-key="ck18"> <span>PPP는 SLIP의 단점을 보완하여 IETF가 개발 (SLIP은 IP만 지원)</span></label>
+        <label><input type="checkbox" data-key="ck19"> <span>PPP는 오류 검출·데이터 압축·사용자 인증 제공, 재전송과 흐름제어 X</span></label>
+        <label><input type="checkbox" data-key="ck20"> <span>PPP 프레임: Flag(01111110)·Address(11111111)·Control(00000011)·Protocol·Payload(1500B)·FCS·Flag</span></label>
+        <label><input type="checkbox" data-key="ck21"> <span>PPP 프로토콜 값: LCP=0xC021, PAP=0xC023, CHAP=0xC223, NCP=0x8021, IP=0x0021</span></label>
+        <label><input type="checkbox" data-key="ck22"> <span>PPP 바이트 스터핑: ESC=0x7D 사용. 0x20보다 작은 값도 무조건 스터핑</span></label>
+        <label><input type="checkbox" data-key="ck23"> <span>PPP 3개 프로토콜: LCP(링크) · AP(인증: PAP/CHAP) · NCP(네트워크 캡슐화·IPCP)</span></label>
+        <label><input type="checkbox" data-key="ck24"> <span>PAP는 패스워드 직접 전송 / CHAP는 challenge-response (PAP보다 보안 우수)</span></label>
+    </div>
+</section>
+
+<!-- ==================== 01. 데이터링크 프로토콜의 분류 ==================== -->
+<section class="section-card" id="classify">
+    <div class="section-head">
+        <span class="section-badge">01</span>
+        <span class="section-title">🗂️ 데이터링크 프로토콜의 분류</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>데이터링크 프로토콜이란?</div>
+        <div class="memo-hook">
+            <div class="hook-label">데이터링크 프로토콜 = ?</div>
+            <div class="mnemonic">전송 제어 프로토콜</div>
+            <div class="hook-desc">회선 제어 · 흐름 제어 · 오류 제어 등의 기능을 실현하기 위한 규칙</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>데이터링크 프로토콜은 <strong>회선 제어, 흐름 제어, 오류 제어</strong> 등의 기능을 실현하기 위한 규칙을 포함</li>
+                <li><strong>전송 제어 프로토콜</strong>이라고도 한다</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>분류 트리 ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">분류 ★</div>
+            <div class="mnemonic">비동기식 / 동기식(문자·비트)</div>
+            <div class="hook-desc">동기식 → 문자위주(BSC) / 비트위주(SDLC·HDLC·LAPs·SLIP·PPP·LANs)</div>
+        </div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>대분류</th><th>중분류</th><th>대표 프로토콜</th></tr></thead>
+            <tbody>
+                <tr><td><b>비동기식</b></td><td>—</td><td>XMODEM, YMODEM, ZMODEM, BLAST, Kermit</td></tr>
+                <tr><td rowspan="2"><b>동기식</b></td><td><b>문자 위주</b></td><td><b>BSC</b></td></tr>
+                <tr><td><b>비트 위주</b></td><td>SDLC, <b>HDLC</b>, LAPs, SLIP, <b>PPP</b>, LANs</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>비동기식 데이터링크 프로토콜</div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>통신이 송신 측과 수신 측 사이의 <strong>기계적인 클록(clock)의 동기화 없이 이루어짐</strong></li>
+                <li>송신 측에서 프레임의 시작과 끝을 알리는 <strong>수신 측과 약속된 비트 삽입</strong></li>
+                <li>수신 측에서는 추가된 비트를 확인하여 데이터 부분만 추출</li>
+                <li>프로토콜 종류: <strong>XMODEM, YMODEM, ZMODEM, BLAST, Kermit</strong></li>
+                <li><strong>거의 사용되지 않음</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>동기식 — 문자 위주 vs 비트 위주</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">문자 위주 (Character-oriented)</div>
+                <div class="a"><b>바이트 위주</b>라고도 함. 프레임을 <b>바이트(8비트)</b>로 구성되는 문자들의 연속된 열로 간주. 문자 단위로 전송, <b>ASCII 제어 문자</b> 사용. 대표: <b>1964년 IBM의 BSC</b>. 비트 위주에 비해 비효율적이라 거의 사용되지 않음.</div>
+            </div>
+            <div class="flash">
+                <div class="q">비트 위주 (Bit-oriented)</div>
+                <div class="a">전송 프레임을 <b>비트열로 간주</b>. <b>1975 IBM SDLC</b> → <b>1979 ISO HDLC 표준화</b> → <b>1981 ITU-T가 HDLC 기반으로 LAPs 개발</b>.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>LAP (Link Access Procedures)</div>
+        <div class="memo-hook">
+            <div class="hook-label">LAP 3종 ★</div>
+            <div class="mnemonic">LAPB · LAPD · LAPM</div>
+            <div class="hook-desc">B = Balanced / D = D channel / M = Modem</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 LAP 매칭</div>
+            <ul>
+                <li><strong>LAPB (LAP Balanced)</strong>: X.25 패킷교환망과 <strong>ISDN의 B채널용</strong></li>
+                <li><strong>LAPD (LAP for D channel)</strong>: <strong>ISDN의 D채널용</strong></li>
+                <li><strong>LAPM (LAP for Modem)</strong>: <strong>모뎀용</strong></li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 HDLC로부터 발전된 프로토콜</div>
+            <ul>
+                <li><strong>Frame relay, PPP 등</strong></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 02. BSC ==================== -->
+<section class="section-card s2" id="bsc">
+    <div class="section-head">
+        <span class="section-badge">02</span>
+        <span class="section-title">📜 BSC (Binary Synchronous Communication)</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>BSC 개요</div>
+        <div class="memo-hook">
+            <div class="hook-label">BSC 한 줄 ★</div>
+            <div class="mnemonic">1964 IBM 문자위주</div>
+            <div class="hook-desc">점대점 + 다중점 / 정지-대기 ARQ + 반이중 / 전이중 X, 연속 ARQ X</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li><strong>1964년 IBM에서 개발한 문자 위주 프로토콜</strong></li>
+                <li><strong>점대점과 다중점 모두를 지원</strong></li>
+                <li><strong>정지-대기 ARQ 흐름 제어와 오류 제어</strong>를 사용하는 <strong>반이중 전송을 지원</strong></li>
+                <li><strong>전이중 전송과 연속적 ARQ를 지원하지 않음</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>BSC 프레임 구조</div>
+        <div class="frame-box">
+            <div class="frame-cell flag">SYN</div>
+            <div class="frame-cell flag">SYN</div>
+            <div class="frame-cell ctrl">SOH</div>
+            <div class="frame-cell ctrl">Header</div>
+            <div class="frame-cell ctrl">STX</div>
+            <div class="frame-cell data">Data</div>
+            <div class="frame-cell ctrl">ETX</div>
+            <div class="frame-cell fcs">BCC</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 필드 설명</div>
+            <ul>
+                <li><strong>SYN (Synchronization)</strong>: 동기 문자. <strong>2개 이상의 SYN으로 시작</strong>. 송수신 장치 간의 문자 동기를 맞추기 위한 전송 제어 문자. 수신 장치에게 새로운 프레임의 도착을 알림</li>
+                <li><strong>SOH (Start of Header)</strong>: 헤더의 시작</li>
+                <li><strong>Header</strong>: 송수신 장치의 주소, 프레임 식별 번호 등과 같은 제어 정보</li>
+                <li><strong>STX (Start of Text)</strong>: 본문의 시작</li>
+                <li><strong>Data</strong>: 실제 데이터 본문</li>
+                <li><strong>ETX (End of Text)</strong>: 본문의 끝</li>
+                <li><strong>BCC (Block Check Count)</strong>: 오류 제어용. <strong>1바이트 LRC 또는 2바이트 CRC</strong>로 구성</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>BSC 전송 제어 문자 (코드 16진수) ★</div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>문자</th><th>의미</th><th>기능</th><th>코드 (16진수)</th></tr></thead>
+            <tbody>
+                <tr><td><b>SYN</b></td><td>Synchronization</td><td>문자 동기</td><td>16H</td></tr>
+                <tr><td><b>SOH</b></td><td>Start of Header</td><td>헤더의 시작</td><td>01H</td></tr>
+                <tr><td><b>STX</b></td><td>Start of Text</td><td>본문의 시작 및 헤더의 종료</td><td>02H</td></tr>
+                <tr><td><b>ETX</b></td><td>End of Text</td><td>본문의 종료</td><td>03H</td></tr>
+                <tr><td><b>ETB</b></td><td>End of Transmission Block</td><td>블록의 종료</td><td>17H</td></tr>
+                <tr><td><b>EOT</b></td><td>End of Transmission</td><td>전송 종료 및 데이터링크 해제</td><td>04H</td></tr>
+                <tr><td><b>ENQ</b></td><td>Enquiry</td><td>상대편에 데이터링크 설정 및 응답 요구</td><td>05H</td></tr>
+                <tr><td><b>DLE</b></td><td>Data Link Escape</td><td>데이터 내의 제어 문자를 데이터로 취급</td><td>10H</td></tr>
+                <tr><td><b>ACK</b></td><td>Acknowledgement</td><td>긍정 응답</td><td>06H</td></tr>
+                <tr><td><b>NAK</b></td><td>Negative Acknowledgement</td><td>부정 응답</td><td>15H</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">전송 블록 형식화</div>
+                <div class="a">프레임들의 크기를 결정 (<b>SYN, SOH, STX, ETB, ETX</b> 등의 제어 문자).</div>
+            </div>
+            <div class="flash">
+                <div class="q">스테이션 간의 대화</div>
+                <div class="a"><b>반이중 통신</b>으로 프레임을 교환하기 위해 사용 (<b>ENQ</b>).</div>
+            </div>
+            <div class="flash">
+                <div class="q">투명 모드 제어</div>
+                <div class="a">사용자 데이터 투명성 보장 (<b>DLE</b>). 16진수(Hex)-0~9,A,B,C,D,E,F. <b>0x or H로 표시</b>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">SYN 위치</div>
+                <div class="a">프레임 시작에 <b>2개 이상</b>의 SYN. 수신 측에 새 프레임 도착을 알림.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>데이터 투명성 (Data Transparency)</div>
+        <div class="memo-hook">
+            <div class="hook-label">투명성 = ?</div>
+            <div class="mnemonic">DLE 문자 사용</div>
+            <div class="hook-desc">어떠한 비트들의 조합도 제어 정보와 혼동하지 않고 데이터로 전송 가능</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li><strong>어떠한 비트들의 조합도 제어 정보와 혼동하지 않고 데이터로 전송이 가능해야 함</strong>을 의미</li>
+                <li><strong>DLE(Data Link Escape) 문자</strong>를 사용하여 확보함</li>
+                <li>본문 내에 제어 문자가 오는 경우 <strong>STX와 ETX 문자 앞에 DLE 문자를 삽입</strong></li>
+                <li>두 DLE 문자 사이에 있는 모든 문자는 <strong>데이터로 취급</strong></li>
+                <li>투명 영역 내에 제어 문자와 동일한 비트 패턴을 갖는 문자가 있어도 제어 문자로 취급하지 않음</li>
+                <li>문서 내에 있는 <strong>DLE 문자는 DLE 문자를 하나 더 추가</strong></li>
+            </ul>
+        </div>
+        <div class="frame-box">
+            <div class="frame-cell flag">SYN</div>
+            <div class="frame-cell flag">SYN</div>
+            <div class="frame-cell ctrl">DLE</div>
+            <div class="frame-cell ctrl">STX</div>
+            <div class="frame-cell data">Transparent Data</div>
+            <div class="frame-cell ctrl">DLE</div>
+            <div class="frame-cell ctrl">ETX</div>
+            <div class="frame-cell fcs">BCC</div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 03. HDLC ==================== -->
+<section class="section-card s3" id="hdlc">
+    <div class="section-head">
+        <span class="section-badge">03</span>
+        <span class="section-title">🧱 HDLC (High-level Data Link Control)</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>HDLC 개요</div>
+        <div class="memo-hook">
+            <div class="hook-label">HDLC 한 줄 ★</div>
+            <div class="mnemonic">1979 ISO 비트위주</div>
+            <div class="hook-desc">SDLC(1975 IBM) 기반 / 점대점·다중점·Half·Full 전이중 모두 지원</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li><strong>1979년 SDLC를 기반으로 ISO에서 표준화한 비트 위주 프로토콜</strong></li>
+                <li><strong>점대점, 다중점, Half-duplex, Full-duplex 모두를 지원</strong></li>
+                <li><strong>흐름 제어: Sliding window 방식 사용</strong></li>
+                <li><strong>오류 제어: Go-back-N ARQ와 선택적 ARQ 방식 사용</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>HDLC 통신국 (Station)</div>
+        <div class="memo-hook">
+            <div class="hook-label">통신국 3종 ★</div>
+            <div class="mnemonic">주국 · 보조국 · 복합국</div>
+            <div class="hook-desc">주국=명령 / 보조국=응답 / 복합국=둘 다</div>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">주국 (1차국)</div>
+                <div class="a"><b>링크의 모든 제어권</b>을 갖는 장치. 보조국들에게 <b>명령(Command)</b>을 보냄.</div>
+            </div>
+            <div class="flash">
+                <div class="q">보조국 (2차국)</div>
+                <div class="a">주국의 제어를 받고 주국의 명령에 따라 <b>응답(Response)</b>을 보내는 스테이션.</div>
+            </div>
+            <div class="flash">
+                <div class="q">복합국 (조합국)</div>
+                <div class="a"><b>명령과 응답을 모두 발생</b>할 수 있음. 서로 연결된 <b>대등 장치(Peer Device)</b> 중 하나. 상황에 따라 주국 또는 보조국으로 동작.</div>
+            </div>
+            <div class="flash">
+                <div class="q">정리</div>
+                <div class="a">주국은 명령을 발생시키고 보조국은 응답을 만들어 냄.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>HDLC 3가지 구성</div>
+        <div class="memo-hook">
+            <div class="hook-label">구성 3종</div>
+            <div class="mnemonic">불균형 · 대칭 · 균형</div>
+            <div class="hook-desc">균형 구성은 점대점에서 양쪽 모두 복합국</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 구성 매칭</div>
+            <ul>
+                <li><strong>불균형 구성(Unbalanced)</strong>: <strong>주종 구성(Master/Slave)</strong> — 주국 1개 + 보조국 다수</li>
+                <li><strong>대칭 구성(Symmetrical)</strong>: 하나의 <strong>물리적 스테이션이 두 개의 논리적 스테이션</strong>으로 구성 (한쪽이 주국+보조국, 반대쪽이 보조국+주국)</li>
+                <li><strong>균형 구성(Balanced)</strong>: <strong>점대점 연결에서 두 스테이션이 모두 복합국</strong>인 경우</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>HDLC 동작 모드 (NRM · ARM · ABM) ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">동작 모드 3종 ★</div>
+            <div class="mnemonic">NRM · ARM · ABM</div>
+            <div class="hook-desc">정규 응답 / 비동기 응답 / 비동기 균형 — "누가 링크를 제어할 것인가"</div>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">NRM (Normal Response Mode)</div>
+                <div class="a"><b>정규 응답 모드</b>. 표준적인 주국-보조국 관계. 보조국은 전송하기 전에 <b>항상 주국의 허락</b>을 얻어야 함.</div>
+            </div>
+            <div class="flash">
+                <div class="q">ARM (Asynchronous Response Mode)</div>
+                <div class="a"><b>비동기 응답 모드</b>. 채널이 사용되고 있지 않으면 보조국은 <b>주국의 허가 없이 전송</b>할 수 있음. 보조국으로부터의 모든 전송은 <b>주국을 경유</b>하여 연결됨.</div>
+            </div>
+            <div class="flash">
+                <div class="q">ABM (Asynchronous Balanced Mode)</div>
+                <div class="a"><b>비동기 균형 모드</b>. 모든 스테이션은 동등하며 <b>점대점으로 연결된 복합국</b>만 사용됨.</div>
+            </div>
+            <div class="flash">
+                <div class="q">전송 시작 권한 정리</div>
+                <div class="a">NRM = <b>주국만</b> / ARM = <b>둘 중 하나</b> / ABM = <b>둘 다</b>.</div>
+            </div>
+        </div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>구분</th><th>정규 응답 모드</th><th>비동기 응답 모드</th><th>비동기 균형 모드</th></tr></thead>
+            <tbody>
+                <tr><td>스테이션 종류</td><td>주국 및 보조국</td><td>주국 및 보조국</td><td><b>복합국</b></td></tr>
+                <tr><td>전송 시작 권한</td><td><b>주국</b></td><td>둘 중 하나</td><td>둘 다</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>HDLC 프레임 구조 (I · S · U)</div>
+        <div class="memo-hook">
+            <div class="hook-label">프레임 3종 ★</div>
+            <div class="mnemonic">I · S · U</div>
+            <div class="hook-desc">Information(정보) / Supervisory(감시) / Unnumbered(무번호)</div>
+        </div>
+        <div class="frame-box">
+            <div class="frame-cell flag">Flag</div>
+            <div class="frame-cell ctrl">Address</div>
+            <div class="frame-cell ctrl">Control</div>
+            <div class="frame-cell data">Information</div>
+            <div class="frame-cell fcs">FCS</div>
+            <div class="frame-cell flag">Flag</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 필드 설명</div>
+            <ul>
+                <li><strong>Flag</strong>: 프레임의 시작과 끝을 나타내는 8비트로 프레임의 동기를 제공함. 비트 패턴이 <strong>'01111110'</strong>이며 수신기를 위한 동기화 패턴의 역할</li>
+                <li><strong>Address</strong>: 프레임을 송신하거나 수신하는 종국을 식별하기 위한 주소 필드. 주국 송신 시 목적지 보조국 주소, 주국 수신 시 발신지 보조국 주소</li>
+                <li><strong>Control</strong>: 프레임 종류를 식별하기 위해 사용</li>
+                <li><strong>Information(data)</strong>: 실제 전송할 데이터</li>
+                <li><strong>FCS (Frame Check Sequence)</strong>: 프레임 전송 도중 오류 검사. 주로 <strong>CRC(16비트 또는 32비트)</strong> 사용</li>
+            </ul>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">I-frame (정보)</div>
+                <div class="a">사용자 데이터 전송 및 사용자 데이터에 관련된 <b>제어정보 전송</b>. Control: <b>0 + N(S) + P/F + N(R)</b>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">S-frame (감시)</div>
+                <div class="a">제어정보의 전송에만 사용. <b>데이터 링크 계층의 흐름제어와 오류제어</b>에 사용. Control: <b>10 + Code + P/F + N(R)</b>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">U-frame (무번호)</div>
+                <div class="a"><b>시스템 관리를 위해 예약</b>. 링크 자체를 관리할 목적의 정보 전송. Control: <b>11 + Code + P/F + Code</b>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">제어 필드 약자</div>
+                <div class="a">N(S) = 현재 전송 프레임 번호 / N(R) = 다음에 받기 원하는 프레임 번호 / P/F = 폴 or 마지막 / Code = HDLC 명령/응답 2진 코드.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">6</span>피기백킹 (Piggybacking)</div>
+        <div class="memo-hook">
+            <div class="hook-label">피기백킹 = ?</div>
+            <div class="mnemonic">목말 태우기</div>
+            <div class="hook-desc">I-프레임에 ACK 제어정보를 합쳐서 보냄 — 별도 응답 프레임 불필요</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>양방향 데이터 교환에서 스테이션2는 스테이션1로부터 받은 데이터에 대한 <strong>응답을 별도의 응답 프레임을 사용하지 않고 자신의 I-프레임의 제어 필드를 이용</strong>하여 보낼 수 있음</li>
+                <li>I-프레임에 제어 정보를 합쳐서 보내는 것을 <strong>목말 태우기에 비유</strong>한 것</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">7</span>P/F (Poll/Final) 비트</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">P 비트</div>
+                <div class="a"><b>명령 프레임에 표시</b>. 보조국이나 상대 복합국에 응답을 요구. 주국 또는 복합국은 P=1인 명령 송신 후 <b>응답(F=1)을 수신할 때까지 P=1인 명령을 송신할 수 없다</b>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">F 비트</div>
+                <div class="a"><b>응답 프레임에 표시</b>. P=1인 명령에 대한 응답으로 사용. P=1인 명령 수신 시 보조국·복합국은 F=1인 응답 송신 후 다음 P=1 명령 수신까지 F=1을 송신할 수 없음. 보조국의 <b>마지막 응답</b>을 표시할 때도 사용.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">8</span>S-프레임의 명령과 응답 ★</div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>Code (2비트)</th><th>약어</th><th>의미</th></tr></thead>
+            <tbody>
+                <tr><td><b>00</b></td><td><b>RR</b></td><td>Receive Ready (긍정 응답, 수신할 준비가 되어 있음)</td></tr>
+                <tr><td><b>01</b></td><td><b>REJ</b></td><td>Reject (부정 응답)</td></tr>
+                <tr><td><b>10</b></td><td><b>RNR</b></td><td>Receive Not Ready (긍정 응답, 수신할 수 없음)</td></tr>
+                <tr><td><b>11</b></td><td><b>SREJ</b></td><td>Selective Reject (부정 응답, 선택적 재전송)</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">9</span>U-프레임의 주요 명령/응답</div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>Code</th><th>Command</th><th>Response</th><th>비고</th></tr></thead>
+            <tbody>
+                <tr><td>00 001</td><td><b>SNRM</b></td><td>—</td><td>정규 응답 모드 설정</td></tr>
+                <tr><td>11 011</td><td>SNRME</td><td>—</td><td>NRM 확장 모드</td></tr>
+                <tr><td>11 000</td><td>SARM</td><td>DM</td><td>비동기 응답 모드</td></tr>
+                <tr><td>11 100</td><td><b>SABM</b></td><td>—</td><td>비동기 균형 모드 설정</td></tr>
+                <tr><td>11 110</td><td>SABME</td><td>—</td><td>ABM 확장 모드</td></tr>
+                <tr><td>00 000</td><td>UI</td><td>UI</td><td>Unnumbered Information</td></tr>
+                <tr><td>00 110</td><td>—</td><td><b>UA</b></td><td><b>Unnumbered Acknowledge</b> (링크 설정/해제 응답)</td></tr>
+                <tr><td>00 010</td><td><b>DISC</b></td><td>RD</td><td><b>Disconnect</b> / Request Disconnect</td></tr>
+                <tr><td>11 001</td><td>RSET</td><td>—</td><td>Reset</td></tr>
+                <tr><td>00 111</td><td>TEST</td><td>TEST</td><td>테스트</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">10</span>데이터 투명성 — 비트 스터핑 ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">HDLC 비트 스터핑 ★</div>
+            <div class="mnemonic">5개 1 → 0 삽입</div>
+            <div class="hook-desc">Flag(01111110)이 데이터에 나타나는 것을 방지</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>프레임 내의 어디서든지 <strong>플래그(Flag) 비트 01111110이 나타나지 않도록 보장</strong>해야 함</li>
+                <li>이를 위해 <strong>비트 스터핑(bit stuffing)</strong> 과정을 수행</li>
+                <li>송신기는 <strong>연속된 5개 이상의 1이 있으면 다섯 번째 다음에 0을 삽입</strong></li>
+                <li>수신기에서는 삽입된 0을 제거</li>
+            </ul>
+        </div>
+        <div class="code-block">원래 데이터        송신 데이터          수신 데이터
+10101010101010   → 10101010101010   → 10101010101010
+11111111111111   → 1111101111101111 → 1111101111101111 (0 삽입/제거)
+0111110          → 01111100         → 01111100
+01111110(Flag와 동일) → 011111010    → 011111010</div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">11</span>HDLC 동작 과정</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">데이터링크 연결 설정</div>
+                <div class="a"><b>SNRM, SARM, SABM 중 한 프레임</b>을 전달하고 응답은 <b>UA</b>로 받는다.</div>
+            </div>
+            <div class="flash">
+                <div class="q">데이터링크 해제</div>
+                <div class="a"><b>DISC 프레임</b>을 보조국에 전달하고 수신 측은 <b>UA</b>로 응답한다.</div>
+            </div>
+            <div class="flash">
+                <div class="q">전이중 데이터 전송</div>
+                <div class="a">복합국 A와 B 간에 논리적인 연결이 이루어지면 데이터 전송 단계. <b>흐름 제어와 오류 제어를 수행하면서 I-프레임을 교환</b>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">RNR 흐름 제어</div>
+                <div class="a">데이터 전송 단계에서 수신 스테이션의 버퍼가 넘치지 않도록 <b>슬라이딩 윈도뿐 아니라 RNR을 이용한 흐름 제어도 병행</b>하여 수행.</div>
+            </div>
+            <div class="flash">
+                <div class="q">REJ 오류 제어</div>
+                <div class="a">I-프레임에 오류 발생 시 <b>REJ 명령이나 타임아웃</b>을 이용하여 오류 복구. <b>Go-back-N ARQ</b>를 가정.</div>
+            </div>
+            <div class="flash">
+                <div class="q">폴링 데이터 전송</div>
+                <div class="a">먼저 <b>NRM</b>이 되어야 함. 주국이 <b>SNRM 명령</b>을 보조국에 전송하여 링크 설정 요구 → 보조국 <b>UA 응답</b>.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">12</span>HDLC 응용 프로토콜</div>
+        <div class="memo-hook">
+            <div class="hook-label">LAP 매칭 ★</div>
+            <div class="mnemonic">LAPB · LAPD · LAPM</div>
+            <div class="hook-desc">B = X.25·ISDN B채널(ABM) / D = ISDN D채널(ABM) / M = 모뎀 (HDLC 부분집합)</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 매칭</div>
+            <ul>
+                <li><strong>LAPB</strong>: X.25 프로토콜과 ISDN의 B채널에서 사용 (<strong>비동기 균형 모드, ABM</strong>)</li>
+                <li><strong>LAPD</strong>: ISDN의 D채널에서 사용 (<strong>비동기 균형 모드, ABM</strong>)</li>
+                <li><strong>LAPM</strong>: 모뎀을 위한 <strong>단순화된 HDLC 부분집합</strong></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 04. PPP ==================== -->
+<section class="section-card s4" id="ppp">
+    <div class="section-head">
+        <span class="section-badge">04</span>
+        <span class="section-title">🔌 PPP (Point-to-Point Protocol)</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>PPP 개요</div>
+        <div class="memo-hook">
+            <div class="hook-label">PPP 한 줄 ★</div>
+            <div class="mnemonic">SLIP의 단점 보완 · IETF</div>
+            <div class="hook-desc">가정에서 전화선·케이블로 인터넷 접속용 점대점 링크 프로토콜</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 배경</div>
+            <ul>
+                <li>가정에 있는 컴퓨터를 <strong>전화선이나 케이블을 이용하여 인터넷에 접속</strong>하기 위해서는 점대점 링크 프로토콜이 필요</li>
+            </ul>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">SLIP</div>
+                <div class="a"><b>Serial Line Internet Protocol</b>. <b>IP만을 지원</b>하는 한계가 있음.</div>
+            </div>
+            <div class="flash">
+                <div class="q">PPP</div>
+                <div class="a"><b>Point-to-Point Protocol</b>. <b>SLIP의 단점을 보완하여 IETF에서 개발</b>.</div>
+            </div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 PPP 핵심 특징</div>
+            <ul>
+                <li><strong>전화선을 이용한 인터넷 접속에 널리 사용</strong></li>
+                <li><strong>비동기식과 동기식 모두 지원</strong></li>
+                <li><strong>데이터링크 계층 프로토콜</strong></li>
+                <li><strong>오류 검출, 데이터 압축, 사용자 인증 기능 제공</strong></li>
+                <li><strong>오류 복구를 위한 재전송과 흐름 제어는 제공하지 않음</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>PPP 프레임 구조</div>
+        <div class="frame-box">
+            <div class="frame-cell flag">Flag<br>01111110<br>1바이트</div>
+            <div class="frame-cell ctrl">Address<br>11111111<br>1바이트</div>
+            <div class="frame-cell ctrl">Control<br>00000011<br>1바이트</div>
+            <div class="frame-cell ctrl">Protocol<br>1·2바이트</div>
+            <div class="frame-cell data">페이로드(payload)<br>최대 1,500바이트</div>
+            <div class="frame-cell fcs">FCS<br>2·4바이트</div>
+            <div class="frame-cell flag">Flag<br>01111110<br>1바이트</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 필드 설명 (HDLC와 유사)</div>
+            <ul>
+                <li><strong>Flag</strong>: 프레임의 시작과 끝 (동기화), HDLC와 같이 <strong>01111110</strong> 사용</li>
+                <li><strong>Address</strong>: 점대점 연결이므로 의미가 없음 → HDLC의 <strong>브로드캐스트 주소인 11111111을 사용</strong></li>
+                <li><strong>Control</strong>: <strong>00000011</strong> — 순서 번호를 사용하지 않으므로 흐름 제어나 오류 제어를 수행하지 않음</li>
+                <li><strong>Protocol</strong>: 페이로드 필드에 포함된 정보의 <strong>프로토콜 종류</strong>를 나타냄</li>
+                <li><strong>페이로드(Payload)</strong>: 최대 <strong>1,500바이트</strong>를 갖는 사용자 데이터</li>
+                <li><strong>FCS (Frame Check Sequence)</strong>: <strong>2바이트 또는 4바이트의 CRC</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>Protocol 필드 값 ★</div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>프로토콜</th><th>값</th><th>용도</th></tr></thead>
+            <tbody>
+                <tr><td><b>LCP</b></td><td class="hl"><b>0xC021</b></td><td>링크 제어 프로토콜</td></tr>
+                <tr><td><b>PAP</b></td><td class="hl"><b>0xC023</b></td><td>Password Authentication</td></tr>
+                <tr><td><b>CHAP</b></td><td class="hl"><b>0xC223</b></td><td>Challenge Handshake Authentication</td></tr>
+                <tr><td><b>NCP</b></td><td class="hl"><b>0x8021</b></td><td>네트워크 제어 프로토콜</td></tr>
+                <tr><td><b>IP data</b></td><td class="hl"><b>0x0021</b></td><td>IP 패킷 데이터</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>바이트 스터핑 (Byte Stuffing)</div>
+        <div class="memo-hook">
+            <div class="hook-label">PPP 스터핑 ★</div>
+            <div class="mnemonic">ESC = 0x7D</div>
+            <div class="hook-desc">HDLC는 비트 스터핑 / PPP는 바이트 스터핑. 0x = 16진수</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li><strong>ESC(escape) 문자인 0x7D를 사용</strong>하여 바이트 스터핑을 수행. <strong>0x는 16진수를 의미</strong></li>
+                <li>플래그를 제외한 프레임 내부에 <strong>01111110 (0x7E)이 나타나면 0x5E로 대치</strong>되어 전송</li>
+                <li>수신 측에서는 프레임 내부에 0x7D이 나오면 바이트 스터핑으로 판단하여 <strong>0x7D를 제거하고 원래 데이터를 복원</strong></li>
+                <li>플래그를 제외한 프레임 내부에 <strong>ESC 문자인 01111101 (0x7D)이 있으면 0x5D로 대치</strong></li>
+                <li><strong>0x20보다 작은 값은 무조건 바이트 스터핑을 수행</strong> — 모뎀의 직렬 드라이버가 0x20보다 작은 값을 ASCII 제어 문자로 인식하는 것을 방지</li>
+            </ul>
+        </div>
+        <div class="code-block">▸ 0x7E (Flag) 처리:
+   01111110 ← 0x7E
+ ⊕ 00100000 ← 0x20
+   01011110 ← 0x5E  (전송)
+
+▸ 0x7D (ESC) 처리:
+   01111101 ← 0x7D
+ ⊕ 00100000 ← 0x20
+   01011101 ← 0x5D  (전송)</div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>PPP 처리 과정 + 3개 프로토콜 ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">PPP 처리 과정 ★</div>
+            <div class="mnemonic">LCP → AP → NCP</div>
+            <div class="hook-desc">링크 설정(LCP) → 인증(PAP/CHAP) → 네트워크 설정(NCP) → 패킷 송수신 → 해제</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 PPP 3개 프로토콜</div>
+            <ul>
+                <li><strong>LCP (Link Control Protocol)</strong>: 두 기기 간 <strong>링크의 설정, 유지, 구성, 해제</strong>를 담당</li>
+                <li><strong>AP (Authentication Protocol)</strong>: 연결을 위한 <strong>사용자의 인증 절차</strong>를 수행 (PAP / CHAP)</li>
+                <li><strong>NCP (Network Control Protocol)</strong>: 링크 설정과 인증 완료 후, <strong>상위 계층에서 오는 데이터를 PPP 프레임으로 캡슐화하여 전송</strong>. <strong>IPCP</strong>(Internet Protocol Control Protocol)가 <strong>IP 주소 할당</strong> 수행</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 LCP 패킷 코드 (Protocol = 0xC021)</div>
+            <ul>
+                <li>0x01 Configure-request · 0x02 Configure-ack · 0x03 Configure-nak · 0x04 Configure-reject</li>
+                <li>0x05 Terminate-request · 0x06 Terminate-ack · 0x07 Code-reject · 0x08 Protocol-reject</li>
+                <li>0x09 Echo-reject · 0x0A Echo-reply · 0x0B Discard-request</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">6</span>인증 프로토콜 — PAP vs CHAP ★</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">PAP (Password Authentication Protocol)</div>
+                <div class="a">Protocol 값 <b>0xC023</b>. <b>패스워드를 전달하여 인증을 획득</b>하는 방법. 코드: 1=request, 2=ack, 3=nak. <b>패스워드가 전송로 상에 노출</b>됨.</div>
+            </div>
+            <div class="flash">
+                <div class="q">CHAP (Challenge Handshake AP)</div>
+                <div class="a">Protocol 값 <b>0xC223</b>. <b>PAP보다 높은 보안 제공</b>. <b>challenge → response → success/failure</b> 방식. <b>패스워드가 전송로 상에 노출되지 않으므로 더 안전</b>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">PAP 메시지 종류</div>
+                <div class="a"><b>authentication_request</b> ↔ <b>authentication_ack 또는 nak</b>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">CHAP 메시지 종류</div>
+                <div class="a">시스템→사용자 <b>challenge</b> / 사용자→시스템 <b>response</b> / 시스템→사용자 <b>success 또는 failure</b>.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 체크 퀴즈 ==================== -->
+<section class="section-card" id="quiz">
+    <div class="section-head">
+        <span class="section-badge">QUIZ</span>
+        <span class="section-title">📝 체크 퀴즈</span>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:14px;">객관식과 단답형으로 핵심 개념을 빠르게 점검하세요.</p>
+
+    <h3 style="font-size:1.05rem; margin:18px 0 10px; color:var(--primary);">▪ 객관식</h3>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q1.</span>비동기식 데이터링크 프로토콜이 <b>아닌</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb1')">① XMODEM</button></li>
+            <li><button onclick="ans(this,false,'fb1')">② YMODEM</button></li>
+            <li><button onclick="ans(this,false,'fb1')">③ Kermit</button></li>
+            <li><button onclick="ans(this,true,'fb1')">④ BSC</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb1"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q2.</span>BSC에 대한 설명으로 <b>틀린</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb2')">① 1964년 IBM에서 개발</li>
+            <li><button onclick="ans(this,false,'fb2')">② 문자 위주 프로토콜이다</button></li>
+            <li><button onclick="ans(this,false,'fb2')">③ 정지-대기 ARQ와 반이중을 지원</button></li>
+            <li><button onclick="ans(this,true,'fb2')">④ 전이중 전송과 연속적 ARQ를 지원</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb2"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q3.</span>BSC 전송 제어 문자 중 "본문의 시작"을 나타내며 코드가 02H인 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb3')">① SOH</button></li>
+            <li><button onclick="ans(this,true,'fb3')">② STX</button></li>
+            <li><button onclick="ans(this,false,'fb3')">③ ETX</button></li>
+            <li><button onclick="ans(this,false,'fb3')">④ ETB</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb3"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q4.</span>BSC의 데이터 투명성을 보장하기 위해 사용되는 문자는?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb4')">① SYN</button></li>
+            <li><button onclick="ans(this,false,'fb4')">② ENQ</button></li>
+            <li><button onclick="ans(this,true,'fb4')">③ DLE (Data Link Escape)</button></li>
+            <li><button onclick="ans(this,false,'fb4')">④ EOT</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb4"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q5.</span>HDLC를 표준화한 기관과 연도는?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb5')">① 1964년 IBM</button></li>
+            <li><button onclick="ans(this,false,'fb5')">② 1975년 IBM (이건 SDLC)</button></li>
+            <li><button onclick="ans(this,true,'fb5')">③ 1979년 ISO</button></li>
+            <li><button onclick="ans(this,false,'fb5')">④ 1981년 ITU-T</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb5"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q6.</span>HDLC의 동작 모드 중 "점대점으로 연결된 복합국만 사용"되는 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb6')">① NRM (정규 응답 모드)</button></li>
+            <li><button onclick="ans(this,false,'fb6')">② ARM (비동기 응답 모드)</button></li>
+            <li><button onclick="ans(this,true,'fb6')">③ ABM (비동기 균형 모드)</button></li>
+            <li><button onclick="ans(this,false,'fb6')">④ SDLC</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb6"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q7.</span>HDLC의 Flag 비트 패턴은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb7')">① 00000011</button></li>
+            <li><button onclick="ans(this,true,'fb7')">② 01111110</button></li>
+            <li><button onclick="ans(this,false,'fb7')">③ 11111111</button></li>
+            <li><button onclick="ans(this,false,'fb7')">④ 10101010</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb7"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q8.</span>HDLC S-프레임의 Code 매칭이 <b>틀린</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb8')">① 00 = RR (Receive Ready)</button></li>
+            <li><button onclick="ans(this,false,'fb8')">② 01 = REJ (Reject)</button></li>
+            <li><button onclick="ans(this,true,'fb8')">③ 10 = SREJ (Selective Reject)</button></li>
+            <li><button onclick="ans(this,false,'fb8')">④ 11 = SREJ (10은 RNR)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb8"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q9.</span>HDLC의 비트 스터핑 규칙은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb9')">① 연속된 5개의 0 다음에 1 삽입</button></li>
+            <li><button onclick="ans(this,true,'fb9')">② 연속된 5개의 1 다음에 0 삽입</button></li>
+            <li><button onclick="ans(this,false,'fb9')">③ 연속된 6개의 1 다음에 0 삽입</button></li>
+            <li><button onclick="ans(this,false,'fb9')">④ 매 8비트마다 0 삽입</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb9"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q10.</span>HDLC의 흐름 제어와 오류 제어 방식이 올바르게 매칭된 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,true,'fb10')">① 흐름=슬라이딩 윈도 / 오류=Go-back-N + 선택적 ARQ</button></li>
+            <li><button onclick="ans(this,false,'fb10')">② 흐름=정지-대기 / 오류=정지-대기 ARQ</button></li>
+            <li><button onclick="ans(this,false,'fb10')">③ 흐름=RTS/CTS / 오류=CRC만</button></li>
+            <li><button onclick="ans(this,false,'fb10')">④ 흐름=Xon/Xoff / 오류=Stop-and-wait</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb10"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q11.</span>I-프레임에 ACK 제어정보를 합쳐서 보내는 "목말 태우기"는?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb11')">① 비트 스터핑</button></li>
+            <li><button onclick="ans(this,true,'fb11')">② 피기백킹 (Piggybacking)</button></li>
+            <li><button onclick="ans(this,false,'fb11')">③ 폴링</button></li>
+            <li><button onclick="ans(this,false,'fb11')">④ 셀렉션</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb11"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q12.</span>LAP과 사용처 매칭이 <b>틀린</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb12')">① LAPB = X.25 패킷교환망과 ISDN의 B채널</button></li>
+            <li><button onclick="ans(this,false,'fb12')">② LAPD = ISDN의 D채널</button></li>
+            <li><button onclick="ans(this,false,'fb12')">③ LAPM = 모뎀</button></li>
+            <li><button onclick="ans(this,true,'fb12')">④ LAPP = 패킷 음성 (그런 LAP은 없음)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb12"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q13.</span>PPP에 대한 설명으로 <b>틀린</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb13')">① SLIP의 단점을 보완하여 IETF에서 개발</button></li>
+            <li><button onclick="ans(this,false,'fb13')">② 비동기식과 동기식 모두 지원</button></li>
+            <li><button onclick="ans(this,false,'fb13')">③ 오류 검출, 데이터 압축, 사용자 인증 기능 제공</button></li>
+            <li><button onclick="ans(this,true,'fb13')">④ 오류 복구를 위한 재전송과 흐름 제어를 제공</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb13"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q14.</span>PPP 프레임의 Address 필드 값은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb14')">① 01111110</button></li>
+            <li><button onclick="ans(this,false,'fb14')">② 00000011</button></li>
+            <li><button onclick="ans(this,true,'fb14')">③ 11111111 (브로드캐스트 주소, 점대점이라 의미 없음)</button></li>
+            <li><button onclick="ans(this,false,'fb14')">④ 00000000</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb14"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q15.</span>PPP에서 바이트 스터핑에 사용되는 ESC 문자 값은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb15')">① 0x7E</button></li>
+            <li><button onclick="ans(this,true,'fb15')">② 0x7D</button></li>
+            <li><button onclick="ans(this,false,'fb15')">③ 0x5E</button></li>
+            <li><button onclick="ans(this,false,'fb15')">④ 0x5D</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb15"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q16.</span>PPP 인증 프로토콜 중 패스워드가 전송로 상에 노출되지 않아 더 안전한 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb16')">① PAP</button></li>
+            <li><button onclick="ans(this,true,'fb16')">② CHAP (Challenge Handshake Authentication Protocol)</button></li>
+            <li><button onclick="ans(this,false,'fb16')">③ LCP</button></li>
+            <li><button onclick="ans(this,false,'fb16')">④ NCP</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb16"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q17.</span>PPP의 3개 프로토콜이 <b>아닌</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb17')">① LCP (링크 제어)</button></li>
+            <li><button onclick="ans(this,false,'fb17')">② AP (인증)</button></li>
+            <li><button onclick="ans(this,false,'fb17')">③ NCP (네트워크 제어)</button></li>
+            <li><button onclick="ans(this,true,'fb17')">④ TCP (전송 제어)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb17"></div>
+    </div>
+
+    <h3 style="font-size:1.05rem; margin:24px 0 10px; color:var(--primary);">▪ 단답형</h3>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q18.</span>BSC의 SYN 문자 코드(16진수)는?</div>
+        <div class="short-answer">
+            <input type="text" id="sa1" placeholder="답 입력 (예: 16H)">
+            <button onclick="checkShort('sa1', ['16H','16h','0x16','16'], 'mfb1')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb1">16H — SYN은 문자 동기용 제어 문자로 코드값은 16H. 프레임은 항상 2개 이상의 SYN으로 시작한다.</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q19.</span>HDLC 동작 모드 3가지를 약어로 쓰시오. (예: AAA, BBB, CCC)</div>
+        <div class="short-answer">
+            <input type="text" id="sa2" placeholder="답 입력">
+            <button onclick="checkShort('sa2', ['NRM, ARM, ABM','NRM,ARM,ABM','NRM ARM ABM','nrm, arm, abm','nrm,arm,abm'], 'mfb2')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb2">NRM, ARM, ABM — 정규 응답 모드 / 비동기 응답 모드 / 비동기 균형 모드. ABM만 복합국 사용.</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q20.</span>HDLC 프레임 3종을 약어로 쓰시오. (예: A, B, C)</div>
+        <div class="short-answer">
+            <input type="text" id="sa3" placeholder="답 입력">
+            <button onclick="checkShort('sa3', ['I, S, U','I,S,U','I S U','i, s, u','i,s,u','I-frame, S-frame, U-frame'], 'mfb3')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb3">I, S, U — Information(정보·사용자 데이터), Supervisory(감시·흐름/오류 제어), Unnumbered(무번호·시스템 관리).</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q21.</span>PPP 프레임에서 LCP의 Protocol 필드 값은? (16진수)</div>
+        <div class="short-answer">
+            <input type="text" id="sa4" placeholder="답 입력 (예: 0xC021)">
+            <button onclick="checkShort('sa4', ['0xC021','0xc021','C021','c021'], 'mfb4')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb4">0xC021 — LCP=0xC021, PAP=0xC023, CHAP=0xC223, NCP=0x8021, IP data=0x0021.</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q22.</span>PPP 프레임 페이로드의 최대 크기는? (단위: 바이트)</div>
+        <div class="short-answer">
+            <input type="text" id="sa5" placeholder="답 입력 (숫자)">
+            <button onclick="checkShort('sa5', ['1500','1500바이트','1,500','1500B'], 'mfb5')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb5">1,500 바이트 — PPP 페이로드는 최대 1,500바이트의 사용자 데이터를 가진다.</div>
+    </div>
+
+    <h3 style="font-size:1.05rem; margin:24px 0 10px; color:var(--primary);">▪ 서술형 연습</h3>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q23.</span>문자 위주 프로토콜과 비트 위주 프로토콜의 차이를 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da1" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d1')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d1">
+            ▸ <b>문자 위주 프로토콜</b>: 바이트 위주라고도 하며, 프레임을 <b>바이트(8비트) 단위로 구성된 문자들의 연속된 열</b>로 간주. <b>ASCII 제어 문자</b>를 사용한다. 대표적으로 <b>1964년 IBM이 개발한 BSC</b>가 있으며, 비효율적이라 거의 사용되지 않는다.<br>
+            ▸ <b>비트 위주 프로토콜</b>: 전송 프레임을 <b>비트열로 간주</b>한다. <b>1975년 IBM의 SDLC</b>를 시작으로 <b>1979년 ISO가 HDLC를 표준화</b>했으며, 이후 ITU-T가 LAPs(LAPB/LAPD/LAPM)를 개발했다. Frame relay, PPP 등도 HDLC에서 발전한 프로토콜이다.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q24.</span>BSC의 데이터 투명성 보장 방법을 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da2" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d2')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d2">
+            ▸ <b>데이터 투명성</b>은 어떠한 비트 조합도 제어 정보와 혼동하지 않고 데이터로 전송될 수 있어야 함을 의미한다.<br>
+            ▸ BSC는 <b>DLE(Data Link Escape) 문자(10H)</b>를 사용하여 확보한다.<br>
+            ▸ 본문 내에 제어 문자가 오는 경우 <b>STX와 ETX 문자 앞에 DLE 문자를 삽입</b>하며, 두 DLE 문자 사이에 있는 모든 문자는 데이터로 취급한다.<br>
+            ▸ 문서 내에 있는 <b>DLE 문자는 DLE 문자를 하나 더 추가</b>해 데이터임을 표시한다.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q25.</span>HDLC의 NRM, ARM, ABM 동작 모드를 비교 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da3" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d3')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d3">
+            ▸ <b>NRM (정규 응답 모드)</b>: 표준적인 주국-보조국 관계. <b>보조국은 전송 전에 항상 주국의 허락</b>을 얻어야 함. 전송 시작 권한 = <b>주국만</b>.<br>
+            ▸ <b>ARM (비동기 응답 모드)</b>: <b>채널이 사용되지 않으면 보조국이 주국 허가 없이 전송 가능</b>. 단, 보조국으로부터의 모든 전송은 주국을 경유해 연결됨. 전송 시작 권한 = <b>둘 중 하나</b>.<br>
+            ▸ <b>ABM (비동기 균형 모드)</b>: 모든 스테이션이 동등하며 <b>점대점으로 연결된 복합국만 사용</b>. 전송 시작 권한 = <b>둘 다</b>. LAPB·LAPD가 이 모드로 동작.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q26.</span>HDLC의 비트 스터핑 동작을 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da4" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d4')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d4">
+            ▸ HDLC는 프레임 내의 어디서든지 <b>플래그 비트 01111110이 나타나지 않도록 보장</b>해야 한다.<br>
+            ▸ 이를 위해 <b>송신기는 연속된 5개의 1이 있으면 다섯 번째 다음에 0을 삽입</b>하며, <b>수신기는 삽입된 0을 제거</b>한다.<br>
+            ▸ 예: 원본 11111111111111(1×14) → 송신 1111101111101111(5개 1마다 0 삽입) → 수신 측에서 0을 제거하여 복원.<br>
+            ▸ 이로써 데이터 내부에 플래그와 동일한 패턴이 우연히 나타나는 것을 방지할 수 있다.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q27.</span>PPP의 처리 과정을 LCP, AP, NCP를 사용하여 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da5" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d5')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d5">
+            ▸ <b>① 링크 설정 (LCP)</b>: 두 기기 간 링크의 설정, 유지, 구성, 해제를 담당. configuration_request ↔ configuration_ack 교환.<br>
+            ▸ <b>② 인증 (AP)</b>: 연결을 위한 사용자 인증 절차 수행. <b>PAP(0xC023)</b>는 패스워드를 직접 전송하므로 노출되며, <b>CHAP(0xC223)</b>는 challenge → response → success/failure로 패스워드를 노출시키지 않아 더 안전.<br>
+            ▸ <b>③ 네트워크 설정 (NCP)</b>: 링크 설정·인증 완료 후, 상위 계층 데이터를 PPP 프레임으로 캡슐화하여 전송. <b>IPCP(Internet Protocol Control Protocol)</b>가 <b>IP 주소를 할당</b>.<br>
+            ▸ 데이터 송수신 후 NCP → LCP 순으로 terminate_request로 해제.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q28.</span>HDLC의 비트 스터핑과 PPP의 바이트 스터핑을 비교 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da6" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d6')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d6">
+            ▸ <b>HDLC 비트 스터핑</b>: 비트 단위로 동작. 연속된 5개의 1이 있으면 다섯 번째 다음에 0을 삽입하여 플래그(01111110)와의 충돌을 방지. 수신 측은 삽입된 0을 제거.<br>
+            ▸ <b>PPP 바이트 스터핑</b>: 바이트 단위로 동작. <b>ESC 문자(0x7D)</b>를 사용하여 프레임 내부의 0x7E(플래그)와 0x7D(ESC)를 각각 <b>0x5E, 0x5D</b>로 대치하여 전송. 수신 측에서 0x7D를 만나면 다음 바이트의 6번째 비트를 반전시켜 원래 값을 복원.<br>
+            ▸ 또한 PPP는 <b>0x20보다 작은 값은 무조건 바이트 스터핑</b>을 수행해 모뎀 직렬 드라이버가 ASCII 제어 문자로 오인식하는 것을 방지한다.
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 최종 정리 ==================== -->
+<section class="section-card s2" id="final">
+    <div class="section-head">
+        <span class="section-badge">FINAL</span>
+        <span class="section-title">🎯 최종 정리 — 시험 직전 훑어보기</span>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:14px;">아래 핵심 카드만 마지막에 한 번 훑으면 9장 핵심은 거의 다 챙긴 것입니다.</p>
+
+    <div class="final-grid">
+        <div class="final-card">
+            <div class="fc-title">데이터링크 프로토콜 = ?</div>
+            <div class="fc-mn">전송 제어 프로토콜</div>
+            <div class="fc-desc">회선·흐름·오류 제어 규칙. 비동기식 + 동기식(문자/비트).</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">BSC ★</div>
+            <div class="fc-mn">1964 IBM 문자위주</div>
+            <div class="fc-desc">점대점+다중점, 정지-대기 ARQ+반이중. 전이중·연속 ARQ X.</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">BSC 프레임</div>
+            <div class="fc-mn">SYN·SOH·STX·ETX·BCC</div>
+            <div class="fc-desc">SYN 2개 이상으로 시작. BCC = LRC 1B 또는 CRC 2B.</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">BSC 투명성</div>
+            <div class="fc-mn">DLE (10H)</div>
+            <div class="fc-desc">STX·ETX 앞 DLE 삽입. DLE는 DLE 추가.</div>
+        </div>
+        <div class="final-card c5">
+            <div class="fc-title">HDLC ★</div>
+            <div class="fc-mn">1979 ISO 비트위주</div>
+            <div class="fc-desc">SDLC(1975 IBM) 기반. 점대점·다중점·Half·Full 모두 지원.</div>
+        </div>
+        <div class="final-card">
+            <div class="fc-title">HDLC 흐름·오류 제어</div>
+            <div class="fc-mn">슬라이딩 윈도 / GBN·SR</div>
+            <div class="fc-desc">흐름 = 슬라이딩 윈도 / 오류 = Go-back-N + 선택적 ARQ.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">HDLC 통신국</div>
+            <div class="fc-mn">주국 · 보조국 · 복합국</div>
+            <div class="fc-desc">주국=명령 / 보조국=응답 / 복합국=둘 다(대등).</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">HDLC 동작 모드 ★</div>
+            <div class="fc-mn">NRM · ARM · ABM</div>
+            <div class="fc-desc">주국만 / 둘 중 하나 / 둘 다 (ABM=복합국 점대점).</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">HDLC 프레임 3종</div>
+            <div class="fc-mn">I · S · U</div>
+            <div class="fc-desc">정보 / 감시(흐름·오류) / 무번호(관리).</div>
+        </div>
+        <div class="final-card c5">
+            <div class="fc-title">HDLC Flag</div>
+            <div class="fc-mn">01111110</div>
+            <div class="fc-desc">8비트 동기화 패턴. FCS는 CRC 16비트 또는 32비트.</div>
+        </div>
+        <div class="final-card">
+            <div class="fc-title">S-프레임 Code ★</div>
+            <div class="fc-mn">00·01·10·11</div>
+            <div class="fc-desc">RR · REJ · RNR · SREJ.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">피기백킹</div>
+            <div class="fc-mn">목말 태우기</div>
+            <div class="fc-desc">I-프레임에 ACK 합쳐서 전송. 별도 응답 프레임 불필요.</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">HDLC 비트 스터핑 ★</div>
+            <div class="fc-mn">5개 1 → 0 삽입</div>
+            <div class="fc-desc">Flag(01111110) 충돌 방지. 수신 측은 0 제거.</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">LAP 매칭 ★</div>
+            <div class="fc-mn">LAPB·LAPD·LAPM</div>
+            <div class="fc-desc">X.25/ISDN B(ABM) · ISDN D(ABM) · 모뎀(부분집합).</div>
+        </div>
+        <div class="final-card c5">
+            <div class="fc-title">PPP 개발 ★</div>
+            <div class="fc-mn">SLIP 보완 · IETF</div>
+            <div class="fc-desc">SLIP은 IP만 지원. 전화선·케이블 인터넷 접속용.</div>
+        </div>
+        <div class="final-card">
+            <div class="fc-title">PPP 기능</div>
+            <div class="fc-mn">검출·압축·인증 O / 재전송·흐름 X</div>
+            <div class="fc-desc">오류 검출, 데이터 압축, 사용자 인증만 제공.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">PPP 프레임 ★</div>
+            <div class="fc-mn">7E·FF·03·Proto·1500B·CRC·7E</div>
+            <div class="fc-desc">Flag·Address(브로드캐스트)·Control·Protocol·Payload·FCS.</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">PPP Protocol 값 ★</div>
+            <div class="fc-mn">C021·C023·C223·8021·0021</div>
+            <div class="fc-desc">LCP·PAP·CHAP·NCP·IP data.</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">PPP 바이트 스터핑</div>
+            <div class="fc-mn">ESC = 0x7D</div>
+            <div class="fc-desc">0x7E→0x5E, 0x7D→0x5D. 0x20보다 작은 값은 무조건 스터핑.</div>
+        </div>
+        <div class="final-card c5">
+            <div class="fc-title">PPP 처리 ★</div>
+            <div class="fc-mn">LCP → AP → NCP</div>
+            <div class="fc-desc">링크 설정 → 인증 → 네트워크 캡슐화. NCP의 IPCP가 IP 할당.</div>
+        </div>
+        <div class="final-card">
+            <div class="fc-title">PAP vs CHAP ★</div>
+            <div class="fc-mn">패스워드 노출 / Challenge-Response</div>
+            <div class="fc-desc">CHAP는 패스워드 미노출 → PAP보다 보안 우수.</div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    데이터통신 9장 — 데이터링크 프로토콜 · 학습자료 · 참고: 제09장 PDF (ch09_데이터링크+프로토콜)
+</footer>
+
+<script>
+// 다크모드
+const themeToggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+const savedTheme = localStorage.getItem('theme-ch09') || 'light';
+html.setAttribute('data-theme', savedTheme);
+themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+themeToggle.addEventListener('click', () => {
+    const cur = html.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme-ch09', next);
+    themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+});
+
+// 체크리스트 (localStorage)
+document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+    const key = 'ch09-' + cb.dataset.key;
+    if (localStorage.getItem(key) === '1') {
+        cb.checked = true;
+        cb.parentElement.classList.add('done');
+    }
+    cb.addEventListener('change', () => {
+        if (cb.checked) {
+            cb.parentElement.classList.add('done');
+            localStorage.setItem(key, '1');
+        } else {
+            cb.parentElement.classList.remove('done');
+            localStorage.removeItem(key);
+        }
+    });
+});
+
+// 객관식 정답 처리
+function ans(btn, isCorrect, fbId) {
+    const parent = btn.closest('.quiz-options');
+    parent.querySelectorAll('button').forEach(b => b.disabled = true);
+    const fb = document.getElementById(fbId);
+    fb.classList.add('show');
+    if (isCorrect) {
+        btn.classList.add('correct');
+        fb.className = 'quiz-feedback show correct-fb';
+        fb.textContent = '✅ 정답입니다!';
+    } else {
+        btn.classList.add('wrong');
+        parent.querySelectorAll('button').forEach(b => {
+            if (b.getAttribute('onclick').includes('true')) {
+                b.classList.add('correct');
+            }
+        });
+        fb.className = 'quiz-feedback show wrong-fb';
+        fb.textContent = '❌ 오답입니다. 정답은 위에 초록색으로 표시되었습니다.';
+    }
+}
+
+// 단답형 정답 처리
+function checkShort(inputId, answers, modelId) {
+    const val = document.getElementById(inputId).value.trim();
+    const model = document.getElementById(modelId);
+    const isCorrect = answers.some(a => val === a || val.toLowerCase() === a.toLowerCase());
+    model.classList.add('show');
+    if (isCorrect) {
+        model.style.borderLeftColor = 'var(--success)';
+        model.style.background = 'rgba(22,163,74,0.06)';
+        model.innerHTML = '✅ 정답입니다! ' + model.innerHTML.replace(/^[✅❌]\s/, '');
+    } else if (val.length > 0) {
+        model.style.borderLeftColor = 'var(--danger)';
+        model.style.background = 'rgba(220,38,38,0.06)';
+        if (!model.innerHTML.startsWith('❌')) {
+            model.innerHTML = '❌ 정답을 다시 확인하세요. — ' + model.innerHTML;
+        }
+    }
+}
+
+// 서술형 모범답안 토글
+function showModel(id) {
+    document.getElementById(id).classList.toggle('show');
+}
+</script>
+</body>
+</html>

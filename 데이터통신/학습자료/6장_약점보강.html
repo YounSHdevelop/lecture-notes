@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터통신 6장 — 약점 보강 (개념 시각화)</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #2563eb; --primary-dark: #1e3a8a;
+    --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+    --purple: #7c3aed; --orange: #ea580c; --teal: #0d9488; --pink: #db2777;
+    --bg: #f3f4f6; --card-bg: #ffffff;
+    --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+    --nav-bg: rgba(255,255,255,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --soft-bg: #f8fafc;
+    --core-bg: #fef3c7;
+    --cladding-bg: #dbeafe;
+    --coating-bg: #d1fae5;
+}
+[data-theme="dark"] {
+    --bg: #0f172a; --card-bg: #1e293b;
+    --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+    --nav-bg: rgba(15,23,42,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --soft-bg: #0b1224;
+    --core-bg: #78350f;
+    --cladding-bg: #1e3a8a;
+    --coating-bg: #14532d;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; padding-top:64px; }
+
+.nav { position:fixed; top:0; left:0; right:0; height:60px; background:var(--nav-bg); backdrop-filter:blur(12px); display:flex; align-items:center; padding:0 24px; z-index:1000; border-bottom:1px solid var(--border); }
+.nav-logo { font-weight:700; color:var(--primary); text-decoration:none; font-size:1rem; }
+.nav-links { display:flex; gap:8px; margin-left:24px; flex-wrap:wrap; }
+.nav-links a { text-decoration:none; color:var(--text-muted); font-size:0.85rem; padding:6px 10px; border-radius:8px; font-weight:600; }
+.nav-links a:hover { color:var(--primary); background:rgba(37,99,235,0.08); }
+.nav-right { margin-left:auto; display:flex; gap:10px; align-items:center; }
+.nav-home { text-decoration:none; color:var(--text-muted); font-size:0.85rem; }
+.btn-theme { background:none; border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; color:var(--text); }
+
+.page-header { background:linear-gradient(135deg, #7c3aed, #2563eb); color:white; padding:64px 24px 56px; text-align:center; }
+.week-badge { display:inline-block; background:rgba(255,255,255,0.2); padding:6px 18px; border-radius:20px; font-size:0.85rem; margin-bottom:16px; letter-spacing:1px; }
+.page-header h1 { font-size:2rem; font-weight:900; margin-bottom:10px; }
+.page-header .subtitle { font-size:1rem; opacity:0.9; }
+
+.section-card { max-width:960px; margin:32px auto; padding:32px; background:var(--card-bg); border-radius:16px; box-shadow:var(--shadow); border-top:5px solid var(--primary); }
+.section-card.s2 { border-top-color:var(--purple); }
+.section-card.s3 { border-top-color:var(--orange); }
+.section-card.s4 { border-top-color:var(--teal); }
+.section-card.s5 { border-top-color:var(--pink); }
+.section-card.s6 { border-top-color:var(--success); }
+.section-card.s7 { border-top-color:var(--danger); }
+.section-card.s8 { border-top-color:var(--warning); }
+.section-head { display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:16px; border-bottom:2px solid var(--border); }
+.section-badge { font-size:0.78rem; font-weight:900; letter-spacing:1.5px; padding:6px 14px; border-radius:20px; color:white; background:var(--primary); }
+.section-card.s2 .section-badge { background:var(--purple); }
+.section-card.s3 .section-badge { background:var(--orange); }
+.section-card.s4 .section-badge { background:var(--teal); }
+.section-card.s5 .section-badge { background:var(--pink); }
+.section-card.s6 .section-badge { background:var(--success); }
+.section-card.s7 .section-badge { background:var(--danger); }
+.section-card.s8 .section-badge { background:var(--warning); }
+.section-title { font-size:1.5rem; font-weight:700; }
+
+.intro-hook { padding:20px 22px; border-radius:14px; margin:14px 0; text-align:center; background:linear-gradient(135deg, rgba(220,38,38,0.10), rgba(220,38,38,0.04)); border:2px solid var(--danger); color:var(--danger); font-weight:700; }
+.intro-hook .label { font-size:0.78rem; opacity:0.85; letter-spacing:2px; }
+.intro-hook .msg { font-size:1.1rem; margin-top:6px; }
+
+/* 광섬유 단면도 */
+.fiber-cross-section { display:flex; justify-content:center; align-items:center; margin:20px 0; padding:24px; background:var(--soft-bg); border-radius:14px; }
+.fiber-circle { position:relative; width:280px; height:280px; }
+.fiber-layer { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); border-radius:50%; display:flex; justify-content:center; align-items:center; font-weight:700; }
+.layer-coating { width:280px; height:280px; background:var(--coating-bg); color:#065f46; }
+.layer-cladding { width:200px; height:200px; background:var(--cladding-bg); color:#1e40af; }
+.layer-core { width:80px; height:80px; background:var(--core-bg); color:#92400e; font-size:0.9rem; }
+.fiber-labels { display:flex; flex-direction:column; gap:8px; margin-left:32px; }
+.fiber-label { padding:10px 14px; border-radius:10px; font-size:0.88rem; }
+.fiber-label.core { background:var(--core-bg); color:#92400e; border-left:4px solid #f59e0b; }
+.fiber-label.cladding { background:var(--cladding-bg); color:#1e40af; border-left:4px solid #3b82f6; }
+.fiber-label.coating { background:var(--coating-bg); color:#065f46; border-left:4px solid #10b981; }
+
+/* 전반사 다이어그램 */
+.refraction-diagram { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:20px 0; }
+.refr-case { padding:20px; border-radius:12px; background:var(--soft-bg); text-align:center; }
+.refr-case .case-title { font-weight:700; font-size:0.95rem; margin-bottom:10px; color:var(--primary); }
+.refr-case.danger .case-title { color:var(--danger); }
+.refr-case.warning .case-title { color:var(--warning); }
+.refr-case.success .case-title { color:var(--success); }
+.refr-svg { width:100%; height:120px; margin:10px 0; }
+.refr-desc { font-size:0.85rem; color:var(--text-muted); margin-top:8px; }
+
+/* 비교 매트릭스 */
+.matrix-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.9rem; }
+.matrix-table th, .matrix-table td { padding:12px; border:1px solid var(--border); text-align:center; }
+.matrix-table th { background:rgba(37,99,235,0.08); font-weight:700; }
+.matrix-table td.yes { background:rgba(22,163,74,0.12); color:var(--success); font-weight:900; font-size:1.1rem; }
+.matrix-table td.no { background:rgba(220,38,38,0.12); color:var(--danger); font-weight:900; font-size:1.1rem; }
+.matrix-table td.label { background:var(--soft-bg); font-weight:700; text-align:left; }
+
+/* 분류 트리 */
+.tree { background:var(--soft-bg); border-radius:14px; padding:24px; margin:14px 0; }
+.tree-node { padding:8px 14px; margin:4px 0; border-radius:8px; background:var(--card-bg); display:inline-block; font-weight:700; border:2px solid var(--border); }
+.tree-node.root { background:var(--primary); color:white; border-color:var(--primary); }
+.tree-node.branch1 { background:rgba(124,58,237,0.15); color:var(--purple); border-color:var(--purple); }
+.tree-node.branch2 { background:rgba(234,88,12,0.15); color:var(--orange); border-color:var(--orange); }
+.tree-node.leaf { background:rgba(22,163,74,0.10); color:var(--success); border-color:var(--success); font-weight:600; }
+.tree-row { margin:8px 0; padding-left:30px; }
+.tree-row.lv2 { padding-left:60px; }
+
+/* 카드 그리드 */
+.card-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:14px 0; }
+.concept-card { padding:18px; border-radius:12px; background:var(--soft-bg); border-left:4px solid var(--primary); }
+.concept-card.purple { border-left-color:var(--purple); }
+.concept-card.orange { border-left-color:var(--orange); }
+.concept-card.teal { border-left-color:var(--teal); }
+.concept-card.pink { border-left-color:var(--pink); }
+.concept-card.success { border-left-color:var(--success); }
+.concept-card.danger { border-left-color:var(--danger); }
+.concept-card .cc-title { font-weight:700; font-size:1rem; margin-bottom:8px; }
+.concept-card .cc-content { font-size:0.9rem; line-height:1.7; color:var(--text-muted); }
+.concept-card .cc-content b { color:var(--text); }
+
+/* 메모리 박스 */
+.memo-box { background:linear-gradient(135deg, rgba(37,99,235,0.08), rgba(124,58,237,0.05)); border:2px solid var(--primary); border-radius:14px; padding:20px 24px; margin:16px 0; }
+.memo-box.purple { background:linear-gradient(135deg, rgba(124,58,237,0.08), rgba(219,39,119,0.05)); border-color:var(--purple); }
+.memo-box.orange { background:linear-gradient(135deg, rgba(234,88,12,0.08), rgba(217,119,6,0.05)); border-color:var(--orange); }
+.memo-box.teal { background:linear-gradient(135deg, rgba(13,148,136,0.08), rgba(34,197,94,0.05)); border-color:var(--teal); }
+.memo-box .mb-title { font-weight:900; font-size:1rem; margin-bottom:10px; color:var(--primary); }
+.memo-box.purple .mb-title { color:var(--purple); }
+.memo-box.orange .mb-title { color:var(--orange); }
+.memo-box.teal .mb-title { color:var(--teal); }
+.memo-box .mb-content { font-size:0.92rem; line-height:1.8; }
+.memo-box .mb-content b { color:var(--text); }
+.memo-box .mnemonic { display:inline-block; padding:4px 12px; background:white; border-radius:6px; font-weight:900; font-size:1.05rem; color:var(--primary); margin:6px 4px; }
+.memo-box.purple .mnemonic { color:var(--purple); }
+.memo-box.orange .mnemonic { color:var(--orange); }
+.memo-box.teal .mnemonic { color:var(--teal); }
+[data-theme="dark"] .memo-box .mnemonic { background:#0f172a; }
+
+/* 주파수 스펙트럼 */
+.spectrum-bar { display:flex; height:60px; border-radius:10px; overflow:hidden; margin:14px 0; box-shadow:var(--shadow); }
+.spectrum-cell { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; color:white; font-size:0.78rem; font-weight:700; padding:6px 4px; text-align:center; line-height:1.3; }
+.spectrum-cell .freq { font-size:0.7rem; opacity:0.85; margin-top:2px; }
+.sp1 { background:#1e40af; }
+.sp2 { background:#3b82f6; }
+.sp3 { background:#0d9488; }
+.sp4 { background:#16a34a; }
+.sp5 { background:#ea580c; }
+.sp6 { background:#dc2626; }
+.sp7 { background:#7c3aed; }
+.sp8 { background:#db2777; }
+
+/* 비교 박스 */
+.compare-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:14px 0; }
+.compare-box { padding:18px; border-radius:12px; background:var(--soft-bg); }
+.compare-box.left { border-left:4px solid var(--success); }
+.compare-box.right { border-left:4px solid var(--danger); }
+.compare-box .cb-title { font-weight:900; font-size:1rem; margin-bottom:8px; color:var(--success); }
+.compare-box.right .cb-title { color:var(--danger); }
+.compare-box ul { padding-left:20px; }
+.compare-box li { padding:4px 0; font-size:0.9rem; }
+
+/* 실수 체크 */
+.mistake-box { background:rgba(220,38,38,0.05); border-left:4px solid var(--danger); padding:14px 18px; margin:12px 0; border-radius:8px; }
+.mistake-box .mb-label { font-weight:700; color:var(--danger); margin-bottom:6px; font-size:0.92rem; }
+.mistake-box .mb-fix { color:var(--text); font-size:0.9rem; }
+.mistake-box .mb-fix b { color:var(--success); }
+
+footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.85rem; }
+
+@media (max-width:680px) {
+    .card-grid, .compare-grid, .refraction-diagram { grid-template-columns:1fr; }
+    .nav-links { display:none; }
+    .page-header h1 { font-size:1.4rem; }
+    .section-card { margin:16px 10px; padding:20px; }
+    .fiber-cross-section { flex-direction:column; }
+    .fiber-labels { margin-left:0; margin-top:16px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="../index.html" class="nav-logo">데이터통신</a>
+    <div class="nav-links">
+        <a href="#fiber-structure">광섬유구조</a>
+        <a href="#refraction">전반사</a>
+        <a href="#dispersion">분산</a>
+        <a href="#loss">손실</a>
+        <a href="#device">송수신소자</a>
+        <a href="#coax">동축RG</a>
+        <a href="#freq">주파수</a>
+        <a href="#satellite">위성</a>
+    </div>
+    <div class="nav-right">
+        <a href="6장.html" class="nav-home">← 6장 본문</a>
+        <button class="btn-theme" id="themeToggle">🌙</button>
+    </div>
+</nav>
+
+<header class="page-header">
+    <div class="week-badge">제06장 · 약점 보강</div>
+    <h1>6장 — 자주 틀린 개념 시각화</h1>
+    <p class="subtitle">퀴즈에서 헷갈렸던 부분을 그림·표·매트릭스로 확실히!</p>
+</header>
+
+<div class="intro-hook" style="max-width:960px; margin:24px auto; padding:18px;">
+    <div class="label">★ THIS IS YOUR WEAK POINT</div>
+    <div class="msg">이 페이지의 8가지 주제는 퀴즈에서 틀렸거나 헷갈린 부분이에요. 각 섹션은 "왜 헷갈리는지 → 어떻게 외울지" 순서로 정리됩니다.</div>
+</div>
+
+<div class="intro-hook" style="max-width:960px; margin:24px auto; padding:20px; background:linear-gradient(135deg, rgba(217,119,6,0.15), rgba(217,119,6,0.05)); border-color:var(--warning); color:var(--warning);">
+    <div class="label">🔥 REPEAT MISTAKES (2차 퀴즈)</div>
+    <div class="msg" style="font-size:0.95rem; line-height:1.8;">
+        보강 페이지를 한 번 봤음에도 <b>또 틀린 부분</b>은 페이지 곳곳에 <b>🔥 마크</b>로 표시되어 있어요. 이 부분들은 절대 그냥 넘어가지 마세요!
+    </div>
+</div>
+
+<!-- ========== 01. 광섬유 3층 구조 + 굴절률 ========== -->
+<section class="section-card" id="fiber-structure">
+    <div class="section-head">
+        <span class="section-badge">01</span>
+        <span class="section-title">🔬 광섬유 3층 구조 + 굴절률 관계</span>
+    </div>
+
+    <div class="memo-box">
+        <div class="mb-title">⚠ 자주 틀리는 포인트</div>
+        <div class="mb-content">
+            "코어 vs 클래딩, 누가 굴절률이 더 높지?" → <b>코어 &gt; 클래딩</b> (안쪽이 더 밀도 높음)<br>
+            "빛의 통로는 어디?" → <b>코어</b> (Core = 중심 = 통로)<br>
+            "클래딩 지름은?" → <b>125μm (모든 종류 공통, ITU-T 표준)</b>
+        </div>
+    </div>
+
+    <div class="fiber-cross-section">
+        <div class="fiber-circle">
+            <div class="fiber-layer layer-coating">
+                <div class="fiber-layer layer-cladding">
+                    <div class="fiber-layer layer-core">코어<br>(빛의 통로)</div>
+                </div>
+            </div>
+        </div>
+        <div class="fiber-labels">
+            <div class="fiber-label core">🟡 <b>코어 (Core)</b><br>높은 굴절률 · 9~125μm<br>빛이 통과하는 통로</div>
+            <div class="fiber-label cladding">🔵 <b>클래딩 (Cladding)</b><br>낮은 굴절률 · <b>125μm</b><br>빛을 반사 (전반사 일으킴)</div>
+            <div class="fiber-label coating">🟢 <b>코팅 (Coating)</b><br>합성수지 피복<br>외부 충격 보호</div>
+        </div>
+    </div>
+
+    <div class="memo-box purple">
+        <div class="mb-title">📐 코어 지름 별 종류</div>
+        <div class="mb-content">
+            <span class="mnemonic">단일모드 = 9~10μm</span> (가장 좁음, 단일 광선)<br>
+            <span class="mnemonic">계단형 다중 = 50μm</span><br>
+            <span class="mnemonic">증가형 다중 = 50/62.5/100μm</span><br>
+            <br>
+            <b>외울 것:</b> 클래딩 125μm는 셋 다 동일 / 변하는 건 코어 지름!
+        </div>
+    </div>
+</section>
+
+<!-- ========== 02. 전반사 조건 + 스넬의 법칙 ========== -->
+<section class="section-card s2" id="refraction">
+    <div class="section-head">
+        <span class="section-badge">02</span>
+        <span class="section-title">💫 전반사 조건 — 스넬의 법칙</span>
+    </div>
+
+    <div class="memo-box purple">
+        <div class="mb-title">⚠ 자주 틀리는 포인트</div>
+        <div class="mb-content">
+            "전반사가 일어나려면 입사각이 임계각보다 어때야 해?" → <b>커야 함 (&gt;)</b><br>
+            왜? 입사각이 충분히 크면 빛이 통과 못 하고 모두 반사되니까.
+        </div>
+    </div>
+
+    <div class="memo-box" style="background:linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.04)); border:3px solid var(--danger);">
+        <div class="mb-title" style="color:var(--danger); font-size:1.1rem;">🔥 REPEAT MISTAKE — 전반사의 "방향"이 헷갈림</div>
+        <div class="mb-content">
+            <b>Q. 전반사는 어떤 방향에서 일어나는가?</b><br><br>
+            ✅ <b>높은 굴절률 → 낮은 굴절률</b> (예: 코어 → 클래딩)<br>
+            ❌ 낮은 굴절률 → 높은 굴절률 (불가능!)<br><br>
+            <span class="mnemonic" style="background:rgba(220,38,38,0.1); color:var(--danger);">"고→저로 갈 때만 전반사"</span><br><br>
+            <b>왜 이게 중요한가?</b> 광섬유가 작동하는 핵심 원리예요. 빛이 코어(고밀도)에서 클래딩(저밀도) 경계를 만났을 때, 입사각이 임계각보다 크면 빛이 모두 반사되어 코어 안에 갇혀 멀리 전달돼요.
+        </div>
+    </div>
+
+    <div class="refraction-diagram">
+        <div class="refr-case success">
+            <div class="case-title">입사각 &lt; 임계각</div>
+            <svg class="refr-svg" viewBox="0 0 120 120">
+                <rect x="0" y="0" width="120" height="60" fill="rgba(37,99,235,0.1)"/>
+                <rect x="0" y="60" width="120" height="60" fill="rgba(124,58,237,0.1)"/>
+                <line x1="0" y1="60" x2="120" y2="60" stroke="#94a3b8" stroke-width="1"/>
+                <line x1="60" y1="0" x2="60" y2="120" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
+                <line x1="20" y1="20" x2="60" y2="60" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow1)"/>
+                <line x1="60" y1="60" x2="110" y2="100" stroke="#16a34a" stroke-width="2" marker-end="url(#arrow1)"/>
+                <defs><marker id="arrow1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="currentColor"/></marker></defs>
+            </svg>
+            <div class="refr-desc"><b>굴절</b> (다른 매질로 빠져나감)</div>
+        </div>
+        <div class="refr-case warning">
+            <div class="case-title">입사각 = 임계각</div>
+            <svg class="refr-svg" viewBox="0 0 120 120">
+                <rect x="0" y="0" width="120" height="60" fill="rgba(37,99,235,0.1)"/>
+                <rect x="0" y="60" width="120" height="60" fill="rgba(124,58,237,0.1)"/>
+                <line x1="0" y1="60" x2="120" y2="60" stroke="#94a3b8" stroke-width="1"/>
+                <line x1="60" y1="0" x2="60" y2="120" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
+                <line x1="10" y1="30" x2="60" y2="60" stroke="#dc2626" stroke-width="2"/>
+                <line x1="60" y1="60" x2="115" y2="60" stroke="#d97706" stroke-width="2"/>
+            </svg>
+            <div class="refr-desc"><b>굴절각 = 90°</b> (경계면 따라 진행)</div>
+        </div>
+        <div class="refr-case danger">
+            <div class="case-title">입사각 &gt; 임계각 ★</div>
+            <svg class="refr-svg" viewBox="0 0 120 120">
+                <rect x="0" y="0" width="120" height="60" fill="rgba(37,99,235,0.1)"/>
+                <rect x="0" y="60" width="120" height="60" fill="rgba(124,58,237,0.1)"/>
+                <line x1="0" y1="60" x2="120" y2="60" stroke="#94a3b8" stroke-width="1"/>
+                <line x1="60" y1="0" x2="60" y2="120" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
+                <line x1="20" y1="55" x2="60" y2="60" stroke="#dc2626" stroke-width="2"/>
+                <line x1="60" y1="60" x2="100" y2="55" stroke="#7c3aed" stroke-width="2.5"/>
+            </svg>
+            <div class="refr-desc"><b>전반사</b> (광섬유의 원리!)</div>
+        </div>
+    </div>
+
+    <div class="memo-box">
+        <div class="mb-title">💡 광섬유에서 전반사가 가능한 이유</div>
+        <div class="mb-content">
+            ① <b>코어가 클래딩보다 굴절률이 높음</b> (필수 조건)<br>
+            ② 빛이 코어 안에서 클래딩 경계에 <b>임계각보다 큰 각</b>으로 부딪침<br>
+            ③ 결과: 빛이 모두 코어 쪽으로 반사되어 갇힘 → 멀리 전달<br>
+            <br>
+            만약 코어 굴절률이 클래딩보다 <b>낮으면</b> → 빛이 클래딩으로 빠져나가 <b>전송 불가</b>!
+        </div>
+    </div>
+</section>
+
+<!-- ========== 03. 광섬유 분산 3종 매트릭스 ========== -->
+<section class="section-card s3" id="dispersion">
+    <div class="section-head">
+        <span class="section-badge">03</span>
+        <span class="section-title">📊 광섬유 분산 3종 — 발생 매트릭스</span>
+    </div>
+
+    <div class="memo-box orange">
+        <div class="mb-title">⚠ 자주 틀리는 포인트 (★★★ 진짜 자주 틀림)</div>
+        <div class="mb-content">
+            <b>Q. 단일모드에 없는 분산은?</b> → <b>모드 분산</b> (단일 광선이라 경로 차이 X)<br>
+            <b>Q. 모든 광섬유에 있는 분산은?</b> → <b>재료 분산 + 구조 분산 (= 색 분산)</b><br>
+            <b>Q. 분산 크기 순서?</b> → <b>모드 &gt; 재료 &gt; 구조</b>
+        </div>
+    </div>
+
+    <div class="memo-box" style="background:linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.04)); border:3px solid var(--danger);">
+        <div class="mb-title" style="color:var(--danger); font-size:1.1rem;">🔥 REPEAT MISTAKE — 재료 분산 vs 구조 분산 헷갈림</div>
+        <div class="mb-content">
+            <b>"파장에 따라 굴절률이 달라서 발생"</b> → <b>재료 분산</b> (구조 X)<br>
+            <b>"빛이 클래딩으로 누설"</b> → <b>구조 분산</b> (재료 X)<br><br>
+            <b>★ 결정적 키워드 매칭 ★</b><br>
+            <table class="matrix-table" style="margin-top:10px;">
+                <thead><tr><th>분산</th><th>핵심 키워드</th><th>원인</th></tr></thead>
+                <tbody>
+                    <tr><td class="label">모드</td><td><b>경로 차이</b></td><td>다중모드 광선이 여러 길로 감</td></tr>
+                    <tr><td class="label">재료</td><td><b>파장 / 굴절률</b></td><td>유리(재료)의 굴절률이 파장마다 다름</td></tr>
+                    <tr><td class="label">구조</td><td><b>클래딩으로 누설</b></td><td>경계면(구조)에서 빛이 새어 나감</td></tr>
+                </tbody>
+            </table>
+            <br>
+            <span class="mnemonic" style="background:rgba(220,38,38,0.1); color:var(--danger);">"재료 = 파장 / 구조 = 누설"</span><br>
+            "재료"를 보면 → "유리 재료가 파장마다 다르게 굴절"을 떠올리고,<br>
+            "구조"를 보면 → "광섬유 구조(경계면)에서 새는 것"을 떠올리세요!
+        </div>
+    </div>
+
+    <div class="tbl-wrap">
+    <table class="matrix-table">
+        <thead>
+            <tr>
+                <th>분산 종류</th>
+                <th>계단형 (SI)</th>
+                <th>증가형 (GI)</th>
+                <th>단일모드 (SM)</th>
+                <th>원인</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="label">🔴 모드 분산</td>
+                <td class="yes">✓ 큼</td>
+                <td class="yes">✓ 작음</td>
+                <td class="no">✗</td>
+                <td style="text-align:left; font-size:0.85rem;">다중모드 광선의 <b>경로 차이</b>로 도착 시간 다름</td>
+            </tr>
+            <tr>
+                <td class="label">🟠 재료 분산</td>
+                <td class="yes">✓</td>
+                <td class="yes">✓</td>
+                <td class="yes">✓</td>
+                <td style="text-align:left; font-size:0.85rem;">빛의 <b>파장</b>별 굴절률 차이</td>
+            </tr>
+            <tr>
+                <td class="label">🟡 구조 분산</td>
+                <td class="yes">✓</td>
+                <td class="yes">✓</td>
+                <td class="yes">✓</td>
+                <td style="text-align:left; font-size:0.85rem;">빛 일부가 <b>클래딩으로 누설</b></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="tree">
+        <div style="text-align:center; margin-bottom:14px;"><b>📂 분산 분류 트리</b></div>
+        <div style="text-align:center;"><span class="tree-node root">분산 (Dispersion)</span></div>
+        <div class="tree-row">├─ <span class="tree-node branch1">모드 분산</span> <span style="color:var(--text-muted); font-size:0.85rem;">(단일모드엔 없음)</span></div>
+        <div class="tree-row">└─ <span class="tree-node branch2">색 분산 (Chromatic)</span></div>
+        <div class="tree-row lv2">├─ <span class="tree-node leaf">재료 분산</span> <span style="color:var(--text-muted); font-size:0.85rem;">(파장별 굴절률 차이)</span></div>
+        <div class="tree-row lv2">└─ <span class="tree-node leaf">구조 분산</span> <span style="color:var(--text-muted); font-size:0.85rem;">(=도파로 분산, 클래딩 누설)</span></div>
+    </div>
+
+    <div class="memo-box orange">
+        <div class="mb-title">🎯 암기법</div>
+        <div class="mb-content">
+            <span class="mnemonic">"모재구" 순서로 작아짐</span> → 모드 &gt; 재료 &gt; 구조<br>
+            <span class="mnemonic">"단일은 모드가 없다"</span> → 단일모드에 없는 분산 = 모드 분산<br>
+            <span class="mnemonic">"색 = 재 + 구"</span> → 색 분산 = 재료 + 구조
+        </div>
+    </div>
+</section>
+
+<!-- ========== 04. 광섬유 손실 6종 분류 ========== -->
+<section class="section-card s4" id="loss">
+    <div class="section-head">
+        <span class="section-badge">04</span>
+        <span class="section-title">📉 광섬유 손실 6종 — 제조 vs 설치</span>
+    </div>
+
+    <div class="memo-box teal">
+        <div class="mb-title">⚠ 자주 틀리는 포인트</div>
+        <div class="mb-content">
+            "흡수 손실은 제조 단계? 설치 단계?" → <b>제조 단계 (고유 손실)</b><br>
+            "마이크로벤딩은?" → <b>설치 단계 (불균일한 압력)</b>
+        </div>
+    </div>
+
+    <div class="compare-grid">
+        <div class="compare-box left">
+            <div class="cb-title">✅ 제조 단계 (고유 손실)</div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">광섬유 자체의 결함</p>
+            <ul>
+                <li><b>레일리 산란 손실</b> — 미소 입자에 부딪힘</li>
+                <li><b>흡수 손실</b> — 광 출력이 열로 유실</li>
+                <li><b>구조 불완전 손실</b> — 불균일한 면에 누설</li>
+            </ul>
+        </div>
+        <div class="compare-box right">
+            <div class="cb-title">⚠ 설치 단계 (부가 손실)</div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">사람이 설치하다 발생</p>
+            <ul>
+                <li><b>마이크로벤딩 손실</b> — 불균일한 압력으로 축이 휨</li>
+                <li><b>휨 손실</b> — 광섬유 구부러짐</li>
+                <li><b>접속 손실</b> — 코어 정렬 불량</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="memo-box teal">
+        <div class="mb-title">🎯 암기법</div>
+        <div class="mb-content">
+            <span class="mnemonic">제조 = 레·흡·구조</span> (광섬유 자체)<br>
+            <span class="mnemonic">설치 = 마·휨·접</span> (사람이 만지는 것)
+        </div>
+    </div>
+
+    <div class="memo-box" style="background:linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.04)); border:3px solid var(--danger);">
+        <div class="mb-title" style="color:var(--danger); font-size:1.1rem;">🔥 REPEAT MISTAKE — 손실 6종 원인 키워드 매칭이 약함</div>
+        <div class="mb-content">
+            <b>각 손실의 "결정적 원인 키워드" 한 단어로 외우기 ★</b>
+            <table class="matrix-table" style="margin-top:10px;">
+                <thead><tr><th>손실</th><th>키워드</th><th>설명</th><th>단계</th></tr></thead>
+                <tbody>
+                    <tr><td class="label">레일리 산란</td><td style="background:rgba(124,58,237,0.1); font-weight:900;">입자</td><td>광이 미소 입자에 부딪힘</td><td>제조</td></tr>
+                    <tr><td class="label">흡수</td><td style="background:rgba(220,38,38,0.1); font-weight:900;">열</td><td>광 출력이 광섬유 내에서 열로 유실</td><td>제조</td></tr>
+                    <tr><td class="label">구조 불완전</td><td style="background:rgba(234,88,12,0.1); font-weight:900;">면</td><td>불균일한 면에 의해 광 에너지 누설</td><td>제조</td></tr>
+                    <tr><td class="label">마이크로벤딩</td><td style="background:rgba(13,148,136,0.1); font-weight:900;">압력</td><td>불균일한 압력으로 축이 휨</td><td>설치</td></tr>
+                    <tr><td class="label">휨</td><td style="background:rgba(217,119,6,0.1); font-weight:900;">구부러짐</td><td>광섬유 자체가 구부러짐</td><td>설치</td></tr>
+                    <tr><td class="label">접속</td><td style="background:rgba(219,39,119,0.1); font-weight:900;">정렬</td><td>접속 시 코어 정렬 불량</td><td>설치</td></tr>
+                </tbody>
+            </table>
+            <br>
+            <span class="mnemonic" style="background:rgba(220,38,38,0.1); color:var(--danger);">"레=입자, 흡=열, 구조=면, 마=압력, 휨=구부러짐, 접=정렬"</span>
+        </div>
+    </div>
+
+    <div class="memo-box" style="background:linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.04)); border:3px solid var(--danger);">
+        <div class="mb-title" style="color:var(--danger); font-size:1.1rem;">🔥 REPEAT MISTAKE — 마이크로벤딩 vs 휨 손실 (미묘한 차이)</div>
+        <div class="mb-content">
+            둘 다 <b>설치 단계 손실(마·휨·접)</b>이지만 원인이 다름!
+            <div class="compare-grid" style="margin-top:12px;">
+                <div class="compare-box left">
+                    <div class="cb-title">🔬 마이크로벤딩 손실</div>
+                    <ul>
+                        <li>키워드: <b>불균일한 압력</b></li>
+                        <li>광섬유의 <b>축이 미세하게 휨</b></li>
+                        <li>"micro(미세) + bending(휨)"</li>
+                        <li>눈에 잘 안 보이는 미세한 휨</li>
+                    </ul>
+                </div>
+                <div class="compare-box right">
+                    <div class="cb-title">💪 휨 손실</div>
+                    <ul>
+                        <li>키워드: <b>구부러짐</b></li>
+                        <li>광섬유가 <b>눈에 보이게 구부러짐</b></li>
+                        <li>설치할 때 손으로 휘는 큰 휨</li>
+                        <li>코너에 강제로 꺾을 때</li>
+                    </ul>
+                </div>
+            </div>
+            <br>
+            <b>구분 팁:</b><br>
+            ▸ 문제에 "<b>불균일한 압력</b>"이 나오면 → <b>마이크로벤딩</b><br>
+            ▸ 문제에 "<b>구부러져서</b>" 또는 "<b>설치 시 휘어서</b>"가 나오면 → <b>휨 손실</b>
+        </div>
+    </div>
+</section>
+
+<!-- ========== 05. 광통신 송수신 소자 ========== -->
+<section class="section-card s5" id="device">
+    <div class="section-head">
+        <span class="section-badge">05</span>
+        <span class="section-title">💡 광통신 송수신 소자 매칭</span>
+    </div>
+
+    <div class="memo-box">
+        <div class="mb-title">⚠ 자주 틀리는 포인트</div>
+        <div class="mb-content">
+            "단거리 송신은?" → <b>LED</b><br>
+            "장거리 송신은?" → <b>ILD (분사 레이저 다이오드)</b><br>
+            "수신 소자는?" → <b>PD / APD</b> (둘 다 Photo Diode)
+        </div>
+    </div>
+
+    <div class="card-grid">
+        <div class="concept-card pink">
+            <div class="cc-title">📤 송신부 (전 → 광)</div>
+            <div class="cc-content">
+                <b>LED</b> (Light Emitting Diode)<br>
+                → <b>단거리</b>, 가격 저렴<br><br>
+                <b>ILD</b> (Injection Laser Diode)<br>
+                → <b>장거리</b>, 가격 매우 비쌈 (광섬유 단점 중 하나!)
+            </div>
+        </div>
+        <div class="concept-card teal">
+            <div class="cc-title">📥 수신부 (광 → 전)</div>
+            <div class="cc-content">
+                <b>PD</b> (Photo Diode)<br>
+                <b>APD</b> (Avalanche Photo Diode)<br><br>
+                → <b>빛을 전기 신호로 변환</b>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align:center; margin:20px 0; padding:20px; background:var(--soft-bg); border-radius:12px; font-size:0.95rem; font-weight:700;">
+        🔋 전기 → <span style="color:var(--pink);">LED/ILD</span> → 💡 광섬유 → <span style="color:var(--teal);">PD/APD</span> → 🔋 전기
+    </div>
+
+    <div class="memo-box">
+        <div class="mb-title">🎯 암기법</div>
+        <div class="mb-content">
+            <span class="mnemonic">송신 = 빛 만들기</span> (LED·ILD)<br>
+            <span class="mnemonic">수신 = 빛 감지하기</span> (Photo Diode 시리즈)<br>
+            <span class="mnemonic">LED = 단거리</span> / <span class="mnemonic">레이저 = 장거리</span>
+        </div>
+    </div>
+</section>
+
+<!-- ========== 06. 동축 케이블 RG 표준 ========== -->
+<section class="section-card s6" id="coax">
+    <div class="section-head">
+        <span class="section-badge">06</span>
+        <span class="section-title">📡 동축 케이블 RG 표준 — 임피던스</span>
+    </div>
+
+    <div class="memo-box orange">
+        <div class="mb-title">⚠ 자주 틀리는 포인트</div>
+        <div class="mb-content">
+            "RG-8은 LAN? CATV?" → <b>LAN (50Ω, 10BASE5 Thick Ethernet)</b><br>
+            "RG-58은?" → <b>LAN (50Ω, 10BASE2 Thin Ethernet)</b><br>
+            "75Ω는?" → <b>CATV/TV용 (RG-6, RG-11, RG-59)</b>
+        </div>
+    </div>
+
+    <div class="tbl-wrap">
+    <table class="matrix-table">
+        <thead>
+            <tr>
+                <th>RG 번호</th>
+                <th>임피던스</th>
+                <th>용도</th>
+                <th>분류</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="label">RG-6</td>
+                <td style="background:rgba(220,38,38,0.08);">75Ω</td>
+                <td>CATV, 위성TV</td>
+                <td style="font-weight:700; color:var(--danger);">TV용</td>
+            </tr>
+            <tr>
+                <td class="label">RG-8 ★</td>
+                <td style="background:rgba(22,163,74,0.08);">50Ω</td>
+                <td><b>10BASE5 LAN</b> (Thick)</td>
+                <td style="font-weight:700; color:var(--success);">LAN용</td>
+            </tr>
+            <tr>
+                <td class="label">RG-11</td>
+                <td style="background:rgba(220,38,38,0.08);">75Ω</td>
+                <td>10BASE5 LAN</td>
+                <td style="font-weight:700; color:var(--danger);">TV용</td>
+            </tr>
+            <tr>
+                <td class="label">RG-58 ★</td>
+                <td style="background:rgba(22,163,74,0.08);">50Ω</td>
+                <td><b>10BASE2 LAN</b> (Thin)</td>
+                <td style="font-weight:700; color:var(--success);">LAN용</td>
+            </tr>
+            <tr>
+                <td class="label">RG-59</td>
+                <td style="background:rgba(220,38,38,0.08);">75Ω</td>
+                <td>CATV</td>
+                <td style="font-weight:700; color:var(--danger);">TV용</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="memo-box orange">
+        <div class="mb-title">🎯 암기법 (이것만 외우면 끝)</div>
+        <div class="mb-content">
+            <span class="mnemonic">50Ω = LAN</span> → <b>RG-8, RG-58</b><br>
+            <span class="mnemonic">75Ω = TV</span> → <b>RG-6, RG-11, RG-59</b><br>
+            <br>
+            <b>"오공(50)은 랜, 칠오(75)는 TV"</b>로 외우면 어떤 RG가 나와도 답할 수 있어요!
+        </div>
+    </div>
+</section>
+
+<!-- ========== 07. 주파수 대역별 활용 ========== -->
+<section class="section-card s7" id="freq">
+    <div class="section-head">
+        <span class="section-badge">07</span>
+        <span class="section-title">📻 주파수 대역별 활용 (VLF~EHF)</span>
+    </div>
+
+    <div class="memo-box">
+        <div class="mb-title">⚠ 자주 틀리는 포인트</div>
+        <div class="mb-content">
+            "이동 전화는?" → <b>UHF (300MHz~3GHz)</b><br>
+            "위성 통신은?" → <b>SHF (3~30GHz)</b><br>
+            "우주 통신은?" → <b>EHF (30~300GHz)</b><br>
+            "FM 라디오는?" → <b>VHF (30~300MHz)</b>
+        </div>
+    </div>
+
+    <div class="spectrum-bar">
+        <div class="spectrum-cell sp1">VLF<span class="freq">3~30KHz</span></div>
+        <div class="spectrum-cell sp2">LF<span class="freq">30~300KHz</span></div>
+        <div class="spectrum-cell sp3">MF<span class="freq">300K~3M</span></div>
+        <div class="spectrum-cell sp4">HF<span class="freq">3M~30M</span></div>
+        <div class="spectrum-cell sp5">VHF<span class="freq">30M~300M</span></div>
+        <div class="spectrum-cell sp6">UHF<span class="freq">300M~3G</span></div>
+        <div class="spectrum-cell sp7">SHF<span class="freq">3G~30G</span></div>
+        <div class="spectrum-cell sp8">EHF<span class="freq">30G~300G</span></div>
+    </div>
+
+    <div class="card-grid">
+        <div class="concept-card">
+            <div class="cc-title">📻 라디오·TV 관련 (헷갈리기 쉬움)</div>
+            <div class="cc-content">
+                ▸ <b>AM 라디오</b> = <b>MF</b> (중파)<br>
+                ▸ <b>단파 방송, HAM</b> = <b>HF</b><br>
+                ▸ <b>FM 라디오, VHF TV</b> = <b>VHF</b> (초단파)<br>
+                ▸ <b>UHF TV</b> = <b>UHF</b>
+            </div>
+        </div>
+        <div class="concept-card purple">
+            <div class="cc-title">📱 통신 관련</div>
+            <div class="cc-content">
+                ▸ <b>이동 전화</b> = <b>UHF</b> (300MHz~3GHz)<br>
+                ▸ <b>레이더</b> = UHF / SHF<br>
+                ▸ <b>위성 통신</b> = <b>SHF</b> (3~30GHz)<br>
+                ▸ <b>미사일, 우주 통신</b> = <b>EHF</b> (30~300GHz)
+            </div>
+        </div>
+    </div>
+
+    <div class="memo-box">
+        <div class="mb-title">🎯 결정적 암기법</div>
+        <div class="mb-content">
+            <span class="mnemonic">AM↔MF, FM↔VHF</span> (글자가 정반대!)<br>
+            <span class="mnemonic">휴대폰 U = UHF</span> ("U"의 폰)<br>
+            <span class="mnemonic">위성 S = SHF</span> (Satellite의 S)<br>
+            <span class="mnemonic">우주 E = EHF</span> (Extreme = 가장 먼 우주)
+        </div>
+    </div>
+
+    <div class="memo-box" style="background:linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.04)); border:3px solid var(--danger);">
+        <div class="mb-title" style="color:var(--danger); font-size:1.1rem;">🔥 REPEAT MISTAKE — VHF vs UHF (이동전화 위치 헷갈림)</div>
+        <div class="mb-content">
+            <b>"TV"가 들어가서 VHF로 착각하기 쉬움. 이동전화는 무조건 UHF!</b>
+            <table class="matrix-table" style="margin-top:10px;">
+                <thead><tr><th>대역</th><th>주파수</th><th>활용</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td class="label">VHF</td>
+                        <td>30~300 MHz</td>
+                        <td><b>VHF TV, FM 라디오</b> (옛날 TV만)</td>
+                    </tr>
+                    <tr>
+                        <td class="label" style="background:rgba(220,38,38,0.1);">UHF ★</td>
+                        <td style="background:rgba(220,38,38,0.1);">300 MHz ~ <b>3 GHz</b></td>
+                        <td style="background:rgba(220,38,38,0.1);"><b>이동 전화, TV 방송, 레이더</b></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <span class="mnemonic" style="background:rgba(220,38,38,0.1); color:var(--danger);">"이동전화는 무조건 UHF!"</span><br>
+            <span class="mnemonic" style="background:rgba(220,38,38,0.1); color:var(--danger);">"휴대폰 U = UHF"</span>
+        </div>
+    </div>
+</section>
+
+<!-- ========== 08. 위성 마이크로파 핵심 ========== -->
+<section class="section-card s8" id="satellite">
+    <div class="section-head">
+        <span class="section-badge">08</span>
+        <span class="section-title">🛰 위성 마이크로파 — 핵심 3가지</span>
+    </div>
+
+    <div class="memo-box">
+        <div class="mb-title">⚠ 자주 틀리는 포인트</div>
+        <div class="mb-content">
+            "위성 마이크로파 주파수는?" → <b>1GHz 이상</b><br>
+            "정지궤도 고도는?" → <b>36,000 Km</b><br>
+            "Uplink vs Downlink, 누가 주파수 높음?" → <b>Uplink &gt; Downlink</b>
+        </div>
+    </div>
+
+    <div class="card-grid">
+        <div class="concept-card success">
+            <div class="cc-title">1️⃣ 주파수: 1 GHz 이상</div>
+            <div class="cc-content">
+                마이크로파 전체 대역(1~300GHz) 중 사용<br>
+                위성 통신용은 주로 <b>SHF (3~30GHz)</b>
+            </div>
+        </div>
+        <div class="concept-card purple">
+            <div class="cc-title">2️⃣ 정지궤도: 36,000 Km</div>
+            <div class="cc-content">
+                지구 자전과 같은 주기로 공전<br>
+                지상에서 보면 <b>항상 같은 위치</b>에 있는 것처럼 보임
+            </div>
+        </div>
+        <div class="concept-card orange">
+            <div class="cc-title">3️⃣ Uplink &gt; Downlink (주파수)</div>
+            <div class="cc-content">
+                <b>상향 링크(Uplink)가 하향 링크보다 높은 주파수</b><br>
+                → "올라가는 게 더 힘드니까 높은 주파수"로 기억
+            </div>
+        </div>
+        <div class="concept-card teal">
+            <div class="cc-title">4️⃣ 가시거리 공식 (참고)</div>
+            <div class="cc-content">
+                d = 7.14√(Kh), K = <b>4/3</b><br>
+                (이건 공식 자체보다 √(Kh) 형태만 알아두면 OK)
+            </div>
+        </div>
+    </div>
+
+    <div class="memo-box">
+        <div class="mb-title">🎯 위성 통신 3가지 키워드</div>
+        <div class="mb-content">
+            <span class="mnemonic">1 GHz 이상</span> · <span class="mnemonic">36,000 Km</span> · <span class="mnemonic">Uplink &gt; Downlink</span>
+        </div>
+    </div>
+
+    <div class="memo-box" style="background:linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.04)); border:3px solid var(--danger);">
+        <div class="mb-title" style="color:var(--danger); font-size:1.1rem;">🔥 REPEAT MISTAKE — 위성 마이크로파 주파수 "1 GHz 이상"</div>
+        <div class="mb-content">
+            <b>"300 MHz 이상"이나 "30 GHz 이상"으로 헷갈리지 말 것!</b><br><br>
+            <b>왜 1 GHz인가?</b><br>
+            마이크로파 전체 대역이 <b>1 GHz ~ 300 GHz</b>이기 때문에, 위성 마이크로파도 <b>1 GHz부터 시작</b>합니다.<br><br>
+            <b>주파수 경계값 단권화 ★</b><br>
+            <ul style="padding-left:20px; margin-top:8px;">
+                <li><b>라디오파</b>: 3 KHz ~ <b>1 GHz</b></li>
+                <li><b>마이크로파</b>: <b>1 GHz</b> ~ <b>300 GHz</b> (위성 마이크로파 = 1GHz 이상)</li>
+                <li><b>적외선파</b>: <b>300 GHz</b> ~ <b>400 THz</b></li>
+            </ul>
+            <br>
+            <span class="mnemonic" style="background:rgba(220,38,38,0.1); color:var(--danger);">"1G / 300G / 400T 이 3개 숫자"</span>만 외우면 다 풀려요!
+        </div>
+    </div>
+</section>
+
+<!-- ========== BONUS: 무선 전파 방법 3종 ========== -->
+<section class="section-card s2" id="wave-method">
+    <div class="section-head">
+        <span class="section-badge">+</span>
+        <span class="section-title">🌐 BONUS: 무선 전파 방법 3종</span>
+    </div>
+
+    <div class="card-grid">
+        <div class="concept-card">
+            <div class="cc-title">🌍 지표면 전파</div>
+            <div class="cc-content">
+                라디오파가 지구를 감싸는 <b>대기의 가장 낮은 부분</b>을 통해 이동<br>
+                → 저주파 대역에서 활용
+            </div>
+        </div>
+        <div class="concept-card purple">
+            <div class="cc-title">⚡ 전리층 전파</div>
+            <div class="cc-content">
+                <b>높은 주파수의 라디오파</b>가 전리층으로 발사되었다가 <b>반사</b>되어 돌아옴<br>
+                → HF(단파) 방송에 활용
+            </div>
+        </div>
+        <div class="concept-card orange">
+            <div class="cc-title">📡 가시선 전파</div>
+            <div class="cc-content">
+                <b>초단파 신호</b>가 안테나에서 안테나로 <b>직선으로 직접 전송</b><br>
+                → 마이크로파, 지상 마이크로파에 활용 (고지대 안테나 + 지향성)
+            </div>
+        </div>
+        <div class="concept-card teal">
+            <div class="cc-title">🎯 한 줄 정리</div>
+            <div class="cc-content">
+                <span class="mnemonic">지표면 = 낮은 부분</span><br>
+                <span class="mnemonic">전리층 = 반사</span><br>
+                <span class="mnemonic">가시선 = 직선</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== EXTRA 1: 키워드 매칭 종합 ========== -->
+<section class="section-card s7" id="keyword-final">
+    <div class="section-head">
+        <span class="section-badge">🔥</span>
+        <span class="section-title">🎯 키워드 한 단어 매칭 (시험 직전 단권화)</span>
+    </div>
+
+    <div class="intro-hook" style="margin:0 0 16px 0;">
+        <div class="label">2차 퀴즈에서 반복 실수한 항목 모음</div>
+        <div class="msg">문제에서 보기에 나오는 "결정적 한 단어"만 보고 답을 매칭하는 표</div>
+    </div>
+
+    <div class="memo-box">
+        <div class="mb-title">📌 광섬유 손실 — 한 단어 매칭</div>
+        <div class="mb-content">
+            <table class="matrix-table">
+                <thead><tr><th>보기에 이 단어가 보이면</th><th>답</th></tr></thead>
+                <tbody>
+                    <tr><td><b>입자에 부딪힘</b></td><td style="color:var(--purple); font-weight:900;">레일리 산란</td></tr>
+                    <tr><td><b>열로 유실</b></td><td style="color:var(--danger); font-weight:900;">흡수</td></tr>
+                    <tr><td><b>불균일한 면 / 코어 밖 누설</b></td><td style="color:var(--orange); font-weight:900;">구조 불완전</td></tr>
+                    <tr><td><b>불균일한 압력</b></td><td style="color:var(--teal); font-weight:900;">마이크로벤딩</td></tr>
+                    <tr><td><b>구부러져서</b></td><td style="color:var(--warning); font-weight:900;">휨</td></tr>
+                    <tr><td><b>접속할 때 / 코어 정렬</b></td><td style="color:var(--pink); font-weight:900;">접속</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="memo-box purple">
+        <div class="mb-title">📌 광섬유 분산 — 한 단어 매칭</div>
+        <div class="mb-content">
+            <table class="matrix-table">
+                <thead><tr><th>보기에 이 단어가 보이면</th><th>답</th></tr></thead>
+                <tbody>
+                    <tr><td><b>경로 차이 / 다중모드</b></td><td style="color:var(--danger); font-weight:900;">모드 분산</td></tr>
+                    <tr><td><b>파장 / 굴절률 차이</b></td><td style="color:var(--orange); font-weight:900;">재료 분산</td></tr>
+                    <tr><td><b>클래딩으로 누설 / 도파로</b></td><td style="color:var(--warning); font-weight:900;">구조 분산</td></tr>
+                    <tr><td><b>재료 + 구조 합쳐서</b></td><td style="color:var(--teal); font-weight:900;">색 분산</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="memo-box orange">
+        <div class="mb-title">📌 주파수 대역별 활용 — 한 단어 매칭</div>
+        <div class="mb-content">
+            <table class="matrix-table">
+                <thead><tr><th>보기에 이 단어가 보이면</th><th>답</th></tr></thead>
+                <tbody>
+                    <tr><td><b>AM 라디오</b></td><td style="font-weight:900;">MF</td></tr>
+                    <tr><td><b>FM 라디오 / VHF TV</b></td><td style="font-weight:900;">VHF</td></tr>
+                    <tr><td><b>이동 전화 / 휴대폰 / UHF TV / 레이더</b></td><td style="color:var(--danger); font-weight:900;">UHF</td></tr>
+                    <tr><td><b>위성 통신</b></td><td style="color:var(--primary); font-weight:900;">SHF</td></tr>
+                    <tr><td><b>우주 통신 / 미사일</b></td><td style="color:var(--purple); font-weight:900;">EHF</td></tr>
+                    <tr><td><b>단파 방송 / HAM (아마추어 무선)</b></td><td style="font-weight:900;">HF</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="memo-box teal">
+        <div class="mb-title">📌 전파 방법 3종 — 한 단어 매칭</div>
+        <div class="mb-content">
+            <table class="matrix-table">
+                <thead><tr><th>보기에 이 단어가 보이면</th><th>답</th></tr></thead>
+                <tbody>
+                    <tr><td><b>대기 가장 낮은 부분</b></td><td style="color:var(--success); font-weight:900;">지표면 전파</td></tr>
+                    <tr><td><b>전리층에 반사 / 되돌아옴</b></td><td style="color:var(--purple); font-weight:900;">전리층 전파</td></tr>
+                    <tr><td><b>안테나 ↔ 안테나 직선 / 초단파</b></td><td style="color:var(--orange); font-weight:900;">가시선 전파</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ========== EXTRA 2: 시험 직전 5분 체크 ========== -->
+<section class="section-card s8" id="last-check">
+    <div class="section-head">
+        <span class="section-badge">⏰</span>
+        <span class="section-title">시험 직전 5분 체크리스트</span>
+    </div>
+
+    <div class="memo-box">
+        <div class="mb-title">🔥 무조건 외워야 하는 숫자 10개</div>
+        <div class="mb-content">
+            <ol style="padding-left:24px; line-height:2;">
+                <li>UTP 최대 전송 거리 = <b>100m</b></li>
+                <li>광섬유 무중계 전송 = <b>50 Km</b> (TP/동축은 5Km)</li>
+                <li>클래딩 지름 = <b>125 μm</b> (모든 종류 공통)</li>
+                <li>단일모드 코어 = <b>9~10 μm</b></li>
+                <li>계단형 코어 = <b>50 μm</b></li>
+                <li>라디오파 = <b>3KHz ~ 1GHz</b></li>
+                <li>마이크로파 = <b>1GHz ~ 300GHz</b></li>
+                <li>적외선파 = <b>300GHz ~ 400THz</b></li>
+                <li>정지궤도 = <b>36,000 Km</b></li>
+                <li>위성 마이크로파 = <b>1 GHz 이상</b></li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="memo-box purple">
+        <div class="mb-title">🔥 무조건 외워야 하는 매칭 10개</div>
+        <div class="mb-content">
+            <ol style="padding-left:24px; line-height:2;">
+                <li>유선 매체 3종 = <b>TP / 동축 / 광케이블</b></li>
+                <li>무선 매체 3종 = <b>라디오파 / 마이크로파 / 적외선파</b></li>
+                <li>전파 방법 3종 = <b>지표면 / 전리층 / 가시선</b></li>
+                <li>차폐 강도 = <b>UTP &lt; FTP &lt; STP &lt; S-STP</b></li>
+                <li>S-STP = <b>CAT.7</b> (10기가비트)</li>
+                <li>분산 크기 = <b>모드 &gt; 재료 &gt; 구조</b> (모드는 단일모드 X)</li>
+                <li>수신 특성 = <b>단일 &gt; 증가형 &gt; 계단형</b></li>
+                <li>송신 소자 = <b>LED(단)/ILD(장)</b>, 수신 = <b>PD/APD</b></li>
+                <li>RG-8, RG-58 = <b>50Ω LAN</b>, 나머지(6,11,59) = <b>75Ω TV</b></li>
+                <li>이동전화=UHF, 위성=SHF, 우주=EHF</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="memo-box orange">
+        <div class="mb-title">🔥 절대 안 헷갈리게 — 함정 패턴 모음</div>
+        <div class="mb-content">
+            <div class="mistake-box">
+                <div class="mb-label">🚨 함정 1: 단일모드에 없는 분산</div>
+                <div class="mb-fix">❌ 색 분산 → ✅ <b>모드 분산</b> (색 분산은 모든 광섬유에 있음)</div>
+            </div>
+            <div class="mistake-box">
+                <div class="mb-label">🚨 함정 2: 전반사 방향</div>
+                <div class="mb-fix">❌ 저→고 → ✅ <b>고→저</b> (코어→클래딩)</div>
+            </div>
+            <div class="mistake-box">
+                <div class="mb-label">🚨 함정 3: 흡수 손실 vs 레일리 산란</div>
+                <div class="mb-fix">"열" 키워드 → ✅ <b>흡수</b> / "입자" 키워드 → ✅ <b>레일리 산란</b></div>
+            </div>
+            <div class="mistake-box">
+                <div class="mb-label">🚨 함정 4: 재료 vs 구조 분산</div>
+                <div class="mb-fix">"파장/굴절률" → ✅ <b>재료</b> / "클래딩 누설" → ✅ <b>구조</b></div>
+            </div>
+            <div class="mistake-box">
+                <div class="mb-label">🚨 함정 5: 위성 마이크로파 주파수</div>
+                <div class="mb-fix">❌ 300MHz / 30GHz → ✅ <b>1 GHz 이상</b></div>
+            </div>
+            <div class="mistake-box">
+                <div class="mb-label">🚨 함정 6: 이동 전화 = VHF?</div>
+                <div class="mb-fix">❌ VHF → ✅ <b>UHF</b> (300MHz~3GHz)</div>
+            </div>
+            <div class="mistake-box">
+                <div class="mb-label">🚨 함정 7: 마이크로벤딩 vs 휨</div>
+                <div class="mb-fix">"불균일한 압력" → ✅ <b>마이크로벤딩</b> / "구부러짐" → ✅ <b>휨</b></div>
+            </div>
+            <div class="mistake-box">
+                <div class="mb-label">🚨 함정 8: RG-8 = CATV?</div>
+                <div class="mb-fix">❌ CATV → ✅ <b>LAN (50Ω, 10BASE5 Thick Ethernet)</b></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    💪 약점 보강 페이지 (v2) · 🔥 표시된 부분은 절대 다시 틀리지 말 것!<br>
+    <a href="6장.html" style="color:var(--primary); text-decoration:none; font-weight:700;">← 6장 본문으로 돌아가기</a>
+</footer>
+
+<script>
+const themeToggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+const savedTheme = localStorage.getItem('theme') || 'light';
+html.setAttribute('data-theme', savedTheme);
+themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+themeToggle.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+});
+</script>
+
+</body>
+</html>

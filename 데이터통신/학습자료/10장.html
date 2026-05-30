@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터통신 10장 — LAN 기술 학습자료</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #2563eb; --primary-dark: #1e3a8a;
+    --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+    --purple: #7c3aed; --orange: #ea580c; --teal: #0d9488; --pink: #db2777;
+    --bg: #f3f4f6; --card-bg: #ffffff;
+    --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+    --nav-bg: rgba(255,255,255,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
+    --soft-bg: #f8fafc;
+}
+[data-theme="dark"] {
+    --bg: #0f172a; --card-bg: #1e293b;
+    --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+    --nav-bg: rgba(15,23,42,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --soft-bg: #0b1224;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; padding-top:64px; }
+
+.nav { position:fixed; top:0; left:0; right:0; height:60px; background:var(--nav-bg); backdrop-filter:blur(12px); display:flex; align-items:center; padding:0 24px; z-index:1000; border-bottom:1px solid var(--border); }
+.nav-logo { font-weight:700; color:var(--primary); text-decoration:none; font-size:1rem; }
+.nav-links { display:flex; gap:8px; margin-left:24px; flex-wrap:wrap; }
+.nav-links a { text-decoration:none; color:var(--text-muted); font-size:0.85rem; padding:6px 10px; border-radius:8px; font-weight:600; }
+.nav-links a:hover { color:var(--primary); background:rgba(37,99,235,0.08); }
+.nav-right { margin-left:auto; display:flex; gap:10px; align-items:center; }
+.nav-home { text-decoration:none; color:var(--text-muted); font-size:0.85rem; }
+.btn-theme { background:none; border:1px solid var(--border); border-radius:8px; padding:6px 10px; cursor:pointer; color:var(--text); }
+
+.page-header { background:linear-gradient(135deg, #1e3a8a, #2563eb); color:white; padding:64px 24px 56px; text-align:center; }
+.week-badge { display:inline-block; background:rgba(255,255,255,0.2); padding:6px 18px; border-radius:20px; font-size:0.85rem; margin-bottom:16px; letter-spacing:1px; }
+.page-header h1 { font-size:2rem; font-weight:900; margin-bottom:10px; }
+.page-header .subtitle { font-size:1rem; opacity:0.9; }
+
+.goal-overview { max-width:960px; margin:32px auto; padding:0 16px; }
+.goal-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+.goal-card { padding:20px 22px; border-radius:14px; background:var(--card-bg); box-shadow:var(--shadow); border-left:5px solid var(--primary); display:flex; gap:14px; align-items:flex-start; }
+.goal-card .gnum { display:inline-flex; align-items:center; justify-content:center; min-width:34px; height:34px; border-radius:10px; background:var(--primary); color:white; font-weight:900; font-size:1rem; flex-shrink:0; }
+.goal-card.g2 { border-left-color:var(--purple); } .goal-card.g2 .gnum { background:var(--purple); }
+.goal-card.g3 { border-left-color:var(--orange); } .goal-card.g3 .gnum { background:var(--orange); }
+.goal-card.g4 { border-left-color:var(--teal); } .goal-card.g4 .gnum { background:var(--teal); }
+.goal-card p { font-size:0.92rem; }
+
+.plan-overview { max-width:960px; margin:32px auto; padding:0 16px; }
+.plan-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
+.plan-card { padding:18px; border-radius:16px; background:var(--card-bg); box-shadow:var(--shadow); border-top:5px solid var(--primary); }
+.plan-card.p2 { border-top-color:var(--purple); }
+.plan-card.p3 { border-top-color:var(--orange); }
+.plan-card.p4 { border-top-color:var(--teal); }
+.plan-card.p5 { border-top-color:var(--pink); }
+.plan-card .day-tag { font-size:0.74rem; font-weight:700; letter-spacing:1px; color:var(--primary); }
+.plan-card.p2 .day-tag { color:var(--purple); }
+.plan-card.p3 .day-tag { color:var(--orange); }
+.plan-card.p4 .day-tag { color:var(--teal); }
+.plan-card.p5 .day-tag { color:var(--pink); }
+.plan-card h3 { font-size:0.98rem; margin:6px 0 10px; }
+.plan-card ul { list-style:none; font-size:0.8rem; }
+.plan-card ul li { padding:3px 0; color:var(--text-muted); }
+.plan-card ul li::before { content:"▸ "; color:var(--text-muted); }
+
+.section-card { max-width:960px; margin:32px auto; padding:32px; background:var(--card-bg); border-radius:16px; box-shadow:var(--shadow); border-top:5px solid var(--primary); }
+.section-card.s2 { border-top-color:var(--purple); }
+.section-card.s3 { border-top-color:var(--orange); }
+.section-card.s4 { border-top-color:var(--teal); }
+.section-card.s5 { border-top-color:var(--pink); }
+.section-head { display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:16px; border-bottom:2px solid var(--border); }
+.section-badge { font-size:0.78rem; font-weight:900; letter-spacing:1.5px; padding:6px 14px; border-radius:20px; color:white; background:var(--primary); }
+.section-card.s2 .section-badge { background:var(--purple); }
+.section-card.s3 .section-badge { background:var(--orange); }
+.section-card.s4 .section-badge { background:var(--teal); }
+.section-card.s5 .section-badge { background:var(--pink); }
+.section-title { font-size:1.5rem; font-weight:700; }
+
+.topic { margin:28px 0 14px; }
+.topic-title { font-size:1.12rem; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.topic-num { display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:28px; padding:0 8px; border-radius:14px; background:var(--primary); color:white; font-size:0.82rem; font-weight:700; }
+.section-card.s2 .topic-num { background:var(--purple); }
+.section-card.s3 .topic-num { background:var(--orange); }
+.section-card.s4 .topic-num { background:var(--teal); }
+.section-card.s5 .topic-num { background:var(--pink); }
+
+.memo-hook { padding:22px 24px; border-radius:14px; margin:16px 0; text-align:center; background:linear-gradient(135deg, rgba(37,99,235,0.10), rgba(37,99,235,0.04)); border:2px solid var(--primary); color:var(--primary); }
+.section-card.s2 .memo-hook { background:linear-gradient(135deg, rgba(124,58,237,0.10), rgba(124,58,237,0.04)); border-color:var(--purple); color:var(--purple); }
+.section-card.s3 .memo-hook { background:linear-gradient(135deg, rgba(234,88,12,0.10), rgba(234,88,12,0.04)); border-color:var(--orange); color:var(--orange); }
+.section-card.s4 .memo-hook { background:linear-gradient(135deg, rgba(13,148,136,0.10), rgba(13,148,136,0.04)); border-color:var(--teal); color:var(--teal); }
+.section-card.s5 .memo-hook { background:linear-gradient(135deg, rgba(219,39,119,0.10), rgba(219,39,119,0.04)); border-color:var(--pink); color:var(--pink); }
+.memo-hook .hook-label { font-size:0.78rem; opacity:0.85; letter-spacing:2px; font-weight:700; }
+.memo-hook .mnemonic { font-size:1.5rem; font-weight:900; letter-spacing:2px; margin:10px 0; }
+.memo-hook .hook-desc { font-size:0.88rem; opacity:0.95; margin-top:6px; font-weight:500; }
+
+.flash-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:14px 0; }
+.flash { padding:14px 16px; border-radius:10px; background:var(--soft-bg); border-left:4px solid var(--primary); }
+.section-card.s2 .flash { border-left-color:var(--purple); }
+.section-card.s3 .flash { border-left-color:var(--orange); }
+.section-card.s4 .flash { border-left-color:var(--teal); }
+.section-card.s5 .flash { border-left-color:var(--pink); }
+.flash .q { font-weight:700; font-size:0.92rem; margin-bottom:6px; }
+.flash .a { font-size:0.88rem; color:var(--text-muted); line-height:1.7; }
+
+.memo-list { margin:12px 0; padding:16px 20px; background:var(--soft-bg); border-radius:10px; }
+.memo-list-title { font-weight:700; font-size:0.95rem; margin-bottom:8px; color:var(--primary); }
+.section-card.s2 .memo-list-title { color:var(--purple); }
+.section-card.s3 .memo-list-title { color:var(--orange); }
+.section-card.s4 .memo-list-title { color:var(--teal); }
+.section-card.s5 .memo-list-title { color:var(--pink); }
+.memo-list ol, .memo-list ul { padding-left:24px; }
+.memo-list li { padding:3px 0; font-size:0.92rem; }
+.memo-list li strong { color:var(--primary); }
+.section-card.s2 .memo-list li strong { color:var(--purple); }
+.section-card.s3 .memo-list li strong { color:var(--orange); }
+.section-card.s4 .memo-list li strong { color:var(--teal); }
+.section-card.s5 .memo-list li strong { color:var(--pink); }
+
+.std-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.86rem; }
+.std-table th, .std-table td { padding:9px 11px; border:1px solid var(--border); text-align:left; }
+.std-table th { background:rgba(37,99,235,0.08); font-weight:700; }
+.std-table td.hl { background:rgba(220,38,38,0.05); font-weight:600; }
+.section-card.s2 .std-table th { background:rgba(124,58,237,0.08); }
+.section-card.s3 .std-table th { background:rgba(234,88,12,0.08); }
+.section-card.s4 .std-table th { background:rgba(13,148,136,0.08); }
+.section-card.s5 .std-table th { background:rgba(219,39,119,0.08); }
+.tbl-wrap { overflow-x:auto; }
+
+.formula-box { background:rgba(124,58,237,0.06); border:1px solid rgba(124,58,237,0.25); border-radius:10px; padding:14px 18px; margin:12px 0; text-align:center; }
+.formula { font-size:1.05rem; font-weight:700; color:var(--purple); font-family:'Courier New',monospace; }
+.formula-desc { font-size:0.83rem; color:var(--text-muted); margin-top:6px; }
+
+.frame-box { display:flex; gap:0; flex-wrap:nowrap; margin:14px 0; overflow-x:auto; border-radius:10px; }
+.frame-cell { padding:14px 8px; border:1px solid var(--border); flex:1; text-align:center; font-size:0.78rem; font-weight:600; background:var(--soft-bg); min-width:64px; }
+.frame-cell small { display:block; font-weight:400; color:var(--text-muted); font-size:0.7rem; margin-top:3px; }
+.frame-cell.flag { background:rgba(37,99,235,0.12); color:var(--primary); }
+.frame-cell.data { background:rgba(13,148,136,0.10); color:var(--teal); flex:2.5; }
+.frame-cell.fcs { background:rgba(220,38,38,0.10); color:var(--danger); }
+.frame-cell.ctrl { background:rgba(234,88,12,0.10); color:var(--orange); }
+.frame-cell.addr { background:rgba(124,58,237,0.10); color:var(--purple); }
+
+.flow-box { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:14px 0; padding:16px; background:var(--soft-bg); border-radius:10px; justify-content:center; }
+.flow-step { padding:8px 14px; border-radius:8px; background:var(--card-bg); border:1px solid var(--border); font-size:0.85rem; font-weight:600; }
+.flow-step.hl { border-color:var(--primary); color:var(--primary); }
+.flow-arrow { color:var(--text-muted); font-weight:700; }
+
+.diagram { background:var(--soft-bg); border-radius:10px; padding:18px; margin:14px 0; font-family:'Courier New',monospace; font-size:0.82rem; white-space:pre; overflow-x:auto; line-height:1.6; color:var(--text); }
+
+.note-box { background:rgba(217,119,6,0.07); border:1px solid rgba(217,119,6,0.3); border-radius:10px; padding:14px 18px; margin:12px 0; font-size:0.88rem; }
+.note-box .note-title { font-weight:700; color:var(--warning); margin-bottom:6px; }
+
+.checklist { background:var(--soft-bg); border-radius:12px; padding:18px 22px; margin:14px 0; border-left:4px solid var(--primary); }
+.checklist-title { font-weight:700; margin-bottom:10px; font-size:1rem; }
+.checklist label { display:flex; align-items:flex-start; gap:10px; padding:6px 0; cursor:pointer; font-size:0.92rem; }
+.checklist input[type="checkbox"] { margin-top:5px; width:18px; height:18px; cursor:pointer; flex-shrink:0; }
+.checklist label.done { text-decoration:line-through; color:var(--text-muted); }
+
+.quiz-item { margin-bottom:18px; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--card-bg); }
+.quiz-q { font-weight:600; margin-bottom:10px; font-size:0.95rem; }
+.q-num { color:var(--primary); font-weight:700; margin-right:6px; }
+.quiz-options { list-style:none; }
+.quiz-options li { margin-bottom:6px; }
+.quiz-options button { width:100%; text-align:left; padding:9px 14px; border:1px solid var(--border); border-radius:8px; background:var(--soft-bg); color:var(--text); cursor:pointer; font-size:0.9rem; font-family:inherit; }
+.quiz-options button:hover:not(:disabled) { border-color:var(--primary); }
+.quiz-options button.correct { background:rgba(22,163,74,0.12); border-color:var(--success); color:var(--success); font-weight:600; }
+.quiz-options button.wrong { background:rgba(220,38,38,0.12); border-color:var(--danger); color:var(--danger); }
+.quiz-feedback { display:none; margin-top:10px; padding:10px 14px; border-radius:8px; font-size:0.88rem; }
+.quiz-feedback.show { display:block; }
+.quiz-feedback.correct-fb { background:rgba(22,163,74,0.08); color:var(--success); }
+.quiz-feedback.wrong-fb { background:rgba(220,38,38,0.08); color:var(--danger); }
+
+.short-answer input { padding:8px 12px; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:var(--card-bg); color:var(--text); width:60%; min-width:180px; }
+.short-answer button { padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.88rem; margin-left:6px; }
+.model-answer { display:none; margin-top:10px; padding:12px 16px; border-radius:8px; background:rgba(37,99,235,0.06); border-left:4px solid var(--primary); font-size:0.88rem; line-height:1.75; }
+.model-answer.show { display:block; }
+.desc-answer textarea { width:100%; min-height:70px; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; background:var(--card-bg); color:var(--text); resize:vertical; }
+.desc-answer button { margin-top:6px; padding:8px 16px; border:none; border-radius:8px; background:var(--primary); color:white; cursor:pointer; font-family:inherit; font-size:0.88rem; }
+
+.final-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:14px; }
+.final-card { padding:16px 18px; border-radius:12px; background:var(--soft-bg); border-left:4px solid var(--primary); }
+.final-card.c2 { border-left-color:var(--purple); }
+.final-card.c3 { border-left-color:var(--orange); }
+.final-card.c4 { border-left-color:var(--teal); }
+.final-card.c5 { border-left-color:var(--pink); }
+.final-card .fc-title { font-weight:700; font-size:0.95rem; margin-bottom:6px; }
+.final-card .fc-mn { font-size:1.15rem; font-weight:900; letter-spacing:1px; color:var(--primary); margin:6px 0; }
+.final-card.c2 .fc-mn { color:var(--purple); }
+.final-card.c3 .fc-mn { color:var(--orange); }
+.final-card.c4 .fc-mn { color:var(--teal); }
+.final-card.c5 .fc-mn { color:var(--pink); }
+.final-card .fc-desc { font-size:0.85rem; color:var(--text-muted); }
+
+footer { text-align:center; padding:28px; color:var(--text-muted); font-size:0.85rem; }
+
+@media (max-width:680px) {
+    .plan-grid, .goal-grid, .flash-grid, .final-grid { grid-template-columns:1fr; }
+    .nav-links { display:none; }
+    .page-header h1 { font-size:1.4rem; }
+    .section-card { margin:16px 10px; padding:20px; }
+    .memo-hook .mnemonic { font-size:1.2rem; letter-spacing:1px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="../index.html" class="nav-logo">데이터통신</a>
+    <div class="nav-links">
+        <a href="#overview">목표</a>
+        <a href="#lan">분류·표준</a>
+        <a href="#csma">CSMA/CD</a>
+        <a href="#token">토큰</a>
+        <a href="#wlan">무선LAN</a>
+        <a href="#wpan">WPAN</a>
+        <a href="#quiz">체크퀴즈</a>
+        <a href="#final">최종정리</a>
+    </div>
+    <div class="nav-right">
+        <a href="../index.html" class="nav-home">홈</a>
+        <button class="btn-theme" id="themeToggle">🌙</button>
+    </div>
+</nav>
+
+<header class="page-header">
+    <div class="week-badge">제10장 · LAN 기술</div>
+    <h1>데이터통신 10장 — LAN 기술</h1>
+    <p class="subtitle">LAN 분류·표준 · CSMA/CD(이더넷) · 토큰 제어 · 무선 LAN · WPAN</p>
+</header>
+
+<!-- ==================== 학습 목표 ==================== -->
+<div class="goal-overview" id="overview">
+    <div class="goal-grid">
+        <div class="goal-card"><span class="gnum">1</span><p>LAN을 <b>토폴로지, 전송 매체, 매체 액세스 방식</b>에 따라 분류하고 표준안을 설명할 수 있다.</p></div>
+        <div class="goal-card g2"><span class="gnum">2</span><p><b>CSMA/CD, 토큰 링, 토큰 버스</b>를 설명할 수 있다.</p></div>
+        <div class="goal-card g3"><span class="gnum">3</span><p><b>고속 LAN과 무선 LAN</b>을 설명할 수 있다.</p></div>
+        <div class="goal-card g4"><span class="gnum">4</span><p><b>블루투스, 지그비, UWB</b>를 설명할 수 있다.</p></div>
+    </div>
+</div>
+
+<!-- ==================== 학습 로드맵 ==================== -->
+<div class="plan-overview">
+    <div class="plan-grid">
+        <div class="plan-card">
+            <div class="day-tag">01 · 분류·표준</div>
+            <h3>LAN의 분류</h3>
+            <ul>
+                <li>토폴로지·매체·접근·전송</li>
+                <li>스타·버스·링·트리</li>
+                <li>IEEE 802 (LLC+MAC)</li>
+            </ul>
+        </div>
+        <div class="plan-card p2">
+            <div class="day-tag">02 · 이더넷</div>
+            <h3>CSMA/CD</h3>
+            <ul>
+                <li>CS·MA·CD 의미</li>
+                <li>최소 프레임 512비트</li>
+                <li>고속·기가·10기가</li>
+            </ul>
+        </div>
+        <div class="plan-card p3">
+            <div class="day-tag">03 · 토큰</div>
+            <h3>토큰 제어</h3>
+            <ul>
+                <li>토큰 버스(802.4)</li>
+                <li>토큰 링(802.5)</li>
+                <li>FDDI · DQDB</li>
+            </ul>
+        </div>
+        <div class="plan-card p4">
+            <div class="day-tag">04 · 무선 LAN</div>
+            <h3>IEEE 802.11</h3>
+            <ul>
+                <li>BSS·ESS·AP</li>
+                <li>CSMA/CA · NAV</li>
+                <li>숨겨진/노출 터미널</li>
+            </ul>
+        </div>
+        <div class="plan-card p5">
+            <div class="day-tag">05 · WPAN</div>
+            <h3>근거리 개인망</h3>
+            <ul>
+                <li>블루투스(피코넷)</li>
+                <li>지그비(802.15.4)</li>
+                <li>UWB</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 학습 체크리스트 ==================== -->
+<section class="section-card" id="checklist">
+    <div class="section-head">
+        <span class="section-badge">START</span>
+        <span class="section-title">📋 오늘 외워야 할 것</span>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:6px;">아래 항목을 다 체크하면 10장 한 바퀴 완료입니다.</p>
+    <div class="checklist">
+        <div class="checklist-title">✓ 학습 체크포인트</div>
+        <label><input type="checkbox" data-key="ck1"> <span>LAN 분류 4기준: 토폴로지 / 전송 매체 / 액세스 방법 / 전송 기술</span></label>
+        <label><input type="checkbox" data-key="ck2"> <span>LAN 토폴로지: 스타·버스·링·트리 (메쉬형은 LAN에서 사용 안 함)</span></label>
+        <label><input type="checkbox" data-key="ck3"> <span>이더넷 = 버스형 / 버스 끝 종단장치(Terminator)로 신호 반사 제거</span></label>
+        <label><input type="checkbox" data-key="ck4"> <span>전송 기술: 베이스밴드(디지털 그대로·TDM) vs 브로드밴드(FDM·CATV 유사)</span></label>
+        <label><input type="checkbox" data-key="ck5"> <span>IEEE 802 (1985): 데이터링크 계층을 LLC + MAC 부계층으로 분리</span></label>
+        <label><input type="checkbox" data-key="ck6"> <span>IEEE 802 번호: 802.3=CSMA/CD, 802.4=토큰버스, 802.5=토큰링, 802.6=DQDB, 802.11=무선LAN</span></label>
+        <label><input type="checkbox" data-key="ck7"> <span>CSMA/CD = CS(감지) + MA(다중접근) + CD(충돌검출)</span></label>
+        <label><input type="checkbox" data-key="ck8"> <span>충돌 시: Jam 신호 → N=N+1 → N&gt;15면 비정상 종료 / [0,2ᴺ-1] 임의수 k → k×슬롯타임 대기</span></label>
+        <label><input type="checkbox" data-key="ck9"> <span>슬롯타임 = 2 × 전송 지연시간 + 여유 마진 / 최소 프레임 전송시간 Tfr ≥ 2Tp</span></label>
+        <label><input type="checkbox" data-key="ck10"> <span>이더넷 최소 프레임 = 512비트(64바이트), 최대 길이 2,500m</span></label>
+        <label><input type="checkbox" data-key="ck11"> <span>지속방식: 1-persistent(즉시·유선) / p-persistent(확률 p·위성)</span></label>
+        <label><input type="checkbox" data-key="ck12"> <span>이더넷 프레임: Preamble(7B)·SFD(1B,10101011)·DA(6B)·SA(6B)·Length/Type(2B)·Data(46~1500B)·CRC(4B,CRC-32)</span></label>
+        <label><input type="checkbox" data-key="ck13"> <span>표기법: 10BASE-T → 10Mbps·베이스밴드·Twisted pair. 스위치 사용 시 충돌 없음</span></label>
+        <label><input type="checkbox" data-key="ck14"> <span>고속(100M)·기가(1G)·10기가(10G). 기가비트는 최소 프레임 64→512B 확장 + 프레임 버스팅</span></label>
+        <label><input type="checkbox" data-key="ck15"> <span>10기가비트(802.3ae·2002): 전이중 모드만, CSMA/CD 미지원, 백본용</span></label>
+        <label><input type="checkbox" data-key="ck16"> <span>토큰 = 채널 사용권. 충돌 없음(안정적), 지연 예측 가능, 우선순위 / 단점: 노드↑면 순회시간↑, 토큰 분실 시 무한 대기</span></label>
+        <label><input type="checkbox" data-key="ck17"> <span>FDDI: 100Mbps 광케이블 이중 링(Dual ring), 토큰링(802.5), 토큰 조기 해제. 계층 PMD·PHY(4B/5B)·SMT</span></label>
+        <label><input type="checkbox" data-key="ck18"> <span>무선 LAN: IEEE 802.11, ISM 비인가 대역(2.4GHz·5GHz)</span></label>
+        <label><input type="checkbox" data-key="ck19"> <span>802.11 구조: BSS + DS = ESS / AP로 DS 연결 / 유선 연결은 포털(Portal)</span></label>
+        <label><input type="checkbox" data-key="ck20"> <span>MAC: PCF(비경쟁·AP 중앙제어) / DCF(경쟁·CSMA/CA)</span></label>
+        <label><input type="checkbox" data-key="ck21"> <span>CSMA/CA: 충돌 회피, ACK 필요, 핵심은 NAV. RTS→CTS→data→ACK</span></label>
+        <label><input type="checkbox" data-key="ck22"> <span>숨겨진 터미널 → RTS/CTS로 해결 / 노출된 터미널 → 동시 전송 가능한데 못 함</span></label>
+        <label><input type="checkbox" data-key="ck23"> <span>WPAN = IEEE 802.15 (블루투스·지그비·UWB), 10m 내외</span></label>
+        <label><input type="checkbox" data-key="ck24"> <span>블루투스: 1994 에릭슨, 79채널·FHSS·초당 1600 호핑(625μs), 피코넷(마스터1+슬레이브 최대7)·스케터넷</span></label>
+        <label><input type="checkbox" data-key="ck25"> <span>지그비: 802.15.4, 250Kbps, 긴 배터리·보안, 128비트 대칭키, IoT 주력. 코디네이터·라우터·엔드디바이스</span></label>
+        <label><input type="checkbox" data-key="ck26"> <span>UWB: 3.1~10.6GHz, 100Mbps↑, 초광대역+낮은 출력, 고성능 휴대폰 근거리 고속</span></label>
+    </div>
+</section>
+
+<!-- ==================== 01. LAN의 분류와 표준 ==================== -->
+<section class="section-card" id="lan">
+    <div class="section-head">
+        <span class="section-badge">01</span>
+        <span class="section-title">🗂️ LAN의 분류와 표준</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>LAN의 정의</div>
+        <div class="memo-hook">
+            <div class="hook-label">LAN = ?</div>
+            <div class="mnemonic">제한된 지역의 데이터 통신 네트워크</div>
+            <div class="hook-desc">제한된 지역 내 다수의 독립된 컴퓨터 기기들이 상호 통신 가능하도록 하는 데이터 통신 네트워크</div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>LAN의 분류 (4가지 기준) ★</div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>분류 기준</th><th>종류</th></tr></thead>
+            <tbody>
+                <tr><td><b>토폴로지에 의한 분류</b></td><td>스타형, 버스형, 링형, 트리형</td></tr>
+                <tr><td><b>전송 매체에 의한 분류</b></td><td>트위스티드 페어, 동축케이블, 광케이블, 무선</td></tr>
+                <tr><td><b>액세스 방법에 의한 분류</b></td><td>CSMA/CD, 토큰 패싱(토큰 링, 토큰 버스)</td></tr>
+                <tr><td><b>전송 기술에 의한 분류</b></td><td>베이스밴드, 브로드밴드</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>토폴로지에 의한 분류</div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 토폴로지(Topology)란</div>
+            <ul>
+                <li>네트워크를 구성하는 <strong>노드와 노드 간의 연결 상태에 대한 배치</strong>를 의미</li>
+                <li><strong>LAN에서 메쉬형(Mesh type)은 사용되지 않는다</strong> ★</li>
+            </ul>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">⭐ 스타형 (Star)</div>
+                <div class="a">각 스테이션이 <b>허브(Hub)</b>라는 중앙 전송 제어 장치와 <b>점대점 링크</b>로 연결.<br><b>장점</b>: 고장 발견·유지보수 용이 / 한 스테이션 고장이 전체에 영향 X / 증설·이전 용이.<br><b>단점</b>: <b>중앙 장치 고장 시 전체 동작 불가</b> / 케이블링 비용·노력 / 통신량 많으면 전송 지연. → 성능 향상 위해 <b>스위칭 허브</b> 사용 추세.</div>
+            </div>
+            <div class="flash">
+                <div class="q">⭐ 버스형 (Bus)</div>
+                <div class="a"><b>버스(공통 배선)</b>에 모든 요소 연결. 끝에 <b>종단 장치(Terminator)</b>로 신호 반사 중첩 제거. <b>이더넷=버스형</b>.<br><b>장점</b>: 케이블링 비용 최소 / 한 스테이션 고장이 다른 부분에 영향 X(신뢰성).<br><b>단점</b>: 베이스밴드는 거리 멀면 중계기 필요 / 버스 결함 시 전체 전송 불가 / 스테이션↑면 처리능력 급감 / 부하↑면 응답 느림.</div>
+            </div>
+            <div class="flash">
+                <div class="q">링형 (Ring)</div>
+                <div class="a"><b>닫힌 루프</b> 형태로 각 스테이션이 양쪽 스테이션과 <b>전용 점대점</b> 연결.<br><b>장점</b>: 각 스테이션에서 <b>신호 재생</b> → 잡음에 강함 / 단방향 전송로 → <b>광섬유에 잘 부합</b>.<br><b>단점</b>: 스테이션 변경·추가 어려움 / 한 스테이션 고장이 전체에 영향.</div>
+            </div>
+            <div class="flash">
+                <div class="q">트리형 (Tree)</div>
+                <div class="a"><b>스타형의 변형</b>. 1차 허브에 연결되지만 모든 장치가 중앙 장치에 직접 연결되진 않음.<br><b>2차 허브</b>를 둠으로써: 1차 허브에 더 많은 스테이션 연결 / 2차 허브로 네트워크 분리·우선순위 부가.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>전송 매체에 의한 분류</div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>매체</th><th>특징</th></tr></thead>
+            <tbody>
+                <tr><td><b>트위스티드 페어 (UTP/STP)</b></td><td>2개 이상 구리 도선이 꼬임. <b>가장 많이 활용</b>, 가장 값싸고 쉽게 설치. 대역폭 제한 많고 잡음 많음.</td></tr>
+                <tr><td><b>동축 케이블</b></td><td>넓은 대역폭, 빠른 속도, 적은 전기적 간섭. 많이 쓰였으나 <b>점차 사용 빈도 감소</b>.</td></tr>
+                <tr><td><b>광케이블</b></td><td>넓은 대역폭, 매우 높은 속도, 오류 적음. 전기적 간섭 X, <b>보안성 우수</b>. 크기 작고 가볍지만 설치에 고도 기술 필요. 주로 <b>백본(Backbone)</b>에 사용.</td></tr>
+                <tr><td><b>무선 LAN (WiFi)</b></td><td>유선 LAN 장점 + 제약 없는 연결성. 신뢰성·유연성·설치 용이성, 비용 절감. <b>IEEE 802.11</b>로 표준화.</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>매체 액세스 방식에 의한 분류 ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">매체 접근 방식</div>
+            <div class="mnemonic">경쟁 방식 vs 토큰 제어 방식</div>
+            <div class="hook-desc">공유 전송 매체에 대한 채널 할당 문제를 해결하는 방식</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 분류</div>
+            <ul>
+                <li><strong>경쟁 방식 → CSMA/CD</strong>: 스테이션이 채널 상태를 미리 감지해 충돌을 피하는 방식</li>
+                <li><strong>토큰 제어 → 토큰 링</strong>: 토큰이라는 짧은 프레임으로 데이터를 보낼 권리를 정해 전달</li>
+                <li><strong>토큰 제어 → 토큰 버스</strong>: 토큰 링 + 이더넷 결합. <b>물리적 버스, 논리적 토큰 링</b></li>
+                <li>토큰 개념 활용 분야: <strong>공장 자동화(산업용 네트워크), 항공 및 군사 시스템</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">6</span>전송 기술에 의한 분류 (베이스밴드 vs 브로드밴드) ★</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">베이스밴드 (Baseband)</div>
+                <div class="a"><b>디지털 신호를 그대로 전송</b>. 높은 전송율의 <b>하나의 전송 채널(TDM 사용)</b>. 전송 속도 빠르나 <b>신호 감쇠 심해 거리에 민감</b>.</div>
+            </div>
+            <div class="flash">
+                <div class="q">브로드밴드 (Broadband)</div>
+                <div class="a"><b>주파수 분할 다중화(FDM)</b> 사용. 데이터·음성 동시 전송, 동축/광케이블 사용. <b>한 방향으로만 전송(CATV와 유사)</b>. 거리에 둔감하지만 속도 느림.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">7</span>LAN의 표준 — IEEE 802 ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">IEEE 802 핵심 ★</div>
+            <div class="mnemonic">데이터링크 = LLC + MAC</div>
+            <div class="hook-desc">1985년 LAN 표준화 / 물리 계층 + 데이터링크 계층 기능 규정</div>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">LLC (Logical Link Control)</div>
+                <div class="a">데이터링크 계층의 <b>기본 기능: 에러 제어 및 흐름 제어</b>. <b>HDLC 프레임 구조</b> 사용(논리 주소·제어 정보·데이터로 구성).</div>
+            </div>
+            <div class="flash">
+                <div class="q">MAC (Medium Access Control)</div>
+                <div class="a">물리적 매체·연결 방식에 따른 제어. <b>공유 매체에 대한 접근 제어</b> 담당. 종류: <b>이더넷(CSMA/CD), 토큰 버스, 토큰 링</b>.</div>
+            </div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 IEEE 802 프로젝트 번호 ★</div>
+            <ul>
+                <li><strong>802.1</strong> Internetworking · <strong>802.2</strong> LLC</li>
+                <li><strong>802.3</strong> CSMA/CD · <strong>802.4</strong> Token bus · <strong>802.5</strong> Token ring</li>
+                <li><strong>802.6</strong> DQDB · <strong>802.11</strong> Wireless LAN · <strong>802.15</strong> WPAN</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 02. CSMA/CD 방식 LAN ==================== -->
+<section class="section-card s2" id="csma">
+    <div class="section-head">
+        <span class="section-badge">02</span>
+        <span class="section-title">⚡ CSMA/CD 방식 LAN (이더넷)</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>CSMA/CD의 의미 ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">CSMA/CD = ?</div>
+            <div class="mnemonic">CS + MA + CD</div>
+            <div class="hook-desc">버스형에 사용되는 매체 접근 방식, 이 방식의 LAN = 이더넷(Ethernet)</div>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">CS (Carrier Sense)</div>
+                <div class="a">회선을 <b>사용 중인지 감지</b>한다.</div>
+            </div>
+            <div class="flash">
+                <div class="q">MA (Multiple Access)</div>
+                <div class="a">회선을 사용하고 있지 않다면 <b>누구든지 사용 가능</b>하다.</div>
+            </div>
+            <div class="flash">
+                <div class="q">CD (Collision Detection)</div>
+                <div class="a">프레임을 전송하면서 <b>충돌 여부를 조사</b>한다.</div>
+            </div>
+            <div class="flash">
+                <div class="q">한 줄 정리</div>
+                <div class="a">감지하고(CS) → 비어 있으면 보내고(MA) → 보내면서 충돌을 본다(CD).</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>동작 과정 & 재전송 알고리즘 ★</div>
+        <div class="flow-box">
+            <span class="flow-step">N=0</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step hl">채널 사용 중? (Yes면 대기)</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">프레임 전송</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">충돌?</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step hl">Jam 신호 전송</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">N=N+1</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">N&gt;15 ? (Yes면 비정상 종료)</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step hl">[0, 2ᴺ-1] 임의수 k 선택</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">k×슬롯타임 대기</span>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 재전송 알고리즘 (이진 지수 백오프)</div>
+            <ul>
+                <li>프레임 전송 중 충돌 시 정해진 <strong>최대 시도 횟수(N=15)</strong>만큼 재전송 시도</li>
+                <li>충돌이 반복되면 통신량이 많다는 의미 → 재전송 <strong>대기 시간을 늘려</strong> 통신량 조절</li>
+                <li>N번 충돌 시 <strong>[0, 2ᴺ-1] 사이 임의의 수 k</strong>를 선택해 <strong>k × 슬롯타임</strong> 동안 대기</li>
+            </ul>
+        </div>
+        <div class="formula-box">
+            <div class="formula">슬롯 타임(slot time) = 2 × 전송 지연시간 + 여유 마진</div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>지속 방식 (Persistent strategy)</div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 매체가 사용 중일 때 어떻게 할 것인가?</div>
+            <ul>
+                <li><strong>Non-persistent</strong>: 회선 사용 중이면 회선 감시를 중지하고 <strong>임의의 시간 기다렸다가 처음부터 다시 시작</strong></li>
+                <li><strong>Persistent</strong>: 회선 사용 중이면 회선을 계속 감시</li>
+                <li>└ <strong>1-persistent</strong>: 사용 중이 아니면 <strong>즉시 전송(확률 1)</strong>. CSMA/CD에서 사용. <b>유선</b></li>
+                <li>└ <strong>p-persistent</strong>: 회선이 비어 있어도 <strong>확률 p로 전송</strong>. <b>위성 통신</b>. 충돌 가능성↓ 효율성↑</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>최소 프레임 크기 ★</div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 원리</div>
+            <ul>
+                <li>CSMA/CD에서는 <strong>하나의 프레임을 모두 전송하기 전에 충돌을 감지</strong>할 수 있어야 함</li>
+                <li>프레임 전송시간(Tfr)은 <strong>최대 전파시간(Tp)의 2배 이상</strong>이 되어야 함</li>
+            </ul>
+        </div>
+        <div class="formula-box">
+            <div class="formula">T<sub>fr</sub> ≥ 2 T<sub>p</sub></div>
+            <div class="formula-desc">최대 전파 지연 Tp = 25.6μs → 최소 전송시간 Tfr = 2 × 25.6 = 51.2μs<br>전송 속도 10Mbps → 최소 프레임 = 10Mbps × 51.2μs = <b>512비트(64바이트)</b>, 최대 길이 <b>2,500m</b></div>
+        </div>
+        <div class="note-box">
+            <div class="note-title">📌 Note: 전송 지연 vs 전파 지연</div>
+            • <b>전송 지연(Transmission delay)</b>: 채널 용량에 하나의 프레임을 완전히 송출하는 데 걸리는 시간.<br>
+            &nbsp;&nbsp;<b>전송 지연 = (프레임 길이 [bit]) / (채널 전송 속도 [bps])</b><br>
+            • <b>전파 지연(Propagation delay)</b>: 매체를 통해 전파적으로 이동하는 데 걸리는 시간(보통 매우 작음).<br>
+            &nbsp;&nbsp;<b>전파 지연 = (총 이동 거리 [m]) / (이동 속도 [m/sec])</b>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>이더넷 프레임 형식 ★</div>
+        <div class="frame-box">
+            <div class="frame-cell flag">Preamble<small>7바이트</small></div>
+            <div class="frame-cell flag">SFD<small>1바이트</small></div>
+            <div class="frame-cell addr">DA<small>6바이트</small></div>
+            <div class="frame-cell addr">SA<small>6바이트</small></div>
+            <div class="frame-cell ctrl">Length/Type<small>2바이트</small></div>
+            <div class="frame-cell data">Data<small>46~1,500바이트</small></div>
+            <div class="frame-cell fcs">CRC<small>4바이트</small></div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 필드 설명</div>
+            <ul>
+                <li><strong>Preamble</strong>: 프레임 동기를 위해 사용. <b>1과 0을 반복</b></li>
+                <li><strong>SFD (Start Frame Delimiter)</strong>: <b>10101011</b> 비트 패턴, 프레임의 도착을 알림</li>
+                <li><strong>Destination Address (DA)</strong>: 목적지 물리 주소(MAC address)</li>
+                <li><strong>Source Address (SA)</strong>: 발신지 물리 주소(MAC address)</li>
+                <li><strong>Length/Type</strong>: 데이터(PDU)의 바이트 수. <b>0x0600 = 1,536</b>보다 작으면 Length, 크면 Type</li>
+                <li><strong>Data</strong>: 46 ~ 1,500 바이트</li>
+                <li><strong>CRC</strong>: 오류 검출. <b>CRC-32</b> 사용. 목적지 주소(DA)~데이터 필드까지의 오류 검사</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">6</span>물리적인 규격 (표기법) ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">표기 읽는 법</div>
+            <div class="mnemonic">10 BASE - T</div>
+            <div class="hook-desc">첫 숫자=전송률(Mbps) · BASE=베이스밴드/BROAD=브로드밴드 · 마지막=케이블 최대 길이(m) 또는 유형</div>
+        </div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>명칭</th><th>매체</th><th>세그먼트 최대 길이</th><th>토폴로지</th><th>신호 방식</th></tr></thead>
+            <tbody>
+                <tr><td><b>10BASE2</b></td><td>가는 동축 케이블</td><td>185m</td><td>버스형</td><td>베이스밴드(맨체스터)</td></tr>
+                <tr><td><b>10BASE5</b></td><td>굵은 동축 케이블</td><td>500m</td><td>버스형</td><td>베이스밴드(맨체스터)</td></tr>
+                <tr><td><b>10BASE-T</b></td><td>2 UTP</td><td>100m</td><td>스타형</td><td>베이스밴드(맨체스터)</td></tr>
+                <tr><td>10BASE-FP</td><td>광케이블</td><td>500m</td><td>스타형</td><td>맨체스터(ON/OFF)</td></tr>
+                <tr><td>10BROAD36</td><td>동축 케이블</td><td>1,800m</td><td>버스형/트리형</td><td>브로드밴드(DPSK)</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">10BASE-T 스타형</div>
+                <div class="a">각 스테이션은 허브와 <b>한 쌍의 케이블</b>로 연결. <b>전이중 전송 가능</b>, 충돌은 <b>허브 내에서만</b> 발생.</div>
+            </div>
+            <div class="flash">
+                <div class="q">허브 대신 스위치(Switch) 사용</div>
+                <div class="a"><b>충돌이 발생하지 않는다.</b> 각 회선의 프레임을 수신 버퍼에 저장하고 <b>수신 주소를 참조하여 순서대로 목적지로 전달</b>.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">7</span>CSMA/CD LAN의 발전 — 고속·기가·10기가 ★</div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>구분</th><th>속도</th><th>핵심 특징</th></tr></thead>
+            <tbody>
+                <tr><td><b>고속 이더넷 (Fast Ethernet)</b></td><td>100Mbps급</td><td>초기 이더넷 MAC 프로토콜·프레임 형식 유지. TP·광섬유 사용. 100Base-TX(2쌍 Cat5, 100m), 100Base-T4(4쌍 Cat3), 100Base-FX(2쌍 다중모드 광, 반이중 400m/전이중 2,000m)</td></tr>
+                <tr><td><b>기가비트 이더넷 (1GbE)</b></td><td>1Gbps급</td><td>10/100Mbps와 호환. <b>최소 프레임 64→512바이트로 확장</b>, <b>프레임 버스팅(Frame bursting)</b> 제공. 광: 1000Base-LX(장거리)·SX(단거리) / 구리: 1000Base-T·CX</td></tr>
+                <tr><td><b>10기가비트 이더넷 (10GbE)</b></td><td>10Gbps급</td><td>IEEE 802.3ae(2002 최초 제정). 프레임 형식 동일. <b>전이중 모드로만 동작</b>, 스위치 이용, <b>반이중 CSMA/CD 미지원</b>. 주로 <b>백본 네트워크</b>. LAN·MAN·WAN 통합. 40·100기가비트도 등장</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 03. 토큰 제어 방식 LAN ==================== -->
+<section class="section-card s3" id="token">
+    <div class="section-head">
+        <span class="section-badge">03</span>
+        <span class="section-title">🪙 토큰 제어 방식 LAN</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>토큰(Token) 개념 ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">토큰 = ?</div>
+            <div class="mnemonic">채널 사용권</div>
+            <div class="hook-desc">특정한 비트 패턴을 갖는 제어 패킷. 토큰을 가진 스테이션만 전송 가능</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 특징과 장단점</div>
+            <ul>
+                <li>전송 원하는 스테이션 간 <strong>충돌 없이 매체에 접근</strong> (CSMA/CD보다 안정적)</li>
+                <li>매체 접근 지연시간이 어느 정도 <strong>예측 가능</strong></li>
+                <li><strong>우선순위 개념 적용</strong>: 우선순위 높은 스테이션에 토큰 먼저 제공</li>
+                <li><strong>단점</strong>: 노드 수↑면 토큰 순회 시간이 길어져 네트워크 속도 저하</li>
+                <li><strong>단점</strong>: 구현 복잡, <strong>토큰 분실 시 스테이션들이 무한히 대기</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>토큰 버스 LAN (IEEE 802.4)</div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>토큰이 버스 구조 노드로 형성된 <strong>논리적인 링 구조</strong>를 따라 돌며, 토큰을 가진 노드가 특정 시간 동안 회선 점유해 패킷 전송</li>
+                <li>전송을 마쳤거나 일정 시간 지나면 토큰은 <strong>논리적 순서대로 다음 노드</strong>로 넘어감</li>
+                <li><strong>IEEE 802.4</strong>로 표준화 → 이더넷에 밀려 거의 사용되지 않음</li>
+                <li>물리적으로는 <b>버스</b>, 논리적으로는 <b>링</b> (예: 논리적 링 A→D→B→C→A)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>토큰 링 LAN (IEEE 802.5)</div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li><strong>프리 토큰(Free token)</strong>이 각 노드를 <strong>한 쪽 방향으로 순차적</strong>으로 옮겨가며 데이터 전송</li>
+                <li><strong>IEEE 802.5</strong>로 표준화 → <strong>STP 케이블 사용, 16Mbps 전송</strong></li>
+            </ul>
+        </div>
+        <div class="flow-box">
+            <span class="flow-step hl">① 프리 토큰이 A 도착</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">② 비지 토큰으로 바꾸고 프레임을 링으로 전송</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">③ 수신 C가 프레임 수신, 복사 필드 마크</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step hl">④ 프레임이 A로 돌아오면 프리 토큰 전송</span>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>토큰 제어 LAN의 발전 — FDDI ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">FDDI</div>
+            <div class="mnemonic">100Mbps 광 이중 링</div>
+            <div class="hook-desc">Fiber Distributed Data Interface — 저속 LAN들을 상호 연결하는 기간 LAN</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>저속 LAN들을 상호 연결하는 <strong>기간 LAN</strong> 역할. 고속 데이터 + 음성·데이터 전송</li>
+                <li><strong>100Mbps</strong> 고성능 광케이블 LAN, <strong>이중 링(Dual ring)</strong>으로 구성</li>
+                <li><strong>200Km 범위에서 1,000개</strong>의 스테이션 연결, 노드 간 거리 <strong>2Km로 제한</strong></li>
+                <li><strong>토큰 링 방식(IEEE 802.5)</strong> 사용: <strong>토큰 조기 해제 방식</strong> → 효율적 전송</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 FDDI의 계층 구조</div>
+            <ul>
+                <li><strong>PMD 계층</strong>: 광섬유 종류별 광 송수신기 포함한 각종 전송 장비 내역 규정</li>
+                <li><strong>PHY 계층</strong>: 부호화(<b>4B/5B</b>) 및 고장 난 스테이션 처리 방식 규정. 스테이션 간 최대 거리 = 다중 모드 2Km, 단일 모드 40Km</li>
+                <li><strong>SMT (Station Management)</strong>: 연결 관리, 링 관리, SMT 프레임 서비스</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>DQDB (IEEE 802.6)</div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li><strong>Distributed-Queue Dual Bus</strong>. <strong>IEEE 802.6</strong>으로 표준화 → <strong>MAN 표준의 일부</strong></li>
+                <li><strong>이중 버스</strong>로 구성 → 네트워크 용량 증가 (단방향 버스 A + 단방향 버스 B, 양 끝 Head end)</li>
+                <li><strong>영상 서비스를 위한 MAN용</strong>으로 개발</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 04. 무선 LAN ==================== -->
+<section class="section-card s4" id="wlan">
+    <div class="section-head">
+        <span class="section-badge">04</span>
+        <span class="section-title">📶 무선 LAN (IEEE 802.11)</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>WLAN 개요 = 와이파이</div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>이동성·편리성, <strong>Ad-hoc 네트워킹</strong>, 유선 연결 어려운 곳 서비스 요구로 등장</li>
+                <li>케이블 없어 구축·수정 용이, 유선 대비 인적·경제적 비용 크게 절감</li>
+                <li><strong>단점</strong>: 신호 간섭 영향 커 오류율 높고 전송률 낮음 / 열린 공간 전파 → <strong>도청 쉬움</strong></li>
+                <li><strong>IEEE 802.11</strong>로 표준화. 적외선 기술(실내) + <strong>무선 주파수 기술(실외, 대부분의 WLAN)</strong></li>
+                <li><strong>비인가 대역 ISM</strong>(Industrial, Scientific and Medical): <strong>2.4GHz, 5GHz</strong>. 국내 ISM = 2.400~2.485GHz, 5.725~5.825GHz</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>IEEE 802.11 표준 (1997 채택)</div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>표준안</th><th>제정 시기</th><th>주파수 대역</th><th>전송 속도</th><th>변조 방식</th></tr></thead>
+            <tbody>
+                <tr><td>IEEE 802.11</td><td>1997.6</td><td>2.4~2.5GHz</td><td>2Mbps</td><td>DSSS, FHSS</td></tr>
+                <tr><td>802.11a</td><td>1999.9</td><td>5GHz대</td><td>54Mbps</td><td>OFDM</td></tr>
+                <tr><td>802.11b</td><td>1999.9</td><td>2.4~2.5GHz</td><td>11Mbps</td><td>DSSS</td></tr>
+                <tr><td>802.11g</td><td>2003.6</td><td>2.4~2.5GHz</td><td>54Mbps</td><td>OFDM, DSSS</td></tr>
+                <tr><td>802.11n</td><td>2009.9</td><td>2.4 / 5GHz</td><td>600Mbps</td><td>OFDM</td></tr>
+                <tr><td>802.11ac</td><td>2013.12</td><td>5GHz대</td><td>6.933Gbps</td><td>OFDM</td></tr>
+                <tr><td>802.11ad</td><td>2014.12</td><td>2.4, 5, 60GHz</td><td>6.75Gbps</td><td>OFDM+SC</td></tr>
+                <tr><td>802.11ah</td><td>2016.8</td><td>900MHz</td><td>68Mbps</td><td>MIMO-OFDM</td></tr>
+                <tr><td>802.11ay</td><td>2019</td><td>60GHz</td><td>100Gbps</td><td>OFDM/SC</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>IEEE 802.11 네트워크 구조 ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">구조 핵심 ★</div>
+            <div class="mnemonic">BSS + DS = ESS</div>
+            <div class="hook-desc">다수의 BSS가 DS에 의해 연결되어 ESS가 된다</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>다수의 <strong>BSS</strong>가 <strong>DS</strong>에 의해 연결되어 <strong>ESS</strong>가 된다</li>
+                <li>BSS에서는 <strong>AP를 통해서 DS에 연결</strong></li>
+                <li>BSS 내부 이동 STA들은 AP와 데이터를 송수신</li>
+                <li>기존 유선 LAN과 연결하려면 <strong>포털(Portal)</strong>이라는 장치를 통해 DS에 접속</li>
+            </ul>
+        </div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>약어</th><th>의미</th></tr></thead>
+            <tbody>
+                <tr><td><b>STA</b></td><td>스테이션</td></tr>
+                <tr><td><b>BSS</b></td><td>기본 서비스 집합 (Basic Service Set)</td></tr>
+                <tr><td><b>ESS</b></td><td>확장 서비스 집합 (Extended Service Set)</td></tr>
+                <tr><td><b>DS</b></td><td>분배 시스템 (Distribution System)</td></tr>
+                <tr><td><b>DSS</b></td><td>분배 시스템 서비스</td></tr>
+                <tr><td><b>SS</b></td><td>스테이션 서비스</td></tr>
+                <tr><td><b>AP</b></td><td>액세스 포인트 (Access Point)</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 애드혹 네트워크 (Ad-hoc Network)</div>
+            <ul>
+                <li><strong>BSS가 다른 BSS나 DS 없이 홀로 존재</strong></li>
+                <li>중앙에 AP를 두지 않고 스테이션들이 <strong>직접 송수신기로 무선 통신</strong></li>
+                <li>필요에 따라 그룹 구성원 사이에 <strong>잠정적으로 구성</strong>되고 작업 종료되면 없어지는 네트워크</li>
+                <li>외부 네트워크와 연결되지 않으며, 자체 네트워크에서만 통신, 작업 끝나면 해제</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>IEEE 802.11 MAC 계층 (PCF · DCF) ★</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">PCF (Point Coordination Function)</div>
+                <div class="a"><b>비경쟁 방식</b>. <b>AP</b>로 스테이션들의 데이터 전송을 <b>중앙에서 제어</b>하는 방식.</div>
+            </div>
+            <div class="flash">
+                <div class="q">DCF (Distributed Coordination Function)</div>
+                <div class="a"><b>경쟁 방식</b>. <b>CSMA/CA</b> 사용. 무선에서는 충돌 여부를 검출할 수 없어 <b>아예 충돌을 회피</b>한다.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">5</span>CSMA/CA ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">CSMA/CA 핵심 ★</div>
+            <div class="mnemonic">충돌 회피 · NAV</div>
+            <div class="hook-desc">CSMA/CD의 변형 — 무선은 충돌 검출 불가 → 아예 충돌을 회피</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>CSMA/CD의 변형 → 무선에서는 충돌 검출 불가, <strong>아예 충돌을 회피</strong>하는 방법 사용</li>
+                <li>반드시 <strong>ACK가 필요</strong> → 수신 스테이션이 데이터를 잘 받았는지 송신 측이 알 수 없기 때문</li>
+                <li>충돌 회피의 핵심은 <strong>NAV(Network Allocation Vector)</strong>에 있다</li>
+                <li>한 스테이션이 <strong>RTS 프레임 전송 시 채널 점유 시간이 포함</strong> → 이 시간 동안 다른 스테이션은 전송 시도하지 않음</li>
+            </ul>
+        </div>
+        <div class="flow-box">
+            <span class="flow-step">DIFS</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step hl">RTS</span>
+            <span class="flow-arrow">→ SIFS →</span>
+            <span class="flow-step hl">CTS</span>
+            <span class="flow-arrow">→ SIFS →</span>
+            <span class="flow-step">data</span>
+            <span class="flow-arrow">→ SIFS →</span>
+            <span class="flow-step">ACK</span>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 경쟁 윈도 (Contention window)</div>
+            <ul>
+                <li>전송 시도 전 충돌 회피 위해 <strong>슬롯타임의 정수 배 시간 동안 대기</strong></li>
+                <li>초기 대기 시간은 <strong>슬롯타임 1개</strong> → 대기 후 매체 비어 있으면 RTS 전송</li>
+                <li>사용 중이면 다시 <strong>이전 대기 시간의 2배</strong>에 해당하는 대기 시간 내에서 임의 슬롯타임 개수만큼 대기 (시도 횟수 N=3이면 <strong>0~7 (0과 2ᴺ-1)</strong> 사이 임의값 선택)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">6</span>숨겨진 터미널 vs 노출된 터미널 ★</div>
+        <div class="flash-grid">
+            <div class="flash">
+                <div class="q">숨겨진 터미널 문제 (Hidden terminal)</div>
+                <div class="a">중간 B는 A와 C 모두와 통신 가능하나 <b>A와 C는 직접 통신 불가</b>. A가 B에 전송 시 C는 모르므로 C가 B에 전송하면 <b>충돌</b>.<br>→ <b>해결: RTS/CTS</b>. A가 RTS 전송, B가 CTS 응답 → C도 CTS 수신 → <b>NAV 기간 동안 전송 시도 안 함</b>으로 충돌 회피.</div>
+            </div>
+            <div class="flash">
+                <div class="q">노출된 터미널 문제 (Exposed terminal)</div>
+                <div class="a">B가 A로 전송하면 C도 신호 감지해 <b>매체 사용 불가로 판단</b>. C가 D에 전송해도 되지만 B 전송 완료까지 대기.<br>→ 이처럼 <b>동시 전송이 가능함에도 전송하지 못하는 경우</b>를 의미.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">7</span>IEEE 802.11 프레임 형식</div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>무선은 잡음 간섭으로 <strong>재전송 가능성↑</strong> → 프레임 크기를 작게 하는 것이 유리</li>
+                <li>802.11에서는 큰 프레임을 작게 <strong>분할</strong>하여 사용할 것을 권고</li>
+            </ul>
+        </div>
+        <div class="frame-box">
+            <div class="frame-cell ctrl">FC<small>2바이트</small></div>
+            <div class="frame-cell ctrl">D<small>2바이트</small></div>
+            <div class="frame-cell addr">주소1<small>6바이트</small></div>
+            <div class="frame-cell addr">주소2<small>6바이트</small></div>
+            <div class="frame-cell addr">주소3<small>6바이트</small></div>
+            <div class="frame-cell flag">SC<small>2바이트</small></div>
+            <div class="frame-cell addr">주소4<small>6바이트</small></div>
+            <div class="frame-cell data">프레임 본체<small>0~2,312바이트</small></div>
+            <div class="frame-cell fcs">FCS<small>4바이트</small></div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 필드 설명</div>
+            <ul>
+                <li><strong>프레임 제어(FC)</strong>: 프레임 타입·제어 정보 정의 (version·타입·부타입·ToDS·fromDS·More flag·재시도·전력관리·More data·WEP·예약 부필드)</li>
+                <li><strong>기간(Duration, D)</strong>: 충돌 회피를 위한 <strong>NAV 값</strong>을 나타냄</li>
+                <li><strong>순서 제어(SC)</strong>: 흐름 제어를 위한 순서 번호</li>
+                <li><strong>프레임 몸체(Frame body)</strong>: 프레임 타입에서 정의된 데이터</li>
+                <li><strong>FCS</strong>: 오류 검출을 위한 <strong>CRC-32</strong> 필드</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 주소 필드 (To DS / From DS 조합)</div>
+            <ul>
+                <li><strong>0 / 0</strong>: 주소1=수신지, 주소2=송신지, 주소3=BSS ID</li>
+                <li><strong>0 / 1</strong>: 주소1=수신지, 주소2=송신 AP, 주소3=송신지</li>
+                <li><strong>1 / 0</strong>: 주소1=수신 AP, 주소2=송신지, 주소3=수신지</li>
+                <li><strong>1 / 1</strong>: 주소1=수신 AP, 주소2=송신 AP, 주소3=수신지, 주소4=송신지</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 제어 프레임 형식</div>
+            <ul>
+                <li><strong>RTS</strong>: FC · D · 주소1 · 주소2 · FCS</li>
+                <li><strong>CTS 또는 ACK</strong>: FC · D · 주소1 · FCS</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 05. 무선 개인 통신 (WPAN) ==================== -->
+<section class="section-card s5" id="wpan">
+    <div class="section-head">
+        <span class="section-badge">05</span>
+        <span class="section-title">🔵 무선 개인 통신 (WPAN)</span>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">1</span>WPAN 개요</div>
+        <div class="memo-hook">
+            <div class="hook-label">WPAN = ?</div>
+            <div class="mnemonic">IEEE 802.15 · 10m 내외</div>
+            <div class="hook-desc">Wireless Personal Area Network — 블루투스·지그비·UWB</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li>무선 기반 이동성·편리성, 언제·어디서나 맞춤형 서비스 → <strong>유비쿼터스 네트워크 핵심 기술</strong></li>
+                <li><strong>10m 내외</strong>의 비교적 단거리에서 디바이스 간 무선 연결</li>
+                <li>저전력·소형·저가격, <strong>저속(Kbps)~초고속(Gbps)</strong> 다양한 속도</li>
+                <li>외부 망과 연동되어 원격지에서도 서비스 제공 인프라</li>
+                <li><strong>IEEE 802.15</strong> 표준화 그룹: <strong>블루투스, 지그비, UWB</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">2</span>블루투스 (Bluetooth) ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">블루투스 한 줄</div>
+            <div class="mnemonic">1994 에릭슨 · 79채널 FHSS</div>
+            <div class="hook-desc">10m 짧은 거리 장치 연결용 무선 LAN의 일종 (PC·마우스·프린터·스피커·헤드셋)</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 네트워크 구조</div>
+            <ul>
+                <li>일반적으로 기기 간 <strong>1:1 데이터 통신</strong></li>
+                <li><strong>피코넷(Piconet)</strong>: 하나의 마스터를 중심으로 여러 개(<strong>최대 7대</strong>)의 슬레이브 연결</li>
+                <li><strong>스케터넷(Scatternet)</strong>: 2개의 피코넷이 겹치는 형태</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 프로토콜 계층 구조</div>
+            <ul>
+                <li><strong>RF(무선 계층)</strong>: 물리 계층. <strong>총 79개 채널</strong>(f = 2402 + k MHz, k=0~78). <strong>FHSS</strong> 방식. <strong>초당 1,600번 호핑</strong> → 각 주파수 체류 시간 625μs (=1/1600)</li>
+                <li><strong>Baseband(베이스밴드)</strong>: LAN의 MAC 계층과 유사. 슬롯타임(625μs) <strong>TDMA</strong> 접근. 마스터=0,2,4,6 / 슬레이브=1,3,5,7 슬롯 → <strong>TDD-TDMA</strong>. 프레임: 액세스 코드(72비트)·헤더(54비트)·페이로드(0~2,740비트)</li>
+                <li><strong>Link Manager</strong>: 두 장치 사이 링크 설정·관리·해제</li>
+                <li><strong>HCI(Host Controller Interface)</strong>: 호스트와 호스트 컨트롤러 사이 인터페이스 담당</li>
+                <li><strong>L2CAP</strong>: LAN의 <strong>LLC 부계층에 해당</strong>. 다중화, 분할·재조립, QoS 관리</li>
+                <li><strong>RFCOMM/SDP</strong>: RFCOMM은 가상 직렬 포트 제공 / SDP(Service Discovery Protocol)는 사용 가능 서비스 종류·특성 파악</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 블루투스 표준의 변화</div>
+            <ul>
+                <li><strong>1.1</strong>: 2002 IEEE 표준 승인, 723Kbps · <strong>2.0+EDR</strong>: 3.0Mbps(실제 2.1Mbps)</li>
+                <li><strong>3.0+HS</strong>: 최대 24Mbps · <strong>4.0+LE</strong>: 저전력(BLE) 1Mbps</li>
+                <li><strong>4.2</strong>: IoT, IPv6/6LoWPAN · <strong>5.0</strong>: 사물인터넷 초점, 속도·도달 범위 trade-off</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">3</span>지그비 (ZigBee) ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">지그비 한 줄 ★</div>
+            <div class="mnemonic">IEEE 802.15.4 · IoT 주력</div>
+            <div class="hook-desc">소형·저전력·저비용 / 저속 250Kbps / 긴 배터리 수명·보안 요구 분야</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li><strong>Zig-zag + Bee</strong>의 합성어 (벌들이 지그재그로 날며 통신하는 모습)</li>
+                <li>소형·저전력·저비용 WPAN 표준 기술 (<strong>IEEE 802.15.4</strong>)</li>
+                <li>저속(<strong>250Kbps</strong>), <strong>긴 배터리 수명·보안</strong> 요구 분야에서 사용</li>
+                <li>주기적·간헐적 데이터나 센서·입력 장치 단순 신호 전달에 적합</li>
+                <li><strong>128비트 대칭키 암호화</strong> 보안 기능. <strong>IoT에 주로 사용</strong></li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 프로토콜 스택 & 네트워크 토폴로지</div>
+            <ul>
+                <li><strong>IEEE 802.15.4</strong>는 물리·MAC 계층 정의 / 상위 계층은 <strong>지그비 연합(ZigBee Alliance)</strong> 담당</li>
+                <li>마스터-슬레이브 구성, <strong>최대 256개 노드</strong> 허용 (스타·클러스터 트리·메쉬형)</li>
+                <li><strong>코디네이터(Coordinator)</strong>: 마스터 기능, 네트워크에 <strong>1개만 존재</strong>. 정보 저장, 최적 전송 경로 결정</li>
+                <li><strong>라우터(Router)</strong>: 항상 활성 모드(Active mode), 중간 노드 역할, 데이터 전송·전달</li>
+                <li><strong>엔드 디바이스(End device)</strong>: 상위 노드와 통신하는 최소한의 기능</li>
+            </ul>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 MAC & PHY</div>
+            <ul>
+                <li><strong>MAC</strong>: 코디네이터 있으면 <strong>폴링(경쟁 없음)</strong>, 없으면 <strong>CSMA/CA 경쟁 기반</strong></li>
+                <li><strong>MAC 프레임</strong>: 프레임 제어·순서 번호·주소 정보·페이로드·<strong>FCS(CRC-16)</strong></li>
+                <li><strong>PHY</strong>: 2.4GHz 250Kbps 16채널 / 미국 915MHz 40Kbps 10채널 / 유럽 868MHz 20Kbps 1채널. DSSS, 2.4GHz는 OQPSK 변조</li>
+            </ul>
+        </div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>구분</th><th>지그비</th><th>블루투스</th><th>와이파이</th><th>NFC</th></tr></thead>
+            <tbody>
+                <tr><td>전송 거리</td><td>~100m</td><td>~10m</td><td>~10m</td><td>~20cm</td></tr>
+                <tr><td>전송 속도</td><td>~250Kbps</td><td>~24Mbps</td><td>11/54Mbps</td><td>106~848Kbps</td></tr>
+                <tr><td>최대 채널 수</td><td>32,000</td><td>7</td><td>14</td><td>1</td></tr>
+                <tr><td>소비 전력</td><td class="hl">매우 낮음</td><td>중간</td><td>높음</td><td>낮음</td></tr>
+                <tr><td>복잡도 / 비용</td><td>낮음 / 낮음</td><td>낮음 / 낮음</td><td>높음 / 높음</td><td>낮음 / 낮음</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="topic">
+        <div class="topic-title"><span class="topic-num">4</span>UWB (Ultra-WideBand) ★</div>
+        <div class="memo-hook">
+            <div class="hook-label">UWB 한 줄</div>
+            <div class="mnemonic">3.1~10.6GHz · 초광대역 저전력</div>
+            <div class="hook-desc">매우 넓은 대역에 걸쳐 낮은 전력으로 초고속 통신을 실현하는 근거리 무선 기술</div>
+        </div>
+        <div class="memo-list">
+            <div class="memo-list-title">💡 핵심 정리</div>
+            <ul>
+                <li><strong>3.1~10.6GHz</strong> 대역에서 <strong>100Mbps 이상</strong>의 속도</li>
+                <li>기존 스펙트럼에 비해 매우 넓은 대역에 걸쳐 <strong>낮은 전력</strong> 사용 → 초고속 근거리 통신</li>
+                <li>특징: <strong>초광대역 활용 + 상대적으로 낮은 출력</strong>. <strong>고가·고성능 휴대폰</strong>의 기기 간 접속 기술</li>
+            </ul>
+        </div>
+        <div class="tbl-wrap">
+        <table class="std-table">
+            <thead><tr><th>구분</th><th>WLAN 11g</th><th>WLAN 11n</th><th>블루투스</th><th>지그비</th><th>UWB</th></tr></thead>
+            <tbody>
+                <tr><td>주파수</td><td>2.4GHz</td><td>5GHz</td><td>2.4GHz</td><td>868/915M/2.4G</td><td>3.1~10.6GHz</td></tr>
+                <tr><td>전송 속도</td><td>54Mbps</td><td>500Mbps</td><td>1Mbps</td><td>20/40/250Kbps</td><td>500Mbps</td></tr>
+                <tr><td>커버리지</td><td>1Km</td><td>1Km</td><td>10m</td><td>30m</td><td>2~10m</td></tr>
+                <tr><td>다중 접속</td><td>OFDM/DSSS</td><td>MIMO-OFDM</td><td>FHSS</td><td>CSMA/CA</td><td>MB OFDM·DS-CDMA</td></tr>
+                <tr><td>응용 분야</td><td>Hotspot</td><td>Hotspot</td><td>근거리 유선 대체</td><td>저전력 기기 제어</td><td>근거리 고속</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 체크 퀴즈 ==================== -->
+<section class="section-card s3" id="quiz">
+    <div class="section-head">
+        <span class="section-badge">QUIZ</span>
+        <span class="section-title">✏️ 체크 퀴즈</span>
+    </div>
+
+    <h3 style="font-size:1.05rem; margin:8px 0 10px; color:var(--orange);">▪ 객관식</h3>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q1.</span>LAN의 토폴로지 분류에 <b>해당하지 않는</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb1')">① 스타형</button></li>
+            <li><button onclick="ans(this,false,'fb1')">② 버스형</button></li>
+            <li><button onclick="ans(this,false,'fb1')">③ 링형</button></li>
+            <li><button onclick="ans(this,true,'fb1')">④ 메쉬형 (LAN에서는 사용되지 않음)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb1"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q2.</span>버스형 LAN에서 신호 반사에 의한 상호 중첩을 제거하기 위해 버스 끝에 다는 장치는?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb2')">① 허브(Hub)</button></li>
+            <li><button onclick="ans(this,true,'fb2')">② 종단 장치(Terminator)</button></li>
+            <li><button onclick="ans(this,false,'fb2')">③ 리피터(Repeater)</button></li>
+            <li><button onclick="ans(this,false,'fb2')">④ 스위치(Switch)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb2"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q3.</span>IEEE 802 표준에서 데이터링크 계층을 분리한 두 부계층은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,true,'fb3')">① LLC와 MAC</button></li>
+            <li><button onclick="ans(this,false,'fb3')">② PHY와 PMD</button></li>
+            <li><button onclick="ans(this,false,'fb3')">③ LCP와 NCP</button></li>
+            <li><button onclick="ans(this,false,'fb3')">④ PCF와 DCF</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb3"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q4.</span>IEEE 802 프로젝트 번호 매칭이 <b>틀린</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb4')">① 802.3 = CSMA/CD</button></li>
+            <li><button onclick="ans(this,false,'fb4')">② 802.4 = 토큰 버스</button></li>
+            <li><button onclick="ans(this,false,'fb4')">③ 802.5 = 토큰 링</button></li>
+            <li><button onclick="ans(this,true,'fb4')">④ 802.6 = 무선 LAN (→ 802.6은 DQDB, 무선 LAN은 802.11)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb4"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q5.</span>CSMA/CD에서 'CD'가 의미하는 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb5')">① Carrier Detection (반송파 검출)</button></li>
+            <li><button onclick="ans(this,true,'fb5')">② Collision Detection (충돌 검출)</button></li>
+            <li><button onclick="ans(this,false,'fb5')">③ CollisionDed (충돌 회피)</button></li>
+            <li><button onclick="ans(this,false,'fb5')">④ Channel Division (채널 분할)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb5"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q6.</span>이더넷의 최소 프레임 크기로 옳은 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb6')">① 256비트(32바이트)</button></li>
+            <li><button onclick="ans(this,true,'fb6')">② 512비트(64바이트)</button></li>
+            <li><button onclick="ans(this,false,'fb6')">③ 1,024비트(128바이트)</button></li>
+            <li><button onclick="ans(this,false,'fb6')">④ 1,500비트</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb6"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q7.</span>CSMA/CD 충돌 시 동작으로 <b>틀린</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb7')">① 충돌이 발생하면 Jam 신호를 전송한다</button></li>
+            <li><button onclick="ans(this,false,'fb7')">② 시도 횟수 N이 15를 초과하면 비정상 종료한다</button></li>
+            <li><button onclick="ans(this,false,'fb7')">③ [0, 2ᴺ-1] 사이 임의수 k를 골라 k×슬롯타임 대기한다</button></li>
+            <li><button onclick="ans(this,true,'fb7')">④ 충돌이 반복될수록 대기 시간을 줄여 빠르게 재전송한다 (→ 늘림)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb7"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q8.</span>10기가비트 이더넷에 대한 설명으로 <b>틀린</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb8')">① IEEE 802.3ae로 2002년 최초 규격 제정</button></li>
+            <li><button onclick="ans(this,false,'fb8')">② 전이중 모드로만 동작하고 스위치를 이용한다</button></li>
+            <li><button onclick="ans(this,true,'fb8')">③ 반이중 CSMA/CD를 지원한다 (→ 지원하지 않음)</button></li>
+            <li><button onclick="ans(this,false,'fb8')">④ 주로 백본 네트워크에 사용된다</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb8"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q9.</span>FDDI에 대한 설명으로 <b>틀린</b> 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb9')">① 100Mbps 고성능 광케이블 LAN, 이중 링으로 구성</button></li>
+            <li><button onclick="ans(this,false,'fb9')">② 토큰 링 방식(IEEE 802.5)을 사용한다</button></li>
+            <li><button onclick="ans(this,false,'fb9')">③ 부호화 방식으로 4B/5B를 사용한다</button></li>
+            <li><button onclick="ans(this,true,'fb9')">④ CSMA/CD 경쟁 방식으로 매체에 접근한다 (→ 토큰 방식)</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb9"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q10.</span>IEEE 802.11 네트워크 구조에서 다수의 BSS가 DS로 연결되어 이루는 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb10')">① AP</button></li>
+            <li><button onclick="ans(this,false,'fb10')">② STA</button></li>
+            <li><button onclick="ans(this,true,'fb10')">③ ESS (확장 서비스 집합)</button></li>
+            <li><button onclick="ans(this,false,'fb10')">④ Portal</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb10"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q11.</span>무선 LAN에서 CSMA/CA를 사용하는 이유로 옳은 것은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb11')">① 무선이 유선보다 빠르기 때문</button></li>
+            <li><button onclick="ans(this,true,'fb11')">② 무선에서는 충돌 여부를 검출할 수 없어 아예 회피하기 때문</button></li>
+            <li><button onclick="ans(this,false,'fb11')">③ ACK가 필요 없기 때문</button></li>
+            <li><button onclick="ans(this,false,'fb11')">④ 토큰을 사용하기 때문</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb11"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q12.</span>숨겨진 터미널 문제를 해결하기 위한 방법은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,true,'fb12')">① RTS/CTS 교환</button></li>
+            <li><button onclick="ans(this,false,'fb12')">② 비트 스터핑</button></li>
+            <li><button onclick="ans(this,false,'fb12')">③ 토큰 패싱</button></li>
+            <li><button onclick="ans(this,false,'fb12')">④ 종단 장치 설치</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb12"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q13.</span>블루투스 피코넷에서 하나의 마스터에 연결 가능한 최대 슬레이브 수는?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb13')">① 4대</button></li>
+            <li><button onclick="ans(this,true,'fb13')">② 7대</button></li>
+            <li><button onclick="ans(this,false,'fb13')">③ 16대</button></li>
+            <li><button onclick="ans(this,false,'fb13')">④ 256대</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb13"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q14.</span>다음 중 IoT에 주로 사용되며 128비트 대칭키 암호화를 제공하는 저속·저전력 WPAN 기술은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb14')">① 블루투스</button></li>
+            <li><button onclick="ans(this,true,'fb14')">② 지그비 (IEEE 802.15.4)</button></li>
+            <li><button onclick="ans(this,false,'fb14')">③ UWB</button></li>
+            <li><button onclick="ans(this,false,'fb14')">④ NFC</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb14"></div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q15.</span>전송 기술 분류에서 FDM을 사용하고 CATV와 유사하게 한 방향 전송하는 방식은?</div>
+        <ul class="quiz-options">
+            <li><button onclick="ans(this,false,'fb15')">① 베이스밴드</button></li>
+            <li><button onclick="ans(this,true,'fb15')">② 브로드밴드</button></li>
+            <li><button onclick="ans(this,false,'fb15')">③ 토큰 패싱</button></li>
+            <li><button onclick="ans(this,false,'fb15')">④ 맨체스터</button></li>
+        </ul>
+        <div class="quiz-feedback" id="fb15"></div>
+    </div>
+
+    <h3 style="font-size:1.05rem; margin:24px 0 10px; color:var(--orange);">▪ 단답형</h3>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q16.</span>CSMA/CD의 슬롯 타임을 구하는 식을 쓰시오.</div>
+        <div class="short-answer">
+            <input type="text" id="sa1" placeholder="답 입력">
+            <button onclick="checkShort('sa1', ['2*전송지연시간+여유마진','2×전송지연시간+여유마진','2 x 전송 지연시간 + 여유 마진','2*전파지연+여유마진','2×전송지연+여유마진'], 'mfb1')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb1">슬롯 타임 = <b>2 × 전송 지연시간 + 여유 마진</b>. 한 프레임을 모두 보내기 전에 충돌을 감지할 수 있어야 하므로 Tfr ≥ 2Tp 조건이 필요하다.</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q17.</span>토큰 링 LAN의 IEEE 표준 번호와 전송 속도를 쓰시오.</div>
+        <div class="short-answer">
+            <input type="text" id="sa2" placeholder="답 입력 (예: 802.5, 16Mbps)">
+            <button onclick="checkShort('sa2', ['802.5, 16Mbps','IEEE 802.5, 16Mbps','802.5 16Mbps','802.5,16Mbps'], 'mfb2')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb2"><b>IEEE 802.5, 16Mbps</b> — STP 케이블을 사용하며 프리 토큰이 한 방향으로 순차적으로 옮겨가며 데이터를 전송한다.</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q18.</span>무선 LAN에서 충돌 회피의 핵심이 되는, 채널 점유 시간을 나타내는 값의 약어는?</div>
+        <div class="short-answer">
+            <input type="text" id="sa3" placeholder="답 입력 (약어)">
+            <button onclick="checkShort('sa3', ['NAV','nav','Network Allocation Vector'], 'mfb3')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb3"><b>NAV (Network Allocation Vector)</b> — RTS 프레임에 채널 점유 시간이 포함되어, 이 시간 동안 다른 스테이션은 전송을 시도하지 않아 충돌을 회피한다.</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q19.</span>블루투스 RF 계층은 총 몇 개의 채널을 사용하며, 1초당 호핑 횟수는?</div>
+        <div class="short-answer">
+            <input type="text" id="sa4" placeholder="답 입력 (예: 79채널, 1600회)">
+            <button onclick="checkShort('sa4', ['79채널, 1600회','79, 1600','79채널 1600회','79,1600','79개, 1600번'], 'mfb4')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb4"><b>79개 채널, 초당 1,600번 호핑</b> — FHSS 방식. 각 주파수에서 머무는 시간은 625μs(=1/1600)이며 f = 2402 + k MHz (k=0~78).</div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q20.</span>지그비의 IEEE 표준 번호와 전송 속도를 쓰시오.</div>
+        <div class="short-answer">
+            <input type="text" id="sa5" placeholder="답 입력 (예: 802.15.4, 250Kbps)">
+            <button onclick="checkShort('sa5', ['802.15.4, 250Kbps','IEEE 802.15.4, 250Kbps','802.15.4 250Kbps','802.15.4,250Kbps'], 'mfb5')">확인</button>
+        </div>
+        <div class="model-answer" id="mfb5"><b>IEEE 802.15.4, 250Kbps</b> — 소형·저전력·저비용 WPAN으로 긴 배터리 수명과 보안을 요구하는 분야, IoT에 주로 사용된다.</div>
+    </div>
+
+    <h3 style="font-size:1.05rem; margin:24px 0 10px; color:var(--orange);">▪ 서술형 연습</h3>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q21.</span>스타형 LAN의 장점과 단점을 각각 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da1" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d1')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d1">
+            ▸ 스타형은 각 스테이션이 <b>허브라는 중앙 전송 제어 장치와 점대점 링크</b>로 연결된 형태다.<br>
+            ▸ <b>장점</b>: 고장 발견이 쉽고 유지보수가 용이하다 / 한 스테이션의 고장이 전체 네트워크에 영향을 미치지 않는다 / 스테이션 증설·이전이 용이하다.<br>
+            ▸ <b>단점</b>: 중앙 전송 제어 장치가 고장 나면 네트워크 전체가 동작 불가능하다 / 설치 시 케이블링에 많은 노력·비용이 든다 / 통신량이 많으면 전송 지연이 발생한다.<br>
+            ▸ 최근에는 성능 향상을 위해 <b>스위칭 기능을 갖는 허브</b>를 사용하는 추세이다.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q22.</span>CSMA/CD에서 최소 프레임 크기가 필요한 이유와, 10Mbps·Tp=25.6μs일 때의 최소 프레임 크기를 계산 과정과 함께 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da2" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d2')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d2">
+            ▸ CSMA/CD는 <b>하나의 프레임을 모두 전송하기 전에 충돌을 감지</b>할 수 있어야 한다. 그래야 충돌을 인지하고 재전송할 수 있기 때문이다.<br>
+            ▸ 따라서 프레임 전송시간 Tfr은 최대 전파시간 Tp의 2배 이상이어야 한다: <b>Tfr ≥ 2Tp</b>.<br>
+            ▸ Tp = 25.6μs → 최소 전송시간 Tfr = 2 × 25.6μs = <b>51.2μs</b>.<br>
+            ▸ 전송 속도 10Mbps → 최소 프레임 크기 = 10Mbps × 51.2μs = <b>512비트(64바이트)</b>.<br>
+            ▸ 실제 이더넷의 최소 프레임 길이는 512비트(64바이트)이며 최대 길이는 2,500m로 규정된다.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q23.</span>숨겨진 터미널 문제와 노출된 터미널 문제를 비교 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da3" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d3')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d3">
+            ▸ <b>숨겨진 터미널 문제</b>: 중간의 B는 A와 C 모두와 통신할 수 있지만 A와 C는 서로 직접 통신할 수 없는 거리에 있다. A가 B에 전송 중인 것을 C가 모르고 C도 B에 전송하면 <b>충돌</b>이 발생한다. 해결책으로 A가 RTS를 보내고 B가 CTS로 응답하면, C도 CTS를 수신하여 <b>NAV 기간 동안 전송을 시도하지 않아</b> 충돌을 회피한다.<br>
+            ▸ <b>노출된 터미널 문제</b>: B가 A로 전송하면 C도 신호를 감지해 매체를 사용할 수 없다고 판단한다. 실제로는 C가 D에 전송해도 되지만 B의 전송이 끝날 때까지 대기한다. 즉 <b>동시 전송이 가능함에도 전송하지 못하는</b> 비효율이 발생한다.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q24.</span>블루투스의 네트워크 구조(1:1, 피코넷, 스케터넷)를 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da4" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d4')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d4">
+            ▸ 블루투스는 일반적으로 기기 간 <b>1:1 데이터 통신</b>을 위해 사용된다.<br>
+            ▸ <b>피코넷(Piconet)</b>: 하나의 <b>마스터를 중심으로 여러 개(최대 7대)의 슬레이브</b>가 연결되는 형태다.<br>
+            ▸ <b>스케터넷(Scatternet)</b>: <b>2개의 피코넷이 겹치는 형태</b>로, 한 장치가 두 피코넷에 동시에 속하여(M/S) 두 네트워크를 이어준다.<br>
+            ▸ 베이스밴드 계층에서 마스터와 슬레이브는 슬롯타임(625μs)을 이용한 TDMA로 매체에 접근하며, 마스터는 0,2,4,6 슬롯을, 슬레이브는 1,3,5,7 슬롯을 사용하는 TDD-TDMA 방식으로 반이중 통신한다.
+        </div>
+    </div>
+
+    <div class="quiz-item">
+        <div class="quiz-q"><span class="q-num">Q25.</span>지그비, 블루투스, 와이파이의 특성을 전송 거리·속도·소비 전력 관점에서 비교 설명하시오.</div>
+        <div class="desc-answer">
+            <textarea id="da5" placeholder="여기에 답안을 작성해보세요"></textarea>
+            <button onclick="showModel('mfb_d5')">모범답안 보기</button>
+        </div>
+        <div class="model-answer" id="mfb_d5">
+            ▸ <b>지그비</b>: 전송 거리 ~100m, 속도 ~250Kbps로 느리지만 <b>소비 전력이 매우 낮고</b> 복잡도·비용이 낮다. 긴 배터리 수명과 보안이 필요한 IoT·센서 제어에 적합하다.<br>
+            ▸ <b>블루투스</b>: 전송 거리 ~10m, 속도 ~24Mbps, 소비 전력 중간. 근거리 유선 대체(마우스·헤드셋 등)에 사용된다.<br>
+            ▸ <b>와이파이</b>: 전송 거리 ~10m(핫스팟 범위는 더 넓음), 속도 11/54Mbps로 가장 빠르지만 <b>소비 전력이 높고</b> 복잡도·비용이 높다.<br>
+            ▸ 정리하면 속도는 와이파이 &gt; 블루투스 &gt; 지그비 순이고, 저전력·저비용은 지그비가 가장 우수하다.
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 최종 정리 ==================== -->
+<section class="section-card s2" id="final">
+    <div class="section-head">
+        <span class="section-badge">FINAL</span>
+        <span class="section-title">🎯 최종 정리 — 시험 직전 훑어보기</span>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:14px;">아래 핵심 카드만 마지막에 한 번 훑으면 10장 핵심은 거의 다 챙긴 것입니다.</p>
+
+    <div class="final-grid">
+        <div class="final-card">
+            <div class="fc-title">LAN 분류 4기준 ★</div>
+            <div class="fc-mn">토폴로지·매체·접근·전송</div>
+            <div class="fc-desc">메쉬형은 LAN에서 사용 X.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">토폴로지</div>
+            <div class="fc-mn">스타·버스·링·트리</div>
+            <div class="fc-desc">이더넷=버스형, 끝에 종단장치(Terminator).</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">전송 기술 ★</div>
+            <div class="fc-mn">베이스밴드 / 브로드밴드</div>
+            <div class="fc-desc">디지털 그대로(TDM) / FDM·CATV 유사.</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">IEEE 802 ★</div>
+            <div class="fc-mn">데이터링크 = LLC + MAC</div>
+            <div class="fc-desc">1985. LLC=에러·흐름제어 / MAC=접근제어.</div>
+        </div>
+        <div class="final-card c5">
+            <div class="fc-title">802 번호 ★</div>
+            <div class="fc-mn">.3 .4 .5 .6 .11</div>
+            <div class="fc-desc">CSMA/CD·토큰버스·토큰링·DQDB·무선LAN.</div>
+        </div>
+        <div class="final-card">
+            <div class="fc-title">CSMA/CD ★</div>
+            <div class="fc-mn">CS + MA + CD</div>
+            <div class="fc-desc">감지·다중접근·충돌검출. 이더넷=버스형.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">충돌 처리</div>
+            <div class="fc-mn">Jam → N+1 → N&gt;15 종료</div>
+            <div class="fc-desc">[0,2ᴺ-1] k → k×슬롯타임 대기.</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">최소 프레임 ★</div>
+            <div class="fc-mn">512비트(64바이트)</div>
+            <div class="fc-desc">Tfr≥2Tp / 슬롯타임=2×전송지연+마진 / 최대 2,500m.</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">지속 방식</div>
+            <div class="fc-mn">1-persistent / p-persistent</div>
+            <div class="fc-desc">즉시(유선) / 확률 p(위성).</div>
+        </div>
+        <div class="final-card c5">
+            <div class="fc-title">이더넷 프레임</div>
+            <div class="fc-mn">Preamble·SFD·DA·SA·L/T·Data·CRC</div>
+            <div class="fc-desc">SFD=10101011, Data 46~1500B, CRC-32.</div>
+        </div>
+        <div class="final-card">
+            <div class="fc-title">표기법</div>
+            <div class="fc-mn">10 BASE - T</div>
+            <div class="fc-desc">Mbps·베이스밴드·길이/유형. 스위치=충돌 없음.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">이더넷 발전 ★</div>
+            <div class="fc-mn">100M / 1G / 10G</div>
+            <div class="fc-desc">기가=64→512B확장+버스팅 / 10기가=전이중·CSMA/CD X.</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">토큰 ★</div>
+            <div class="fc-mn">채널 사용권</div>
+            <div class="fc-desc">충돌 없음·예측 가능·우선순위 / 분실 시 무한 대기.</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">FDDI ★</div>
+            <div class="fc-mn">100M 광 이중 링</div>
+            <div class="fc-desc">토큰링(802.5)·조기 해제. PMD·PHY(4B/5B)·SMT.</div>
+        </div>
+        <div class="final-card c5">
+            <div class="fc-title">DQDB</div>
+            <div class="fc-mn">802.6 · MAN</div>
+            <div class="fc-desc">이중 버스, 영상 서비스 MAN용.</div>
+        </div>
+        <div class="final-card">
+            <div class="fc-title">무선 LAN</div>
+            <div class="fc-mn">802.11 · ISM</div>
+            <div class="fc-desc">비인가 대역 2.4GHz·5GHz. 도청 쉬움.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">802.11 구조 ★</div>
+            <div class="fc-mn">BSS + DS = ESS</div>
+            <div class="fc-desc">AP로 DS 연결, 유선 연결은 포털(Portal).</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">MAC 방식</div>
+            <div class="fc-mn">PCF / DCF</div>
+            <div class="fc-desc">비경쟁(AP중앙) / 경쟁(CSMA/CA).</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">CSMA/CA ★</div>
+            <div class="fc-mn">충돌 회피 · NAV</div>
+            <div class="fc-desc">ACK 필요. RTS→CTS→data→ACK.</div>
+        </div>
+        <div class="final-card c5">
+            <div class="fc-title">터미널 문제 ★</div>
+            <div class="fc-mn">숨겨진 / 노출된</div>
+            <div class="fc-desc">숨겨진→RTS/CTS 해결 / 노출→가능한데 못 보냄.</div>
+        </div>
+        <div class="final-card">
+            <div class="fc-title">WPAN</div>
+            <div class="fc-mn">802.15 · 10m</div>
+            <div class="fc-desc">블루투스·지그비·UWB.</div>
+        </div>
+        <div class="final-card c2">
+            <div class="fc-title">블루투스 ★</div>
+            <div class="fc-mn">79채널 FHSS · 1600호핑</div>
+            <div class="fc-desc">1994 에릭슨. 피코넷(M+7S)·스케터넷.</div>
+        </div>
+        <div class="final-card c3">
+            <div class="fc-title">지그비 ★</div>
+            <div class="fc-mn">802.15.4 · 250Kbps</div>
+            <div class="fc-desc">저전력·128비트 대칭키·IoT. 코디네이터 1개.</div>
+        </div>
+        <div class="final-card c4">
+            <div class="fc-title">UWB</div>
+            <div class="fc-mn">3.1~10.6GHz · 100M↑</div>
+            <div class="fc-desc">초광대역+저출력. 근거리 고속, 고성능 휴대폰.</div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    데이터통신 10장 — LAN 기술 · 학습자료 · 참고: 제10장 PDF (ch10_LAN+기술_주용호)
+</footer>
+
+<script>
+// 다크모드
+const themeToggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+const savedTheme = localStorage.getItem('theme-ch10') || 'light';
+html.setAttribute('data-theme', savedTheme);
+themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+themeToggle.addEventListener('click', () => {
+    const cur = html.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme-ch10', next);
+    themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+});
+
+// 체크리스트 (localStorage)
+document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+    const key = 'ch10-' + cb.dataset.key;
+    if (localStorage.getItem(key) === '1') {
+        cb.checked = true;
+        cb.parentElement.classList.add('done');
+    }
+    cb.addEventListener('change', () => {
+        if (cb.checked) {
+            cb.parentElement.classList.add('done');
+            localStorage.setItem(key, '1');
+        } else {
+            cb.parentElement.classList.remove('done');
+            localStorage.removeItem(key);
+        }
+    });
+});
+
+// 객관식 정답 처리
+function ans(btn, isCorrect, fbId) {
+    const parent = btn.closest('.quiz-options');
+    parent.querySelectorAll('button').forEach(b => b.disabled = true);
+    const fb = document.getElementById(fbId);
+    fb.classList.add('show');
+    if (isCorrect) {
+        btn.classList.add('correct');
+        fb.className = 'quiz-feedback show correct-fb';
+        fb.textContent = '✅ 정답입니다!';
+    } else {
+        btn.classList.add('wrong');
+        parent.querySelectorAll('button').forEach(b => {
+            if (b.getAttribute('onclick').includes('true')) {
+                b.classList.add('correct');
+            }
+        });
+        fb.className = 'quiz-feedback show wrong-fb';
+        fb.textContent = '❌ 오답입니다. 정답은 위에 초록색으로 표시되었습니다.';
+    }
+}
+
+// 단답형 정답 처리
+function checkShort(inputId, answers, modelId) {
+    const val = document.getElementById(inputId).value.trim();
+    const model = document.getElementById(modelId);
+    const isCorrect = answers.some(a => val === a || val.toLowerCase() === a.toLowerCase());
+    model.classList.add('show');
+    if (isCorrect) {
+        model.style.borderLeftColor = 'var(--success)';
+        model.style.background = 'rgba(22,163,74,0.06)';
+        model.innerHTML = '✅ 정답입니다! ' + model.innerHTML.replace(/^[✅❌]\s/, '');
+    } else if (val.length > 0) {
+        model.style.borderLeftColor = 'var(--danger)';
+        model.style.background = 'rgba(220,38,38,0.06)';
+        if (!model.innerHTML.startsWith('❌')) {
+            model.innerHTML = '❌ 정답을 다시 확인하세요. — ' + model.innerHTML;
+        }
+    }
+}
+
+// 서술형 모범답안 토글
+function showModel(id) {
+    document.getElementById(id).classList.toggle('show');
+}
+</script>
+</body>
+</html>
