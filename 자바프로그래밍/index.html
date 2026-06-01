@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자바프로그래밍 - 강의 노트</title>
+  <style>
+    :root {
+      --primary: #dc2626;
+      --primary-light: #fee2e2;
+      --success: #16a34a;
+      --success-light: #dcfce7;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --info: #2563eb;
+      --info-light: #dbeafe;
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --card-bg: white;
+      --nav-bg: white;
+      --body-bg: #f3f4f6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--body-bg);
+      color: var(--gray-900);
+      line-height: 1.7;
+    }
+
+    header {
+      background: #1e293b;
+      color: white;
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+      border-bottom: 3px solid #dc2626;
+    }
+    header .chapter-tag {
+      display: inline-block;
+      background: rgba(220,38,38,0.25);
+      color: #fca5a5;
+      border-radius: 20px;
+      padding: 0.25rem 1rem;
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+    header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; color: #f1f5f9; }
+    header p { color: #94a3b8; font-size: 0.95rem; }
+
+    nav.toc {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      background: var(--nav-bg);
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    nav.toc a {
+      text-decoration: none;
+      color: var(--primary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      border: 1.5px solid var(--primary-light);
+      transition: background 0.2s, color 0.2s;
+    }
+    nav.toc a:hover { background: var(--primary); color: white; }
+
+    .theme-toggle {
+      margin-left: auto;
+      background: none;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 20px;
+      padding: 0.3rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--gray-700);
+      display: flex; align-items: center; gap: 0.4rem;
+      transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .theme-toggle:hover { border-color: var(--primary); color: var(--primary); }
+
+    main { max-width: 720px; margin: 2rem auto; padding: 0 1rem 4rem; }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--gray-700);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 1.5rem 0 0.75rem;
+      padding-left: 0.25rem;
+    }
+
+    .card-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+
+    .card {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1.4rem 1.5rem;
+      background: var(--card-bg);
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--gray-900);
+      border-top: 4px solid var(--primary);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    .card.blue   { border-color: var(--info); }
+    .card.green  { border-color: var(--success); }
+    .card.orange { border-color: var(--warning); }
+    .card.purple { border-color: var(--purple); }
+
+    .card-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 800;
+      flex-shrink: 0;
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+    .card.blue   .card-icon { background: var(--info-light);   color: var(--info); }
+    .card.green  .card-icon { background: var(--success-light); color: var(--success); }
+    .card.orange .card-icon { background: var(--warning-light); color: var(--warning); }
+    .card.purple .card-icon { background: var(--purple-light);  color: var(--purple); }
+
+    .card-body { flex: 1; min-width: 0; }
+    .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .card-desc  { font-size: 0.82rem; color: var(--gray-700); }
+
+    .tags { display: flex; gap: 0.4rem; margin-top: 0.45rem; flex-wrap: wrap; }
+    .tag {
+      font-size: 0.7rem; padding: 0.15rem 0.55rem; border-radius: 20px;
+      background: var(--primary-light); color: var(--primary);
+      font-weight: 600;
+    }
+    .card.blue   .tag { background: var(--info-light);   color: var(--info); }
+    .card.green  .tag { background: var(--success-light); color: var(--success); }
+    .card.orange .tag { background: var(--warning-light); color: var(--warning); }
+    .card.purple .tag { background: var(--purple-light);  color: var(--purple); }
+
+    .card-arrow {
+      color: var(--gray-700); font-size: 1.3rem; flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .card:hover .card-arrow { transform: translateX(4px); color: var(--primary); }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      padding: 2rem;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    /* ── 다크 테마 ── */
+    [data-theme="dark"] {
+      --primary-light: #450a0a;
+      --success-light: #14532d;
+      --warning-light: #451a03;
+      --info-light:    #1e3a5f;
+      --purple-light:  #2e1065;
+      --gray-100: #0f172a;
+      --gray-200: #334155;
+      --gray-700: #94a3b8;
+      --gray-900: #e2e8f0;
+      --card-bg: #1e293b;
+      --nav-bg: #1e293b;
+      --body-bg: #0f172a;
+    }
+    [data-theme="dark"] body  { background: #0f172a; color: #e2e8f0; }
+    [data-theme="dark"] nav.toc { background: #1e293b; border-color: #334155; }
+    [data-theme="dark"] .card { background: #1e293b; color: #e2e8f0; }
+    [data-theme="dark"] .card-desc { color: #94a3b8; }
+    [data-theme="dark"] footer { color: #475569; border-color: #334155; }
+    [data-theme="dark"] .theme-toggle { color: #94a3b8; border-color: #334155; }
+    [data-theme="dark"] .theme-toggle:hover { color: #60a5fa; border-color: #60a5fa; }
+    [data-theme="dark"] .section-label { color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="chapter-tag">자바프로그래밍 · 한신대학교 2학년 1학기</div>
+  <h1>☕ 자바프로그래밍</h1>
+  <p>Java 객체지향 프로그래밍 강의 노트</p>
+</header>
+
+<nav class="toc">
+  <a href="../index.html">← 강의 목록으로</a>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 야간 모드</button>
+</nav>
+
+<main>
+
+  <div class="section-label">챕터별 학습자료</div>
+  <div class="card-list">
+
+    <a href="./6장_학습자료.html" class="card blue">
+      <div class="card-icon">6장</div>
+      <div class="card-body">
+        <div class="card-title">6장 — 상속과 다형성</div>
+        <div class="card-desc">extends, super, 메서드 오버라이딩, 업캐스팅/다운캐스팅, 동적 바인딩, 추상 클래스, 인터페이스</div>
+        <div class="tags">
+          <span class="tag">상속</span>
+          <span class="tag">오버라이딩</span>
+          <span class="tag">다형성</span>
+          <span class="tag">abstract</span>
+          <span class="tag">interface</span>
+        </div>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+
+    <!-- 새 챕터 추가 시 아래를 복사하세요
+    <a href="./N장_학습자료.html" class="card orange">
+      <div class="card-icon">N장</div>
+      <div class="card-body">
+        <div class="card-title">N장 — 제목</div>
+        <div class="card-desc">설명</div>
+        <div class="tags">
+          <span class="tag">키워드</span>
+        </div>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+    -->
+
+  </div>
+</main>
+
+<footer>
+  자바프로그래밍 · 한신대학교 2학년 1학기 | 강의 노트는 계속 추가됩니다
+</footer>
+
+<script>
+  const btn = document.getElementById('themeToggle');
+  function applyTheme(dark) {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    btn.textContent = dark ? '☀️ 라이트 모드' : '🌙 야간 모드';
+  }
+  function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    applyTheme(!isDark);
+  }
+  applyTheme(localStorage.getItem('theme') === 'dark');
+</script>
+
+</body>
+</html>

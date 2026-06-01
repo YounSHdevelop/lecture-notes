@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자바프로그래밍 6장 — 상속과 다형성</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1e3a8a;
+    --primary-light: #2563eb;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --info: #0891b2;
+    --purple: #7c3aed;
+    --orange: #ea580c;
+    --bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --text: #1f2937;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --code-bg: #1e293b;
+    --code-text: #e2e8f0;
+    --nav-bg: rgba(255,255,255,0.95);
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --code-bg: #0f172a;
+    --nav-bg: rgba(15,23,42,0.97);
+    --shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); transition: background .3s, color .3s; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; background: var(--nav-bg);
+    backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);
+    z-index: 100; padding: 0 1.5rem;
+  }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; height: 52px; overflow-x: auto; }
+  .nav-inner a { font-size: .82rem; font-weight: 500; color: var(--text-muted); text-decoration: none; white-space: nowrap; padding: .25rem .5rem; border-radius: 6px; transition: color .2s, background .2s; }
+  .nav-inner a:hover { color: var(--primary-light); background: rgba(37,99,235,.08); }
+  .nav-brand { font-weight: 700; color: var(--primary-light); font-size: .9rem; margin-right: auto; white-space: nowrap; }
+  .theme-btn { margin-left: auto; background: none; border: 1px solid var(--border); border-radius: 8px; padding: .3rem .7rem; cursor: pointer; font-size: .85rem; color: var(--text); transition: all .2s; white-space: nowrap; }
+  .theme-btn:hover { background: var(--primary-light); color: #fff; border-color: var(--primary-light); }
+
+  /* HEADER */
+  header {
+    background: #1e293b;
+    color: #e2e8f0; text-align: center; padding: 5rem 1.5rem 3rem;
+    border-bottom: 3px solid #2563eb;
+  }
+  header .badge { display: inline-block; background: rgba(37,99,235,.25); color: #93c5fd; border-radius: 20px; padding: .3rem 1rem; font-size: .8rem; margin-bottom: 1rem; letter-spacing: .05em; }
+  header h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: .5rem; color: #f1f5f9; }
+  header p { font-size: 1rem; color: #94a3b8; }
+  .header-tags { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; margin-top: 1.2rem; }
+  .header-tags span { background: rgba(37,99,235,.2); color: #93c5fd; border: 1px solid rgba(37,99,235,.3); border-radius: 12px; padding: .2rem .8rem; font-size: .78rem; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* SECTION TITLES */
+  .section-title { font-size: 1.4rem; font-weight: 700; margin: 2.5rem 0 1.2rem; display: flex; align-items: center; gap: .6rem; }
+  .section-title::before { content: ''; display: inline-block; width: 4px; height: 1.4rem; background: var(--primary-light); border-radius: 2px; }
+
+  /* CARDS */
+  .card { background: var(--card-bg); border-radius: 12px; padding: 1.4rem; box-shadow: var(--shadow); }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+  .card-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+
+  .concept-card { border-top: 4px solid; }
+  .concept-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .6rem; }
+  .concept-card p, .concept-card li { font-size: .88rem; color: var(--text-muted); line-height: 1.7; }
+  .concept-card ul { padding-left: 1.1rem; }
+
+  /* CODE BLOCKS */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 1.1rem 1.3rem;
+    overflow-x: visible; white-space: pre-wrap; word-break: break-word;
+    font-family: 'JetBrains Mono', monospace; font-size: .82rem; line-height: 1.7;
+    margin: .8rem 0;
+  }
+  code { font-family: 'JetBrains Mono', monospace; font-size: .85em; }
+  .inline-code { background: rgba(37,99,235,.1); color: var(--primary-light); padding: .1em .4em; border-radius: 4px; font-size: .85em; font-family: 'JetBrains Mono', monospace; }
+  .kw  { color: #7dd3fc; } /* keyword */
+  .cl  { color: #fbbf24; } /* class name */
+  .fn  { color: #86efac; } /* function */
+  .cm  { color: #6b7280; font-style: italic; } /* comment */
+  .st  { color: #fca5a5; } /* string */
+  .an  { color: #c4b5fd; } /* annotation */
+  .num { color: #fb923c; } /* number */
+
+  /* HIGHLIGHT BOXES */
+  .highlight-box { border-radius: 10px; padding: 1rem 1.2rem; margin: .8rem 0; border-left: 4px solid; }
+  .highlight-box.danger  { background: rgba(220,38,38,.08); border-color: var(--danger); }
+  .highlight-box.success { background: rgba(22,163,74,.08); border-color: var(--success); }
+  .highlight-box.warning { background: rgba(217,119,6,.08); border-color: var(--warning); }
+  .highlight-box.info    { background: rgba(8,145,178,.08); border-color: var(--info); }
+  .highlight-box.purple  { background: rgba(124,58,237,.08); border-color: var(--purple); }
+  .highlight-box h4 { font-size: .9rem; font-weight: 700; margin-bottom: .4rem; }
+  .highlight-box p, .highlight-box li { font-size: .87rem; line-height: 1.7; }
+  .highlight-box ul { padding-left: 1.1rem; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; border-radius: 10px; box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; background: var(--card-bg); font-size: .88rem; }
+  th { background: #1e3a8a; color: #fff; padding: .75rem 1rem; text-align: center; font-weight: 600; }
+  td { padding: .65rem 1rem; border-bottom: 1px solid var(--border); text-align: center; }
+  tr:last-child td { border-bottom: none; }
+  td.ok { color: var(--success); font-weight: 700; font-size: 1.1rem; }
+  td.no { color: var(--danger); font-weight: 700; font-size: 1.1rem; }
+  td.left { text-align: left; font-weight: 600; }
+
+  /* COMPARISON TABLE */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  /* IMPORTANT BADGE */
+  .badge-imp { display: inline-block; background: var(--danger); color: #fff; font-size: .72rem; font-weight: 700; padding: .1em .5em; border-radius: 8px; margin-left: .4rem; vertical-align: middle; }
+  .badge-tip { display: inline-block; background: var(--warning); color: #fff; font-size: .72rem; font-weight: 700; padding: .1em .5em; border-radius: 8px; margin-left: .4rem; vertical-align: middle; }
+
+  /* CATCH CARDS */
+  .catch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  .catch-card { background: #1e3a8a; color: #fff; border-radius: 12px; padding: 1.2rem 1.4rem; }
+  .catch-card .num-badge { font-size: .75rem; opacity: .7; font-weight: 700; letter-spacing: .05em; margin-bottom: .4rem; }
+  .catch-card h3 { font-size: .98rem; font-weight: 700; margin-bottom: .5rem; }
+  .catch-card p { font-size: .85rem; opacity: .88; line-height: 1.6; }
+
+  /* KEYWORD CARDS */
+  .keyword-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: .9rem; }
+  .keyword-card { background: var(--card-bg); border-radius: 10px; padding: 1rem 1.2rem; box-shadow: var(--shadow); border-left: 3px solid var(--primary-light); }
+  .keyword-card .en { font-family: 'JetBrains Mono', monospace; font-size: .9rem; font-weight: 600; color: var(--primary-light); }
+  .keyword-card .ko { font-size: .8rem; color: var(--text-muted); margin: .2rem 0 .4rem; }
+  .keyword-card .def { font-size: .86rem; line-height: 1.6; }
+
+  /* QUIZ */
+  .quiz-container { display: flex; flex-direction: column; gap: 1.5rem; }
+  .quiz-card { background: var(--card-bg); border-radius: 12px; padding: 1.4rem; box-shadow: var(--shadow); border-top: 4px solid var(--primary-light); }
+  .quiz-card .q-label { font-size: .75rem; font-weight: 700; color: var(--primary-light); letter-spacing: .08em; margin-bottom: .6rem; }
+  .quiz-card .question { font-size: .97rem; font-weight: 600; line-height: 1.6; margin-bottom: 1rem; }
+  .options { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+  .option-btn {
+    background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px;
+    padding: .65rem 1rem; font-size: .88rem; cursor: pointer; text-align: left;
+    color: var(--text); font-family: 'Noto Sans KR', sans-serif; transition: all .2s; line-height: 1.5;
+  }
+  .option-btn:hover { border-color: var(--primary-light); background: rgba(37,99,235,.06); }
+  .option-btn.correct { background: rgba(22,163,74,.12); border-color: var(--success); color: var(--success); font-weight: 600; }
+  .option-btn.wrong { background: rgba(220,38,38,.1); border-color: var(--danger); color: var(--danger); }
+  .option-btn:disabled { cursor: default; }
+  .short-answer { display: flex; flex-direction: column; gap: .6rem; }
+  .short-input {
+    background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px;
+    padding: .65rem 1rem; font-size: .88rem; color: var(--text); font-family: 'JetBrains Mono', monospace;
+    resize: vertical; min-height: 80px; transition: border-color .2s;
+  }
+  .short-input:focus { outline: none; border-color: var(--primary-light); }
+  .check-btn {
+    background: var(--primary-light); color: #fff; border: none; border-radius: 8px;
+    padding: .6rem 1.4rem; font-size: .88rem; font-weight: 600; cursor: pointer; transition: all .2s;
+    font-family: 'Noto Sans KR', sans-serif; align-self: flex-start;
+  }
+  .check-btn:hover { background: var(--primary); }
+  .feedback { border-radius: 8px; padding: .8rem 1rem; font-size: .87rem; line-height: 1.6; margin-top: .4rem; display: none; }
+  .feedback.show { display: block; }
+  .feedback.ok { background: rgba(22,163,74,.1); color: var(--success); border: 1px solid var(--success); }
+  .feedback.fail { background: rgba(220,38,38,.08); color: var(--danger); border: 1px solid var(--danger); }
+  .score-bar { background: var(--bg); border-radius: 10px; padding: 1.2rem; text-align: center; font-weight: 700; font-size: 1rem; display: none; }
+  .score-bar.show { display: block; }
+
+  /* FLOW DIAGRAM */
+  .flow { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin: .6rem 0; }
+  .flow-box { background: var(--primary-light); color: #fff; border-radius: 8px; padding: .3rem .8rem; font-size: .83rem; font-weight: 600; }
+  .flow-arrow { color: var(--text-muted); font-size: 1.1rem; }
+  .flow-box.child { background: var(--orange); }
+  .flow-box.iface { background: var(--purple); }
+  .flow-box.abs { background: var(--info); }
+
+  /* TABS */
+  .tab-btns { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .tab-btn { background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: .4rem 1rem; font-size: .85rem; font-weight: 600; cursor: pointer; color: var(--text-muted); transition: all .2s; }
+  .tab-btn.active { background: var(--primary-light); color: #fff; border-color: var(--primary-light); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  @media (max-width: 640px) {
+    header h1 { font-size: 1.6rem; }
+    .card-grid, .card-grid-3 { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .catch-grid { grid-template-columns: 1fr; }
+    .keyword-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand">☕ Java 6장</span>
+    <a href="#goals">학습목표</a>
+    <a href="#summary">핵심요약</a>
+    <a href="#inheritance">상속</a>
+    <a href="#override">오버라이딩</a>
+    <a href="#casting">캐스팅</a>
+    <a href="#polymorphism">다형성</a>
+    <a href="#abstract">추상클래스</a>
+    <a href="#interface">인터페이스</a>
+    <a href="#catch">핵심캐치</a>
+    <a href="#keywords">키워드</a>
+    <a href="#quiz">연습문제</a>
+    <button class="theme-btn" onclick="toggleTheme()">🌙 야간모드</button>
+  </div>
+</nav>
+
+<header>
+  <div class="badge">CHAPTER 06</div>
+  <h1>상속과 다형성</h1>
+  <p>Inheritance, Polymorphism, Abstract Class, Interface</p>
+  <div class="header-tags">
+    <span>extends</span><span>super</span><span>@Override</span>
+    <span>업캐스팅/다운캐스팅</span><span>instanceof</span>
+    <span>동적 바인딩</span><span>abstract</span><span>interface</span><span>implements</span>
+  </div>
+</header>
+
+<main>
+
+<!-- ① 학습 목표 -->
+<div id="goals"></div>
+<div class="section-title">학습 목표</div>
+<div class="card-grid-3">
+  <div class="card concept-card" style="border-color:#2563eb">
+    <h3>① 상속의 개념</h3>
+    <p>extends 키워드로 부모 클래스를 상속받고 super를 통해 부모의 생성자와 멤버에 접근할 수 있다.</p>
+  </div>
+  <div class="card concept-card" style="border-color:#16a34a">
+    <h3>② 메서드 오버라이딩</h3>
+    <p>부모 메서드를 자식 클래스에서 재정의하고 @Override 어노테이션을 통해 컴파일 오류를 방지한다.</p>
+  </div>
+  <div class="card concept-card" style="border-color:#d97706">
+    <h3>③ 업캐스팅 / 다운캐스팅</h3>
+    <p>자식 객체를 부모 타입으로 변환(자동), 부모 타입을 자식 타입으로 변환(명시적)하는 방법을 이해한다.</p>
+  </div>
+  <div class="card concept-card" style="border-color:#7c3aed">
+    <h3>④ 동적 바인딩 & 다형성</h3>
+    <p>업캐스팅된 변수로 메서드를 호출할 때 실제 객체의 오버라이딩된 메서드가 실행되는 원리를 이해한다.</p>
+  </div>
+  <div class="card concept-card" style="border-color:#0891b2">
+    <h3>⑤ 추상 클래스</h3>
+    <p>abstract 클래스와 메서드를 선언하고, 자식 클래스에서 구현을 강제하는 구조를 설계할 수 있다.</p>
+  </div>
+  <div class="card concept-card" style="border-color:#ea580c">
+    <h3>⑥ 인터페이스</h3>
+    <p>interface와 implements를 이용해 다중 구현, default·static 메서드를 활용할 수 있다.</p>
+  </div>
+</div>
+
+<!-- ② 핵심 요약 -->
+<div id="summary"></div>
+<div class="section-title">핵심 요약</div>
+<div style="display:flex;flex-direction:column;gap:1rem;">
+  <div class="card">
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem;color:var(--primary-light)">🔑 상속 기본 문법</h3>
+    <pre><span class="kw">class</span> <span class="cl">Donut</span> {             <span class="cm">// 부모 클래스</span>
+    <span class="cl">String</span> name;
+    <span class="kw">int</span> price;
+    <span class="kw">void</span> <span class="fn">show</span>() { ... }
+}
+
+<span class="kw">class</span> <span class="cl">ChocoDonut</span> <span class="kw">extends</span> <span class="cl">Donut</span> {   <span class="cm">// 자식</span>
+    <span class="cl">String</span> topping;
+
+    <span class="kw">void</span> <span class="fn">addTopping</span>() { ... }
+}</pre>
+    <p style="font-size:.85rem;color:var(--text-muted)">자식 클래스는 부모의 name, price, show()를 그대로 사용할 수 있다.</p>
+  </div>
+  <div class="card">
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem;color:var(--success)">🔑 super 사용</h3>
+    <pre><span class="kw">class</span> <span class="cl">ChocoDonut</span> <span class="kw">extends</span> <span class="cl">Donut</span> {
+    <span class="fn">ChocoDonut</span>() {
+        <span class="kw">super</span>();  <span class="cm">// 부모 생성자 호출 (첫 줄!)</span>
+    }
+
+    <span class="kw">void</span> <span class="fn">show</span>() {
+        <span class="cl">System</span>.out.println(<span class="kw">super</span>.name);  <span class="cm">// 부모 필드</span>
+        <span class="kw">super</span>.<span class="fn">show</span>();  <span class="cm">// 부모 메서드</span>
+    }
+}</pre>
+  </div>
+  <div class="card">
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem;color:var(--warning)">🔑 업캐스팅 / 다운캐스팅</h3>
+    <pre><span class="cm">// 업캐스팅 (자동)</span>
+<span class="cl">Donut</span> d = <span class="kw">new</span> <span class="cl">ChocoDonut</span>();
+
+<span class="cm">// 다운캐스팅 (명시적)</span>
+<span class="kw">if</span> (d <span class="kw">instanceof</span> <span class="cl">ChocoDonut</span>) {
+    <span class="cl">ChocoDonut</span> choco = (<span class="cl">ChocoDonut</span>) d;
+    choco.<span class="fn">addTopping</span>();
+}
+
+<span class="cm">// instanceof 없이 다운캐스팅 → ClassCastException!</span></pre>
+  </div>
+  <div class="card">
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem;color:var(--purple)">🔑 추상 클래스 vs 인터페이스</h3>
+    <pre><span class="cm">// 추상 클래스</span>
+<span class="kw">abstract class</span> <span class="cl">Donut</span> {
+    <span class="kw">abstract void</span> <span class="fn">show</span>();  <span class="cm">// 구현 강제</span>
+    <span class="kw">void</span> <span class="fn">common</span>() { ... } <span class="cm">// 일반 메서드 OK</span>
+}
+
+<span class="cm">// 인터페이스</span>
+<span class="kw">interface</span> <span class="cl">Sellable</span> {
+    <span class="kw">void</span> <span class="fn">pack</span>();
+    <span class="kw">default void</span> <span class="fn">pay</span>() { ... }  <span class="cm">// Java 8+</span>
+}
+
+<span class="kw">class</span> <span class="cl">C</span> <span class="kw">extends</span> <span class="cl">Donut</span>
+         <span class="kw">implements</span> <span class="cl">Sellable</span>, <span class="cl">Payable</span> { }</pre>
+  </div>
+</div>
+
+<!-- ③ 상속 상세 -->
+<div id="inheritance"></div>
+<div class="section-title">Section 01 — 상속의 개념과 사용 방법</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem">1. 상속이란?</h3>
+  <p style="font-size:.9rem;line-height:1.8;color:var(--text-muted)">
+    <strong style="color:var(--text)">상속(Inheritance)</strong>이란 이미 만들어진 클래스(부모 클래스)가 가진 속성과 기능을 새로운 클래스(자식 클래스)가 그대로 사용할 수 있도록 하는 개념이다.
+    자식 클래스는 부모 기능을 물려받으므로 <strong style="color:var(--text)">중복 코드를 줄이고 코드의 재사용성을 높이는</strong> 역할을 한다.
+    자바에서 상속은 <span class="inline-code">extends</span> 키워드를 사용한다.
+  </p>
+  <div class="highlight-box warning" style="margin-top:.8rem">
+    <h4>⚠️ 자바 상속의 중요 특징</h4>
+    <ul>
+      <li>자바는 <strong>단일 상속</strong>만 지원한다 — 부모 클래스를 한 번에 하나만 상속받을 수 있다</li>
+      <li>자바의 모든 클래스는 최상위 <strong>Object 클래스</strong>를 자동으로 상속한다</li>
+      <li>인터페이스는 다중 구현 가능 (상속과 다름)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem">2. 접근 제한자와 상속 <span class="badge-imp">시험 필수</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>구분</th><th>같은 클래스</th><th>같은 패키지</th><th>다른 패키지<br>(상속받은 클래스)</th><th>다른 패키지<br>(관계없는 클래스)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="left">public</td><td class="ok">○</td><td class="ok">○</td><td class="ok">○</td><td class="ok">○</td></tr>
+        <tr><td class="left">protected</td><td class="ok">○</td><td class="ok">○</td><td class="ok">○</td><td class="no">✕</td></tr>
+        <tr><td class="left">default (생략)</td><td class="ok">○</td><td class="ok">○</td><td class="no">✕</td><td class="no">✕</td></tr>
+        <tr><td class="left">private</td><td class="ok">○</td><td class="no">✕</td><td class="no">✕</td><td class="no">✕</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="highlight-box info" style="margin-top:.8rem">
+    <h4>💡 protected의 핵심</h4>
+    <p>다른 패키지에 있더라도 <strong>상속받은 자식 클래스</strong>라면 접근 가능하다. 부모 클래스에서 자식에게만 허용하고 싶은 멤버에 사용한다.</p>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem">3. super와 생성자 호출 <span class="badge-imp">시험 필수</span></h3>
+  <div class="card-grid" style="gap:.8rem">
+    <div>
+      <p style="font-size:.88rem;margin-bottom:.6rem;font-weight:600">super의 세 가지 용도</p>
+      <div class="highlight-box info">
+        <ul style="font-size:.87rem">
+          <li><span class="inline-code">super()</span> — 부모 클래스의 생성자 호출</li>
+          <li><span class="inline-code">super.변수</span> — 부모 클래스의 필드 참조</li>
+          <li><span class="inline-code">super.메서드()</span> — 부모 클래스의 메서드 호출</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:.88rem;margin-bottom:.6rem;font-weight:600">생성자 호출 순서</p>
+      <div class="flow">
+        <div class="flow-box">부모 생성자</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box child">자식 생성자</div>
+      </div>
+      <div class="highlight-box danger" style="margin-top:.6rem">
+        <h4>🚨 super() 작성 규칙</h4>
+        <ul style="font-size:.85rem">
+          <li>생성자의 <strong>첫 번째 줄</strong>에 위치해야 한다</li>
+          <li>super()와 this()를 <strong>동시에</strong> 사용할 수 없다</li>
+          <li>생성자에서 super()를 생략하면 컴파일러가 <strong>자동으로 super() 삽입</strong></li>
+          <li>부모 클래스에 기본 생성자가 없으면 <strong>반드시 명시적으로 super(인자) 호출</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <pre><span class="kw">class</span> <span class="cl">Donut</span> {
+    <span class="cl">String</span> name;
+    <span class="fn">Donut</span>(<span class="cl">String</span> name) {
+        <span class="kw">this</span>.name = name;
+    }
+}
+
+<span class="kw">class</span> <span class="cl">ChocoDonut</span> <span class="kw">extends</span> <span class="cl">Donut</span> {
+    <span class="cl">String</span> topping;
+    <span class="fn">ChocoDonut</span>(<span class="cl">String</span> name, <span class="cl">String</span> topping) {
+        <span class="kw">super</span>(name);      <span class="cm">// ← 반드시 첫 줄, 부모 생성자 호출</span>
+        <span class="kw">this</span>.topping = topping;
+    }
+}</pre>
+</div>
+
+<!-- ④ 메서드 오버라이딩 -->
+<div id="override"></div>
+<div class="section-title">메서드 오버라이딩 (Method Overriding)</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem">오버라이딩 규칙 <span class="badge-imp">시험 필수</span></h3>
+  <div class="card-grid" style="gap:.8rem">
+    <div class="highlight-box success">
+      <h4>✅ 오버라이딩 조건 (모두 같아야 함)</h4>
+      <ul>
+        <li>메서드 <strong>이름</strong>이 같아야 함</li>
+        <li><strong>매개변수</strong> 타입·개수·순서가 같아야 함</li>
+        <li><strong>반환형</strong>이 같거나 자식 타입(공변 반환)이어야 함</li>
+      </ul>
+    </div>
+    <div class="highlight-box danger">
+      <h4>🚨 오버라이딩 불가 조건</h4>
+      <ul>
+        <li><span class="inline-code">private</span> 메서드</li>
+        <li><span class="inline-code">static</span> 메서드</li>
+        <li><span class="inline-code">final</span> 메서드</li>
+        <li>접근 제한자를 <strong>더 좁게</strong> 변경 불가<br><small>(public → protected 불가)</small></li>
+      </ul>
+    </div>
+  </div>
+  <pre><span class="kw">class</span> <span class="cl">Donut</span> {
+    <span class="kw">void</span> <span class="fn">show</span>() {
+        <span class="cl">System</span>.out.println(<span class="st">"이것은 기본 도넛이다."</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="cl">ChocoDonut</span> <span class="kw">extends</span> <span class="cl">Donut</span> {
+    <span class="an">@Override</span>
+    <span class="kw">void</span> <span class="fn">show</span>() {  <span class="cm">// 오버라이딩</span>
+        <span class="cm">// super.show(); 호출 가능 → 부모 메서드 포함 실행</span>
+        <span class="cl">System</span>.out.println(<span class="st">"이것은 달콤한 초코 도넛이다."</span>);
+    }
+}</pre>
+  <div class="highlight-box warning" style="margin-top:.6rem">
+    <h4>💡 오버로딩 vs 오버라이딩 비교</h4>
+    <div class="table-wrap" style="margin-top:.4rem">
+      <table>
+        <thead><tr><th>구분</th><th>오버로딩(Overloading)</th><th>오버라이딩(Overriding)</th></tr></thead>
+        <tbody>
+          <tr><td class="left">적용 대상</td><td>같은 클래스 내부</td><td>부모-자식 클래스 간</td></tr>
+          <tr><td class="left">메서드 이름</td><td>같아야 함</td><td>같아야 함</td></tr>
+          <tr><td class="left">매개변수</td><td>달라야 함</td><td>같아야 함</td></tr>
+          <tr><td class="left">반환형</td><td>상관없음</td><td>같거나 좁아야 함</td></tr>
+          <tr><td class="left">접근 제한자</td><td>상관없음</td><td>더 좁게 변경 불가</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem">final과 상속 제한</h3>
+  <div class="card-grid-3" style="gap:.8rem">
+    <div class="highlight-box danger">
+      <h4>final 변수</h4>
+      <p>한 번 초기화 후 <strong>값 변경 불가</strong><br><code>final int MAX = 10;</code></p>
+    </div>
+    <div class="highlight-box danger">
+      <h4>final 메서드</h4>
+      <p>자식 클래스에서 <strong>오버라이딩 불가</strong><br><code>final void recipe() { }</code></p>
+    </div>
+    <div class="highlight-box danger">
+      <h4>final 클래스</h4>
+      <p>다른 클래스가 <strong>상속 불가</strong><br><code>final class Donut { }</code></p>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ 캐스팅 -->
+<div id="casting"></div>
+<div class="section-title">Section 02 — 업캐스팅 & 다운캐스팅 <span class="badge-imp">시험 필수</span></div>
+
+<div class="card-grid" style="margin-bottom:1rem">
+  <div class="card">
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem;color:var(--info)">업캐스팅 (Upcasting)</h3>
+    <p style="font-size:.87rem;color:var(--text-muted);margin-bottom:.7rem">자식 객체를 <strong style="color:var(--text)">부모 타입</strong>으로 변환 — <strong style="color:var(--success)">자동</strong></p>
+    <pre><span class="cl">ChocoDonut</span> choco = <span class="kw">new</span> <span class="cl">ChocoDonut</span>();
+<span class="cl">Donut</span> d = choco;  <span class="cm">// 업캐스팅 (자동)</span>
+
+<span class="cm">// 업캐스팅 후에는 Donut에 정의된</span>
+<span class="cm">// 멤버에만 접근 가능!</span>
+d.<span class="fn">show</span>();      <span class="cm">// OK</span>
+d.<span class="fn">addTopping</span>(); <span class="cm">// 오류! Donut에 없는 메서드</span></pre>
+    <div class="highlight-box info" style="margin-top:.6rem">
+      <p style="font-size:.85rem">업캐스팅 후 <span class="inline-code">d.show()</span>를 호출하면 <strong>동적 바인딩</strong>에 의해 실제 객체(ChocoDonut)의 오버라이딩된 show()가 실행된다.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem;color:var(--orange)">다운캐스팅 (Downcasting)</h3>
+    <p style="font-size:.87rem;color:var(--text-muted);margin-bottom:.7rem">부모 타입을 <strong style="color:var(--text)">자식 타입</strong>으로 변환 — <strong style="color:var(--danger)">명시적 (강제)</strong></p>
+    <pre><span class="cl">Donut</span> d = <span class="kw">new</span> <span class="cl">ChocoDonut</span>();  <span class="cm">// 업캐스팅</span>
+
+<span class="cm">// instanceof로 반드시 확인 후 다운캐스팅</span>
+<span class="kw">if</span> (d <span class="kw">instanceof</span> <span class="cl">ChocoDonut</span>) {
+    <span class="cl">ChocoDonut</span> choco = (<span class="cl">ChocoDonut</span>) d;
+    choco.<span class="fn">addTopping</span>(); <span class="cm">// 자식 메서드 사용 가능</span>
+}
+
+<span class="cm">// instanceof 확인 없이 잘못된 캐스팅</span>
+<span class="cm">// → ClassCastException 런타임 오류!</span></pre>
+    <div class="highlight-box danger" style="margin-top:.6rem">
+      <h4>🚨 ClassCastException</h4>
+      <p style="font-size:.85rem">instanceof로 타입을 먼저 확인하지 않으면 런타임에 ClassCastException이 발생한다.</p>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem">instanceof 연산자</h3>
+  <pre><span class="cl">Donut</span> d1 = <span class="kw">new</span> <span class="cl">Donut</span>();
+<span class="cl">Donut</span> d2 = <span class="kw">new</span> <span class="cl">ChocoDonut</span>();
+<span class="cl">Donut</span> d3 = <span class="kw">new</span> <span class="cl">LemonDonut</span>();
+
+<span class="cl">System</span>.out.println(d1 <span class="kw">instanceof</span> <span class="cl">Donut</span>);       <span class="cm">// true</span>
+<span class="cl">System</span>.out.println(d2 <span class="kw">instanceof</span> <span class="cl">Donut</span>);       <span class="cm">// true  (자식도 부모 instanceof true)</span>
+<span class="cl">System</span>.out.println(d2 <span class="kw">instanceof</span> <span class="cl">ChocoDonut</span>);  <span class="cm">// true</span>
+<span class="cl">System</span>.out.println(d3 <span class="kw">instanceof</span> <span class="cl">ChocoDonut</span>);  <span class="cm">// false</span>
+<span class="cl">System</span>.out.println(d2 <span class="kw">instanceof</span> <span class="cl">LemonDonut</span>);  <span class="cm">// false</span></pre>
+  <div class="highlight-box success" style="margin-top:.6rem">
+    <p style="font-size:.87rem">자식 클래스의 인스턴스는 <strong>부모 클래스의 instanceof도 true</strong>를 반환한다. 다운캐스팅하기 전 반드시 instanceof로 확인하는 것이 좋다.</p>
+  </div>
+</div>
+
+<!-- ⑥ 동적 바인딩 & 다형성 -->
+<div id="polymorphism"></div>
+<div class="section-title">동적 바인딩 & 다형성 (Polymorphism)</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem">1. 동적 바인딩 (Dynamic Binding) <span class="badge-imp">시험 필수</span></h3>
+  <p style="font-size:.9rem;line-height:1.8;color:var(--text-muted);margin-bottom:.8rem">
+    업캐스팅된 부모 타입 변수로 메서드를 호출할 때, <strong style="color:var(--text)">실제 생성된 객체(자식)의 오버라이딩된 메서드가 실행</strong>된다.
+    이것을 <strong style="color:var(--primary-light)">동적 바인딩(dynamic binding)</strong>이라 한다. 컴파일 시간이 아닌 <strong>실행 시간</strong>에 메서드가 결정된다.
+  </p>
+  <pre><span class="kw">class</span> <span class="cl">Donut</span> { <span class="kw">void</span> <span class="fn">show</span>() { <span class="cl">System</span>.out.println(<span class="st">"기본 도넛"</span>); } }
+<span class="kw">class</span> <span class="cl">ChocoDonut</span> <span class="kw">extends</span> <span class="cl">Donut</span> { <span class="an">@Override</span> <span class="kw">void</span> <span class="fn">show</span>() { <span class="cl">System</span>.out.println(<span class="st">"초코 도넛"</span>); } }
+<span class="kw">class</span> <span class="cl">LemonDonut</span> <span class="kw">extends</span> <span class="cl">Donut</span> { <span class="an">@Override</span> <span class="kw">void</span> <span class="fn">show</span>() { <span class="cl">System</span>.out.println(<span class="st">"레몬 도넛"</span>); } }
+
+<span class="cl">Donut</span> d1 = <span class="kw">new</span> <span class="cl">Donut</span>();       <span class="cm">// 기본 도넛</span>
+<span class="cl">Donut</span> d2 = <span class="kw">new</span> <span class="cl">ChocoDonut</span>();  <span class="cm">// 초코 도넛  ← 동적 바인딩!</span>
+<span class="cl">Donut</span> d3 = <span class="kw">new</span> <span class="cl">LemonDonut</span>();  <span class="cm">// 레몬 도넛  ← 동적 바인딩!</span>
+d1.<span class="fn">show</span>(); d2.<span class="fn">show</span>(); d3.<span class="fn">show</span>();</pre>
+</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem">2. 다형성 활용 — 배열로 다양한 객체 관리</h3>
+  <pre><span class="cl">Donut</span>[] donuts = {
+    <span class="kw">new</span> <span class="cl">Donut</span>(),
+    <span class="kw">new</span> <span class="cl">ChocoDonut</span>(),
+    <span class="kw">new</span> <span class="cl">LemonDonut</span>()
+};
+
+<span class="kw">for</span> (<span class="cl">Donut</span> d : donuts) {
+    d.<span class="fn">show</span>();  <span class="cm">// 각 객체의 실제 오버라이딩된 메서드 실행 (동적 바인딩)</span>
+}</pre>
+  <div class="highlight-box success" style="margin-top:.6rem">
+    <h4>💡 다형성의 3가지 요소</h4>
+    <ul style="font-size:.87rem">
+      <li><strong>상속</strong> — 부모-자식 관계</li>
+      <li><strong>메서드 오버라이딩</strong> — 자식이 부모 메서드를 재정의</li>
+      <li><strong>업캐스팅</strong> — 부모 타입 변수로 자식 객체 참조</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ⑦ 추상 클래스 -->
+<div id="abstract"></div>
+<div class="section-title">추상 클래스 (Abstract Class)</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem">추상 클래스의 특징 <span class="badge-imp">시험 필수</span></h3>
+  <div class="card-grid" style="gap:.8rem">
+    <div class="highlight-box info">
+      <h4>추상 클래스란?</h4>
+      <ul style="font-size:.86rem">
+        <li>abstract 키워드 사용</li>
+        <li><strong>직접 객체 생성 불가</strong> (<code>new Donut()</code> → 오류)</li>
+        <li>추상 메서드 + 일반 메서드 모두 가질 수 있음</li>
+        <li>생성자, 필드 선언 가능</li>
+        <li>자식 클래스에서 추상 메서드 <strong>반드시 구현</strong>해야 함</li>
+      </ul>
+    </div>
+    <div class="highlight-box purple">
+      <h4>추상 메서드란?</h4>
+      <ul style="font-size:.86rem">
+        <li>메서드 이름만 선언, 구현부 없음</li>
+        <li><code>abstract void show();</code></li>
+        <li>중괄호 없이 세미콜론으로 끝남</li>
+        <li>자식 클래스가 구현을 제공해야 함</li>
+        <li>private, static, final과 함께 사용 불가</li>
+      </ul>
+    </div>
+  </div>
+  <pre><span class="kw">abstract class</span> <span class="cl">Donut</span> {        <span class="cm">// 추상 클래스</span>
+    <span class="cl">String</span> name;
+    <span class="kw">int</span> price;
+
+    <span class="kw">void</span> <span class="fn">setPrice</span>(<span class="kw">int</span> price) {   <span class="cm">// 일반 메서드 — 자식이 그대로 사용</span>
+        <span class="kw">this</span>.price = price;
+    }
+
+    <span class="kw">abstract void</span> <span class="fn">show</span>();        <span class="cm">// 추상 메서드 — 자식이 반드시 구현</span>
+}
+
+<span class="kw">class</span> <span class="cl">ChocoDonut</span> <span class="kw">extends</span> <span class="cl">Donut</span> {
+    <span class="an">@Override</span>
+    <span class="kw">void</span> <span class="fn">show</span>() {  <span class="cm">// 추상 메서드 구현</span>
+        <span class="cl">System</span>.out.println(<span class="st">"맛있습니다. 가격: "</span> + price + <span class="st">"원"</span>);
+    }
+}
+
+<span class="cm">// Donut d = new Donut(); → 오류! 추상 클래스는 직접 생성 불가</span>
+<span class="cl">Donut</span> d = <span class="kw">new</span> <span class="cl">ChocoDonut</span>();   <span class="cm">// OK — 업캐스팅</span></pre>
+</div>
+
+<!-- ⑧ 인터페이스 -->
+<div id="interface"></div>
+<div class="section-title">인터페이스 (Interface)</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem">인터페이스의 특징</h3>
+  <div class="card-grid" style="gap:.8rem">
+    <div class="highlight-box purple">
+      <h4>인터페이스란?</h4>
+      <ul style="font-size:.86rem">
+        <li>interface 키워드로 선언</li>
+        <li>모든 메서드는 기본적으로 <strong>public abstract</strong></li>
+        <li>모든 필드는 <strong>public static final</strong></li>
+        <li>직접 객체 생성 불가</li>
+        <li>클래스는 <strong>여러 인터페이스 동시 구현 가능</strong> (다중 구현)</li>
+        <li>인터페이스끼리 <strong>extends</strong>로 상속 가능</li>
+      </ul>
+    </div>
+    <div class="highlight-box warning">
+      <h4>Java 8 이후 추가 기능</h4>
+      <ul style="font-size:.86rem">
+        <li><strong>default 메서드</strong> — 인터페이스 안에 구현 코드 작성 가능</li>
+        <li><strong>static 메서드</strong> — 인터페이스 이름으로 직접 호출 가능</li>
+        <li>구현 클래스에서 default 메서드를 오버라이딩할 수 있음</li>
+      </ul>
+    </div>
+  </div>
+  <pre><span class="kw">interface</span> <span class="cl">Sellable</span> {
+    <span class="kw">void</span> <span class="fn">pack</span>();                 <span class="cm">// 추상 메서드 (public abstract 생략)</span>
+    <span class="kw">default void</span> <span class="fn">pay</span>() {         <span class="cm">// default 메서드 (Java 8+)</span>
+        <span class="cl">System</span>.out.println(<span class="st">"결제 완료"</span>);
+    }
+    <span class="kw">static void</span> <span class="fn">printBanner</span>() {  <span class="cm">// static 메서드 (Java 8+)</span>
+        <span class="cl">System</span>.out.println(<span class="st">"도넛 주문 시스템"</span>);
+    }
+}
+
+<span class="kw">interface</span> <span class="cl">Payable</span> {
+    <span class="kw">void</span> <span class="fn">pay</span>();
+}
+
+<span class="cm">// 다중 구현</span>
+<span class="kw">class</span> <span class="cl">ChocoDonut</span> <span class="kw">implements</span> <span class="cl">Sellable</span>, <span class="cl">Payable</span> {
+    <span class="an">@Override</span>
+    <span class="kw">public void</span> <span class="fn">pack</span>() { <span class="cl">System</span>.out.println(<span class="st">"초코 도넛 포장 완료"</span>); }
+    <span class="an">@Override</span>
+    <span class="kw">public void</span> <span class="fn">pay</span>() { <span class="cl">System</span>.out.println(<span class="st">"초코 도넛 결제 완료"</span>); }
+}
+
+<span class="cm">// 인터페이스 타입 변수 선언 가능</span>
+<span class="cl">Sellable</span> donut = <span class="kw">new</span> <span class="cl">ChocoDonut</span>();
+donut.<span class="fn">pack</span>();
+<span class="cl">Sellable</span>.<span class="fn">printBanner</span>();  <span class="cm">// static 메서드는 인터페이스 이름으로 호출</span></pre>
+</div>
+
+<div class="card" style="margin-bottom:1rem">
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:.8rem">추상 클래스 vs 인터페이스 비교 <span class="badge-imp">시험 필수</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>구분</th><th>추상 클래스</th><th>인터페이스</th></tr></thead>
+      <tbody>
+        <tr><td class="left">선언/키워드</td><td>abstract class</td><td>interface</td></tr>
+        <tr><td class="left">상속/구현</td><td>extends (단일 상속)</td><td>implements (다중 구현)</td></tr>
+        <tr><td class="left">필드</td><td>일반 변수, 상수 모두 가능</td><td>public static final 상수만</td></tr>
+        <tr><td class="left">메서드</td><td>추상 + 일반 메서드</td><td>추상 + default + static</td></tr>
+        <tr><td class="left">생성자</td><td>있음</td><td>없음</td></tr>
+        <tr><td class="left">접근 제한자</td><td>제한 없음</td><td>public만 허용</td></tr>
+        <tr><td class="left">다중 관계</td><td>단일 상속만</td><td>여러 개 구현 가능</td></tr>
+        <tr><td class="left">용도</td><td>공통 기능을 공유하면서 일부 구현 강제</td><td>서로 다른 클래스들에 동일한 기능을 강제</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ⑨ 핵심 캐치 -->
+<div id="catch"></div>
+<div class="section-title">핵심 캐치 — 시험 포인트</div>
+<div class="catch-grid">
+  <div class="catch-card">
+    <div class="num-badge">POINT 01</div>
+    <h3>super()는 반드시 첫 줄</h3>
+    <p>자식 생성자에서 super()를 두 번째 줄 이후에 작성하면 컴파일 오류. 첫 줄에만 위치할 수 있다.</p>
+  </div>
+  <div class="catch-card" style="background:#6d28d9">
+    <div class="num-badge">POINT 02</div>
+    <h3>업캐스팅 후 자식 멤버 접근 불가</h3>
+    <p>업캐스팅 후 부모 타입 변수로는 부모 클래스에 선언된 멤버만 접근 가능. 자식 전용 메서드는 다운캐스팅 후 사용.</p>
+  </div>
+  <div class="catch-card" style="background:#c2410c">
+    <div class="num-badge">POINT 03</div>
+    <h3>동적 바인딩 — 실제 객체의 메서드 실행</h3>
+    <p>Donut d = new ChocoDonut()일 때 d.show()는 Donut의 show()가 아닌 ChocoDonut의 show()가 실행된다.</p>
+  </div>
+  <div class="catch-card" style="background:#15803d">
+    <div class="num-badge">POINT 04</div>
+    <h3>instanceof 후 다운캐스팅</h3>
+    <p>다운캐스팅 전 반드시 instanceof로 타입을 확인해야 ClassCastException을 방지할 수 있다.</p>
+  </div>
+  <div class="catch-card" style="background:#0e7490">
+    <div class="num-badge">POINT 05</div>
+    <h3>추상 클래스 직접 생성 불가</h3>
+    <p>abstract class는 new로 직접 생성할 수 없다. 반드시 자식 클래스를 통해서만 인스턴스 생성 가능.</p>
+  </div>
+  <div class="catch-card" style="background:#b91c1c">
+    <div class="num-badge">POINT 06</div>
+    <h3>인터페이스 — 다중 구현 가능</h3>
+    <p>클래스는 단일 상속만 가능하지만, 인터페이스는 여러 개를 동시에 implements 할 수 있다. 단, 모든 메서드를 구현해야 한다.</p>
+  </div>
+  <div class="catch-card" style="background:#4338ca">
+    <div class="num-badge">POINT 07</div>
+    <h3>@Override 어노테이션의 역할</h3>
+    <p>컴파일러가 오버라이딩 규칙(이름, 매개변수)이 맞는지 검사. 오버라이딩이 아니면 컴파일 오류 발생 → 오타 방지.</p>
+  </div>
+  <div class="catch-card" style="background:#92400e">
+    <div class="num-badge">POINT 08</div>
+    <h3>오버라이딩 접근 제한자 규칙</h3>
+    <p>오버라이딩 시 부모보다 좁은 접근 제한자로 변경 불가. public 메서드를 protected로 오버라이딩하면 컴파일 오류.</p>
+  </div>
+</div>
+
+<!-- ⑩ 핵심 키워드 -->
+<div id="keywords"></div>
+<div class="section-title">핵심 키워드</div>
+<div class="keyword-grid">
+  <div class="keyword-card">
+    <div class="en">extends</div>
+    <div class="ko">상속 키워드</div>
+    <div class="def">자식 클래스가 부모 클래스를 상속받을 때 사용. class 자식 extends 부모</div>
+  </div>
+  <div class="keyword-card">
+    <div class="en">super</div>
+    <div class="ko">부모 참조 키워드</div>
+    <div class="def">부모 클래스의 생성자(super()), 필드(super.x), 메서드(super.m())를 참조</div>
+  </div>
+  <div class="keyword-card">
+    <div class="en">@Override</div>
+    <div class="ko">오버라이딩 어노테이션</div>
+    <div class="def">메서드 오버라이딩임을 명시. 컴파일러가 오버라이딩 규칙 위반 여부를 검사</div>
+  </div>
+  <div class="keyword-card">
+    <div class="en">instanceof</div>
+    <div class="ko">타입 확인 연산자</div>
+    <div class="def">객체가 특정 클래스/인터페이스의 인스턴스인지 확인. 다운캐스팅 전 사용 권장</div>
+  </div>
+  <div class="keyword-card">
+    <div class="en">abstract</div>
+    <div class="ko">추상 클래스/메서드</div>
+    <div class="def">구현 없이 선언만 하는 메서드 또는 그것을 포함하는 클래스. 자식 클래스가 구현 강제</div>
+  </div>
+  <div class="keyword-card">
+    <div class="en">interface</div>
+    <div class="ko">인터페이스</div>
+    <div class="def">추상 메서드와 상수만을 갖는 타입. implements 키워드로 구현하며 다중 구현 가능</div>
+  </div>
+  <div class="keyword-card">
+    <div class="en">implements</div>
+    <div class="ko">인터페이스 구현</div>
+    <div class="def">클래스가 인터페이스를 구현할 때 사용. 여러 인터페이스를 쉼표로 나열 가능</div>
+  </div>
+  <div class="keyword-card">
+    <div class="en">dynamic binding</div>
+    <div class="ko">동적 바인딩</div>
+    <div class="def">업캐스팅된 변수로 메서드 호출 시 실행 시간에 실제 객체의 오버라이딩된 메서드가 결정됨</div>
+  </div>
+  <div class="keyword-card">
+    <div class="en">Upcasting</div>
+    <div class="ko">업캐스팅</div>
+    <div class="def">자식 타입을 부모 타입 변수에 대입. 자동 형 변환. 부모 멤버에만 접근 가능</div>
+  </div>
+  <div class="keyword-card">
+    <div class="en">Downcasting</div>
+    <div class="ko">다운캐스팅</div>
+    <div class="def">부모 타입을 자식 타입으로 명시적 형 변환. instanceof 확인 필수. ClassCastException 주의</div>
+  </div>
+  <div class="keyword-card">
+    <div class="en">default method</div>
+    <div class="ko">디폴트 메서드 (Java 8+)</div>
+    <div class="def">인터페이스 안에 구현 코드를 포함한 메서드. default 키워드 사용. 구현 클래스에서 오버라이딩 가능</div>
+  </div>
+  <div class="keyword-card">
+    <div class="en">Polymorphism</div>
+    <div class="ko">다형성</div>
+    <div class="def">하나의 부모 타입 변수로 여러 자식 객체를 다루는 것. 상속 + 오버라이딩 + 업캐스팅의 결합</div>
+  </div>
+</div>
+
+<!-- ⑪ 연습문제 -->
+<div id="quiz"></div>
+<div class="section-title">연습문제 — 프로그래밍 중심</div>
+
+<div id="scoreBar" class="score-bar"></div>
+
+<div class="quiz-container">
+
+  <!-- Q1 객관식 -->
+  <div class="quiz-card">
+    <div class="q-label">PROGRAMMING ① — 코드 추적</div>
+    <div class="question">다음 코드의 실행 결과로 올바른 것은?
+      <pre style="margin-top:.6rem"><span class="kw">class</span> <span class="cl">A</span> { <span class="kw">void</span> <span class="fn">print</span>() { <span class="cl">System</span>.out.println(<span class="st">"A"</span>); } }
+<span class="kw">class</span> <span class="cl">B</span> <span class="kw">extends</span> <span class="cl">A</span> { <span class="an">@Override</span> <span class="kw">void</span> <span class="fn">print</span>() { <span class="cl">System</span>.out.println(<span class="st">"B"</span>); } }
+<span class="kw">class</span> <span class="cl">C</span> <span class="kw">extends</span> <span class="cl">A</span> { <span class="an">@Override</span> <span class="kw">void</span> <span class="fn">print</span>() { <span class="cl">System</span>.out.println(<span class="st">"C"</span>); } }
+
+<span class="cl">A</span>[] arr = { <span class="kw">new</span> <span class="cl">A</span>(), <span class="kw">new</span> <span class="cl">B</span>(), <span class="kw">new</span> <span class="cl">C</span>() };
+<span class="kw">for</span> (<span class="cl">A</span> obj : arr) obj.<span class="fn">print</span>();</pre>
+    </div>
+    <div class="options">
+      <button class="option-btn" onclick="checkMC(this,'q1',false)">① A A A</button>
+      <button class="option-btn" onclick="checkMC(this,'q1',false)">② B C A</button>
+      <button class="option-btn" onclick="checkMC(this,'q1',true)">③ A B C</button>
+      <button class="option-btn" onclick="checkMC(this,'q1',false)">④ 컴파일 오류</button>
+    </div>
+    <div id="q1-feedback" class="feedback">
+      <strong>정답: ③ A B C</strong><br>
+      동적 바인딩(dynamic binding)에 의해 실제 생성된 객체의 오버라이딩된 메서드가 실행된다. arr[0]은 A → "A", arr[1]은 B → "B", arr[2]은 C → "C".
+    </div>
+  </div>
+
+  <!-- Q2 객관식 -->
+  <div class="quiz-card">
+    <div class="q-label">PROGRAMMING ② — 코드 추적</div>
+    <div class="question">다음 코드의 출력 결과로 올바른 것은?
+      <pre style="margin-top:.6rem"><span class="kw">class</span> <span class="cl">Parent</span> {
+    <span class="cl">String</span> name = <span class="st">"부모"</span>;
+    <span class="fn">Parent</span>() { <span class="cl">System</span>.out.println(<span class="st">"Parent 생성자"</span>); }
+}
+<span class="kw">class</span> <span class="cl">Child</span> <span class="kw">extends</span> <span class="cl">Parent</span> {
+    <span class="cl">String</span> name = <span class="st">"자식"</span>;
+    <span class="fn">Child</span>() {
+        <span class="cm">// super()가 자동 삽입됨</span>
+        <span class="cl">System</span>.out.println(<span class="st">"Child 생성자"</span>);
+    }
+}
+<span class="kw">new</span> <span class="cl">Child</span>();</pre>
+    </div>
+    <div class="options">
+      <button class="option-btn" onclick="checkMC(this,'q2',false)">① Child 생성자 → Parent 생성자</button>
+      <button class="option-btn" onclick="checkMC(this,'q2',true)">② Parent 생성자 → Child 생성자</button>
+      <button class="option-btn" onclick="checkMC(this,'q2',false)">③ Child 생성자만 출력</button>
+      <button class="option-btn" onclick="checkMC(this,'q2',false)">④ 컴파일 오류</button>
+    </div>
+    <div id="q2-feedback" class="feedback">
+      <strong>정답: ② Parent 생성자 → Child 생성자</strong><br>
+      자식 생성자에서 super()가 자동 삽입되므로 부모 생성자가 먼저 실행된다. 생성자 호출 순서는 항상 부모 → 자식.
+    </div>
+  </div>
+
+  <!-- Q3 객관식 -->
+  <div class="quiz-card">
+    <div class="q-label">PROGRAMMING ③ — 오류 찾기</div>
+    <div class="question">다음 코드에서 컴파일 오류가 발생하는 줄 번호는?
+      <pre style="margin-top:.6rem"><span class="num">01</span>  <span class="kw">abstract class</span> <span class="cl">Shape</span> {
+<span class="num">02</span>      <span class="kw">abstract double</span> <span class="fn">area</span>();
+<span class="num">03</span>  }
+<span class="num">04</span>  <span class="kw">class</span> <span class="cl">Circle</span> <span class="kw">extends</span> <span class="cl">Shape</span> {
+<span class="num">05</span>      <span class="kw">double</span> radius;
+<span class="num">06</span>      <span class="kw">double</span> <span class="fn">area</span>() { <span class="kw">return</span> <span class="num">3.14</span> * radius * radius; }
+<span class="num">07</span>  }
+<span class="num">08</span>  <span class="kw">public class</span> <span class="cl">Test</span> {
+<span class="num">09</span>      <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {
+<span class="num">10</span>          <span class="cl">Shape</span> s1 = <span class="kw">new</span> <span class="cl">Circle</span>();   <span class="cm">// 업캐스팅</span>
+<span class="num">11</span>          <span class="cl">Shape</span> s2 = <span class="kw">new</span> <span class="cl">Shape</span>();    <span class="cm">// ?</span>
+<span class="num">12</span>      }
+<span class="num">13</span>  }</pre>
+    </div>
+    <div class="options">
+      <button class="option-btn" onclick="checkMC(this,'q3',false)">① 6번 줄</button>
+      <button class="option-btn" onclick="checkMC(this,'q3',false)">② 10번 줄</button>
+      <button class="option-btn" onclick="checkMC(this,'q3',true)">③ 11번 줄</button>
+      <button class="option-btn" onclick="checkMC(this,'q3',false)">④ 오류 없음</button>
+    </div>
+    <div id="q3-feedback" class="feedback">
+      <strong>정답: ③ 11번 줄</strong><br>
+      추상 클래스(abstract class)는 직접 객체를 생성할 수 없다. <code>new Shape()</code>는 컴파일 오류. 10번 줄의 업캐스팅은 정상이다.
+    </div>
+  </div>
+
+  <!-- Q4 객관식 -->
+  <div class="quiz-card">
+    <div class="q-label">PROGRAMMING ④ — instanceof 결과</div>
+    <div class="question">다음 코드에서 출력 결과가 <code>true</code>가 아닌 것은?
+      <pre style="margin-top:.6rem"><span class="kw">class</span> <span class="cl">Animal</span> { }
+<span class="kw">class</span> <span class="cl">Dog</span> <span class="kw">extends</span> <span class="cl">Animal</span> { }
+<span class="kw">class</span> <span class="cl">GoldenRetriever</span> <span class="kw">extends</span> <span class="cl">Dog</span> { }
+
+<span class="cl">GoldenRetriever</span> g = <span class="kw">new</span> <span class="cl">GoldenRetriever</span>();</pre>
+    </div>
+    <div class="options">
+      <button class="option-btn" onclick="checkMC(this,'q4',false)">① g instanceof GoldenRetriever</button>
+      <button class="option-btn" onclick="checkMC(this,'q4',false)">② g instanceof Dog</button>
+      <button class="option-btn" onclick="checkMC(this,'q4',false)">③ g instanceof Animal</button>
+      <button class="option-btn" onclick="checkMC(this,'q4',true)">④ g instanceof String</button>
+    </div>
+    <div id="q4-feedback" class="feedback">
+      <strong>정답: ④ g instanceof String</strong><br>
+      상속 계층상 GoldenRetriever는 Dog, Animal, Object의 자식이므로 ①②③ 모두 true. String과는 무관하므로 false. 단, 컴파일러가 관계없음을 알면 컴파일 오류를 발생시키기도 한다.
+    </div>
+  </div>
+
+  <!-- Q5 단답형 코드 완성 -->
+  <div class="quiz-card">
+    <div class="q-label">PROGRAMMING ⑤ — 코드 완성 (상속 + super)</div>
+    <div class="question">
+      아래 빈칸을 채워 올바른 상속 구조를 완성하시오.<br>
+      Vehicle에는 <code>String brand</code>와 <code>void info()</code>가 있다. Car는 Vehicle을 상속받고,
+      <code>int speed</code> 필드를 추가하며, 생성자에서 <code>super(brand)</code>를 호출한다.
+      <pre style="margin-top:.6rem"><span class="kw">class</span> <span class="cl">Vehicle</span> {
+    <span class="cl">String</span> brand;
+    <span class="fn">Vehicle</span>(<span class="cl">String</span> brand) {
+        <span class="kw">this</span>.brand = brand;
+    }
+    <span class="kw">void</span> <span class="fn">info</span>() {
+        <span class="cl">System</span>.out.println(<span class="st">"브랜드: "</span> + brand);
+    }
+}
+
+<span class="kw">class</span> <span class="cl">Car</span> ________ <span class="cl">Vehicle</span> {   <span class="cm">// ① 상속 키워드</span>
+    <span class="kw">int</span> speed;
+    <span class="fn">Car</span>(<span class="cl">String</span> brand, <span class="kw">int</span> speed) {
+        ________(brand);           <span class="cm">// ② 부모 생성자 호출</span>
+        <span class="kw">this</span>.speed = speed;
+    }
+    <span class="an">@Override</span>
+    <span class="kw">void</span> <span class="fn">info</span>() {
+        ________.info();           <span class="cm">// ③ 부모 메서드 호출</span>
+        <span class="cl">System</span>.out.println(<span class="st">"속도: "</span> + speed);
+    }
+}</pre>
+    </div>
+    <div class="short-answer">
+      <textarea class="short-input" placeholder="① __ ② ________(brand) ③ ________.info() 형태로 작성하세요"></textarea>
+      <button class="check-btn" onclick="checkShort(this, 'q5')">확인</button>
+    </div>
+    <div id="q5-feedback" class="feedback">
+      <strong>정답:</strong><br>
+      ① <code>extends</code><br>
+      ② <code>super(brand)</code> — 부모 생성자 호출, 반드시 생성자 첫 줄<br>
+      ③ <code>super.info()</code> — 부모의 info() 메서드 호출<br><br>
+      완성 코드: <code>class Car extends Vehicle</code> / <code>super(brand);</code> / <code>super.info();</code>
+    </div>
+  </div>
+
+  <!-- Q6 단답형 -->
+  <div class="quiz-card">
+    <div class="q-label">PROGRAMMING ⑥ — 추상 클래스 구현</div>
+    <div class="question">
+      다음 추상 클래스 <code>Animal</code>을 상속받는 <code>Dog</code> 클래스를 완성하시오.
+      Dog의 <code>speak()</code>는 "멍멍!"을 출력하고, <code>move()</code>는 "네 발로 달린다"를 출력해야 한다.
+      <pre style="margin-top:.6rem"><span class="kw">abstract class</span> <span class="cl">Animal</span> {
+    <span class="cl">String</span> name;
+    <span class="fn">Animal</span>(<span class="cl">String</span> name) { <span class="kw">this</span>.name = name; }
+    <span class="kw">abstract void</span> <span class="fn">speak</span>();
+    <span class="kw">abstract void</span> <span class="fn">move</span>();
+}
+
+<span class="cm">// Dog 클래스를 직접 작성해보세요</span></pre>
+    </div>
+    <div class="short-answer">
+      <textarea class="short-input" style="min-height:140px" placeholder="class Dog extends Animal { ... } 형태로 작성해보세요"></textarea>
+      <button class="check-btn" onclick="checkShort(this, 'q6')">정답 확인</button>
+    </div>
+    <div id="q6-feedback" class="feedback">
+      <strong>모범 답안:</strong>
+      <pre style="margin-top:.4rem;background:#0f172a;color:#e2e8f0;padding:.8rem;border-radius:8px;font-size:.82rem">class Dog extends Animal {
+    Dog(String name) {
+        super(name);  // 부모 생성자 호출 (첫 줄!)
+    }
+
+    @Override
+    void speak() {
+        System.out.println(name + ": 멍멍!");
+    }
+
+    @Override
+    void move() {
+        System.out.println(name + ": 네 발로 달린다");
+    }
+}</pre>
+      핵심 포인트: 추상 메서드 2개를 모두 @Override로 구현해야 컴파일 오류가 없다.
+    </div>
+  </div>
+
+  <!-- Q7 단답형 -->
+  <div class="quiz-card">
+    <div class="q-label">PROGRAMMING ⑦ — 인터페이스 + 다형성</div>
+    <div class="question">
+      아래 코드에서 실행 결과를 작성하고, 동작 원리를 설명하시오.
+      <pre style="margin-top:.6rem"><span class="kw">interface</span> <span class="cl">Printable</span> {
+    <span class="kw">void</span> <span class="fn">print</span>();
+}
+
+<span class="kw">class</span> <span class="cl">Doc</span> <span class="kw">implements</span> <span class="cl">Printable</span> {
+    <span class="an">@Override</span>
+    <span class="kw">public void</span> <span class="fn">print</span>() { <span class="cl">System</span>.out.println(<span class="st">"문서 출력"</span>); }
+}
+
+<span class="kw">class</span> <span class="cl">Photo</span> <span class="kw">implements</span> <span class="cl">Printable</span> {
+    <span class="an">@Override</span>
+    <span class="kw">public void</span> <span class="fn">print</span>() { <span class="cl">System</span>.out.println(<span class="st">"사진 출력"</span>); }
+}
+
+<span class="cl">Printable</span>[] items = { <span class="kw">new</span> <span class="cl">Doc</span>(), <span class="kw">new</span> <span class="cl">Photo</span>(), <span class="kw">new</span> <span class="cl">Doc</span>() };
+<span class="kw">for</span> (<span class="cl">Printable</span> p : items) p.<span class="fn">print</span>();</pre>
+    </div>
+    <div class="short-answer">
+      <textarea class="short-input" placeholder="실행 결과 3줄과 동작 원리를 설명해보세요"></textarea>
+      <button class="check-btn" onclick="checkShort(this,'q7')">정답 확인</button>
+    </div>
+    <div id="q7-feedback" class="feedback">
+      <strong>실행 결과:</strong><br>
+      문서 출력<br>
+      사진 출력<br>
+      문서 출력<br><br>
+      <strong>동작 원리 (동적 바인딩 + 다형성):</strong><br>
+      Printable 인터페이스 타입 배열에 여러 구현 객체를 담는다. 반복문에서 p.print()를 호출하면 컴파일 시가 아닌 실행 시에 실제 객체(Doc/Photo)의 오버라이딩된 print()가 결정된다. 이것이 동적 바인딩이고, 다형성(Polymorphism)의 핵심이다.
+    </div>
+  </div>
+
+  <!-- Q8 단답형 -->
+  <div class="quiz-card">
+    <div class="q-label">PROGRAMMING ⑧ — 종합: 상속 + 인터페이스</div>
+    <div class="question">
+      다음 조건으로 클래스를 설계하고 main에서 실행 결과를 예측하시오.<br>
+      - <code>abstract class Product</code>: String name 필드, 추상 메서드 <code>void show()</code><br>
+      - <code>interface Deliverable</code>: <code>void ship()</code>, <code>void confirm()</code><br>
+      - <code>class Book extends Product implements Deliverable</code>: show()는 "책: {name}", ship()은 "책 배송 중", confirm()은 "책 수령 완료"<br>
+      <pre style="margin-top:.6rem"><span class="cm">// 이 코드의 출력 결과를 예측하세요</span>
+<span class="cl">Product</span> p = <span class="kw">new</span> <span class="cl">Book</span>(<span class="st">"자바프로그래밍"</span>);
+p.<span class="fn">show</span>();
+
+<span class="cl">Deliverable</span> d = (<span class="cl">Deliverable</span>) p;
+d.<span class="fn">ship</span>();
+d.<span class="fn">confirm</span>();</pre>
+    </div>
+    <div class="short-answer">
+      <textarea class="short-input" style="min-height:120px" placeholder="Book 클래스 코드와 실행 결과를 작성해보세요"></textarea>
+      <button class="check-btn" onclick="checkShort(this,'q8')">정답 확인</button>
+    </div>
+    <div id="q8-feedback" class="feedback">
+      <strong>전체 구조 (Product + Deliverable + Book)</strong>
+      <pre style="margin-top:.4rem;background:#0f172a;color:#e2e8f0;padding:.8rem;border-radius:8px;font-size:.82rem">// ① 추상 클래스 — 접근 제한자 없음(package-private)
+abstract class Product {
+    String name;
+    Product(String name) { this.name = name; }
+    abstract void show();         // package-private
+}
+
+// ② 인터페이스 — 모든 메서드는 암묵적으로 public abstract
+interface Deliverable {
+    void ship();                  // 실제론 public abstract void ship()
+    void confirm();               // 실제론 public abstract void confirm()
+}
+
+// ③ Book — 출처에 따라 구현 방식이 다르다!
+class Book extends Product implements Deliverable {
+    Book(String name) {
+        super(name);              // Product(String) 생성자 호출
+    }
+
+    // 추상 클래스에서 상속 → 원래 package-private이므로 public 없어도 OK
+    @Override
+    void show() {
+        System.out.println("책: " + name);
+    }
+
+    // 인터페이스에서 구현 → 원래 public이므로 반드시 public 붙여야 함
+    // (public → package-private 으로 좁히면 컴파일 오류!)
+    @Override
+    public void ship() {
+        System.out.println(name + " 책 배송 중");
+    }
+
+    @Override
+    public void confirm() {
+        System.out.println(name + " 책 수령 완료");
+    }
+}</pre>
+      <div style="margin:.6rem 0;padding:.7rem 1rem;background:rgba(37,99,235,.1);border-left:3px solid #2563eb;border-radius:6px;font-size:.86rem;line-height:1.7">
+        <strong>핵심 차이 정리</strong><br>
+        추상 클래스 메서드: 선언된 접근 제한자 그대로 구현 → <code>show()</code>는 public 불필요<br>
+        인터페이스 메서드: 항상 public abstract가 기본값 → <code>ship()</code>, <code>confirm()</code>은 public 필수
+      </div>
+      <strong>실행 결과:</strong><br>
+      책: 자바프로그래밍<br>
+      자바프로그래밍 책 배송 중<br>
+      자바프로그래밍 책 수령 완료<br><br>
+      <strong>추가 포인트:</strong> p는 Product 타입이므로 show()만 호출 가능. ship(), confirm()을 호출하려면 Deliverable 타입으로 캐스팅 필요.
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<script>
+// Theme
+function toggleTheme() {
+  const d = document.documentElement;
+  const btn = document.querySelector('.theme-btn');
+  if (d.getAttribute('data-theme') === 'dark') {
+    d.removeAttribute('data-theme');
+    btn.textContent = '🌙 야간모드';
+    localStorage.setItem('theme', 'light');
+  } else {
+    d.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀️ 라이트모드';
+    localStorage.setItem('theme', 'dark');
+  }
+}
+if (localStorage.getItem('theme') === 'dark') {
+  document.documentElement.setAttribute('data-theme', 'dark');
+  document.querySelector('.theme-btn').textContent = '☀️ 라이트모드';
+}
+
+// MC Quiz
+let mcAnswers = {};
+function checkMC(btn, qid, isCorrect) {
+  if (mcAnswers[qid]) return;
+  mcAnswers[qid] = true;
+  const allBtns = btn.parentElement.querySelectorAll('.option-btn');
+  allBtns.forEach(b => b.disabled = true);
+  if (isCorrect) {
+    btn.classList.add('correct');
+    btn.textContent = '✓ ' + btn.textContent;
+  } else {
+    btn.classList.add('wrong');
+    btn.textContent = '✗ ' + btn.textContent;
+    allBtns.forEach(b => {
+      if (b.onclick.toString().includes('true')) {
+        b.classList.add('correct');
+        b.textContent = '✓ ' + b.textContent;
+      }
+    });
+  }
+  const fb = document.getElementById(qid + '-feedback');
+  if (fb) { fb.classList.add('show'); fb.classList.add(isCorrect ? 'ok' : 'fail'); }
+  updateScore();
+}
+
+// Short answer
+function checkShort(btn, qid) {
+  const fb = document.getElementById(qid + '-feedback');
+  if (fb) { fb.classList.add('show'); fb.classList.add('ok'); }
+  btn.textContent = '✓ 확인됨';
+  btn.disabled = true;
+}
+
+function updateScore() {
+  const total = Object.keys(mcAnswers).length;
+  if (total === 0) return;
+}
+</script>
+</body>
+</html>
