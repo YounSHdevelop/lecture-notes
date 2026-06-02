@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터통신 기말고사 — 7~11장 완전정복</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#2563eb;--primary-dark:#1e3a8a;
+  --success:#16a34a;--danger:#dc2626;--warning:#d97706;
+  --purple:#7c3aed;--orange:#ea580c;--teal:#0d9488;--pink:#db2777;--indigo:#4338ca;
+  --bg:#f3f4f6;--card-bg:#ffffff;
+  --text:#111827;--text-muted:#6b7280;--border:#e5e7eb;
+  --nav-bg:rgba(255,255,255,0.95);
+  --shadow:0 4px 24px rgba(0,0,0,0.08);
+  --soft-bg:#f8fafc;
+}
+[data-theme="dark"]{
+  --bg:#0f172a;--card-bg:#1e293b;
+  --text:#f1f5f9;--text-muted:#94a3b8;--border:#334155;
+  --nav-bg:rgba(15,23,42,0.95);--shadow:0 4px 24px rgba(0,0,0,0.4);--soft-bg:#0b1224;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);line-height:1.75;padding-top:64px;}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;height:60px;background:var(--nav-bg);backdrop-filter:blur(12px);display:flex;align-items:center;padding:0 16px;z-index:1000;border-bottom:1px solid var(--border);}
+.nav-logo{font-weight:900;color:var(--danger);text-decoration:none;font-size:0.95rem;white-space:nowrap;}
+.nav-links{display:flex;gap:4px;margin-left:16px;flex-wrap:wrap;}
+.nav-links a{text-decoration:none;color:var(--text-muted);font-size:0.78rem;padding:5px 8px;border-radius:6px;font-weight:600;}
+.nav-links a:hover{color:var(--primary);background:rgba(37,99,235,0.08);}
+.nav-right{margin-left:auto;display:flex;gap:8px;align-items:center;}
+.nav-home{text-decoration:none;color:var(--text-muted);font-size:0.82rem;}
+.btn-theme{background:none;border:1px solid var(--border);border-radius:8px;padding:5px 9px;cursor:pointer;color:var(--text);font-size:0.85rem;}
+
+/* EXAM BANNER */
+.exam-banner{background:linear-gradient(135deg,#dc2626,#b91c1c);color:white;padding:40px 24px 36px;text-align:center;position:relative;overflow:hidden;}
+.exam-banner::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+.exam-badge{display:inline-block;background:rgba(255,255,255,0.2);padding:6px 18px;border-radius:20px;font-size:0.82rem;margin-bottom:12px;letter-spacing:1px;font-weight:700;}
+.exam-banner h1{font-size:1.8rem;font-weight:900;margin-bottom:8px;}
+.exam-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:600px;margin:16px auto 0;}
+.exam-info-card{background:rgba(255,255,255,0.15);border-radius:12px;padding:12px;text-align:center;}
+.exam-info-card .label{font-size:0.72rem;opacity:0.8;letter-spacing:1px;margin-bottom:4px;}
+.exam-info-card .val{font-size:1rem;font-weight:700;}
+
+/* SECTION CARDS */
+.section-card{max-width:980px;margin:28px auto;padding:28px;background:var(--card-bg);border-radius:16px;box-shadow:var(--shadow);border-top:5px solid var(--primary);}
+.section-card.s2{border-top-color:var(--purple);}
+.section-card.s3{border-top-color:var(--orange);}
+.section-card.s4{border-top-color:var(--teal);}
+.section-card.s5{border-top-color:var(--pink);}
+.section-card.s6{border-top-color:var(--indigo);}
+.section-card.s7{border-top-color:var(--warning);}
+.section-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border);}
+.section-badge{font-size:0.75rem;font-weight:900;letter-spacing:1.5px;padding:5px 12px;border-radius:20px;color:white;background:var(--primary);white-space:nowrap;}
+.section-card.s2 .section-badge{background:var(--purple);}
+.section-card.s3 .section-badge{background:var(--orange);}
+.section-card.s4 .section-badge{background:var(--teal);}
+.section-card.s5 .section-badge{background:var(--pink);}
+.section-card.s6 .section-badge{background:var(--indigo);}
+.section-card.s7 .section-badge{background:var(--warning);}
+.section-title{font-size:1.35rem;font-weight:700;}
+
+/* TOPIC */
+.topic{margin:24px 0 12px;}
+.topic-title{font-size:1.05rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.topic-num{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;padding:0 7px;border-radius:13px;background:var(--primary);color:white;font-size:0.78rem;font-weight:700;}
+.section-card.s2 .topic-num{background:var(--purple);}
+.section-card.s3 .topic-num{background:var(--orange);}
+.section-card.s4 .topic-num{background:var(--teal);}
+.section-card.s5 .topic-num{background:var(--pink);}
+.section-card.s6 .topic-num{background:var(--indigo);}
+.section-card.s7 .topic-num{background:var(--warning);}
+
+/* MEMO HOOK */
+.memo-hook{padding:18px 20px;border-radius:12px;margin:12px 0;text-align:center;background:linear-gradient(135deg,rgba(37,99,235,0.10),rgba(37,99,235,0.04));border:2px solid var(--primary);color:var(--primary);}
+.section-card.s2 .memo-hook{background:linear-gradient(135deg,rgba(124,58,237,0.10),rgba(124,58,237,0.04));border-color:var(--purple);color:var(--purple);}
+.section-card.s3 .memo-hook{background:linear-gradient(135deg,rgba(234,88,12,0.10),rgba(234,88,12,0.04));border-color:var(--orange);color:var(--orange);}
+.section-card.s4 .memo-hook{background:linear-gradient(135deg,rgba(13,148,136,0.10),rgba(13,148,136,0.04));border-color:var(--teal);color:var(--teal);}
+.section-card.s5 .memo-hook{background:linear-gradient(135deg,rgba(219,39,119,0.10),rgba(219,39,119,0.04));border-color:var(--pink);color:var(--pink);}
+.section-card.s6 .memo-hook{background:linear-gradient(135deg,rgba(67,56,202,0.10),rgba(67,56,202,0.04));border-color:var(--indigo);color:var(--indigo);}
+.section-card.s7 .memo-hook{background:linear-gradient(135deg,rgba(217,119,6,0.10),rgba(217,119,6,0.04));border-color:var(--warning);color:var(--warning);}
+.memo-hook .hook-label{font-size:0.72rem;opacity:0.8;letter-spacing:2px;font-weight:700;}
+.memo-hook .mnemonic{font-size:1.5rem;font-weight:900;letter-spacing:2px;margin:8px 0;}
+.memo-hook .hook-desc{font-size:0.85rem;opacity:0.95;font-weight:500;}
+
+/* FLASH GRID */
+.flash-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0;}
+.flash{padding:12px 14px;border-radius:10px;background:var(--soft-bg);border-left:4px solid var(--primary);}
+.section-card.s2 .flash{border-left-color:var(--purple);}
+.section-card.s3 .flash{border-left-color:var(--orange);}
+.section-card.s4 .flash{border-left-color:var(--teal);}
+.section-card.s5 .flash{border-left-color:var(--pink);}
+.section-card.s6 .flash{border-left-color:var(--indigo);}
+.section-card.s7 .flash{border-left-color:var(--warning);}
+.flash .q{font-weight:700;font-size:0.88rem;margin-bottom:5px;}
+.flash .a{font-size:0.84rem;color:var(--text-muted);line-height:1.65;}
+
+/* MEMO LIST */
+.memo-list{margin:10px 0;padding:14px 18px;background:var(--soft-bg);border-radius:10px;}
+.memo-list-title{font-weight:700;font-size:0.9rem;margin-bottom:7px;color:var(--primary);}
+.section-card.s2 .memo-list-title{color:var(--purple);}
+.section-card.s3 .memo-list-title{color:var(--orange);}
+.section-card.s4 .memo-list-title{color:var(--teal);}
+.section-card.s5 .memo-list-title{color:var(--pink);}
+.section-card.s6 .memo-list-title{color:var(--indigo);}
+.section-card.s7 .memo-list-title{color:var(--warning);}
+.memo-list ol,.memo-list ul{padding-left:22px;}
+.memo-list li{padding:2px 0;font-size:0.88rem;}
+.memo-list li strong{color:var(--primary);}
+.section-card.s2 .memo-list li strong{color:var(--purple);}
+.section-card.s3 .memo-list li strong{color:var(--orange);}
+.section-card.s4 .memo-list li strong{color:var(--teal);}
+.section-card.s5 .memo-list li strong{color:var(--pink);}
+.section-card.s6 .memo-list li strong{color:var(--indigo);}
+.section-card.s7 .memo-list li strong{color:var(--warning);}
+
+/* TABLE */
+.std-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:0.83rem;}
+.std-table th,.std-table td{padding:8px 10px;border:1px solid var(--border);text-align:left;}
+.std-table th{background:rgba(37,99,235,0.08);font-weight:700;}
+.std-table td.hl{background:rgba(220,38,38,0.06);font-weight:600;color:var(--danger);}
+.tbl-wrap{overflow-x:auto;}
+.section-card.s2 .std-table th{background:rgba(124,58,237,0.08);}
+.section-card.s3 .std-table th{background:rgba(234,88,12,0.08);}
+.section-card.s4 .std-table th{background:rgba(13,148,136,0.08);}
+.section-card.s5 .std-table th{background:rgba(219,39,119,0.08);}
+.section-card.s6 .std-table th{background:rgba(67,56,202,0.08);}
+.section-card.s7 .std-table th{background:rgba(217,119,6,0.08);}
+
+/* FLOW BOX */
+.flow-box{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:12px 0;padding:14px;background:var(--soft-bg);border-radius:10px;justify-content:center;}
+.flow-step{padding:7px 12px;border-radius:8px;background:var(--card-bg);border:2px solid var(--primary);font-size:0.82rem;font-weight:700;color:var(--primary);}
+.section-card.s2 .flow-step{border-color:var(--purple);color:var(--purple);}
+.section-card.s3 .flow-step{border-color:var(--orange);color:var(--orange);}
+.section-card.s4 .flow-step{border-color:var(--teal);color:var(--teal);}
+.section-card.s5 .flow-step{border-color:var(--pink);color:var(--pink);}
+.flow-arrow{color:var(--text-muted);font-weight:900;font-size:1.1rem;}
+
+/* FRAME BOX */
+.frame-box{display:flex;gap:0;flex-wrap:nowrap;margin:12px 0;overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+.frame-cell{padding:12px 6px;border-right:1px solid var(--border);flex:1;text-align:center;font-size:0.76rem;font-weight:600;background:var(--soft-bg);min-width:60px;}
+.frame-cell:last-child{border-right:none;}
+.frame-cell small{display:block;font-weight:400;color:var(--text-muted);font-size:0.68rem;margin-top:2px;}
+.frame-cell.flag{background:rgba(37,99,235,0.12);color:var(--primary);}
+.frame-cell.addr{background:rgba(124,58,237,0.10);color:var(--purple);}
+.frame-cell.ctrl{background:rgba(234,88,12,0.10);color:var(--orange);}
+.frame-cell.data{background:rgba(13,148,136,0.10);color:var(--teal);flex:2.5;}
+.frame-cell.fcs{background:rgba(220,38,38,0.10);color:var(--danger);}
+
+/* DIAGRAM */
+.diagram{background:var(--soft-bg);border-radius:10px;padding:14px 16px;margin:10px 0;font-family:'Courier New',monospace;font-size:0.8rem;white-space:pre;overflow-x:auto;line-height:1.6;color:var(--text);border:1px solid var(--border);}
+
+/* NOTE BOX */
+.note-box{background:rgba(217,119,6,0.07);border:1px solid rgba(217,119,6,0.3);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:0.85rem;}
+.note-box .note-title{font-weight:700;color:var(--warning);margin-bottom:5px;}
+
+/* ALERT BOX */
+.alert-box{background:rgba(220,38,38,0.07);border:2px solid rgba(220,38,38,0.35);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:0.85rem;}
+.alert-box .alert-title{font-weight:700;color:var(--danger);margin-bottom:5px;}
+
+/* FORMULA */
+.formula-box{background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.25);border-radius:10px;padding:12px 16px;margin:10px 0;text-align:center;}
+.formula{font-size:1rem;font-weight:700;color:var(--purple);font-family:'Courier New',monospace;}
+.formula-desc{font-size:0.8rem;color:var(--text-muted);margin-top:5px;}
+
+/* GENERATION TABLE */
+.gen-table-wrap{overflow-x:auto;margin:12px 0;}
+.gen-table{width:100%;border-collapse:collapse;font-size:0.8rem;min-width:600px;}
+.gen-table th{padding:8px 10px;background:var(--primary-dark);color:white;font-weight:700;text-align:center;border:1px solid var(--border);}
+.gen-table td{padding:7px 10px;border:1px solid var(--border);text-align:center;vertical-align:top;}
+.gen-table tr:nth-child(even) td{background:rgba(37,99,235,0.04);}
+.gen-table td.hl{background:rgba(220,38,38,0.08);font-weight:700;color:var(--danger);}
+
+/* QUIZ */
+.quiz-item{margin-bottom:16px;padding:16px;border-radius:12px;border:1px solid var(--border);background:var(--card-bg);}
+.quiz-q{font-weight:600;margin-bottom:9px;font-size:0.92rem;}
+.q-num{color:var(--primary);font-weight:700;margin-right:5px;}
+.quiz-type{font-size:0.72rem;padding:2px 8px;border-radius:10px;margin-left:6px;font-weight:700;}
+.quiz-type.obj{background:rgba(37,99,235,0.12);color:var(--primary);}
+.quiz-type.short{background:rgba(13,148,136,0.12);color:var(--teal);}
+.quiz-type.essay{background:rgba(220,38,38,0.12);color:var(--danger);}
+.quiz-options{list-style:none;}
+.quiz-options li{margin-bottom:5px;}
+.quiz-options button{width:100%;text-align:left;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--soft-bg);color:var(--text);cursor:pointer;font-size:0.86rem;font-family:inherit;transition:all 0.15s;}
+.quiz-options button:hover:not(:disabled){border-color:var(--primary);}
+.quiz-options button.correct{background:rgba(22,163,74,0.12);border-color:var(--success);color:var(--success);font-weight:600;}
+.quiz-options button.wrong{background:rgba(220,38,38,0.12);border-color:var(--danger);color:var(--danger);}
+.quiz-feedback{display:none;margin-top:8px;padding:9px 12px;border-radius:8px;font-size:0.84rem;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct-fb{background:rgba(22,163,74,0.08);color:var(--success);}
+.quiz-feedback.wrong-fb{background:rgba(220,38,38,0.08);color:var(--danger);}
+
+.short-answer input{padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:0.86rem;font-family:inherit;background:var(--card-bg);color:var(--text);width:55%;min-width:160px;}
+.short-answer button{padding:7px 14px;border:none;border-radius:8px;background:var(--primary);color:white;cursor:pointer;font-family:inherit;font-size:0.84rem;margin-left:6px;}
+.model-answer{display:none;margin-top:8px;padding:10px 14px;border-radius:8px;background:rgba(37,99,235,0.06);border-left:4px solid var(--primary);font-size:0.84rem;line-height:1.7;}
+.model-answer.show{display:block;}
+
+.essay-answer textarea{width:100%;min-height:80px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.86rem;font-family:inherit;background:var(--card-bg);color:var(--text);resize:vertical;}
+.essay-answer button{margin-top:6px;padding:7px 14px;border:none;border-radius:8px;background:var(--danger);color:white;cursor:pointer;font-family:inherit;font-size:0.84rem;}
+.essay-model{display:none;margin-top:8px;padding:12px 16px;border-radius:8px;background:rgba(220,38,38,0.06);border-left:4px solid var(--danger);font-size:0.84rem;line-height:1.75;}
+.essay-model.show{display:block;}
+.essay-model .em-label{font-weight:700;color:var(--danger);margin-bottom:6px;}
+
+footer{text-align:center;padding:28px;color:var(--text-muted);font-size:0.82rem;}
+
+@media(max-width:680px){
+  .flash-grid,.gen-table-wrap{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  .exam-info-grid{grid-template-columns:1fr 1fr;}
+  .section-card{margin:14px 8px;padding:18px;}
+  .frame-box{flex-wrap:wrap;}
+  .frame-cell{min-width:50px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html" class="nav-logo">🔥 기말고사</a>
+  <div class="nav-links">
+    <a href="#ch7">7장·다중화</a>
+    <a href="#ch8">8장·링크제어</a>
+    <a href="#ch9">9장·HDLC</a>
+    <a href="#ch10">10장·LAN</a>
+    <a href="#ch11">11장·WAN</a>
+    <a href="#essay">서술형대비</a>
+    <a href="#quiz">연습문제</a>
+  </div>
+  <div class="nav-right">
+    <a href="../index.html" class="nav-home">홈</a>
+    <button class="btn-theme" id="themeToggle">🌙</button>
+  </div>
+</nav>
+
+<!-- ===== EXAM BANNER ===== -->
+<header class="exam-banner">
+  <div class="exam-badge">기말고사 완전정복 · 7~11장</div>
+  <h1>데이터통신 기말고사 학습자료</h1>
+  <p style="opacity:0.9;font-size:0.95rem;margin-top:6px;">서술형 중심 · 단답 · 객관 완벽 대비</p>
+  <div class="exam-info-grid">
+    <div class="exam-info-card">
+      <div class="label">📅 시험 날짜</div>
+      <div class="val">다음 주 화요일</div>
+    </div>
+    <div class="exam-info-card">
+      <div class="label">⏰ 시험 시간</div>
+      <div class="val">09:30</div>
+    </div>
+    <div class="exam-info-card">
+      <div class="label">📍 강의실</div>
+      <div class="val">18420</div>
+    </div>
+  </div>
+</header>
+
+<!-- ==================== 7장: 다중화 ==================== -->
+<section class="section-card" id="ch7">
+  <div class="section-head">
+    <span class="section-badge">7장</span>
+    <span class="section-title">🔀 다중화 (Multiplexing)</span>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">1</span>다중화 개념</div>
+    <div class="memo-hook">
+      <div class="hook-label">핵심 정의</div>
+      <div class="mnemonic">단일 링크 → 여러 신호 동시 전송</div>
+      <div class="hook-desc">링크의 전송 용량이 장치들의 전송량보다 클 때 사용 / 링크(물리적) vs 채널(논리적)</div>
+    </div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">FDM (주파수 분할)</div>
+        <div class="a"><b>아날로그</b> 신호 다중화. 서로 다른 반송파로 변조. <b>보호 대역(Guard Band)</b> 필수. AM·FM 라디오, 전화망.</div>
+      </div>
+      <div class="flash">
+        <div class="q">WDM (파장 분할)</div>
+        <div class="a"><b>광섬유</b>의 아날로그 다중화. <b>프리즘</b>으로 빛을 결합·분리.</div>
+      </div>
+      <div class="flash">
+        <div class="q">TDM (시분할)</div>
+        <div class="a"><b>디지털</b> 신호 다중화. 시간을 나눠 공유. 동기(STDM, 고정 슬롯) vs 비동기(Statistical=통계적=지능적).</div>
+      </div>
+      <div class="flash">
+        <div class="q">CDM (코드 분할)</div>
+        <div class="a"><b>FDM+TDM 혼합</b>. 각 사용자에게 직교 코드 부여. <b>스펙트럼 확산</b>(FHSS→DSSS 현재 주류). 군사·위성·한국 이동통신.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">2</span>TDM 핵심 수치 — 시험 단골!</div>
+    <div class="tbl-wrap">
+    <table class="std-table">
+      <thead><tr><th>종류</th><th>속도</th><th>채널</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td class="hl"><b>T-1 (북미)</b></td><td class="hl"><b>1.544 Mbps</b></td><td>24채널</td><td>1프레임=193비트(24×8+1)</td></tr>
+        <tr><td class="hl"><b>E-1 (한국/유럽)</b></td><td class="hl"><b>2.048 Mbps</b></td><td>30채널</td><td>음성30+프레임동기1+신호용1=32</td></tr>
+        <tr><td>DS-0 기본단위</td><td>64 Kbps</td><td>—</td><td>8000샘플/초 × 8비트</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="alert-box">
+      <div class="alert-title">★ 단답 예상: 비동기 TDM의 다른 이름 2개</div>
+      <b>통계적 TDM(Statistical TDM)</b> = <b>지능적 TDM(Intelligent TDM)</b> = 비동기 TDM. 모두 같은 것!
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">3</span>스펙트럼 확산 (CDM)</div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">FHSS (주파수 도약)</div>
+        <div class="a">Frequency Hopping Spread Spectrum. 홉 주기마다 다른 반송 주파수로 변조. 슈도랜덤 코드로 도약 패턴 결정. <b>과거 주류.</b></div>
+      </div>
+      <div class="flash">
+        <div class="q">DSSS (직접 순열)</div>
+        <div class="a">Direct Sequence Spread Spectrum. <b>칩(Chip)</b> n비트 코드를 각 비트에 곱해 n배 대역 확산. 바커 순열(n=11). <b>현재 주류.</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 8장: 데이터링크 제어 ==================== -->
+<section class="section-card s2" id="ch8">
+  <div class="section-head">
+    <span class="section-badge">8장</span>
+    <span class="section-title">⚙️ 데이터링크 제어</span>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">1</span>전송 제어 절차 5단계 ★★★ (서술 최빈출)</div>
+    <div class="memo-hook">
+      <div class="hook-label">무조건 암기</div>
+      <div class="mnemonic">회선 → 링크 확립 → 전송 → 링크 해제 → 절단</div>
+      <div class="hook-desc">전용 회선은 ①⑤ 생략 → 3단계(링크 확립→전송→링크 해제)</div>
+    </div>
+    <div class="flow-box">
+      <span class="flow-step">① 회선 연결</span><span class="flow-arrow">→</span>
+      <span class="flow-step">② 데이터링크 확립</span><span class="flow-arrow">→</span>
+      <span class="flow-step">③ 데이터 전송</span><span class="flow-arrow">→</span>
+      <span class="flow-step">④ 데이터링크 해제</span><span class="flow-arrow">→</span>
+      <span class="flow-step">⑤ 회선 절단</span>
+    </div>
+    <div class="memo-list">
+      <div class="memo-list-title">단계별 설명</div>
+      <ul>
+        <li><strong>① 회선 연결</strong>: 물리적 접속. 다이얼로 통신 회선 연결 (교환 회선 전용)</li>
+        <li><strong>② 데이터링크 확립</strong>: 논리적 경로 구성 = <b>회선 제어</b> (경쟁 or 폴·셀렉션)</li>
+        <li><strong>③ 데이터 전송</strong>: 오류·순서 제어 수행하며 데이터 전송</li>
+        <li><strong>④ 데이터링크 해제</strong>: 논리적 링크 해제</li>
+        <li><strong>⑤ 회선 절단</strong>: 물리적 접속 절단 (교환 회선 전용)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">2</span>데이터링크 3대 제어 기능</div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">회선 제어 (Line Control)</div>
+        <div class="a"><b>누가 신호를 보낼 것인가?</b> 경쟁 방식 or 폴·셀렉션 방식.</div>
+      </div>
+      <div class="flash">
+        <div class="q">흐름 제어 (Flow Control)</div>
+        <div class="a"><b>수신 버퍼가 넘치지 않게</b> 송신 속도 조절. 정지-대기 / 슬라이딩 윈도우.</div>
+      </div>
+      <div class="flash">
+        <div class="q">오류 제어 (Error Control)</div>
+        <div class="a"><b>보낸 대로 잘 받았나?</b> 오류 검출 후 재전송(ARQ) 또는 전진 오류 수정(FEC).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">3</span>회선 제어 방식</div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">경쟁 방식 (Contention)</div>
+        <div class="a">먼저 요구한 장치가 송신 권한. <b>점대점</b>에 사용. 대표: <b>ALOHA</b> (하와이대, 최초 무선 패킷망). 트래픽 높으면 비효율.</div>
+      </div>
+      <div class="flash">
+        <div class="q">폴-셀렉션 (Poll-Selection)</div>
+        <div class="a"><b>다중점</b> 방식. 주장치(Primary) + 종장치(Secondary). <b>폴</b>=주→종 (보낼 데이터? 묻기). <b>셀렉션</b>=주→종 (데이터 전송). 모든 전송은 주장치를 통해.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">4</span>흐름 제어 방식 ★★</div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">RTS/CTS (하드웨어적) ★</div>
+        <div class="a">EIA-232에서 사용. 모뎀 통신 시 보오율 맞춤. RTS 전송 → CTS ON → 데이터 → CTS OFF. <b>일반적으로 많이 사용.</b></div>
+      </div>
+      <div class="flash">
+        <div class="q">Xon/Xoff (소프트웨어적)</div>
+        <div class="a">컴퓨터↔프린터. 버퍼 full → Xoff(멈춤) → Xon(재개).</div>
+      </div>
+      <div class="flash">
+        <div class="q">정지-대기 (Stop-and-Wait) ★</div>
+        <div class="a">한 프레임 전송 → ACK 대기 → 다음. <b>장점: 간단. 단점: 링크 낭비, 비효율.</b></div>
+      </div>
+      <div class="flash">
+        <div class="q">슬라이딩 윈도우 ★★</div>
+        <div class="a">ACK 없이 <b>여러 프레임 연속 전송</b>. TCP 사용. 윈도우 크기 <b>16비트(최대 65,535)</b>. <b>전송 효율 좋음.</b></div>
+      </div>
+    </div>
+    <div class="note-box">
+      <div class="note-title">★ 슬라이딩 윈도우 크기 계산 예</div>
+      ACK 수신까지 40μs, 프레임 1개 전송 2μs → 윈도우 크기 = 40÷2 = <b>20</b>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">5</span>오류 검출 방식 ★★</div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">패리티 검사 (Parity Check)</div>
+        <div class="a">1비트 리던던시 추가. 홀수/짝수 패리티. <b>짝수 개 오류는 검출 불가.</b> 가장 간단하나 약함.</div>
+      </div>
+      <div class="flash">
+        <div class="q">블록 합 검사 (Block Sum)</div>
+        <div class="a"><b>2차원 패리티</b>(VRC 세로 + LRC 가로). <b>1비트 오류는 위치까지 찾아 정정 가능.</b> 짝수 개 오류도 LRC로 검출.</div>
+      </div>
+      <div class="flash">
+        <div class="q">CRC (순환 중복 검사) ★★</div>
+        <div class="a">2진 다항식 나눗셈 → <b>FCS</b> 생성. 수신 측 나머지 <b>0이면 오류 없음</b>. <b>버스트 오류</b> 검출. <b>가장 많이 사용</b>. 2계층.</div>
+      </div>
+      <div class="flash">
+        <div class="q">검사합 (Checksum)</div>
+        <div class="a">세그먼트 합 + 캐리 → <b>1의 보수</b>. 수신 측 결과 <b>0이면 오류 없음</b>. TCP/UDP 등 3~4계층.</div>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+    <table class="std-table">
+      <thead><tr><th>CRC 종류</th><th>생성 다항식</th></tr></thead>
+      <tbody>
+        <tr><td><b>CRC-16</b></td><td>x¹⁶ + x¹⁵ + x² + 1</td></tr>
+        <tr><td><b>CRC-CCITT</b></td><td>x¹⁶ + x¹² + x⁵ + 1</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">6</span>ARQ (자동 반복 요청) ★★</div>
+    <div class="memo-hook">
+      <div class="hook-label">ARQ = 흐름제어 + 오류제어의 통합</div>
+      <div class="mnemonic">데이터링크 계층의 대표 오류 정정</div>
+      <div class="hook-desc">오류 검출 → 재전송 요청. 흐름 제어(슬라이딩/정지대기) + 프레임 오류 → ARQ</div>
+    </div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">① Stop-and-Wait ARQ</div>
+        <div class="a">1프레임 전송 후 ACK/NAK 대기. NAK이면 재전송. <b>가장 단순, 효율 최저.</b></div>
+      </div>
+      <div class="flash">
+        <div class="q">② Go-Back-N ARQ ★</div>
+        <div class="a">오류 프레임부터 <b>이후 모든 프레임 재전송</b>. NAK 2 수신 → 2,3,4 재전송. <b>제어 간단, 가장 많이 사용.</b></div>
+      </div>
+      <div class="flash">
+        <div class="q">③ 선택적(Selective) ARQ</div>
+        <div class="a"><b>오류 프레임만</b> 재전송. NAK 2 수신 → 2만 재전송. 효율적이나 <b>대용량 버퍼·제어 복잡.</b></div>
+      </div>
+      <div class="flash">
+        <div class="q">후진(BEC) vs 전진(FEC)</div>
+        <div class="a"><b>BEC(ARQ)</b>: 역채널로 재전송 요청. <b>FEC(해밍코드)</b>: 스스로 정정, 역채널 불필요, <b>실시간 통신</b>.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 9장: 데이터링크 프로토콜 & HDLC ==================== -->
+<section class="section-card s3" id="ch9">
+  <div class="section-head">
+    <span class="section-badge">9장</span>
+    <span class="section-title">📋 데이터링크 프로토콜 & HDLC</span>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">1</span>프로토콜 분류 ★★</div>
+    <div class="tbl-wrap">
+    <table class="std-table">
+      <thead><tr><th>대분류</th><th>중분류</th><th>대표 프로토콜</th></tr></thead>
+      <tbody>
+        <tr><td>비동기식</td><td>—</td><td>XMODEM, YMODEM, ZMODEM (거의 미사용)</td></tr>
+        <tr><td rowspan="2"><b>동기식</b></td><td class="hl"><b>문자 위주</b></td><td class="hl"><b>BSC</b> (1964, IBM)</td></tr>
+        <tr><td class="hl"><b>비트 위주</b></td><td class="hl"><b>SDLC(1975 IBM) → HDLC(1979 ISO) → LAP계열</b></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">문자 위주 (Character-oriented)</div>
+        <div class="a">바이트 위주. 8비트 문자의 연속열로 간주. ASCII 제어 문자 사용. <b>BSC가 대표.</b></div>
+      </div>
+      <div class="flash">
+        <div class="q">비트 위주 (Bit-oriented)</div>
+        <div class="a">전송 프레임을 비트열로 간주. <b>SDLC → HDLC → LAPB·LAPD·LAPM → PPP</b>로 발전.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">2</span>BSC 특징</div>
+    <div class="memo-list">
+      <ul>
+        <li><strong>1964년 IBM</strong>이 개발한 문자 위주 프로토콜</li>
+        <li>점대점 + 다중점 지원 / <strong>정지-대기 ARQ</strong> / <strong>반이중 전송</strong></li>
+        <li><strong>전이중 전송과 연속적 ARQ 지원하지 않음 ★</strong></li>
+        <li>프레임: SYN SYN SOH Header STX Data ETX BCC (BCC=LRC 또는 CRC)</li>
+        <li>데이터 투명성: <strong>DLE(Data Link Escape)</strong> 문자로 확보</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">3</span>HDLC 프레임 구조 ★★★ (그릴 줄 알아야 함!)</div>
+    <div class="memo-hook">
+      <div class="hook-label">HDLC 프레임 순서 암기</div>
+      <div class="mnemonic">플·주·제·정·FCS·플</div>
+      <div class="hook-desc">플래그 → 주소부 → 제어부 → 정보부 → FCS → 플래그</div>
+    </div>
+    <div class="frame-box">
+      <div class="frame-cell flag">플래그<small>01111110</small></div>
+      <div class="frame-cell addr">주소부<small>(Address)</small></div>
+      <div class="frame-cell ctrl">제어부<small>(Control)</small></div>
+      <div class="frame-cell data">정보부<small>(Information)</small></div>
+      <div class="frame-cell fcs">FCS<small>(CRC)</small></div>
+      <div class="frame-cell flag">플래그<small>01111110</small></div>
+    </div>
+    <div class="memo-list">
+      <div class="memo-list-title">각 필드 설명</div>
+      <ul>
+        <li><strong>플래그</strong>: 01111110 — 프레임 시작·끝 표시</li>
+        <li><strong>주소부</strong>: 보조국 주소 (주→종: 수신지 주소 / 종→주: 발신지 주소)</li>
+        <li><strong>제어부</strong>: N(S)=현재 순서번호, N(R)=다음 기대 순서번호, P/F=폴/마지막 비트</li>
+        <li><strong>정보부</strong>: 사용자 데이터</li>
+        <li><strong>FCS</strong>: CRC 오류 검출 코드</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">4</span>HDLC 프레임 3가지 유형 ★★</div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">I 프레임 (Information, 정보)</div>
+        <div class="a">사용자 <b>데이터 전송</b>용. 제어부 MSB=0. N(S)=현재순서, N(R)=피기백킹(응답번호). <b>흐름·오류 제어 동시 수행.</b></div>
+      </div>
+      <div class="flash">
+        <div class="q">S 프레임 (Supervisory, 감독)</div>
+        <div class="a"><b>흐름 제어·오류 제어</b>용. 데이터 없음. S코드: 00=RR(받을 준비 됨), 01=REJ(거절/Go-back-N), 10=RNR(받을 준비 안 됨), 11=SREJ(선택적 거절).</div>
+      </div>
+      <div class="flash">
+        <div class="q">U 프레임 (Unnumbered, 무번호/비번호)</div>
+        <div class="a"><b>링크 관리</b>용. 연결 설정(SNRM/SARM/SABM→UA) 및 해제(DISC→UA). 순서 번호 없음.</div>
+      </div>
+      <div class="flash">
+        <div class="q">비트 스터핑 (데이터 투명성)</div>
+        <div class="a">플래그 패턴(01111110) 오인식 방지. 연속된 1이 5개면 <b>다섯 번째 다음에 0 삽입</b>. 수신 측에서 0 제거.</div>
+      </div>
+    </div>
+    <div class="note-box">
+      <div class="note-title">★ HDLC 연결 설정/해제 과정</div>
+      <b>연결 설정</b>: SNRM / SARM / SABM → UA 응답<br>
+      <b>연결 해제</b>: DISC → UA 응답<br>
+      <b>피기백킹(Piggyback)</b>: I-프레임의 제어 필드에 응답(N(R))을 함께 보내는 것 = 목말 태우기
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">5</span>HDLC 통신국·구성·동작 모드</div>
+    <div class="tbl-wrap">
+    <table class="std-table">
+      <thead><tr><th>구분</th><th>종류</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td>통신국</td><td>주국(Primary)</td><td>명령 전송, 링크 제어</td></tr>
+        <tr><td>통신국</td><td>보조국(Secondary)</td><td>응답 전송</td></tr>
+        <tr><td>통신국</td><td>복합국(Combined)</td><td>주국+보조국 역할 모두</td></tr>
+        <tr><td>동작 모드</td><td class="hl"><b>NRM</b> (정규 응답)</td><td>보조국이 주국 허가 받아야만 전송 가능</td></tr>
+        <tr><td>동작 모드</td><td><b>ARM</b> (비동기 응답)</td><td>보조국이 허가 없이도 전송 가능</td></tr>
+        <tr><td>동작 모드</td><td class="hl"><b>ABM</b> (비동기 균형)</td><td>복합국 간 점대점. 서로 대등. <b>가장 많이 사용.</b></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 10장: LAN 기술 ==================== -->
+<section class="section-card s4" id="ch10">
+  <div class="section-head">
+    <span class="section-badge">10장</span>
+    <span class="section-title">🌐 LAN 기술 (CSMA/CD · CSMA/CA · 터미널 문제)</span>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">1</span>CSMA/CD — 유선 LAN (이더넷) ★★</div>
+    <div class="memo-hook">
+      <div class="hook-label">CSMA/CD = ?</div>
+      <div class="mnemonic">CS(반송파 감지) + MA(다중접근) + CD(충돌 검출)</div>
+      <div class="hook-desc">충돌 감지 후 Jam 신호 전송 → 지수 백오프 → 재전송. 유선에서만 가능(충돌 감지 가능).</div>
+    </div>
+    <div class="memo-list">
+      <div class="memo-list-title">CSMA/CD 동작 과정</div>
+      <ol>
+        <li>전송 전 채널 감지(CS) → 비어있으면 전송</li>
+        <li>충돌 발생 시 <strong>Jam(재밍) 신호</strong> 전송, 카운터 N=N+1</li>
+        <li>N&gt;15이면 <strong>비정상 종료</strong></li>
+        <li>[0, 2ᴺ-1] 범위의 임의 정수 k × 슬롯타임 대기 후 재시도</li>
+      </ol>
+    </div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">최소 프레임 크기</div>
+        <div class="a"><b>512비트 (64바이트)</b>. 전송 시간 Tfr ≥ 2Tp 보장. 이더넷 최대 거리 2,500m.</div>
+      </div>
+      <div class="flash">
+        <div class="q">이더넷 프레임 구조</div>
+        <div class="a">Preamble(7B) · SFD(1B,10101011) · DA(6B) · SA(6B) · Length(2B) · Data(46~1500B) · CRC(4B, <b>CRC-32</b>).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">2</span>CSMA/CA — 무선 LAN ★★ (서술 대비)</div>
+    <div class="memo-hook">
+      <div class="hook-label">CSMA/CA = CSMA/CD 변형</div>
+      <div class="mnemonic">무선 = 충돌 검출 불가 → 충돌 회피(CA)</div>
+      <div class="hook-desc">핵심: NAV(Network Allocation Vector). RTS→CTS→data→ACK 순서.</div>
+    </div>
+    <div class="memo-list">
+      <div class="memo-list-title">CSMA/CA 동작 (서술용)</div>
+      <ol>
+        <li>송신 전 DIFS만큼 대기</li>
+        <li><strong>RTS(Request To Send)</strong> 프레임 전송 → 채널 점유 시간(NAV) 포함</li>
+        <li>수신 스테이션이 <strong>CTS(Clear To Send)</strong> 전송 → 주변 스테이션은 NAV 설정</li>
+        <li>NAV 기간 동안 다른 스테이션은 전송 시도하지 않음 → <b>충돌 회피</b></li>
+        <li>데이터 전송 후 <strong>ACK</strong> 수신 (무선은 ACK 필수)</li>
+      </ol>
+    </div>
+    <div class="alert-box">
+      <div class="alert-title">★ CSMA/CD vs CSMA/CA 핵심 차이</div>
+      CSMA/<b>CD</b>: 충돌 <b>검출</b> → 유선 LAN (IEEE 802.3)<br>
+      CSMA/<b>CA</b>: 충돌 <b>회피</b> → 무선 LAN (IEEE 802.11) / 반드시 ACK 필요 / NAV가 핵심
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">3</span>숨겨진 터미널 & 노출된 터미널 ★★ (서술 대비)</div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">🔴 숨겨진 터미널 문제 (Hidden Terminal)</div>
+        <div class="a"><b>시나리오</b>: A와 C는 직접 통신 불가. B는 A,C 모두와 통신 가능.<br>→ A가 B에 전송 중 C는 모르고 B에 전송 시도 → <b>충돌 발생</b>.<br><b>해결</b>: A가 RTS 전송 → B가 CTS 전송 → C도 CTS 수신 → NAV 기간 전송 중단.</div>
+      </div>
+      <div class="flash">
+        <div class="q">🟡 노출된 터미널 문제 (Exposed Terminal)</div>
+        <div class="a"><b>시나리오</b>: B→A 전송 중, C는 B 신호 감지 → 매체 사용 중이라 판단 → D에 전송하지 않음.<br>→ <b>실제로 C가 D에 전송해도 되는데 못 하는 상황</b>.<br>= 동시 전송이 가능함에도 불필요하게 대기하는 비효율.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">4</span>IEEE 802.11 무선 LAN 구조</div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">BSS / ESS / AP</div>
+        <div class="a">BSS(기본 서비스 집합)+DS → ESS(확장 서비스 집합). <b>AP(액세스 포인트)</b>로 DS 연결. 유선 LAN 연결 시 <b>포털(Portal)</b> 사용.</div>
+      </div>
+      <div class="flash">
+        <div class="q">MAC 접근 방식</div>
+        <div class="a"><b>PCF</b>(비경쟁, AP 중앙 제어) vs <b>DCF</b>(경쟁, CSMA/CA 사용). 실제로 DCF(CSMA/CA)가 주로 사용.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 11장: WAN / 교환방식 / 이동통신 ==================== -->
+<section class="section-card s5" id="ch11">
+  <div class="section-head">
+    <span class="section-badge">11장</span>
+    <span class="section-title">📡 WAN · 교환방식 · 이동통신</span>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">1</span>교환 방식 분류 ★★ (그림 11-3 핵심)</div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">회선 교환 방식 (Circuit Switching)</div>
+        <div class="a">통신 전 <b>전용 회선 경로를 설정</b>하고 통신이 끝날 때까지 독점 사용. <b>전화망(PSTN)의 기본</b>. 연결 설정·해제 시간 필요. 실시간 대화에 적합.</div>
+      </div>
+      <div class="flash">
+        <div class="q">패킷 교환 방식 (Packet Switching)</div>
+        <div class="a">데이터를 <b>패킷 단위로 분할</b>하여 전송. 회선 공유 가능. <b>데이터그램</b>(독립 경로)과 <b>가상 회선</b>(사전 경로 설정) 방식으로 분류.</div>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+    <table class="std-table">
+      <thead><tr><th>항목</th><th>회선 교환</th><th>패킷 교환</th></tr></thead>
+      <tbody>
+        <tr><td>경로</td><td>전용 경로 확보</td><td>패킷마다 다른 경로 가능</td></tr>
+        <tr><td>대역폭</td><td>고정</td><td>공유 (효율적)</td></tr>
+        <tr><td>지연</td><td>일정 (실시간 적합)</td><td>가변적</td></tr>
+        <tr><td>예</td><td>전화망(PSTN)</td><td>인터넷, X.25</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">2</span>이동통신 세대별 역사 ★★★ (서술 최빈출)</div>
+    <div class="gen-table-wrap">
+    <table class="gen-table">
+      <thead>
+        <tr>
+          <th>세대</th><th>표준 기술</th><th>전송 속도</th><th>특징·서비스</th><th>상용화</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="hl"><b>1G</b></td>
+          <td>아날로그 (AMPS, TACS)</td>
+          <td class="hl"><b>10Kbps 이하</b></td>
+          <td>음성 통화만. 아날로그 시스템.</td>
+          <td>1981년</td>
+        </tr>
+        <tr>
+          <td class="hl"><b>2G</b></td>
+          <td>디지털 (TDMA, CDMA, GSM)</td>
+          <td class="hl"><b>14.4~64Kbps</b></td>
+          <td>음성+단문메시지+저속 인터넷. <b>디지털 시스템.</b></td>
+          <td>1991년</td>
+        </tr>
+        <tr>
+          <td class="hl"><b>3G</b></td>
+          <td>WCDMA, cdma2000 (<b>IMT-2000</b>)</td>
+          <td class="hl"><b>144Kbps~2Mbps</b></td>
+          <td>음성+고속인터넷+<b>화상통화+국제 로밍</b>.</td>
+          <td>2000년</td>
+        </tr>
+        <tr>
+          <td class="hl"><b>4G</b></td>
+          <td><b>LTE-Advanced</b>, 와이브로 (IMT-Advanced)</td>
+          <td class="hl"><b>100Mbps~1Gbps</b></td>
+          <td>고품질 멀티미디어. OFDM 방식.</td>
+          <td>2012년</td>
+        </tr>
+        <tr>
+          <td class="hl"><b>5G</b></td>
+          <td>IMT-2020</td>
+          <td class="hl"><b>1Gbps 이상</b></td>
+          <td>사물인터넷, 홀로그램, 입체 영상.</td>
+          <td>2020년</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="alert-box">
+      <div class="alert-title">★ 시험 자주 출제 수치 정리</div>
+      1G: 아날로그 / 2G: 디지털 64Kbps / <b>3G: IMT-2000, 2Mbps</b> / <b>4G: 100Mbps, LTE-Advanced</b> / <b>5G: 1Gbps 이상</b>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">3</span>핸드오프 기술 ★★ (서술 대비)</div>
+    <div class="memo-hook">
+      <div class="hook-label">핸드오프 = ?</div>
+      <div class="mnemonic">이동 중 통화 끊김 없이 기지국 변경</div>
+      <div class="hook-desc">이동국이 현재 기지국 범위를 벗어날 때 다른 기지국으로 채널을 전환하는 기술</div>
+    </div>
+    <div class="flash-grid">
+      <div class="flash">
+        <div class="q">소프트 핸드오프 (Soft Handoff)</div>
+        <div class="a"><b>Make Before Break</b>. 새 채널을 먼저 연결 후 이전 채널을 끊음. <b>CDMA 방식에서 사용.</b></div>
+      </div>
+      <div class="flash">
+        <div class="q">하드 핸드오프 (Hard Handoff)</div>
+        <div class="a"><b>Break Before Make</b>. 현재 채널을 끊고 즉시 다른 채널 연결. <b>FDMA, TDMA 방식에서 사용.</b></div>
+      </div>
+      <div class="flash">
+        <div class="q">소프터 핸드오프 (Softer Handoff)</div>
+        <div class="a">동일 주파수, 동일 셀 내 <b>섹터 간</b> 발생하는 핸드오프.</div>
+      </div>
+      <div class="flash">
+        <div class="q">핸드오프 발생 조건</div>
+        <div class="a">이동국이 현재 기지국/섹터 영역을 벗어나 인접 기지국으로 이동 시. 통화 유지를 위해 자동 전환.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">4</span>전력 제어 기술 ★★ (서술 대비)</div>
+    <div class="memo-hook">
+      <div class="hook-label">전력 제어 = ?</div>
+      <div class="mnemonic">각 이동국의 수신 전력이 기지국에서 동일하도록 조정</div>
+      <div class="hook-desc">근거리 이동국 = 낮은 전력 / 원거리 이동국 = 큰 전력으로 송신</div>
+    </div>
+    <div class="memo-list">
+      <ul>
+        <li>거리에 따라 전자파 크기는 <strong>1/(10³~10⁵)</strong> 비율로 감소</li>
+        <li><strong>근거리/원거리 문제(Near/far problem)</strong>: 멀리 있는 이동국이 가까이 있는 이동국 간섭으로 복조 불가</li>
+        <li><strong>CDMA</strong>의 채널 용량은 기지국에 수신되는 각 단말기의 수신 전력이 같을 때 최대</li>
+        <li>해결: 전력 제어(Power Control) — 이동국의 송신 전력을 기지국이 실시간 조정</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">5</span>셀룰러 이동 통신 시스템 구성</div>
+    <div class="tbl-wrap">
+    <table class="std-table">
+      <thead><tr><th>구성 요소</th><th>약어</th><th>역할</th></tr></thead>
+      <tbody>
+        <tr><td>이동국</td><td>MS</td><td>핸드폰, 드론 등 사용자 단말기</td></tr>
+        <tr><td>기지국 송수신 장치</td><td>BTS</td><td>이동국과 무선 통신</td></tr>
+        <tr><td>기지국 제어 장치</td><td>BSC</td><td>다수의 BTS 제어</td></tr>
+        <tr><td>이동 통신 교환기</td><td class="hl">MSC</td><td>PSTN과 연동, 회선 교환 서비스</td></tr>
+        <tr><td>홈 위치 등록기</td><td>HLR</td><td>가입자 정보 데이터베이스</td></tr>
+        <tr><td>방문자 위치 등록기</td><td>VLR</td><td>타 지역 방문 시 임시 가입자 정보</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 서술형 완벽 대비 ==================== -->
+<section class="section-card s6" id="essay">
+  <div class="section-head">
+    <span class="section-badge">서술형 대비</span>
+    <span class="section-title">📝 서술형 완벽 모범 답안</span>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">1</span>CSMA/CD를 설명하시오.</div>
+    <div class="memo-list" style="background:rgba(67,56,202,0.05);">
+      <div class="memo-list-title">모범 답안</div>
+      <p style="font-size:0.88rem;line-height:1.8;">
+        CSMA/CD는 <b>CS(Carrier Sense, 반송파 감지) + MA(Multiple Access, 다중 접근) + CD(Collision Detection, 충돌 검출)</b>의 유선 LAN 매체 접근 제어 방식이다.<br><br>
+        전송 전 채널을 감지하여 비어 있으면 전송하고, 전송 중 다른 장치가 동시 전송하여 <b>충돌</b>이 발생하면 <b>Jam 신호</b>를 보내 모든 장치에 충돌을 알린다. 이후 지수 백오프 알고리즘으로 임의 시간 대기 후 재전송한다. 충돌 재시도 횟수가 15를 초과하면 비정상 종료한다. 이더넷(IEEE 802.3)의 표준이다.
+      </p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">2</span>CSMA/CA를 설명하시오.</div>
+    <div class="memo-list" style="background:rgba(67,56,202,0.05);">
+      <div class="memo-list-title">모범 답안</div>
+      <p style="font-size:0.88rem;line-height:1.8;">
+        CSMA/CA는 무선 LAN(IEEE 802.11)에서 사용하는 <b>충돌 회피(Collision Avoidance)</b> 방식이다. 무선 환경에서는 충돌을 직접 감지할 수 없으므로 사전에 충돌을 피하는 방식을 사용한다.<br><br>
+        핵심 메커니즘은 <b>NAV(Network Allocation Vector)</b>이다. 송신 스테이션이 <b>RTS(Request To Send)</b> 프레임에 채널 점유 시간을 포함해 전송하면, 수신 스테이션이 <b>CTS(Clear To Send)</b>를 응답한다. 주변의 모든 스테이션은 CTS를 수신하고 NAV 시간 동안 전송을 하지 않아 충돌을 회피한다. 무선에서는 수신 확인을 위해 <b>ACK가 반드시 필요</b>하다.
+      </p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">3</span>숨겨진 터미널 문제를 설명하시오.</div>
+    <div class="memo-list" style="background:rgba(67,56,202,0.05);">
+      <div class="memo-list-title">모범 답안</div>
+      <p style="font-size:0.88rem;line-height:1.8;">
+        숨겨진 터미널 문제(Hidden Terminal Problem)는 무선 LAN에서 발생하는 문제로, A와 C는 서로 신호 수신 거리 밖에 있어 직접 통신이 불가능하고, B는 A와 C 모두와 통신 가능한 위치에 있는 경우이다.<br><br>
+        A가 B로 데이터를 전송 중일 때, C는 이 사실을 알지 못하고 B로 전송을 시도하면 <b>충돌</b>이 발생한다. A의 입장에서 C는 보이지 않는 숨겨진 터미널이다.<br><br>
+        <b>해결 방법</b>: RTS/CTS 메커니즘을 사용한다. A가 RTS를 전송하면 B가 CTS를 응답하는데, C도 B의 CTS를 수신할 수 있어 NAV를 설정하고 전송을 중단하여 충돌을 방지한다.
+      </p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">4</span>이동통신 세대별 발전 과정을 서술하시오.</div>
+    <div class="memo-list" style="background:rgba(67,56,202,0.05);">
+      <div class="memo-list-title">모범 답안</div>
+      <p style="font-size:0.88rem;line-height:1.8;">
+        이동통신은 다음과 같이 발전하였다.<br><br>
+        <b>1세대(1G, 1981년)</b>: 아날로그(AMPS, TACS) 방식으로 10Kbps 이하의 음성 통화만 가능하였다.<br><br>
+        <b>2세대(2G, 1991년)</b>: 디지털(TDMA, CDMA, GSM) 방식으로 전환되어 14.4~64Kbps의 속도를 제공하며 음성 외에 단문 메시지, 저속 인터넷이 가능해졌다.<br><br>
+        <b>3세대(3G, 2000년)</b>: IMT-2000 표준(WCDMA, cdma2000)으로 최대 2Mbps를 제공하며, 고속 인터넷·화상통화·국제 로밍이 가능해졌다.<br><br>
+        <b>4세대(4G, 2012년)</b>: LTE-Advanced(IMT-Advanced)로 100Mbps~1Gbps의 고속 통신을 제공하며 고품질 멀티미디어 서비스가 가능해졌다.<br><br>
+        <b>5세대(5G, 2020년)</b>: IMT-2020 표준으로 1Gbps 이상을 제공하며 사물인터넷, 홀로그램, 자율주행 등 초연결 서비스를 지원한다.
+      </p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">5</span>HDLC 프레임 구조를 그리고 설명하시오.</div>
+    <div class="memo-list" style="background:rgba(67,56,202,0.05);">
+      <div class="memo-list-title">모범 답안</div>
+      <div class="frame-box" style="margin:10px 0;">
+        <div class="frame-cell flag">플래그<small>01111110</small></div>
+        <div class="frame-cell addr">주소부<small>(Address)</small></div>
+        <div class="frame-cell ctrl">제어부<small>(Control)</small></div>
+        <div class="frame-cell data">정보부<small>(Information)</small></div>
+        <div class="frame-cell fcs">FCS<small>(CRC)</small></div>
+        <div class="frame-cell flag">플래그<small>01111110</small></div>
+      </div>
+      <p style="font-size:0.88rem;line-height:1.8;margin-top:8px;">
+        HDLC 프레임은 <b>플래그 – 주소부 – 제어부 – 정보부 – FCS – 플래그</b> 순으로 구성된다.<br>
+        <b>플래그</b>(01111110)는 프레임의 시작과 끝을 표시하며, <b>주소부</b>는 보조국의 주소를 담는다. <b>제어부</b>에는 순서번호(N(S), N(R))와 P/F 비트가 포함된다. <b>정보부</b>는 사용자 데이터이며, <b>FCS</b>는 CRC를 이용한 오류 검출 코드이다.<br><br>
+        프레임 유형은 <b>I(정보, 데이터 전송)</b>, <b>S(감독, 흐름·오류 제어)</b>, <b>U(무번호, 링크 관리)</b> 3가지이다. 데이터 투명성을 위해 <b>비트 스터핑</b>(연속된 1이 5개이면 0 삽입)을 사용한다.
+      </p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">6</span>핸드오프 기술을 설명하시오.</div>
+    <div class="memo-list" style="background:rgba(67,56,202,0.05);">
+      <div class="memo-list-title">모범 답안</div>
+      <p style="font-size:0.88rem;line-height:1.8;">
+        핸드오프(Handoff)란 이동국이 현재 서비스 중인 기지국 영역을 벗어나 인접한 기지국으로 이동할 때, <b>통화를 끊김 없이 유지하기 위해 채널을 새로운 기지국으로 자동 전환하는 기술</b>이다.<br><br>
+        핸드오프는 3종류로 분류된다.<br>
+        <b>① 소프트 핸드오프(Make Before Break)</b>: 새 채널을 먼저 연결하고 이전 채널을 나중에 끊는 방식으로, <b>CDMA</b>에서 사용한다.<br>
+        <b>② 하드 핸드오프(Break Before Make)</b>: 현재 채널을 끊고 즉시 다른 채널로 연결하는 방식으로, <b>FDMA·TDMA</b>에서 사용한다.<br>
+        <b>③ 소프터 핸드오프</b>: 동일 주파수로 동일 셀 내 섹터 간에 발생하는 핸드오프이다.
+      </p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <div class="topic-title"><span class="topic-num">7</span>전력 제어 기술을 설명하시오.</div>
+    <div class="memo-list" style="background:rgba(67,56,202,0.05);">
+      <div class="memo-list-title">모범 답안</div>
+      <p style="font-size:0.88rem;line-height:1.8;">
+        전력 제어(Power Control)는 <b>기지국에 수신되는 각 이동국의 수신 전력이 동일하도록, 이동국의 송신 전력을 조정하는 기술</b>이다.<br><br>
+        거리에 따라 전자파 크기는 1/(10³~10⁵) 정도로 감소한다. 이로 인해 <b>근거리/원거리 문제(Near/far problem)</b>가 발생하는데, 가까이 있는 이동국의 신호가 멀리 있는 이동국의 신호보다 훨씬 강해 멀리 있는 이동국의 복조가 불가능해진다.<br><br>
+        이를 해결하기 위해 기지국에 <b>가까운 이동국은 낮은 전력</b>으로, <b>먼 이동국은 큰 전력</b>으로 송신하도록 기지국이 실시간으로 각 이동국의 송신 전력을 조정한다. CDMA 시스템에서 특히 중요하다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 연습 문제 ==================== -->
+<section class="section-card s7" id="quiz">
+  <div class="section-head">
+    <span class="section-badge">연습문제</span>
+    <span class="section-title">✏️ 실전 연습 문제</span>
+  </div>
+  <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:14px;">객관식·단답·서술형 모두 포함. 시험 직전 최종 점검!</p>
+
+  <h3 style="font-size:1rem;color:var(--primary);margin:16px 0 10px;">▪ 객관식</h3>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q1.</span><span class="quiz-type obj">객관</span> HDLC 프레임의 종류 중 흐름 제어와 오류 제어를 담당하는 프레임은?</div>
+    <ul class="quiz-options">
+      <li><button onclick="ans(this,false,'f1')">① I 프레임 (Information)</button></li>
+      <li><button onclick="ans(this,true,'f1')">② S 프레임 (Supervisory)</button></li>
+      <li><button onclick="ans(this,false,'f1')">③ U 프레임 (Unnumbered)</button></li>
+      <li><button onclick="ans(this,false,'f1')">④ F 프레임 (Frame Check)</button></li>
+    </ul>
+    <div class="quiz-feedback" id="f1"></div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q2.</span><span class="quiz-type obj">객관</span> ARQ 방식 중 오류가 발생한 프레임부터 이후 모든 프레임을 재전송하는 방식은?</div>
+    <ul class="quiz-options">
+      <li><button onclick="ans(this,false,'f2')">① 정지-대기(Stop-and-Wait) ARQ</button></li>
+      <li><button onclick="ans(this,true,'f2')">② Go-Back-N ARQ</button></li>
+      <li><button onclick="ans(this,false,'f2')">③ 선택적(Selective) ARQ</button></li>
+      <li><button onclick="ans(this,false,'f2')">④ 적응적(Adaptive) ARQ</button></li>
+    </ul>
+    <div class="quiz-feedback" id="f2"></div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q3.</span><span class="quiz-type obj">객관</span> 무선 LAN의 CSMA/CA에서 충돌 회피의 핵심 메커니즘은?</div>
+    <ul class="quiz-options">
+      <li><button onclick="ans(this,false,'f3')">① Jam 신호</button></li>
+      <li><button onclick="ans(this,true,'f3')">② NAV (Network Allocation Vector)</button></li>
+      <li><button onclick="ans(this,false,'f3')">③ CRC 검사</button></li>
+      <li><button onclick="ans(this,false,'f3')">④ 비트 스터핑</button></li>
+    </ul>
+    <div class="quiz-feedback" id="f3"></div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q4.</span><span class="quiz-type obj">객관</span> 이동통신 3G의 국제 표준명은?</div>
+    <ul class="quiz-options">
+      <li><button onclick="ans(this,false,'f4')">① IMT-Advanced</button></li>
+      <li><button onclick="ans(this,true,'f4')">② IMT-2000</button></li>
+      <li><button onclick="ans(this,false,'f4')">③ IMT-2020</button></li>
+      <li><button onclick="ans(this,false,'f4')">④ LTE-Advanced</button></li>
+    </ul>
+    <div class="quiz-feedback" id="f4"></div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q5.</span><span class="quiz-type obj">객관</span> 다음 중 비트 위주 프로토콜이 아닌 것은?</div>
+    <ul class="quiz-options">
+      <li><button onclick="ans(this,false,'f5')">① HDLC</button></li>
+      <li><button onclick="ans(this,false,'f5')">② SDLC</button></li>
+      <li><button onclick="ans(this,true,'f5')">③ BSC</button></li>
+      <li><button onclick="ans(this,false,'f5')">④ LAPB</button></li>
+    </ul>
+    <div class="quiz-feedback" id="f5"></div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q6.</span><span class="quiz-type obj">객관</span> CSMA/CD에서 충돌 발생 시 가장 먼저 하는 행동은?</div>
+    <ul class="quiz-options">
+      <li><button onclick="ans(this,false,'f6')">① 즉시 재전송</button></li>
+      <li><button onclick="ans(this,true,'f6')">② Jam 신호 전송</button></li>
+      <li><button onclick="ans(this,false,'f6')">③ ACK 요청</button></li>
+      <li><button onclick="ans(this,false,'f6')">④ NAV 설정</button></li>
+    </ul>
+    <div class="quiz-feedback" id="f6"></div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q7.</span><span class="quiz-type obj">객관</span> T-1 회선의 전송 속도로 맞는 것은?</div>
+    <ul class="quiz-options">
+      <li><button onclick="ans(this,false,'f7')">① 2.048 Mbps</button></li>
+      <li><button onclick="ans(this,true,'f7')">② 1.544 Mbps</button></li>
+      <li><button onclick="ans(this,false,'f7')">③ 6.312 Mbps</button></li>
+      <li><button onclick="ans(this,false,'f7')">④ 64 Kbps</button></li>
+    </ul>
+    <div class="quiz-feedback" id="f7"></div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q8.</span><span class="quiz-type obj">객관</span> HDLC에서 연결 설정 시 사용하는 프레임의 응답으로 옳은 것은?</div>
+    <ul class="quiz-options">
+      <li><button onclick="ans(this,false,'f8')">① NAK</button></li>
+      <li><button onclick="ans(this,false,'f8')">② DISC</button></li>
+      <li><button onclick="ans(this,true,'f8')">③ UA (Unnumbered Acknowledgment)</button></li>
+      <li><button onclick="ans(this,false,'f8')">④ RR</button></li>
+    </ul>
+    <div class="quiz-feedback" id="f8"></div>
+  </div>
+
+  <h3 style="font-size:1rem;color:var(--teal);margin:20px 0 10px;">▪ 단답형</h3>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q9.</span><span class="quiz-type short">단답</span> 데이터 전송 제어 절차 5단계를 순서대로 쓰시오.</div>
+    <div class="short-answer">
+      <button onclick="showAns('a9')">정답 보기</button>
+    </div>
+    <div class="model-answer" id="a9">
+      <b>회선 연결 → 데이터링크 확립 → 데이터 전송 → 데이터링크 해제 → 회선 절단</b><br>
+      (전용 회선은 회선 연결·절단 생략 → 3단계)
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q10.</span><span class="quiz-type short">단답</span> CRC에서 수신 측이 오류가 없다고 판단하는 조건은 무엇인가?</div>
+    <div class="short-answer">
+      <button onclick="showAns('a10')">정답 보기</button>
+    </div>
+    <div class="model-answer" id="a10">수신된 데이터를 생성 다항식으로 나누었을 때 <b>나머지가 0</b>이면 오류가 없는 것으로 판단한다.</div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q11.</span><span class="quiz-type short">단답</span> 비동기 TDM의 다른 이름 두 가지를 쓰시오.</div>
+    <div class="short-answer">
+      <button onclick="showAns('a11')">정답 보기</button>
+    </div>
+    <div class="model-answer" id="a11"><b>통계적 TDM(Statistical TDM)</b>, <b>지능적 TDM(Intelligent TDM)</b></div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q12.</span><span class="quiz-type short">단답</span> HDLC의 비트 스터핑 규칙을 쓰시오.</div>
+    <div class="short-answer">
+      <button onclick="showAns('a12')">정답 보기</button>
+    </div>
+    <div class="model-answer" id="a12">연속된 1이 <b>5개</b> 나오면 <b>다섯 번째 다음에 0을 삽입</b>하여 전송. 수신 측에서는 5개의 1 다음에 오는 0을 제거하여 원래 데이터를 복구.</div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q13.</span><span class="quiz-type short">단답</span> 소프트 핸드오프와 하드 핸드오프의 차이점을 간략히 쓰시오.</div>
+    <div class="short-answer">
+      <button onclick="showAns('a13')">정답 보기</button>
+    </div>
+    <div class="model-answer" id="a13">
+      <b>소프트 핸드오프</b>: Make Before Break — 새 채널 먼저 연결 후 이전 채널 해제. CDMA 방식 사용.<br>
+      <b>하드 핸드오프</b>: Break Before Make — 현재 채널을 끊고 즉시 새 채널 연결. FDMA·TDMA 방식 사용.
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q14.</span><span class="quiz-type short">단답</span> 흐름 제어 방식 중 하드웨어적 방법과 소프트웨어적 방법은 각각 무엇인가?</div>
+    <div class="short-answer">
+      <button onclick="showAns('a14')">정답 보기</button>
+    </div>
+    <div class="model-answer" id="a14">
+      <b>하드웨어</b>: RTS/CTS (EIA-232, 일반적으로 많이 사용)<br>
+      <b>소프트웨어</b>: Xon/Xoff (컴퓨터↔프린터)
+    </div>
+  </div>
+
+  <h3 style="font-size:1rem;color:var(--danger);margin:20px 0 10px;">▪ 서술형</h3>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q15.</span><span class="quiz-type essay">서술</span> 슬라이딩 윈도우 방식과 정지-대기 방식을 비교하여 설명하시오.</div>
+    <div class="essay-answer">
+      <textarea placeholder="답안을 직접 써보세요..."></textarea>
+      <button onclick="showEssay('e15')">모범 답안 보기</button>
+    </div>
+    <div class="essay-model" id="e15">
+      <div class="em-label">모범 답안</div>
+      <b>정지-대기 방식</b>은 한 번에 한 프레임만 전송하고 ACK를 받아야 다음 프레임을 전송하는 방식이다. 구현이 간단하지만 ACK를 기다리는 동안 링크가 낭비되어 <b>전송 효율이 낮다</b>.<br><br>
+      <b>슬라이딩 윈도우 방식</b>은 ACK를 받기 전에 <b>윈도우 크기만큼 여러 프레임을 연속 전송</b>할 수 있는 방식이다. TCP에서 사용하며 16비트 윈도우 크기(최대 65,535)를 가진다. 전송 지연이 큰 환경에서 효율적이며 <b>전송 효율이 높다</b>. 수신 장치는 여러 프레임에 대해 하나의 ACK로 응답할 수 있다.
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q16.</span><span class="quiz-type essay">서술</span> 전력 제어 기술이 이동통신에서 필요한 이유와 동작 방법을 설명하시오.</div>
+    <div class="essay-answer">
+      <textarea placeholder="답안을 직접 써보세요..."></textarea>
+      <button onclick="showEssay('e16')">모범 답안 보기</button>
+    </div>
+    <div class="essay-model" id="e16">
+      <div class="em-label">모범 답안</div>
+      이동통신에서 전자파의 세기는 거리에 따라 1/(10³~10⁵) 정도로 급격히 감소한다. 이로 인해 <b>근거리/원거리 문제(Near/far problem)</b>가 발생한다. 기지국에 가까이 있는 이동국의 신호가 매우 강해 멀리 있는 이동국의 약한 신호를 가리게 되어, 멀리 있는 이동국의 신호 복조가 불가능해진다.<br><br>
+      <b>전력 제어</b>는 이 문제를 해결하기 위해, 기지국에서 수신되는 각 이동국의 수신 전력이 동일하도록 각 이동국의 송신 전력을 실시간으로 조정하는 기술이다. 기지국에 가까운 이동국은 낮은 전력으로, 먼 이동국은 큰 전력으로 송신하도록 기지국이 지시한다. 이를 통해 CDMA의 채널 용량을 최대화할 수 있다.
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <div class="quiz-q"><span class="q-num">Q17.</span><span class="quiz-type essay">서술</span> 오류 검출 방식 4가지를 나열하고, CRC의 동작 원리를 설명하시오.</div>
+    <div class="essay-answer">
+      <textarea placeholder="답안을 직접 써보세요..."></textarea>
+      <button onclick="showEssay('e17')">모범 답안 보기</button>
+    </div>
+    <div class="essay-model" id="e17">
+      <div class="em-label">모범 답안</div>
+      오류 검출 방식 4가지: <b>① 패리티 검사 ② 블록 합 검사 ③ CRC(순환 중복 검사) ④ 검사합(Checksum)</b><br><br>
+      <b>CRC(Cyclic Redundancy Check)</b>는 데이터링크 계층에서 가장 많이 사용하는 오류 검출 방법이다.<br>
+      <b>송신 측</b>: 전송 데이터를 미리 약속된 <b>생성 다항식 G(x)</b>로 나누어 나머지를 구하고, 이를 <b>FCS(Frame Check Sequence)</b>로 데이터 뒤에 붙여 전송한다.<br>
+      <b>수신 측</b>: 수신된 데이터 전체를 동일한 생성 다항식으로 나누어 <b>나머지가 0이면 오류 없음</b>, 0이 아니면 오류가 발생한 것으로 판단한다. <b>버스트 오류(연속 오류)</b>도 검출할 수 있다.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>데이터통신 기말고사 완전정복 · 7~11장 · 한신대학교 2학년 1학기</p>
+  <p style="margin-top:4px;">열심히 공부했으니 잘 볼 수 있다! 화이팅!</p>
+</footer>
+
+<script>
+// Theme toggle
+const t = document.getElementById('themeToggle');
+const saved = localStorage.getItem('theme-final') || 'light';
+document.documentElement.setAttribute('data-theme', saved);
+t.textContent = saved === 'dark' ? '☀️' : '🌙';
+t.addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  t.textContent = next === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('theme-final', next);
+});
+
+// MCQ
+function ans(btn, correct, fbId) {
+  const siblings = btn.closest('.quiz-options').querySelectorAll('button');
+  siblings.forEach(b => b.disabled = true);
+  const fb = document.getElementById(fbId);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.textContent = '✅ 정답입니다!';
+    fb.className = 'quiz-feedback show correct-fb';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '❌ 오답입니다. 정답 항목을 확인하세요.';
+    fb.className = 'quiz-feedback show wrong-fb';
+    siblings.forEach(b => {
+      const ev = new CustomEvent('check');
+    });
+  }
+}
+
+// Short answer reveal
+function showAns(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+}
+
+// Essay model answer
+function showEssay(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+}
+</script>
+</body>
+</html>
