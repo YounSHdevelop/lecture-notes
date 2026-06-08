@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자바프로그래밍 9장 — 입출력 스트림과 파일 입출력</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#2563eb;--primary-dark:#1e3a8a;
+  --success:#16a34a;--danger:#dc2626;--warning:#d97706;
+  --purple:#7c3aed;--teal:#0d9488;--pink:#db2777;--orange:#ea580c;
+  --bg:#f3f4f6;--card:#ffffff;--text:#1f2937;--text-muted:#6b7280;
+  --border:#e5e7eb;--code-bg:#1e293b;--code-text:#e2e8f0;
+  --nav-bg:rgba(255,255,255,0.95);
+}
+[data-theme="dark"]{
+  --bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--text-muted:#94a3b8;
+  --border:#334155;--nav-bg:rgba(15,23,42,0.95);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 1rem;display:flex;align-items:center;gap:.4rem;height:52px;overflow-x:auto}
+nav a{color:var(--text-muted);text-decoration:none;font-size:.76rem;font-weight:500;white-space:nowrap;padding:.3rem .55rem;border-radius:6px;transition:all .2s}
+nav a:hover{background:var(--primary);color:#fff}
+.nav-theme{margin-left:auto;background:none;border:1px solid var(--border);color:var(--text);cursor:pointer;padding:.3rem .7rem;border-radius:6px;font-size:1rem;flex-shrink:0}
+header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;padding:5rem 2rem 3rem;text-align:center}
+header h1{font-size:1.9rem;margin-bottom:.4rem}
+header p{opacity:.85;font-size:1rem}
+.badges{display:flex;gap:.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+.badge{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:.3rem .9rem;font-size:.78rem}
+.container{max-width:960px;margin:0 auto;padding:2rem 1rem}
+section{margin-bottom:3rem}
+.sec-title{font-size:1.35rem;font-weight:700;margin-bottom:1.4rem;display:flex;align-items:center;gap:.5rem}
+.sec-title .icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.card{background:var(--card);border-radius:12px;padding:1.25rem 1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:1rem}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:640px){.grid-2,.grid-3,.cmp-grid{grid-template-columns:1fr}}
+.obj-card{background:var(--card);border-radius:10px;padding:1rem 1.2rem;border-left:4px solid var(--primary);display:flex;align-items:flex-start;gap:.8rem;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:.6rem}
+.obj-num{background:var(--primary);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;flex-shrink:0}
+.concept-card{background:var(--card);border-radius:10px;padding:1.1rem;border-top:3px solid;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.concept-card h4{font-size:.93rem;margin-bottom:.5rem}
+.concept-card p,.concept-card li{font-size:.85rem;color:var(--text-muted);line-height:1.65}
+.concept-card ul{padding-left:1.1rem}
+.code-block{background:var(--code-bg);color:var(--code-text);border-radius:8px;padding:1rem 1.2rem;font-family:'JetBrains Mono',monospace;font-size:.81rem;line-height:1.75;overflow-x:auto;white-space:pre;margin:.6rem 0}
+.kw{color:#93c5fd}.cls{color:#fde68a}.str{color:#86efac}.cmt{color:#6b7280}.num{color:#f9a8d4}.mth{color:#c084fc}.ann{color:#fb923c}
+.hl{border-radius:10px;padding:1rem 1.25rem;margin:.8rem 0;font-size:.87rem;line-height:1.7}
+.hl-red{background:#fef2f2;border-left:4px solid var(--danger);color:#7f1d1d}
+.hl-blue{background:#eff6ff;border-left:4px solid var(--primary);color:#1e3a8a}
+.hl-green{background:#f0fdf4;border-left:4px solid var(--success);color:#14532d}
+.hl-yellow{background:#fffbeb;border-left:4px solid var(--warning);color:#78350f}
+.hl-purple{background:#f5f3ff;border-left:4px solid var(--purple);color:#4c1d95}
+.hl-teal{background:#f0fdfa;border-left:4px solid var(--teal);color:#134e4a}
+[data-theme="dark"] .hl-red{background:#450a0a;color:#fca5a5}
+[data-theme="dark"] .hl-blue{background:#0c1a3a;color:#93c5fd}
+[data-theme="dark"] .hl-green{background:#052e16;color:#86efac}
+[data-theme="dark"] .hl-yellow{background:#2d1a00;color:#fde68a}
+[data-theme="dark"] .hl-purple{background:#1e0a3c;color:#c084fc}
+[data-theme="dark"] .hl-teal{background:#022c22;color:#5eead4}
+.tbl{width:100%;border-collapse:collapse;font-size:.84rem}
+.tbl th{background:var(--primary);color:#fff;padding:.6rem .8rem;text-align:left}
+.tbl td{padding:.5rem .8rem;border-bottom:1px solid var(--border)}
+.tbl tr:hover td{background:rgba(37,99,235,.05)}
+.kw-card{background:var(--card);border-radius:10px;padding:1rem 1.2rem;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.kw-card .en{font-size:.83rem;color:var(--primary);font-family:'JetBrains Mono',monospace;margin-bottom:.3rem;font-weight:600}
+.kw-card .ko{font-size:.93rem;font-weight:700;margin-bottom:.35rem}
+.kw-card .def{font-size:.82rem;color:var(--text-muted);line-height:1.6}
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.cmp{border-radius:10px;padding:1rem 1.2rem;border:2px solid var(--border)}
+.cmp h4{font-size:.93rem;margin-bottom:.6rem}
+.cmp ul{font-size:.84rem;color:var(--text-muted);padding-left:1rem;line-height:1.8}
+.quiz-card{background:var(--card);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.07);border-left:4px solid var(--purple)}
+.qnum{display:inline-block;background:var(--purple);color:#fff;border-radius:6px;padding:.15rem .6rem;font-size:.76rem;font-weight:700;margin-bottom:.8rem}
+.qtype{display:inline-block;margin-left:.4rem;border:1px solid var(--purple);color:var(--purple);border-radius:20px;padding:.1rem .6rem;font-size:.74rem}
+.quiz-q{font-size:.93rem;font-weight:600;margin-bottom:1rem;line-height:1.6}
+.opts{display:flex;flex-direction:column;gap:.5rem}
+.opt{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.65rem 1rem;cursor:pointer;font-size:.86rem;transition:all .2s;display:flex;align-items:flex-start;gap:.5rem}
+.opt:hover{border-color:var(--purple);background:#f5f3ff}
+[data-theme="dark"] .opt:hover{background:#1e0a3c}
+.opt.correct{background:#f0fdf4;border-color:var(--success);color:#14532d}
+.opt.wrong{background:#fef2f2;border-color:var(--danger);color:#7f1d1d}
+[data-theme="dark"] .opt.correct{background:#052e16;color:#86efac}
+[data-theme="dark"] .opt.wrong{background:#450a0a;color:#fca5a5}
+.fb{margin-top:.8rem;padding:.8rem 1rem;border-radius:8px;font-size:.84rem;line-height:1.65;display:none}
+.fb.show{display:block}
+.fb.cfb{background:#f0fdf4;color:#14532d;border:1px solid #bbf7d0}
+.fb.wfb{background:#fef2f2;color:#7f1d1d;border:1px solid #fecaca}
+[data-theme="dark"] .fb.cfb{background:#052e16;color:#86efac}
+[data-theme="dark"] .fb.wfb{background:#450a0a;color:#fca5a5}
+.short-input{width:100%;padding:.65rem 1rem;border:1px solid var(--border);border-radius:8px;font-size:.86rem;background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace}
+.check-btn{margin-top:.6rem;padding:.5rem 1.2rem;background:var(--purple);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.84rem}
+.check-btn:hover{background:#6d28d9}
+.tag{display:inline-block;padding:.15rem .55rem;border-radius:12px;font-size:.73rem;font-weight:700;margin-left:.3rem}
+.tag-r{background:#fee2e2;color:#dc2626}
+.tag-b{background:#dbeafe;color:#1d4ed8}
+.tag-g{background:#dcfce7;color:#16a34a}
+.tag-p{background:#ede9fe;color:#7c3aed}
+.tag-t{background:#ccfbf1;color:#0f766e}
+[data-theme="dark"] .tag-r{background:#450a0a;color:#f87171}
+[data-theme="dark"] .tag-b{background:#1e3a8a;color:#93c5fd}
+[data-theme="dark"] .tag-g{background:#052e16;color:#4ade80}
+[data-theme="dark"] .tag-p{background:#1e0a3c;color:#c084fc}
+[data-theme="dark"] .tag-t{background:#022c22;color:#5eead4}
+code{background:var(--bg);padding:.1rem .4rem;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.83rem}
+/* stream flow diagram */
+.flow{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;margin:.8rem 0}
+.flow-box{border-radius:8px;padding:.5rem 1rem;font-size:.84rem;font-weight:600;text-align:center}
+.flow-arrow{color:var(--text-muted);font-size:1.3rem;font-weight:700}
+/* path example */
+.path-row{display:flex;align-items:flex-start;gap:.8rem;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.85rem}
+.path-row:last-child{border-bottom:none}
+.path-badge{flex-shrink:0;background:var(--primary);color:#fff;border-radius:6px;padding:.1rem .5rem;font-size:.75rem;font-weight:700}
+.mlist{list-style:none}
+.mlist li{padding:.38rem 0;border-bottom:1px solid var(--border);font-size:.84rem;display:flex;gap:.5rem;align-items:flex-start}
+.mlist li:last-child{border-bottom:none}
+.mn{font-family:'JetBrains Mono',monospace;color:var(--primary);font-size:.8rem;font-weight:600;flex-shrink:0}
+</style>
+</head>
+<body>
+<nav>
+  <a href="#objectives">학습목표</a>
+  <a href="#summary">핵심요약</a>
+  <a href="#stream">스트림 개요</a>
+  <a href="#methods">공통 메서드</a>
+  <a href="#file-read">파일 읽기</a>
+  <a href="#file-write">파일 쓰기</a>
+  <a href="#exception">예외 처리</a>
+  <a href="#keywords">키워드</a>
+  <a href="#quiz">연습문제</a>
+  <button class="nav-theme" onclick="toggleTheme()">🌙</button>
+</nav>
+
+<header>
+  <h1>CHAPTER 09</h1>
+  <h1 style="font-size:1.4rem;margin-top:.3rem">입출력 스트림과 파일 입출력</h1>
+  <p>java.io 패키지 — 파일 읽기·쓰기·예외 처리 완전 정복</p>
+  <div class="badges">
+    <span class="badge">InputStream / Reader</span>
+    <span class="badge">FileReader / FileWriter</span>
+    <span class="badge">try-catch / try-with-resources</span>
+    <span class="badge">파일 경로</span>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ====== 학습목표 ====== -->
+<section id="objectives">
+  <div class="sec-title"><div class="icon" style="background:#dbeafe">🎯</div>학습 목표</div>
+  <div class="obj-card"><div class="obj-num">1</div><div>스트림의 개념과 입력/출력 방향, 바이트/문자 스트림의 차이를 설명할 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">2</div><div>스트림 클래스 계층(InputStream/Reader/OutputStream/Writer)을 이해하고 각 클래스의 역할을 설명할 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">3</div><div>FileReader로 파일을 한 문자씩 읽거나 char 배열로 여러 문자를 한 번에 읽는 코드를 작성할 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">4</div><div>FileWriter로 파일에 문자열을 쓰고, true 옵션으로 기존 파일에 이어 쓸 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">5</div><div>try-catch와 try-with-resources를 사용하여 IOException을 처리하고 스트림을 안전하게 닫을 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">6</div><div>상대 경로와 절대 경로의 차이를 이해하고 올바른 파일 경로를 작성할 수 있다.</div></div>
+</section>
+
+<!-- ====== 핵심요약 ====== -->
+<section id="summary">
+  <div class="sec-title"><div class="icon" style="background:#ccfbf1">📋</div>핵심요약</div>
+  <div class="grid-3">
+    <div class="concept-card" style="border-top-color:#2563eb">
+      <h4>🌊 스트림 방향</h4>
+      <ul style="margin-top:.5rem">
+        <li>입력 스트림: 외부 → 프로그램</li>
+        <li>출력 스트림: 프로그램 → 외부</li>
+        <li>단방향 (양방향 불가)</li>
+      </ul>
+    </div>
+    <div class="concept-card" style="border-top-color:#0d9488">
+      <h4>🔤 스트림 종류</h4>
+      <ul style="margin-top:.5rem">
+        <li>바이트: InputStream / OutputStream</li>
+        <li>문자: Reader / Writer</li>
+        <li>파일: FileReader / FileWriter</li>
+      </ul>
+    </div>
+    <div class="concept-card" style="border-top-color:#7c3aed">
+      <h4>⚠️ 예외 처리</h4>
+      <ul style="margin-top:.5rem">
+        <li>IOException 필수 처리</li>
+        <li>try-catch + close()</li>
+        <li>try-with-resources 권장</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 스트림 흐름도 -->
+  <div class="card" style="margin-top:.5rem">
+    <h4 style="margin-bottom:1rem;font-size:.93rem">스트림 클래스 계층 구조</h4>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:.82rem;color:var(--primary);font-weight:600;margin-bottom:.5rem">📥 입력 스트림</p>
+        <div class="flow">
+          <div class="flow-box" style="background:#dbeafe;color:#1e40af">InputStream<br><small>(바이트)</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="background:#bfdbfe;color:#1e3a8a">FileInputStream</div>
+        </div>
+        <div class="flow">
+          <div class="flow-box" style="background:#dcfce7;color:#14532d">Reader<br><small>(문자)</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="background:#bbf7d0;color:#14532d">FileReader</div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:.82rem;color:var(--orange);font-weight:600;margin-bottom:.5rem">📤 출력 스트림</p>
+        <div class="flow">
+          <div class="flow-box" style="background:#fed7aa;color:#9a3412">OutputStream<br><small>(바이트)</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="background:#fdba74;color:#7c2d12">FileOutputStream</div>
+        </div>
+        <div class="flow">
+          <div class="flow-box" style="background:#fce7f3;color:#9d174d">Writer<br><small>(문자)</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="background:#fbcfe8;color:#831843">FileWriter</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 스트림 개요 ====== -->
+<section id="stream">
+  <div class="sec-title"><div class="icon" style="background:#ccfbf1">🌊</div>입출력 스트림 개요</div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">1. 스트림(Stream)이란</h3>
+    <p style="font-size:.87rem;color:var(--text-muted);line-height:1.7;margin-bottom:.8rem">
+      자바에서 외부(파일·콘솔·네트워크)와 데이터를 주고받는 <strong>단방향 데이터 통로</strong>입니다.
+      모든 입출력 처리는 <code>java.io</code> 패키지의 스트림 클래스를 통해 이루어집니다.
+    </p>
+    <div class="flow" style="margin:1rem 0">
+      <div class="flow-box" style="background:#dbeafe;color:#1e40af;padding:.7rem 1.2rem">파일 / 키보드<br><small>외부 데이터</small></div>
+      <div class="flow-arrow">→ 입력 스트림 →</div>
+      <div class="flow-box" style="background:#f0fdf4;color:#14532d;padding:.7rem 1.2rem">자바 프로그램</div>
+      <div class="flow-arrow">→ 출력 스트림 →</div>
+      <div class="flow-box" style="background:#fef9c3;color:#713f12;padding:.7rem 1.2rem">파일 / 콘솔<br><small>외부 대상</small></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">2. 스트림 분류</h3>
+    <div class="cmp-grid">
+      <div class="cmp" style="border-color:#2563eb">
+        <h4>🔢 바이트 스트림</h4>
+        <ul>
+          <li><strong>1바이트</strong> 단위 처리</li>
+          <li>이미지, 동영상, 바이너리 파일</li>
+          <li>InputStream / OutputStream</li>
+          <li>FileInputStream / FileOutputStream</li>
+        </ul>
+      </div>
+      <div class="cmp" style="border-color:#16a34a">
+        <h4>🔤 문자 스트림</h4>
+        <ul>
+          <li><strong>2바이트(유니코드)</strong> 단위 처리</li>
+          <li>텍스트 파일, 한글 등 다국어 처리</li>
+          <li>Reader / Writer</li>
+          <li>FileReader / FileWriter <span class="tag tag-r">주요 사용</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">3. 표준 입출력 <span class="tag tag-b">System 클래스</span></h3>
+    <table class="tbl">
+      <thead><tr><th>객체</th><th>타입</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td><code>System.in</code></td><td>InputStream</td><td>표준 입력 — 키보드 입력. Scanner와 연결하여 사용</td></tr>
+        <tr><td><code>System.out</code></td><td>OutputStream</td><td>표준 출력 — 콘솔 화면. println() 등으로 사용</td></tr>
+        <tr><td><code>System.err</code></td><td>OutputStream</td><td>오류 출력 — 에러 메시지 전용. IDE에서 빨간색으로 표시</td></tr>
+      </tbody>
+    </table>
+    <div class="code-block" style="margin-top:.8rem"><span class="cmt">// System.in — 키보드 입력 (Scanner와 연결)</span>
+<span class="cls">Scanner</span> scanner = <span class="kw">new</span> <span class="cls">Scanner</span>(<span class="cls">System</span>.in);
+
+<span class="cmt">// System.out — 일반 출력</span>
+<span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"정상 출력"</span>);
+
+<span class="cmt">// System.err — 오류 출력 (catch 블록에서 주로 사용)</span>
+<span class="cls">System</span>.err.<span class="mth">println</span>(<span class="str">"오류 발생: "</span> + e.<span class="mth">getMessage</span>());</div>
+  </div>
+</section>
+
+<!-- ====== 공통 메서드 ====== -->
+<section id="methods">
+  <div class="sec-title"><div class="icon" style="background:#dbeafe">🛠</div>입출력 스트림 공통 메서드</div>
+
+  <div class="card">
+    <table class="tbl">
+      <thead><tr><th>메서드</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td><code>int read()</code></td><td>한 문자(char) 읽기. 파일 끝이면 <strong>-1</strong> 반환 <span class="tag tag-r">★ 핵심</span></td></tr>
+        <tr><td><code>int read(char[] cbuf)</code></td><td>char 배열에 여러 문자 읽기. 읽은 문자 수 반환</td></tr>
+        <tr><td><code>int read(char[] cbuf, int off, int n)</code></td><td>cbuf의 off 위치부터 n개 읽기</td></tr>
+        <tr><td><code>void write(int c)</code></td><td>한 문자 쓰기</td></tr>
+        <tr><td><code>void write(char[] cbuf)</code></td><td>char 배열 전체 쓰기</td></tr>
+        <tr><td><code>void write(String str)</code></td><td>문자열 쓰기 <span class="tag tag-r">★ 핵심</span></td></tr>
+        <tr><td><code>void close()</code></td><td>스트림 종료 및 자원 반환. <strong>반드시 호출</strong> <span class="tag tag-r">★ 핵심</span></td></tr>
+        <tr><td><code>void skip(long n)</code></td><td>n개의 문자/바이트 건너뛰기</td></tr>
+        <tr><td><code>void mark(int readlimit)</code></td><td>현재 스트림 위치를 표시</td></tr>
+        <tr><td><code>void reset()</code></td><td>mark() 위치로 스트림 위치 되돌리기</td></tr>
+      </tbody>
+    </table>
+    <div class="hl hl-red" style="margin-top:.8rem">
+      <strong>⚠️ read()의 반환값</strong>: 파일 끝에 도달하면 <strong>-1</strong>을 반환합니다.
+      <code>while ((ch = fin.read()) != -1)</code> 패턴으로 파일 전체를 읽습니다.
+    </div>
+  </div>
+</section>
+
+<!-- ====== 파일 읽기 ====== -->
+<section id="file-read">
+  <div class="sec-title"><div class="icon" style="background:#dcfce7">📂</div>파일 입출력 — 읽기 (FileReader)</div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">1. 파일 경로 지정 방법 <span class="tag tag-r">시험 필수</span></h3>
+    <div class="path-row">
+      <span class="path-badge">상대</span>
+      <div>
+        <code>menu.txt</code> — 현재 작업 디렉터리의 menu.txt<br>
+        <code>data/menu.txt</code> — 현재 디렉터리 안 data 폴더의 menu.txt<br>
+        <code>../menu.txt</code> — 상위 디렉터리의 menu.txt
+        <p style="font-size:.82rem;color:var(--text-muted);margin-top:.3rem">현재 작업 디렉터리(프로젝트 루트) 기준. IDE에서는 프로젝트 폴더.</p>
+      </div>
+    </div>
+    <div class="path-row">
+      <span class="path-badge" style="background:var(--orange)">절대</span>
+      <div>
+        Windows: <code>C:\menu.txt</code> 또는 <code>C:\\menu.txt</code><br>
+        Unix/Linux: <code>/home/username/menu.txt</code>
+        <p style="font-size:.82rem;color:var(--text-muted);margin-top:.3rem">파일 시스템 최상위(루트)부터 전체 경로. 이식성이 낮으므로 상대 경로 권장.</p>
+      </div>
+    </div>
+    <div class="hl hl-yellow">
+      <strong>💡 윈도우 경로 주의</strong>: <code>\</code>는 이스케이프 문자이므로
+      <code>C:\menu.txt</code>가 아닌 <code>C:\\menu.txt</code> 또는 <code>C:/menu.txt</code>로 작성해야 합니다.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">2. 한 문자씩 읽기 (FileReader) <span class="tag tag-r">시험 필수</span></h3>
+    <div class="code-block"><span class="kw">import</span> java.io.FileReader;
+<span class="kw">import</span> java.io.IOException;
+
+<span class="kw">public class</span> <span class="cls">FileReadExample</span> {
+    <span class="kw">public static void</span> <span class="mth">main</span>(<span class="cls">String</span>[] args) <span class="kw">throws</span> <span class="cls">IOException</span> {
+        <span class="cls">FileReader</span> fin = <span class="kw">new</span> <span class="cls">FileReader</span>(<span class="str">"menu.txt"</span>); <span class="cmt">// 파일 연결</span>
+        <span class="kw">int</span> ch;
+        <span class="kw">while</span> ((ch = fin.<span class="mth">read</span>()) != -<span class="num">1</span>) { <span class="cmt">// -1이면 파일 끝</span>
+            <span class="cls">System</span>.out.<span class="mth">print</span>((<span class="kw">char</span>) ch);  <span class="cmt">// int → char 형변환</span>
+        }
+        fin.<span class="mth">close</span>(); <span class="cmt">// 스트림 반드시 닫기</span>
+    }
+}</div>
+    <div class="hl hl-blue">
+      <strong>패턴 암기</strong>: <code>while ((ch = fin.read()) != -1)</code><br>
+      read()가 반환하는 int 값을 ch에 저장하고, -1이 아닌 동안 반복합니다.
+      출력 시에는 <code>(char) ch</code>로 형변환이 필요합니다.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">3. 여러 문자 한 번에 읽기 (char 배열)</h3>
+    <div class="code-block"><span class="kw">try</span> (<span class="cls">FileReader</span> fin = <span class="kw">new</span> <span class="cls">FileReader</span>(<span class="str">"menu.txt"</span>)) {
+    <span class="kw">char</span>[] cbuf = <span class="kw">new char</span>[<span class="num">10</span>]; <span class="cmt">// 10크기의 char 배열</span>
+    <span class="kw">int</span> count;
+    <span class="kw">while</span> ((count = fin.<span class="mth">read</span>(cbuf)) != -<span class="num">1</span>) {
+        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; count; i++) {
+            <span class="cls">System</span>.out.<span class="mth">print</span>(cbuf[i]); <span class="cmt">// 읽은 만큼만 출력</span>
+        }
+    }
+} <span class="kw">catch</span> (<span class="cls">IOException</span> e) {
+    <span class="cls">System</span>.err.<span class="mth">println</span>(<span class="str">"오류 발생: "</span> + e.<span class="mth">getMessage</span>());
+}</div>
+    <p style="font-size:.85rem;color:var(--text-muted);margin-top:.5rem">
+      <code>read(cbuf)</code>는 배열을 채우며 읽고 실제로 읽은 문자 수를 반환합니다.
+      파일 마지막에서 배열이 덜 채워질 수 있으므로 <code>i &lt; count</code>로 읽은 만큼만 처리해야 합니다.
+    </p>
+  </div>
+</section>
+
+<!-- ====== 파일 쓰기 ====== -->
+<section id="file-write">
+  <div class="sec-title"><div class="icon" style="background:#fce7f3">✍️</div>파일 입출력 — 쓰기 (FileWriter)</div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">1. 파일에 문자열 쓰기 <span class="tag tag-r">시험 필수</span></h3>
+    <div class="code-block"><span class="kw">import</span> java.io.FileWriter;
+<span class="kw">import</span> java.io.IOException;
+
+<span class="kw">try</span> (<span class="cls">FileWriter</span> fout = <span class="kw">new</span> <span class="cls">FileWriter</span>(<span class="str">"new_menu.txt"</span>)) {
+    fout.<span class="mth">write</span>(<span class="str">"4. 크림 도넛\n"</span>);   <span class="cmt">// \n으로 줄바꿈</span>
+    fout.<span class="mth">write</span>(<span class="str">"5. 딸기 도넛\n"</span>);
+    fout.<span class="mth">write</span>(<span class="str">"6. 생딸기 도넛\n"</span>);
+    <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"파일 쓰기 완료!"</span>);
+} <span class="kw">catch</span> (<span class="cls">IOException</span> e) {
+    <span class="cls">System</span>.err.<span class="mth">println</span>(<span class="str">"오류 발생: "</span> + e.<span class="mth">getMessage</span>());
+}</div>
+    <div class="hl hl-yellow">
+      <strong>기본 동작</strong>: 파일이 없으면 새로 생성. 파일이 이미 있으면 <strong>기존 내용 전부 삭제</strong> 후 덮어씁니다.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">2. 파일 이어쓰기 (append 옵션) <span class="tag tag-r">시험 필수</span></h3>
+    <div class="cmp-grid">
+      <div class="cmp" style="border-color:#dc2626">
+        <h4>❌ FileWriter("파일", false)</h4>
+        <ul>
+          <li>기존 내용 전부 삭제</li>
+          <li>새 내용으로 덮어씀</li>
+          <li>기본값(생략 시)</li>
+        </ul>
+      </div>
+      <div class="cmp" style="border-color:#16a34a">
+        <h4>✅ FileWriter("파일", true)</h4>
+        <ul>
+          <li>기존 내용 유지</li>
+          <li>파일 끝에 이어서 추가</li>
+          <li>append = true</li>
+        </ul>
+      </div>
+    </div>
+    <div class="code-block" style="margin-top:.8rem"><span class="cmt">// menu.txt 내용: 1.기본도넛 2.초코도넛 3.레몬도넛</span>
+
+<span class="cmt">// true = 이어쓰기 (append)</span>
+<span class="kw">try</span> (<span class="cls">FileReader</span>  fin  = <span class="kw">new</span> <span class="cls">FileReader</span>(<span class="str">"menu.txt"</span>);
+     <span class="cls">FileWriter</span>  fout = <span class="kw">new</span> <span class="cls">FileWriter</span>(<span class="str">"new_menu.txt"</span>, <span class="kw">true</span>)) {
+    <span class="kw">int</span> ch;
+    <span class="kw">while</span> ((ch = fin.<span class="mth">read</span>()) != -<span class="num">1</span>) {
+        fout.<span class="mth">write</span>(ch); <span class="cmt">// menu.txt 내용 복사</span>
+    }
+    <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"파일 이어쓰기 완료!"</span>);
+}</div>
+  </div>
+</section>
+
+<!-- ====== 예외 처리 ====== -->
+<section id="exception">
+  <div class="sec-title"><div class="icon" style="background:#fee2e2">⚠️</div>파일 입출력 예외 처리</div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">1. try-catch 방식 (전통적)</h3>
+    <div class="code-block"><span class="kw">import</span> java.io.FileReader;
+<span class="kw">import</span> java.io.IOException;
+
+<span class="cls">FileReader</span> fin = <span class="kw">null</span>;
+<span class="kw">try</span> {
+    fin = <span class="kw">new</span> <span class="cls">FileReader</span>(<span class="str">"menu.txt"</span>);
+    <span class="kw">int</span> ch;
+    <span class="kw">while</span> ((ch = fin.<span class="mth">read</span>()) != -<span class="num">1</span>) {
+        <span class="cls">System</span>.out.<span class="mth">print</span>((<span class="kw">char</span>) ch);
+    }
+} <span class="kw">catch</span> (<span class="cls">IOException</span> e) {
+    <span class="cls">System</span>.err.<span class="mth">println</span>(<span class="str">"오류 발생: "</span> + e.<span class="mth">getMessage</span>()); <span class="cmt">// 오류 메시지</span>
+    e.<span class="mth">printStackTrace</span>(); <span class="cmt">// 오류 상세 추적</span>
+} <span class="kw">finally</span> {
+    <span class="kw">if</span> (fin != <span class="kw">null</span>) {
+        <span class="kw">try</span> { fin.<span class="mth">close</span>(); } <span class="kw">catch</span> (<span class="cls">IOException</span> e) {}
+    }
+}</div>
+    <p style="font-size:.85rem;color:var(--text-muted);margin-top:.5rem">
+      finally 블록은 예외 발생 여부와 관계없이 항상 실행됩니다. close()를 여기서 호출하여 자원을 반환합니다.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">2. try-with-resources 방식 (권장) <span class="tag tag-r">시험 필수</span></h3>
+    <div class="code-block"><span class="cmt">// try () 안에 스트림 선언 → 블록 종료 시 자동으로 close() 호출</span>
+<span class="kw">try</span> (<span class="cls">FileReader</span> fin = <span class="kw">new</span> <span class="cls">FileReader</span>(<span class="str">"menu.txt"</span>)) {
+    <span class="kw">int</span> ch;
+    <span class="kw">while</span> ((ch = fin.<span class="mth">read</span>()) != -<span class="num">1</span>) {
+        <span class="cls">System</span>.out.<span class="mth">print</span>((<span class="kw">char</span>) ch);
+    }
+} <span class="kw">catch</span> (<span class="cls">IOException</span> e) {
+    <span class="cls">System</span>.err.<span class="mth">println</span>(<span class="str">"오류 발생: "</span> + e.<span class="mth">getMessage</span>());
+}</div>
+    <div class="hl hl-green">
+      <strong>✅ try-with-resources 장점</strong>: finally 블록 없이도 <strong>자동으로 close()</strong>를 호출합니다.
+      스트림을 여러 개 열 때도 세미콜론(;)으로 구분하여 한 번에 선언 가능합니다.
+    </div>
+
+    <div class="cmp-grid" style="margin-top:.8rem">
+      <div class="cmp" style="border-color:#dc2626">
+        <h4>❌ try-catch (문제점)</h4>
+        <ul>
+          <li>finally에서 close() 직접 호출</li>
+          <li>close()도 예외 발생 가능 → 중첩 try</li>
+          <li>코드가 길고 복잡</li>
+        </ul>
+      </div>
+      <div class="cmp" style="border-color:#16a34a">
+        <h4>✅ try-with-resources</h4>
+        <ul>
+          <li>블록 종료 시 자동 close()</li>
+          <li>finally 블록 불필요</li>
+          <li>코드가 간결하고 안전</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">3. 주요 예외 클래스</h3>
+    <table class="tbl">
+      <thead><tr><th>예외 클래스</th><th>발생 상황</th></tr></thead>
+      <tbody>
+        <tr><td><code>IOException</code></td><td>입출력 전반에 걸친 오류의 최상위 예외</td></tr>
+        <tr><td><code>FileNotFoundException</code></td><td>지정한 경로에 파일이 없을 때 (IOException의 하위)</td></tr>
+        <tr><td><code>ArithmeticException</code></td><td>산술 오류 (예: 0으로 나누기)</td></tr>
+      </tbody>
+    </table>
+    <div class="code-block" style="margin-top:.8rem"><span class="cmt">// getMessage() — 예외 메시지 문자열 반환</span>
+<span class="cmt">// printStackTrace() — 전체 오류 추적 스택 출력</span>
+<span class="kw">catch</span> (<span class="cls">IOException</span> e) {
+    <span class="cls">System</span>.err.<span class="mth">println</span>(<span class="str">"오류 발생: "</span> + e.<span class="mth">getMessage</span>());
+    e.<span class="mth">printStackTrace</span>();
+}</div>
+  </div>
+</section>
+
+<!-- ====== 핵심 키워드 ====== -->
+<section id="keywords">
+  <div class="sec-title"><div class="icon" style="background:#dbeafe">🔑</div>핵심 키워드</div>
+  <div class="grid-3">
+    <div class="kw-card"><div class="en">Stream</div><div class="ko">스트림</div><div class="def">데이터가 한 방향으로만 흐르는 통로. 입력·출력 스트림은 각각 별도.</div></div>
+    <div class="kw-card"><div class="en">FileReader</div><div class="ko">파일 읽기 스트림</div><div class="def">텍스트 파일을 문자(char) 단위로 읽는 클래스. java.io 패키지.</div></div>
+    <div class="kw-card"><div class="en">FileWriter</div><div class="ko">파일 쓰기 스트림</div><div class="def">텍스트 파일에 문자(char) 단위로 쓰는 클래스. append 옵션으로 이어쓰기 가능.</div></div>
+    <div class="kw-card"><div class="en">close()</div><div class="ko">스트림 닫기</div><div class="def">사용한 스트림 자원을 반환. 반드시 호출해야 데이터 손실 방지.</div></div>
+    <div class="kw-card"><div class="en">try-with-resources</div><div class="ko">자동 자원 관리</div><div class="def">try() 안에 선언한 자원을 블록 종료 시 자동 close(). Java 7부터 지원.</div></div>
+    <div class="kw-card"><div class="en">IOException</div><div class="ko">입출력 예외</div><div class="def">파일 입출력 시 발생하는 예외. 반드시 try-catch로 처리해야 함.</div></div>
+    <div class="kw-card"><div class="en">Relative Path</div><div class="ko">상대 경로</div><div class="def">현재 작업 디렉터리 기준 경로. "menu.txt", "data/menu.txt" 등.</div></div>
+    <div class="kw-card"><div class="en">Absolute Path</div><div class="ko">절대 경로</div><div class="def">파일 시스템 루트부터의 전체 경로. "C:\\menu.txt" 등. 이식성 낮음.</div></div>
+    <div class="kw-card"><div class="en">BufferedReader/Writer</div><div class="ko">버퍼 스트림</div><div class="def">FileReader/FileWriter를 감싸 버퍼를 활용하여 입출력 성능을 향상시키는 클래스.</div></div>
+  </div>
+</section>
+
+<!-- ====== 연습문제 ====== -->
+<section id="quiz">
+  <div class="sec-title"><div class="icon" style="background:#f5f3ff">💻</div>프로그래밍 연습문제</div>
+
+  <!-- Q1 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q1</span><span class="qtype">개념 확인</span></div>
+    <div class="quiz-q">다음 중 스트림(Stream)에 대한 설명으로 옳지 않은 것은?</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q1')"><span>①</span> 입력 스트림과 출력 스트림은 데이터 흐름 방향이 반대이다.</div>
+      <div class="opt" onclick="chk(this,false,'q1')"><span>②</span> 문자 스트림은 2바이트(유니코드) 단위로 데이터를 처리한다.</div>
+      <div class="opt" onclick="chk(this,true,'q1')"><span>③</span> 하나의 스트림으로 입력과 출력을 동시에 처리할 수 있다.</div>
+      <div class="opt" onclick="chk(this,false,'q1')"><span>④</span> 사용 후 close()를 호출하여 자원을 반환해야 한다.</div>
+    </div>
+    <div class="fb" id="q1">
+      ✅ <strong>정답: ③</strong><br>
+      스트림은 <strong>단방향</strong>입니다. 하나의 스트림은 입력 또는 출력 중 하나만 담당합니다.<br>
+      입력과 출력 모두 필요하다면 각각의 스트림을 따로 생성해야 합니다.
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q2</span><span class="qtype">출력값 예측</span></div>
+    <div class="quiz-q">
+      파일 "test.txt"에 "ABC"가 저장되어 있을 때, 다음 코드의 출력 결과는?
+    </div>
+    <div class="code-block"><span class="cls">FileReader</span> fin = <span class="kw">new</span> <span class="cls">FileReader</span>(<span class="str">"test.txt"</span>);
+<span class="kw">int</span> ch;
+<span class="kw">while</span> ((ch = fin.<span class="mth">read</span>()) != -<span class="num">1</span>) {
+    <span class="cls">System</span>.out.<span class="mth">print</span>((<span class="kw">char</span>) ch);
+}
+fin.<span class="mth">close</span>();</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q2')"><span>①</span> 65 66 67 (ASCII 코드값)</div>
+      <div class="opt" onclick="chk(this,true,'q2')"><span>②</span> ABC</div>
+      <div class="opt" onclick="chk(this,false,'q2')"><span>③</span> A B C (공백 포함)</div>
+      <div class="opt" onclick="chk(this,false,'q2')"><span>④</span> 오류 발생</div>
+    </div>
+    <div class="fb" id="q2">
+      ✅ <strong>정답: ②</strong><br>
+      read()는 int를 반환하지만 <code>(char) ch</code>로 형변환하여 문자로 출력합니다.<br>
+      형변환 없이 <code>System.out.print(ch)</code>를 쓰면 65, 66, 67이 출력됩니다.
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q3</span><span class="qtype">코드 완성</span></div>
+    <div class="quiz-q">파일을 읽는 코드의 빈칸 ❶~❸에 들어갈 알맞은 코드를 고르시오.</div>
+    <div class="code-block"><span class="kw">try</span> (<span class="cls">FileReader</span> fin = <span class="kw">new</span> <span class="cls">FileReader</span>(<span class="str">"menu.txt"</span>)) {
+    <span class="kw">int</span> ch;
+    <span class="kw">while</span> ((ch = fin.<span style="background:#fde68a;color:#1f2937;border-radius:3px;padding:0 3px">❶</span>()) != <span style="background:#fde68a;color:#1f2937;border-radius:3px;padding:0 3px">❷</span>) {
+        <span class="cls">System</span>.out.<span class="mth">print</span>((<span style="background:#fde68a;color:#1f2937;border-radius:3px;padding:0 3px">❸</span>) ch);
+    }
+} <span class="kw">catch</span> (<span class="cls">IOException</span> e) { ... }</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q3')"><span>①</span> ❶ write / ❷ 0 / ❸ String</div>
+      <div class="opt" onclick="chk(this,true,'q3')"><span>②</span> ❶ read / ❷ -1 / ❸ char</div>
+      <div class="opt" onclick="chk(this,false,'q3')"><span>③</span> ❶ read / ❷ 0 / ❸ int</div>
+      <div class="opt" onclick="chk(this,false,'q3')"><span>④</span> ❶ read / ❷ null / ❸ char</div>
+    </div>
+    <div class="fb" id="q3">
+      ✅ <strong>정답: ②</strong><br>
+      ❶ <code>read()</code>: 파일에서 한 문자씩 읽는 메서드<br>
+      ❷ <code>-1</code>: read()는 파일 끝에 도달하면 -1 반환<br>
+      ❸ <code>char</code>: read()는 int를 반환하므로 char로 형변환해야 문자 출력
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q4</span><span class="qtype">코드 완성</span></div>
+    <div class="quiz-q">기존 파일 "log.txt"에 내용을 <strong>이어서 추가</strong>하는 FileWriter 생성 코드로 올바른 것은?</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q4')"><span>①</span> <code>new FileWriter("log.txt")</code></div>
+      <div class="opt" onclick="chk(this,false,'q4')"><span>②</span> <code>new FileWriter("log.txt", false)</code></div>
+      <div class="opt" onclick="chk(this,true,'q4')"><span>③</span> <code>new FileWriter("log.txt", true)</code></div>
+      <div class="opt" onclick="chk(this,false,'q4')"><span>④</span> <code>new FileWriter("log.txt", "append")</code></div>
+    </div>
+    <div class="fb" id="q4">
+      ✅ <strong>정답: ③</strong><br>
+      두 번째 매개변수 <code>true</code>가 append 모드입니다.<br>
+      ①과 ②는 기존 파일 내용을 삭제하고 덮어씁니다. (false가 기본값)<br>
+      ④는 두 번째 인자가 boolean이어야 하므로 컴파일 오류.
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q5</span><span class="qtype">오류 찾기</span></div>
+    <div class="quiz-q">다음 코드에서 문제가 있는 부분과 그 이유를 고르시오.</div>
+    <div class="code-block"><span class="kw">try</span> (<span class="cls">FileReader</span> fin = <span class="kw">new</span> <span class="cls">FileReader</span>(<span class="str">"menu.txt"</span>)) {
+    <span class="kw">int</span> ch;
+    <span class="kw">while</span> ((ch = fin.<span class="mth">read</span>()) != <span class="num">0</span>) {  <span class="cmt">// ← 여기</span>
+        <span class="cls">System</span>.out.<span class="mth">print</span>((<span class="kw">char</span>) ch);
+    }
+}</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q5')"><span>①</span> try-with-resources를 사용했으므로 close()가 호출되지 않는다</div>
+      <div class="opt" onclick="chk(this,true,'q5')"><span>②</span> 파일 끝 조건이 0이 아닌 -1이어야 한다</div>
+      <div class="opt" onclick="chk(this,false,'q5')"><span>③</span> (char) ch 형변환이 잘못됐다</div>
+      <div class="opt" onclick="chk(this,false,'q5')"><span>④</span> catch 블록이 없으므로 컴파일 오류</div>
+    </div>
+    <div class="fb" id="q5">
+      ✅ <strong>정답: ②</strong><br>
+      read()는 파일 끝에 도달하면 <strong>-1</strong>을 반환합니다. 0이 아닌 -1과 비교해야 합니다.<br>
+      0과 비교하면 파일에 null 문자(0번 코드)가 있을 때 잘못 종료되거나, -1을 만나지 못해 무한 루프가 될 수 있습니다.<br>
+      try-with-resources는 자동 close()가 맞으며, catch 없이 throws 처리도 가능합니다.
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q6</span><span class="qtype">개념 확인</span></div>
+    <div class="quiz-q">try-with-resources에 대한 설명으로 옳은 것은?</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q6')"><span>①</span> try 블록 안에서만 close()를 직접 호출해야 한다</div>
+      <div class="opt" onclick="chk(this,false,'q6')"><span>②</span> 예외 발생 시에는 자동 close()가 실행되지 않는다</div>
+      <div class="opt" onclick="chk(this,true,'q6')"><span>③</span> try() 괄호 안에 선언한 자원은 블록 종료 시 자동으로 close()된다</div>
+      <div class="opt" onclick="chk(this,false,'q6')"><span>④</span> Java 11부터 지원되는 기능이다</div>
+    </div>
+    <div class="fb" id="q6">
+      ✅ <strong>정답: ③</strong><br>
+      try-with-resources는 <strong>Java 7</strong>부터 지원됩니다.<br>
+      블록이 정상 종료되든 예외가 발생하든 관계없이 자원을 <strong>자동으로 close()</strong>합니다.<br>
+      ①: 직접 close() 불필요. ②: 예외 시에도 close() 실행. ④: Java 7+.
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q7</span><span class="qtype">코드 완성 — 종합</span></div>
+    <div class="quiz-q">
+      "result.txt" 파일을 생성하고 "합격\n불합격\n" 두 줄을 쓰는 코드를 완성하시오.<br>
+      <small style="color:var(--text-muted)">try-with-resources 사용, IOException 처리 포함</small>
+    </div>
+    <div class="code-block"><span class="kw">try</span> (<span class="cls">FileWriter</span> fout = ___①___) {
+    fout.___②___(<span class="str">"합격\n"</span>);
+    fout.___②___(<span class="str">"불합격\n"</span>);
+} <span class="kw">catch</span> (___③___ e) {
+    <span class="cls">System</span>.err.<span class="mth">println</span>(e.<span class="mth">getMessage</span>());
+}</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q7')"><span>①</span> ❶ new FileWriter("result.txt", true) / ❷ read / ❸ Exception</div>
+      <div class="opt" onclick="chk(this,true,'q7')"><span>②</span> ❶ new FileWriter("result.txt") / ❷ write / ❸ IOException</div>
+      <div class="opt" onclick="chk(this,false,'q7')"><span>③</span> ❶ new FileReader("result.txt") / ❷ write / ❸ IOException</div>
+      <div class="opt" onclick="chk(this,false,'q7')"><span>④</span> ❶ new FileWriter("result.txt") / ❷ print / ❸ IOException</div>
+    </div>
+    <div class="fb" id="q7">
+      ✅ <strong>정답: ②</strong><br>
+      ❶ <code>new FileWriter("result.txt")</code>: 쓰기 스트림 생성 (덮어쓰기 기본)<br>
+      ❷ <code>write()</code>: FileWriter의 문자열 쓰기 메서드<br>
+      ❸ <code>IOException</code>: 파일 입출력 예외 처리 클래스
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q8</span><span class="qtype">단답형</span></div>
+    <div class="quiz-q">
+      파일을 읽을 때 파일 끝에 도달하면 read() 메서드가 반환하는 값은?
+    </div>
+    <input type="text" class="short-input" id="q8-input" placeholder="숫자를 입력하세요">
+    <button class="check-btn" onclick="chkShort('q8', ['-1'])">확인</button>
+    <div class="fb" id="q8">
+      ✅ <strong>정답: -1</strong><br>
+      read()는 스트림의 끝(End Of File)에 도달하면 <strong>-1</strong>을 반환합니다.<br>
+      이를 이용해 <code>while ((ch = fin.read()) != -1)</code> 패턴으로 파일 전체를 읽습니다.
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q9</span><span class="qtype">경로 구분</span></div>
+    <div class="quiz-q">다음 중 절대 경로(Absolute Path)에 해당하는 것은?</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q9')"><span>①</span> <code>menu.txt</code></div>
+      <div class="opt" onclick="chk(this,false,'q9')"><span>②</span> <code>data/menu.txt</code></div>
+      <div class="opt" onclick="chk(this,false,'q9')"><span>③</span> <code>../menu.txt</code></div>
+      <div class="opt" onclick="chk(this,true,'q9')"><span>④</span> <code>C:\\Users\\menu.txt</code></div>
+    </div>
+    <div class="fb" id="q9">
+      ✅ <strong>정답: ④</strong><br>
+      절대 경로는 파일 시스템의 <strong>루트(/)부터 전체 경로</strong>를 명시합니다.<br>
+      <code>C:\\Users\\menu.txt</code>는 드라이브 문자(C:)부터 시작하는 절대 경로입니다.<br>
+      ①②③은 현재 작업 디렉터리 기준의 <strong>상대 경로</strong>입니다.
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q10</span><span class="qtype">코드 작성 — 종합</span></div>
+    <div class="quiz-q">
+      "input.txt" 파일을 읽어 "output.txt"에 그대로 복사하는 코드를 완성하시오.<br>
+      <small style="color:var(--text-muted)">try-with-resources로 두 스트림을 동시에 선언하고 IOException 처리</small>
+    </div>
+    <div class="code-block"><span class="kw">try</span> (<span class="cls">FileReader</span> fin  = <span class="kw">new</span> <span class="cls">FileReader</span>(<span class="str">"input.txt"</span>);
+     <span class="cls">FileWriter</span>  fout = <span class="kw">new</span> <span class="cls">FileWriter</span>(<span class="str">"output.txt"</span>)) {
+    <span class="kw">int</span> ch;
+    <span class="kw">while</span> ((ch = ___①___) != ___②___) {
+        ___③___;
+    }
+    <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"파일 복사 완료!"</span>);
+} <span class="kw">catch</span> (<span class="cls">IOException</span> e) { ... }</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q10')"><span>①</span> ❶ fout.read() / ❷ 0 / ❸ fin.write(ch)</div>
+      <div class="opt" onclick="chk(this,true,'q10')"><span>②</span> ❶ fin.read() / ❷ -1 / ❸ fout.write(ch)</div>
+      <div class="opt" onclick="chk(this,false,'q10')"><span>③</span> ❶ fin.read() / ❷ -1 / ❸ fin.write(ch)</div>
+      <div class="opt" onclick="chk(this,false,'q10')"><span>④</span> ❶ fout.write() / ❷ null / ❸ fin.read(ch)</div>
+    </div>
+    <div class="fb" id="q10">
+      ✅ <strong>정답: ②</strong><br>
+      ❶ <code>fin.read()</code>: 입력 스트림(fin)에서 읽기<br>
+      ❷ <code>-1</code>: 파일 끝 도달 조건<br>
+      ❸ <code>fout.write(ch)</code>: 출력 스트림(fout)에 쓰기<br>
+      try-with-resources에서 두 스트림을 세미콜론(;)으로 구분하여 선언하면 둘 다 자동 close() 됩니다.
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q11</span><span class="qtype">단답형 — 코드 작성</span></div>
+    <div class="quiz-q">
+      다음 빈칸에 들어갈 올바른 코드를 작성하시오.<br>
+      <small style="color:var(--text-muted)">"data.txt" 파일에 내용을 이어 쓰는 FileWriter 생성문 (append 모드)</small>
+    </div>
+    <input type="text" class="short-input" id="q11-input" placeholder="FileWriter fout = new FileWriter(...)">
+    <button class="check-btn" onclick="chkShort('q11', ['filewriter(\"data.txt\", true)','filewriter(\'data.txt\', true)','data.txt\", true'])">확인</button>
+    <div class="fb" id="q11">
+      ✅ <strong>정답</strong>: <code>FileWriter fout = new FileWriter("data.txt", true);</code><br>
+      두 번째 인자 <code>true</code>가 append(이어쓰기) 모드입니다.
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q12</span><span class="qtype">코드 작성 — 종합</span></div>
+    <div class="quiz-q">
+      다음 중 char 배열을 이용한 파일 읽기 코드에서 빈칸 ❶, ❷에 들어갈 내용을 고르시오.
+    </div>
+    <div class="code-block"><span class="kw">try</span> (<span class="cls">FileReader</span> fin = <span class="kw">new</span> <span class="cls">FileReader</span>(<span class="str">"menu.txt"</span>)) {
+    <span class="kw">char</span>[] cbuf = <span class="kw">new char</span>[<span class="num">10</span>];
+    <span class="kw">int</span> count;
+    <span class="kw">while</span> ((count = fin.<span class="mth">read</span>(<span style="background:#fde68a;color:#1f2937;border-radius:3px;padding:0 3px">❶</span>)) != -<span class="num">1</span>) {
+        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span style="background:#fde68a;color:#1f2937;border-radius:3px;padding:0 3px">❷</span>; i++) {
+            <span class="cls">System</span>.out.<span class="mth">print</span>(cbuf[i]);
+        }
+    }
+}</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q12')"><span>①</span> ❶ ch / ❷ cbuf.length</div>
+      <div class="opt" onclick="chk(this,true,'q12')"><span>②</span> ❶ cbuf / ❷ count</div>
+      <div class="opt" onclick="chk(this,false,'q12')"><span>③</span> ❶ count / ❷ cbuf.length</div>
+      <div class="opt" onclick="chk(this,false,'q12')"><span>④</span> ❶ cbuf / ❷ cbuf.length</div>
+    </div>
+    <div class="fb" id="q12">
+      ✅ <strong>정답: ②</strong><br>
+      ❶ <code>cbuf</code>: read(char[])에 char 배열을 전달해야 함<br>
+      ❷ <code>count</code>: 실제로 읽은 문자 수. 파일 마지막에선 배열이 덜 채워질 수 있으므로
+      <code>cbuf.length</code>가 아닌 <code>count</code>만큼만 출력해야 올바릅니다.
+    </div>
+  </div>
+
+</section>
+</div>
+
+<script>
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? '' : 'dark');
+  document.querySelector('.nav-theme').textContent = dark ? '🌙' : '☀️';
+  localStorage.setItem('theme', dark ? 'light' : 'dark');
+}
+(function(){
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.setAttribute('data-theme','dark');
+    document.querySelector('.nav-theme').textContent = '☀️';
+  }
+})();
+
+function chk(el, correct, id) {
+  const card = el.closest('.quiz-card');
+  card.querySelectorAll('.opt').forEach(o => o.style.pointerEvents = 'none');
+  el.classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) {
+    card.querySelectorAll('.opt').forEach(o => {
+      if (o.getAttribute('onclick') && o.getAttribute('onclick').includes('true')) o.classList.add('correct');
+    });
+  }
+  document.getElementById(id).classList.add('show', correct ? 'cfb' : 'wfb');
+}
+
+function chkShort(id, answers) {
+  const val = document.getElementById(id+'-input').value.trim().toLowerCase().replace(/\s/g,'');
+  const fb = document.getElementById(id);
+  fb.classList.add('show');
+  const ok = answers.some(a => val.includes(a.toLowerCase().replace(/\s/g,'')));
+  fb.classList.toggle('cfb', ok);
+  fb.classList.toggle('wfb', !ok);
+  if (!ok && !fb.dataset.prefixed) {
+    fb.innerHTML = '❌ 다시 확인해보세요.<br>' + fb.innerHTML;
+    fb.dataset.prefixed = '1';
+  }
+}
+</script>
+</body>
+</html>

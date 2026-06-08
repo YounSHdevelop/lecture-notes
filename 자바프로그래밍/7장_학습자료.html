@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자바프로그래밍 7장 — 패키지·모듈과 자바 기본 패키지</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#2563eb; --primary-dark:#1e3a8a;
+  --success:#16a34a; --danger:#dc2626; --warning:#d97706;
+  --purple:#7c3aed; --teal:#0d9488; --pink:#db2777; --orange:#ea580c;
+  --bg:#f3f4f6; --card:#ffffff; --text:#1f2937; --text-muted:#6b7280;
+  --border:#e5e7eb; --code-bg:#1e293b; --code-text:#e2e8f0;
+  --nav-bg:rgba(255,255,255,0.95);
+}
+[data-theme="dark"] {
+  --bg:#0f172a; --card:#1e293b; --text:#e2e8f0; --text-muted:#94a3b8;
+  --border:#334155; --nav-bg:rgba(15,23,42,0.95);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 1rem;display:flex;align-items:center;gap:.4rem;height:52px;overflow-x:auto}
+nav a{color:var(--text-muted);text-decoration:none;font-size:.76rem;font-weight:500;white-space:nowrap;padding:.3rem .55rem;border-radius:6px;transition:all .2s}
+nav a:hover{background:var(--primary);color:#fff}
+.nav-theme{margin-left:auto;background:none;border:1px solid var(--border);color:var(--text);cursor:pointer;padding:.3rem .7rem;border-radius:6px;font-size:1rem;flex-shrink:0}
+header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;padding:5rem 2rem 3rem;text-align:center}
+header h1{font-size:1.9rem;margin-bottom:.4rem}
+header p{opacity:.85;font-size:1rem}
+.badges{display:flex;gap:.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+.badge{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:.3rem .9rem;font-size:.78rem}
+.container{max-width:960px;margin:0 auto;padding:2rem 1rem}
+section{margin-bottom:3rem}
+.sec-title{font-size:1.35rem;font-weight:700;margin-bottom:1.4rem;display:flex;align-items:center;gap:.5rem}
+.sec-title .icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.card{background:var(--card);border-radius:12px;padding:1.25rem 1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:1rem}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:640px){.grid-2,.grid-3,.compare-grid{grid-template-columns:1fr}}
+.obj-card{background:var(--card);border-radius:10px;padding:1rem 1.2rem;border-left:4px solid var(--primary);display:flex;align-items:flex-start;gap:.8rem;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:.6rem}
+.obj-num{background:var(--primary);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;flex-shrink:0}
+.concept-card{background:var(--card);border-radius:10px;padding:1.1rem;border-top:3px solid;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.concept-card h4{font-size:.93rem;margin-bottom:.5rem}
+.concept-card p,.concept-card li{font-size:.85rem;color:var(--text-muted);line-height:1.65}
+.concept-card ul{padding-left:1.1rem}
+.code-block{background:var(--code-bg);color:var(--code-text);border-radius:8px;padding:1rem 1.2rem;font-family:'JetBrains Mono',monospace;font-size:.81rem;line-height:1.75;overflow-x:auto;white-space:pre;margin:.6rem 0}
+.kw{color:#93c5fd}.cls{color:#fde68a}.str{color:#86efac}.cmt{color:#6b7280}.num{color:#f9a8d4}.mth{color:#c084fc}
+.hl{border-radius:10px;padding:1rem 1.25rem;margin:.8rem 0;font-size:.87rem;line-height:1.7}
+.hl-red{background:#fef2f2;border-left:4px solid var(--danger);color:#7f1d1d}
+.hl-blue{background:#eff6ff;border-left:4px solid var(--primary);color:#1e3a8a}
+.hl-green{background:#f0fdf4;border-left:4px solid var(--success);color:#14532d}
+.hl-yellow{background:#fffbeb;border-left:4px solid var(--warning);color:#78350f}
+.hl-purple{background:#f5f3ff;border-left:4px solid var(--purple);color:#4c1d95}
+[data-theme="dark"] .hl-red{background:#450a0a;color:#fca5a5}
+[data-theme="dark"] .hl-blue{background:#0c1a3a;color:#93c5fd}
+[data-theme="dark"] .hl-green{background:#052e16;color:#86efac}
+[data-theme="dark"] .hl-yellow{background:#2d1a00;color:#fde68a}
+[data-theme="dark"] .hl-purple{background:#1e0a3c;color:#c084fc}
+.tbl{width:100%;border-collapse:collapse;font-size:.84rem}
+.tbl th{background:var(--primary);color:#fff;padding:.6rem .8rem;text-align:left}
+.tbl td{padding:.5rem .8rem;border-bottom:1px solid var(--border)}
+.tbl tr:hover td{background:rgba(37,99,235,.05)}
+.kw-card{background:var(--card);border-radius:10px;padding:1rem 1.2rem;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.kw-card .en{font-size:.83rem;color:var(--primary);font-family:'JetBrains Mono',monospace;margin-bottom:.3rem;font-weight:600}
+.kw-card .ko{font-size:.93rem;font-weight:700;margin-bottom:.35rem}
+.kw-card .def{font-size:.82rem;color:var(--text-muted);line-height:1.6}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.cmp{border-radius:10px;padding:1rem 1.2rem;border:2px solid var(--border)}
+.cmp h4{font-size:.93rem;margin-bottom:.6rem}
+.cmp ul{font-size:.84rem;color:var(--text-muted);padding-left:1rem;line-height:1.8}
+.quiz-card{background:var(--card);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.07);border-left:4px solid var(--purple)}
+.qnum{display:inline-block;background:var(--purple);color:#fff;border-radius:6px;padding:.15rem .6rem;font-size:.76rem;font-weight:700;margin-bottom:.8rem}
+.qtype{display:inline-block;margin-left:.4rem;border:1px solid var(--purple);color:var(--purple);border-radius:20px;padding:.1rem .6rem;font-size:.74rem}
+.quiz-q{font-size:.93rem;font-weight:600;margin-bottom:1rem;line-height:1.6}
+.opts{display:flex;flex-direction:column;gap:.5rem}
+.opt{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.65rem 1rem;cursor:pointer;font-size:.86rem;transition:all .2s;display:flex;align-items:flex-start;gap:.5rem}
+.opt:hover{border-color:var(--purple);background:#f5f3ff}
+[data-theme="dark"] .opt:hover{background:#1e0a3c}
+.opt.correct{background:#f0fdf4;border-color:var(--success);color:#14532d}
+.opt.wrong{background:#fef2f2;border-color:var(--danger);color:#7f1d1d}
+[data-theme="dark"] .opt.correct{background:#052e16;color:#86efac}
+[data-theme="dark"] .opt.wrong{background:#450a0a;color:#fca5a5}
+.fb{margin-top:.8rem;padding:.8rem 1rem;border-radius:8px;font-size:.84rem;line-height:1.65;display:none}
+.fb.show{display:block}
+.fb.cfb{background:#f0fdf4;color:#14532d;border:1px solid #bbf7d0}
+.fb.wfb{background:#fef2f2;color:#7f1d1d;border:1px solid #fecaca}
+[data-theme="dark"] .fb.cfb{background:#052e16;color:#86efac}
+[data-theme="dark"] .fb.wfb{background:#450a0a;color:#fca5a5}
+.short-input{width:100%;padding:.65rem 1rem;border:1px solid var(--border);border-radius:8px;font-size:.86rem;background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace}
+.check-btn{margin-top:.6rem;padding:.5rem 1.2rem;background:var(--purple);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.84rem}
+.check-btn:hover{background:#6d28d9}
+.tag{display:inline-block;padding:.15rem .55rem;border-radius:12px;font-size:.73rem;font-weight:700;margin-left:.3rem}
+.tag-r{background:#fee2e2;color:#dc2626}
+.tag-b{background:#dbeafe;color:#1d4ed8}
+.tag-g{background:#dcfce7;color:#16a34a}
+[data-theme="dark"] .tag-r{background:#450a0a;color:#f87171}
+[data-theme="dark"] .tag-b{background:#1e3a8a;color:#93c5fd}
+[data-theme="dark"] .tag-g{background:#052e16;color:#4ade80}
+.map-row{display:flex;align-items:center;gap:.5rem;padding:.38rem 0;border-bottom:1px solid var(--border);font-size:.86rem}
+.map-row:last-child{border-bottom:none}
+.prim{background:#dbeafe;color:#1e40af;padding:.13rem .55rem;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.8rem}
+.wrap{background:#fce7f3;color:#9d174d;padding:.13rem .55rem;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.8rem}
+[data-theme="dark"] .prim{background:#1e3a8a;color:#93c5fd}
+[data-theme="dark"] .wrap{background:#500724;color:#f9a8d4}
+.arrow{color:var(--text-muted)}
+.mlist{list-style:none}
+.mlist li{padding:.38rem 0;border-bottom:1px solid var(--border);font-size:.84rem;display:flex;gap:.5rem;align-items:flex-start}
+.mlist li:last-child{border-bottom:none}
+.mn{font-family:'JetBrains Mono',monospace;color:var(--primary);font-size:.8rem;font-weight:600;flex-shrink:0}
+code{background:var(--bg);padding:.1rem .4rem;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.83rem}
+</style>
+</head>
+<body>
+<nav>
+  <a href="#obj-sec">학습목표</a>
+  <a href="#summary">핵심요약</a>
+  <a href="#object">Object</a>
+  <a href="#wrapper">Wrapper</a>
+  <a href="#string">String</a>
+  <a href="#stringbuffer">StringBuffer</a>
+  <a href="#math">Math</a>
+  <a href="#keywords">키워드</a>
+  <a href="#quiz">연습문제</a>
+  <button class="nav-theme" onclick="toggleTheme()">🌙</button>
+</nav>
+
+<header>
+  <h1>CHAPTER 07</h1>
+  <h1 style="font-size:1.4rem;margin-top:.3rem">패키지·모듈과 자바 기본 패키지</h1>
+  <p>java.lang 핵심 클래스 완전 정복</p>
+  <div class="badges">
+    <span class="badge">Object 클래스</span>
+    <span class="badge">Wrapper 클래스</span>
+    <span class="badge">String / StringBuffer</span>
+    <span class="badge">Math 클래스</span>
+    <span class="badge">패키지 &amp; 모듈</span>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ====== 학습목표 ====== -->
+<section id="obj-sec">
+  <div class="sec-title"><div class="icon" style="background:#dbeafe">🎯</div>학습 목표</div>
+  <div class="obj-card"><div class="obj-num">1</div><div>패키지와 모듈의 개념을 이해하고, 자바 기본 패키지(java.lang, java.util, java.time 등)의 구조를 설명할 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">2</div><div>Object 클래스의 주요 메서드(equals, toString, getClass)를 이해하고 직접 오버라이딩할 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">3</div><div>기본형과 Wrapper 클래스 간 변환(parse, valueOf, 오토박싱/언박싱)을 코드로 작성할 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">4</div><div>String 클래스의 불변성을 이해하고, 주요 메서드(substring, replace, split 등)를 활용할 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">5</div><div>StringBuffer/StringBuilder의 가변 특성을 이해하고, append/insert/reverse 등을 활용할 수 있다.</div></div>
+  <div class="obj-card"><div class="obj-num">6</div><div>Math 클래스의 static 메서드(abs, round, pow, random 등)를 활용하여 수학 계산 코드를 작성할 수 있다.</div></div>
+</section>
+
+<!-- ====== 핵심요약 ====== -->
+<section id="summary">
+  <div class="sec-title"><div class="icon" style="background:#dcfce7">📦</div>핵심요약 — 자바 기본 패키지 구조</div>
+  <div class="grid-3">
+    <div class="concept-card" style="border-top-color:#2563eb">
+      <h4>☕ java.lang <span class="tag tag-r">자동 import</span></h4>
+      <ul style="margin-top:.5rem">
+        <li>Object, String, Math</li>
+        <li>Integer, Double... (Wrapper)</li>
+        <li>StringBuilder, StringBuffer</li>
+      </ul>
+    </div>
+    <div class="concept-card" style="border-top-color:#16a34a">
+      <h4>🛠 java.util</h4>
+      <ul style="margin-top:.5rem">
+        <li>Scanner — 입력 처리</li>
+        <li>ArrayList, HashMap</li>
+      </ul>
+    </div>
+    <div class="concept-card" style="border-top-color:#7c3aed">
+      <h4>🕒 java.time</h4>
+      <ul style="margin-top:.5rem">
+        <li>LocalDate — 날짜</li>
+        <li>LocalTime — 시간</li>
+        <li>LocalDateTime — 날짜+시간</li>
+      </ul>
+    </div>
+    <div class="concept-card" style="border-top-color:#d97706">
+      <h4>💾 java.io / java.nio.file</h4>
+      <ul style="margin-top:.5rem">
+        <li>File — 파일 객체</li>
+        <li>InputStream/OutputStream</li>
+        <li>Paths, Filter</li>
+      </ul>
+    </div>
+    <div class="concept-card" style="border-top-color:#0d9488">
+      <h4>📐 모듈 (Java 9+)</h4>
+      <ul style="margin-top:.5rem">
+        <li>module-info.java</li>
+        <li>exports: 공개 패키지</li>
+        <li>requires: 의존 모듈</li>
+      </ul>
+    </div>
+    <div class="concept-card" style="border-top-color:#db2777">
+      <h4>🔗 패키지 vs 모듈</h4>
+      <ul style="margin-top:.5rem">
+        <li>패키지 = 클래스 묶음</li>
+        <li>모듈 = 패키지 묶음</li>
+        <li>모듈이 더 큰 단위</li>
+      </ul>
+    </div>
+  </div>
+  <div class="hl hl-blue" style="margin-top:.8rem">
+    <strong>⭐ java.lang 패키지</strong>는 모든 자바 프로그램에 <strong>자동으로 import</strong>됩니다.
+    String, Math, Integer 등은 별도 import 없이 바로 사용 가능합니다.
+  </div>
+  <div class="hl hl-yellow" style="margin-top:.5rem">
+    <strong>모듈 설정 예시 (module-info.java)</strong><br>
+    <code>module myapp.donutshop { exports myapp.donutshop; requires java.sql; }</code>
+  </div>
+</section>
+
+<!-- ====== Object 클래스 ====== -->
+<section id="object">
+  <div class="sec-title"><div class="icon" style="background:#fce7f3">👑</div>Object 클래스 <span class="tag tag-r">최상위 부모</span></div>
+
+  <div class="card">
+    <p style="font-size:.88rem;line-height:1.8;margin-bottom:1rem">
+      자바의 모든 클래스는 <strong>자동으로 Object를 상속</strong>받습니다.
+      <code>class Donut {}</code>은 실제로 <code>class Donut extends Object {}</code>와 동일합니다.
+    </p>
+    <table class="tbl">
+      <thead><tr><th>메서드</th><th>반환형</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td><code>equals(Object o)</code></td><td>boolean</td><td>두 객체가 동일한지 비교 (기본: 주소 비교)</td></tr>
+        <tr><td><code>hashCode()</code></td><td>int</td><td>객체 고유 해시코드 반환</td></tr>
+        <tr><td><code>toString()</code></td><td>String</td><td>객체를 문자열로 표현 (기본: "클래스명@해시코드")</td></tr>
+        <tr><td><code>getClass()</code></td><td>Class&lt;?&gt;</td><td>객체의 실제 클래스 정보 반환</td></tr>
+        <tr><td><code>wait() / notify()</code></td><td>void</td><td>멀티스레드 동기화</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:1rem">1. equals() 오버라이딩 <span class="tag tag-r">시험 필수</span></h3>
+    <div class="compare-grid">
+      <div class="cmp" style="border-color:#dc2626">
+        <h4>❌ == 연산자</h4>
+        <ul>
+          <li>참조(주소) 비교</li>
+          <li>서로 다른 new 객체면 항상 false</li>
+          <li>기본 자료형은 값 비교 가능</li>
+        </ul>
+      </div>
+      <div class="cmp" style="border-color:#16a34a">
+        <h4>✅ equals() 메서드</h4>
+        <ul>
+          <li>내용(값) 비교 — 오버라이딩 필요</li>
+          <li>String은 이미 내용 비교로 구현됨</li>
+          <li>직접 만든 클래스는 직접 오버라이딩</li>
+        </ul>
+      </div>
+    </div>
+    <div class="code-block"><span class="cmt">// equals() 오버라이딩 — 절차: instanceof 확인 → 다운캐스팅 → 필드 비교</span>
+<span class="kw">@Override</span>
+<span class="kw">public boolean</span> <span class="mth">equals</span>(<span class="cls">Object</span> obj) {
+    <span class="kw">if</span> (obj <span class="kw">instanceof</span> <span class="cls">Donut</span>) {
+        <span class="cls">Donut</span> other = (<span class="cls">Donut</span>) obj;   <span class="cmt">// 다운캐스팅</span>
+        <span class="kw">return this</span>.name.<span class="mth">equals</span>(other.name); <span class="cmt">// 필드 비교</span>
+    }
+    <span class="kw">return false</span>;
+}
+
+<span class="cls">Donut</span> d1 = <span class="kw">new</span> <span class="cls">Donut</span>(<span class="str">"초코"</span>);
+<span class="cls">Donut</span> d2 = <span class="kw">new</span> <span class="cls">Donut</span>(<span class="str">"초코"</span>);
+d1 == d2;           <span class="cmt">// false — 서로 다른 주소</span>
+d1.<span class="mth">equals</span>(d2);    <span class="cmt">// true  — 이름이 같으므로</span></div>
+    <div class="hl hl-red">
+      <strong>⚠️ 핵심</strong>: 기본 Object의 equals()는 == 과 동일(주소 비교)합니다.
+      내용 비교를 하려면 반드시 <strong>@Override</strong>로 재정의해야 합니다.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">2. toString() 오버라이딩</h3>
+    <p style="font-size:.87rem;color:var(--text-muted);margin-bottom:.8rem">
+      오버라이딩하지 않으면 <code>Donut@7f31245a</code> 형태로 출력됩니다.
+      <code>System.out.println(객체)</code> 호출 시 <strong>toString()이 자동으로 호출</strong>됩니다.
+    </p>
+    <div class="code-block"><span class="kw">@Override</span>
+<span class="kw">public</span> <span class="cls">String</span> <span class="mth">toString</span>() {
+    <span class="kw">return</span> name + <span class="str">" 도넛("</span> + price + <span class="str">"원)"</span>;
+}
+
+<span class="cls">Donut</span> d1 = <span class="kw">new</span> <span class="cls">Donut</span>(<span class="str">"초코"</span>, <span class="num">2000</span>);
+<span class="cls">System</span>.out.<span class="mth">println</span>(d1);  <span class="cmt">// 초코 도넛(2000원)</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:.8rem">3. getClass() vs instanceof</h3>
+    <div class="code-block"><span class="cls">Object</span> obj = <span class="kw">new</span> <span class="cls">ChocoDonut</span>();
+
+<span class="cmt">// instanceof — 부모 클래스도 true</span>
+<span class="kw">if</span> (obj <span class="kw">instanceof</span> <span class="cls">ChocoDonut</span>) {
+    <span class="cls">ChocoDonut</span> choco = (<span class="cls">ChocoDonut</span>) obj;
+    <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"초코 도넛 발견!"</span>);
+}
+
+<span class="cmt">// getClass() — 정확한 클래스명 반환</span>
+<span class="cls">Donut</span> d1 = <span class="kw">new</span> <span class="cls">ChocoDonut</span>();
+<span class="cls">System</span>.out.<span class="mth">println</span>(d1.<span class="mth">getClass</span>().<span class="mth">getName</span>()); <span class="cmt">// ChocoDonut</span></div>
+  </div>
+</section>
+
+<!-- ====== Wrapper 클래스 ====== -->
+<section id="wrapper">
+  <div class="sec-title"><div class="icon" style="background:#fef9c3">📦</div>Wrapper 클래스 <span class="tag tag-b">기본형 → 객체</span></div>
+  <div class="grid-2">
+    <div class="card">
+      <h4 style="margin-bottom:.8rem">기본형 ↔ Wrapper 매핑</h4>
+      <div class="map-row"><span class="prim">byte</span><span class="arrow">→</span><span class="wrap">Byte</span></div>
+      <div class="map-row"><span class="prim">short</span><span class="arrow">→</span><span class="wrap">Short</span></div>
+      <div class="map-row"><span class="prim">int</span><span class="arrow">→</span><span class="wrap">Integer</span><span class="tag tag-r">★</span></div>
+      <div class="map-row"><span class="prim">long</span><span class="arrow">→</span><span class="wrap">Long</span></div>
+      <div class="map-row"><span class="prim">float</span><span class="arrow">→</span><span class="wrap">Float</span></div>
+      <div class="map-row"><span class="prim">double</span><span class="arrow">→</span><span class="wrap">Double</span><span class="tag tag-r">★</span></div>
+      <div class="map-row"><span class="prim">boolean</span><span class="arrow">→</span><span class="wrap">Boolean</span></div>
+      <div class="map-row"><span class="prim">char</span><span class="arrow">→</span><span class="wrap">Character</span><span class="tag tag-r">★</span></div>
+    </div>
+    <div class="card">
+      <h4 style="margin-bottom:.8rem">주요 변환 메서드</h4>
+      <ul class="mlist">
+        <li><span class="mn">parseInt("100")</span><span>문자열 → int</span></li>
+        <li><span class="mn">parseDouble("3.14")</span><span>문자열 → double</span></li>
+        <li><span class="mn">valueOf(100)</span><span>기본형 → Wrapper 객체</span></li>
+        <li><span class="mn">intValue()</span><span>Integer → int</span></li>
+        <li><span class="mn">toString()</span><span>Wrapper → 문자열</span></li>
+        <li><span class="mn">toBinaryString(n)</span><span>정수 → 2진수 문자열</span></li>
+        <li><span class="mn">toHexString(n)</span><span>정수 → 16진수 문자열</span></li>
+        <li><span class="mn">isDigit(c)</span><span>숫자 문자 확인 (Character)</span></li>
+        <li><span class="mn">isLetter(c)</span><span>알파벳 여부 확인</span></li>
+        <li><span class="mn">isUpperCase(c)</span><span>대문자 여부 확인</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-bottom:.8rem">오토박싱 / 언박싱 <span class="tag tag-r">시험 필수</span></h4>
+    <div class="compare-grid">
+      <div class="hl hl-blue" style="margin:0">
+        <strong>오토박싱 (auto-boxing)</strong><br>
+        기본형 → Wrapper 자동 변환<br>
+        <code>Integer num = 100;</code><br>
+        <small>컴파일러 → new Integer(100) 처리</small>
+      </div>
+      <div class="hl hl-green" style="margin:0">
+        <strong>언박싱 (unboxing)</strong><br>
+        Wrapper → 기본형 자동 변환<br>
+        <code>int value = num;</code><br>
+        <small>컴파일러 → num.intValue() 처리</small>
+      </div>
+    </div>
+    <div class="code-block" style="margin-top:.8rem"><span class="cls">Integer</span> num = <span class="num">100</span>;            <span class="cmt">// 오토박싱: int → Integer</span>
+<span class="kw">int</span> i = num;               <span class="cmt">// 언박싱: Integer → int</span>
+
+<span class="cls">String</span> s = <span class="str">"123"</span>;
+<span class="kw">int</span> j = <span class="cls">Integer</span>.<span class="mth">parseInt</span>(s);    <span class="cmt">// 문자열 → int</span>
+<span class="cls">String</span> str = <span class="cls">Integer</span>.<span class="mth">toString</span>(j); <span class="cmt">// int → 문자열</span>
+
+<span class="cls">String</span> yes = <span class="str">"true"</span>;
+<span class="kw">boolean</span> flag = <span class="cls">Boolean</span>.<span class="mth">parseBoolean</span>(yes); <span class="cmt">// true</span></div>
+  </div>
+</section>
+
+<!-- ====== String 클래스 ====== -->
+<section id="string">
+  <div class="sec-title"><div class="icon" style="background:#dcfce7">📝</div>String 클래스 <span class="tag tag-r">불변(Immutable)</span></div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4 style="margin-bottom:.8rem">불변성 &amp; String Pool</h4>
+      <p style="font-size:.86rem;color:var(--text-muted);line-height:1.7;margin-bottom:.8rem">
+        String은 한 번 생성하면 내용 변경 불가.<br>
+        <code>s1 = s1 + "World"</code> → 기존 객체 수정이 아닌 <strong>새 객체 생성</strong>.
+      </p>
+      <div class="hl hl-yellow" style="margin:0">
+        <strong>String Pool</strong>: 리터럴은 재사용<br>
+        <code>String s1 = "Java"; // Pool</code><br>
+        <code>String s2 = "Java"; // 같은 주소</code><br>
+        <code>s1 == s2 → true</code><br><br>
+        <code>String s3 = new String("Java");</code><br>
+        <code>s1 == s3 → <strong>false</strong></code> ← 별도 객체!
+      </div>
+    </div>
+    <div class="card">
+      <h4 style="margin-bottom:.8rem">String 주요 메서드</h4>
+      <ul class="mlist">
+        <li><span class="mn">length()</span><span>문자열 길이</span></li>
+        <li><span class="mn">charAt(i)</span><span>i번째 문자 반환</span></li>
+        <li><span class="mn">equals(s)</span><span>내용 비교</span></li>
+        <li><span class="mn">equalsIgnoreCase(s)</span><span>대소문자 무시 비교</span></li>
+        <li><span class="mn">indexOf(s)</span><span>첫 위치 반환 (없으면 -1)</span></li>
+        <li><span class="mn">lastIndexOf(s)</span><span>마지막 위치 반환</span></li>
+        <li><span class="mn">substring(b,e)</span><span>b~e-1 부분 문자열</span></li>
+        <li><span class="mn">replace(old,new)</span><span>문자열 치환</span></li>
+        <li><span class="mn">split(regex)</span><span>구분자로 분리 → 배열</span></li>
+        <li><span class="mn">trim()</span><span>앞뒤 공백 제거</span></li>
+        <li><span class="mn">toUpperCase()</span><span>모두 대문자</span></li>
+        <li><span class="mn">toLowerCase()</span><span>모두 소문자</span></li>
+        <li><span class="mn">startsWith(s)</span><span>해당 문자열로 시작?</span></li>
+        <li><span class="mn">contains(s)</span><span>포함 여부</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-bottom:.8rem">String 메서드 코드 예제</h4>
+    <div class="code-block"><span class="cls">String</span> s1 = <span class="str">"레몬도넛"</span>;
+s1.<span class="mth">length</span>();                  <span class="cmt">// 4</span>
+s1.<span class="mth">charAt</span>(<span class="num">0</span>);                <span class="cmt">// '레'</span>
+s1.<span class="mth">indexOf</span>(<span class="str">"도"</span>);            <span class="cmt">// 2</span>
+s1.<span class="mth">substring</span>(<span class="num">0</span>, <span class="num">2</span>);         <span class="cmt">// "레몬"</span>
+s1.<span class="mth">replace</span>(<span class="str">"레몬"</span>, <span class="str">"딸기"</span>);  <span class="cmt">// "딸기도넛" — 원본 불변!</span>
+
+<span class="cls">String</span> csv = <span class="str">"초코,레몬,딸기"</span>;
+<span class="cls">String</span>[] parts = csv.<span class="mth">split</span>(<span class="str">","</span>);
+<span class="cmt">// parts[0]="초코", parts[1]="레몬", parts[2]="딸기"</span>
+
+<span class="str">"  hello  "</span>.<span class="mth">trim</span>();         <span class="cmt">// "hello"</span>
+<span class="str">"hello"</span>.<span class="mth">toUpperCase</span>();      <span class="cmt">// "HELLO"</span></div>
+  </div>
+  <div class="hl hl-red">
+    <strong>⚠️ 주의!</strong> String 비교는 반드시 <strong>equals()</strong> 사용.
+    new String()으로 만든 객체는 내용이 같아도 == 비교 시 <strong>false</strong>입니다.
+  </div>
+</section>
+
+<!-- ====== StringBuffer / StringBuilder ====== -->
+<section id="stringbuffer">
+  <div class="sec-title"><div class="icon" style="background:#f5f3ff">🔧</div>StringBuffer / StringBuilder <span class="tag tag-g">가변(Mutable)</span></div>
+
+  <div class="compare-grid" style="margin-bottom:1rem">
+    <div class="cmp" style="border-color:#7c3aed">
+      <h4>StringBuffer</h4>
+      <ul>
+        <li>멀티스레드 환경에서 안전 (synchronized)</li>
+        <li>여러 스레드 동시 접근 안전</li>
+        <li>상대적으로 약간 느림</li>
+      </ul>
+    </div>
+    <div class="cmp" style="border-color:#0d9488">
+      <h4>StringBuilder</h4>
+      <ul>
+        <li>단일 스레드 환경에서 사용</li>
+        <li>동기화 없어 더 빠름</li>
+        <li>일반 상황에서 권장</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-bottom:.8rem">StringBuffer 주요 메서드 <span class="tag tag-r">시험 필수</span></h4>
+    <table class="tbl">
+      <thead><tr><th>메서드</th><th>설명</th><th>예시 결과</th></tr></thead>
+      <tbody>
+        <tr><td><code>append(s)</code></td><td>끝에 추가</td><td>"도넛" → "도넛가게"</td></tr>
+        <tr><td><code>insert(offset, s)</code></td><td>특정 위치에 삽입</td><td>insert(2,"맛있는")</td></tr>
+        <tr><td><code>delete(start, end)</code></td><td>범위 삭제</td><td>delete(0,2)</td></tr>
+        <tr><td><code>replace(start,end,s)</code></td><td>범위 치환</td><td>replace(0,2,"초코")</td></tr>
+        <tr><td><code>reverse()</code></td><td>문자열 뒤집기</td><td>"ABC" → "CBA"</td></tr>
+        <tr><td><code>toString()</code></td><td>String으로 변환</td><td></td></tr>
+        <tr><td><code>length()</code></td><td>길이 반환</td><td></td></tr>
+        <tr><td><code>charAt(i)</code></td><td>특정 위치 문자</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-bottom:.8rem">StringBuffer 코드 예제</h4>
+    <div class="code-block"><span class="cls">StringBuffer</span> sb = <span class="kw">new</span> <span class="cls">StringBuffer</span>(<span class="str">"도넛"</span>);
+sb.<span class="mth">append</span>(<span class="str">" 가게"</span>);       <span class="cmt">// "도넛 가게"</span>
+sb.<span class="mth">insert</span>(<span class="num">2</span>, <span class="str">"맛있는 "</span>);  <span class="cmt">// "도넛맛있는  가게"</span>
+sb.<span class="mth">delete</span>(<span class="num">0</span>, <span class="num">2</span>);          <span class="cmt">// "맛있는  가게"</span>
+sb.<span class="mth">replace</span>(<span class="num">0</span>, <span class="num">2</span>, <span class="str">"초코"</span>);  <span class="cmt">// 0~1 범위를 "초코"로 치환</span>
+sb.<span class="mth">reverse</span>();              <span class="cmt">// 전체 뒤집기</span>
+
+<span class="cls">StringBuffer</span> sb2 = <span class="kw">new</span> <span class="cls">StringBuffer</span>(<span class="str">"ABC"</span>);
+sb2.<span class="mth">reverse</span>();
+<span class="cls">System</span>.out.<span class="mth">println</span>(sb2); <span class="cmt">// CBA</span></div>
+  </div>
+
+  <div class="hl hl-purple">
+    <strong>핵심 차이</strong>: String은 <strong>불변</strong> — 수정마다 새 객체 생성 (메모리 낭비 가능)<br>
+    StringBuffer/Builder는 <strong>가변</strong> — 같은 객체 내부에서 수정 (효율적)<br>
+    문자열을 반복적으로 수정할 때는 StringBuffer/StringBuilder를 사용하세요.
+  </div>
+
+</section>
+
+<!-- ====== Math 클래스 ====== -->
+<section id="math">
+  <div class="sec-title"><div class="icon" style="background:#fef9c3">🔢</div>Math 클래스 <span class="tag tag-b">모두 static</span></div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4 style="margin-bottom:.8rem">Math 주요 메서드</h4>
+      <table class="tbl">
+        <thead><tr><th>메서드</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>abs(a)</code></td><td>절댓값</td></tr>
+          <tr><td><code>ceil(a)</code></td><td>올림 → double</td></tr>
+          <tr><td><code>floor(a)</code></td><td>내림 → double</td></tr>
+          <tr><td><code>round(a)</code></td><td>반올림 → <strong>long</strong></td></tr>
+          <tr><td><code>max(a, b)</code></td><td>최댓값</td></tr>
+          <tr><td><code>min(a, b)</code></td><td>최솟값</td></tr>
+          <tr><td><code>pow(a, b)</code></td><td>a의 b제곱 → double</td></tr>
+          <tr><td><code>sqrt(a)</code></td><td>제곱근 → double</td></tr>
+          <tr><td><code>random()</code></td><td>0.0 이상 1.0 미만 실수</td></tr>
+          <tr><td><code>sin/cos/tan(a)</code></td><td>삼각함수 (라디안)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h4 style="margin-bottom:.8rem">Math 코드 예제</h4>
+      <div class="code-block"><span class="cmt">// import 없이 바로 사용</span>
+<span class="cls">Math</span>.<span class="mth">abs</span>(-<span class="num">10</span>);        <span class="cmt">// 10</span>
+<span class="cls">Math</span>.<span class="mth">abs</span>(-<span class="num">3.14</span>);     <span class="cmt">// 3.14</span>
+
+<span class="cls">Math</span>.<span class="mth">ceil</span>(<span class="num">3.2</span>);       <span class="cmt">// 4.0 (올림)</span>
+<span class="cls">Math</span>.<span class="mth">floor</span>(<span class="num">3.9</span>);      <span class="cmt">// 3.0 (내림)</span>
+<span class="cls">Math</span>.<span class="mth">round</span>(<span class="num">3.5</span>);      <span class="cmt">// 4   (반올림 → long)</span>
+
+<span class="cls">Math</span>.<span class="mth">pow</span>(<span class="num">2</span>, <span class="num">3</span>);       <span class="cmt">// 8.0</span>
+<span class="cls">Math</span>.<span class="mth">sqrt</span>(<span class="num">25</span>);        <span class="cmt">// 5.0</span>
+<span class="cls">Math</span>.<span class="mth">max</span>(<span class="num">10</span>, <span class="num">20</span>);     <span class="cmt">// 20</span>
+
+<span class="cmt">// 1~6 랜덤 정수 (주사위)</span>
+<span class="kw">int</span> dice = (<span class="kw">int</span>)(<span class="cls">Math</span>.<span class="mth">random</span>() * <span class="num">6</span>) + <span class="num">1</span>;</div>
+    </div>
+  </div>
+  <div class="hl hl-blue">
+    <strong>💡 random() 공식</strong>: <code>(int)(Math.random() * N) + start</code><br>
+    start 이상 (start + N - 1) 이하의 정수 생성<br>
+    예) 1~10: <code>(int)(Math.random() * 10) + 1</code> | 50~100: <code>(int)(Math.random() * 51) + 50</code>
+  </div>
+</section>
+
+<!-- ====== 핵심 키워드 ====== -->
+<section id="keywords">
+  <div class="sec-title"><div class="icon" style="background:#dbeafe">🔑</div>핵심 키워드</div>
+  <div class="grid-3">
+    <div class="kw-card"><div class="en">package</div><div class="ko">패키지</div><div class="def">관련 클래스를 묶어 관리하는 단위. 디렉터리 구조와 동일.</div></div>
+    <div class="kw-card"><div class="en">module (Java 9+)</div><div class="ko">모듈</div><div class="def">패키지를 묶은 더 큰 단위. module-info.java로 설정.</div></div>
+    <div class="kw-card"><div class="en">Immutable</div><div class="ko">불변 객체</div><div class="def">한 번 생성하면 내용 변경 불가. String 클래스의 핵심 특성.</div></div>
+    <div class="kw-card"><div class="en">Auto-boxing</div><div class="ko">오토박싱</div><div class="def">기본 자료형이 자동으로 Wrapper 객체로 변환. Java 5부터 지원.</div></div>
+    <div class="kw-card"><div class="en">Unboxing</div><div class="ko">언박싱</div><div class="def">Wrapper 객체가 자동으로 기본 자료형으로 변환.</div></div>
+    <div class="kw-card"><div class="en">String Pool</div><div class="ko">문자열 풀</div><div class="def">JVM이 관리하는 문자열 메모리 영역. 동일 리터럴 재사용.</div></div>
+    <div class="kw-card"><div class="en">@Override</div><div class="ko">오버라이딩</div><div class="def">부모 클래스 메서드를 자식에서 재정의. @Override 어노테이션 권장.</div></div>
+    <div class="kw-card"><div class="en">instanceof</div><div class="ko">인스턴스 확인</div><div class="def">객체가 특정 클래스 또는 부모 클래스의 인스턴스인지 확인.</div></div>
+    <div class="kw-card"><div class="en">static method</div><div class="ko">정적 메서드</div><div class="def">객체 생성 없이 클래스명으로 직접 호출. Math.abs() 등.</div></div>
+  </div>
+</section>
+
+<!-- ====== 연습문제 ====== -->
+<section id="quiz">
+  <div class="sec-title"><div class="icon" style="background:#f5f3ff">💻</div>프로그래밍 연습문제</div>
+
+  <!-- Q1 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q1</span><span class="qtype">출력값 예측</span></div>
+    <div class="quiz-q">다음 코드의 출력 결과는?</div>
+    <div class="code-block"><span class="cls">String</span> s1 = <span class="str">"Java"</span>;
+<span class="cls">String</span> s2 = <span class="str">"Java"</span>;
+<span class="cls">String</span> s3 = <span class="kw">new</span> <span class="cls">String</span>(<span class="str">"Java"</span>);
+<span class="cls">System</span>.out.<span class="mth">println</span>(s1 == s2);
+<span class="cls">System</span>.out.<span class="mth">println</span>(s1 == s3);
+<span class="cls">System</span>.out.<span class="mth">println</span>(s1.<span class="mth">equals</span>(s3));</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q1')"><span>①</span> true / true / true</div>
+      <div class="opt" onclick="chk(this,true,'q1')"><span>②</span> true / false / true</div>
+      <div class="opt" onclick="chk(this,false,'q1')"><span>③</span> false / false / true</div>
+      <div class="opt" onclick="chk(this,false,'q1')"><span>④</span> true / false / false</div>
+    </div>
+    <div class="fb" id="q1">
+      ✅ <strong>정답: ②</strong><br>
+      s1, s2는 같은 String Pool 주소 → <strong>true</strong><br>
+      s3는 new String()으로 별도 힙 객체 생성 → s1 == s3 <strong>false</strong><br>
+      equals()는 내용 비교 → "Java" == "Java" → <strong>true</strong>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q2</span><span class="qtype">출력값 예측</span></div>
+    <div class="quiz-q">다음 코드의 출력 결과는?</div>
+    <div class="code-block"><span class="cls">Integer</span> num = <span class="num">100</span>;     <span class="cmt">// 오토박싱</span>
+<span class="kw">int</span> i = num;           <span class="cmt">// 언박싱</span>
+<span class="cls">System</span>.out.<span class="mth">println</span>(i * <span class="num">2</span>);
+
+<span class="cls">String</span> s = <span class="str">"200"</span>;
+<span class="kw">int</span> j = <span class="cls">Integer</span>.<span class="mth">parseInt</span>(s);
+<span class="cls">System</span>.out.<span class="mth">println</span>(j + <span class="num">50</span>);</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q2')"><span>①</span> 200 / 20050</div>
+      <div class="opt" onclick="chk(this,true,'q2')"><span>②</span> 200 / 250</div>
+      <div class="opt" onclick="chk(this,false,'q2')"><span>③</span> 100 / 250</div>
+      <div class="opt" onclick="chk(this,false,'q2')"><span>④</span> 오류 발생</div>
+    </div>
+    <div class="fb" id="q2">
+      ✅ <strong>정답: ②</strong><br>
+      언박싱으로 i = 100 → i*2 = <strong>200</strong><br>
+      parseInt("200") = 200 → 200+50 = <strong>250</strong>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q3</span><span class="qtype">출력값 예측</span></div>
+    <div class="quiz-q">다음 코드의 출력 결과는?</div>
+    <div class="code-block"><span class="cls">StringBuffer</span> sb = <span class="kw">new</span> <span class="cls">StringBuffer</span>(<span class="str">"ABC"</span>);
+sb.<span class="mth">reverse</span>();
+<span class="cls">System</span>.out.<span class="mth">println</span>(sb);
+
+<span class="cls">StringBuffer</span> sb2 = <span class="kw">new</span> <span class="cls">StringBuffer</span>(<span class="str">"도넛"</span>);
+sb2.<span class="mth">insert</span>(<span class="num">2</span>, <span class="str">"맛있는 "</span>);
+<span class="cls">System</span>.out.<span class="mth">println</span>(sb2);</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q3')"><span>①</span> ABC / 맛있는 도넛</div>
+      <div class="opt" onclick="chk(this,true,'q3')"><span>②</span> CBA / 도넛맛있는 </div>
+      <div class="opt" onclick="chk(this,false,'q3')"><span>③</span> CBA / 맛있는 도넛</div>
+      <div class="opt" onclick="chk(this,false,'q3')"><span>④</span> ABC / 도넛맛있는 </div>
+    </div>
+    <div class="fb" id="q3">
+      ✅ <strong>정답: ②</strong><br>
+      reverse(): "ABC" → <strong>"CBA"</strong><br>
+      insert(2, "맛있는 "): "도넛"의 인덱스 2는 끝이므로 → <strong>"도넛맛있는 "</strong>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q4</span><span class="qtype">출력값 예측</span></div>
+    <div class="quiz-q">다음 코드의 출력 결과는?</div>
+    <div class="code-block"><span class="kw">double</span> r1 = <span class="cls">Math</span>.<span class="mth">ceil</span>(<span class="num">3.2</span>);
+<span class="kw">double</span> r2 = <span class="cls">Math</span>.<span class="mth">floor</span>(<span class="num">3.9</span>);
+<span class="kw">long</span> r3 = <span class="cls">Math</span>.<span class="mth">round</span>(<span class="num">3.5</span>);
+<span class="cls">System</span>.out.<span class="mth">println</span>(r1 + <span class="str">" / "</span> + r2 + <span class="str">" / "</span> + r3);</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q4')"><span>①</span> 3.0 / 4.0 / 3</div>
+      <div class="opt" onclick="chk(this,false,'q4')"><span>②</span> 4.0 / 3.0 / 3</div>
+      <div class="opt" onclick="chk(this,true,'q4')"><span>③</span> 4.0 / 3.0 / 4</div>
+      <div class="opt" onclick="chk(this,false,'q4')"><span>④</span> 4.0 / 4.0 / 4</div>
+    </div>
+    <div class="fb" id="q4">
+      ✅ <strong>정답: ③</strong><br>
+      ceil(3.2) = 올림 → <strong>4.0</strong><br>
+      floor(3.9) = 내림 → <strong>3.0</strong><br>
+      round(3.5) = 반올림 → <strong>4</strong> (long 타입 반환)
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q5</span><span class="qtype">코드 완성</span></div>
+    <div class="quiz-q">빈칸 ❶~❸에 들어갈 알맞은 메서드를 고르시오.</div>
+    <div class="code-block"><span class="cls">String</span> sentence = <span class="str">"Hello World"</span>;
+<span class="cls">String</span>[] words = sentence.<span style="background:#fde68a;color:#1f2937;border-radius:3px;padding:0 3px">❶</span>(<span class="str">" "</span>);
+<span class="kw">for</span> (<span class="cls">String</span> w : words) {
+    <span class="cls">System</span>.out.<span class="mth">println</span>(w.<span style="background:#fde68a;color:#1f2937;border-radius:3px;padding:0 3px">❷</span>());  <span class="cmt">// 대문자</span>
+}
+<span class="kw">boolean</span> check = sentence.<span style="background:#fde68a;color:#1f2937;border-radius:3px;padding:0 3px">❸</span>(<span class="str">"Hello"</span>);</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q5')"><span>①</span> ❶ split / ❷ toUpperCase / ❸ indexOf</div>
+      <div class="opt" onclick="chk(this,true,'q5')"><span>②</span> ❶ split / ❷ toUpperCase / ❸ startsWith</div>
+      <div class="opt" onclick="chk(this,false,'q5')"><span>③</span> ❶ replace / ❷ toLowerCase / ❸ startsWith</div>
+      <div class="opt" onclick="chk(this,false,'q5')"><span>④</span> ❶ split / ❷ toLowerCase / ❸ endsWith</div>
+    </div>
+    <div class="fb" id="q5">
+      ✅ <strong>정답: ②</strong><br>
+      ❶ <code>split(" ")</code>: 공백 기준 분리 → String 배열 반환<br>
+      ❷ <code>toUpperCase()</code>: 모든 문자 대문자 변환<br>
+      ❸ <code>startsWith("Hello")</code>: 특정 문자열로 시작하는지 확인
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q6</span><span class="qtype">코드 완성</span></div>
+    <div class="quiz-q">Donut 클래스의 equals()를 오버라이딩하는 코드. 빈칸 ❶, ❷에 들어갈 코드는?</div>
+    <div class="code-block"><span class="kw">@Override</span>
+<span class="kw">public boolean</span> <span class="mth">equals</span>(<span class="cls">Object</span> obj) {
+    <span class="kw">if</span> (obj <span style="background:#fde68a;color:#1f2937;border-radius:3px;padding:0 3px">❶</span> <span class="cls">Donut</span>) {
+        <span class="cls">Donut</span> other = (<span class="cls">Donut</span>) obj;
+        <span class="kw">return</span> <span style="background:#fde68a;color:#1f2937;border-radius:3px;padding:0 3px">❷</span>;
+    }
+    <span class="kw">return false</span>;
+}</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q6')"><span>①</span> ❶ == / ❷ this == other</div>
+      <div class="opt" onclick="chk(this,true,'q6')"><span>②</span> ❶ instanceof / ❷ this.name.equals(other.name)</div>
+      <div class="opt" onclick="chk(this,false,'q6')"><span>③</span> ❶ instanceof / ❷ this == other</div>
+      <div class="opt" onclick="chk(this,false,'q6')"><span>④</span> ❶ extends / ❷ this.name.equals(other.name)</div>
+    </div>
+    <div class="fb" id="q6">
+      ✅ <strong>정답: ②</strong><br>
+      ❶ <code>instanceof</code>: 타입 확인 연산자<br>
+      ❷ <code>this.name.equals(other.name)</code>: 다운캐스팅 후 필드 내용 비교 (== 는 주소 비교라 틀림)
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q7</span><span class="qtype">출력값 예측</span></div>
+    <div class="quiz-q">다음 코드의 출력 결과는?</div>
+    <div class="code-block"><span class="cls">StringBuffer</span> sb = <span class="kw">new</span> <span class="cls">StringBuffer</span>(<span class="str">"도넛 가게"</span>);
+sb.<span class="mth">replace</span>(<span class="num">3</span>, <span class="num">5</span>, <span class="str">"도시"</span>);
+<span class="cls">System</span>.out.<span class="mth">println</span>(sb);</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q7')"><span>①</span> 도시 가게</div>
+      <div class="opt" onclick="chk(this,false,'q7')"><span>②</span> 도넛도시</div>
+      <div class="opt" onclick="chk(this,true,'q7')"><span>③</span> 도넛 도시</div>
+      <div class="opt" onclick="chk(this,false,'q7')"><span>④</span> 도넛 가도시</div>
+    </div>
+    <div class="fb" id="q7">
+      ✅ <strong>정답: ③</strong><br>
+      "도넛 가게"에서 인덱스 3~4("가게")를 "도시"로 치환<br>
+      → <strong>"도넛 도시"</strong><br>
+      replace(start, end, s): start 이상 end 미만(end 포함 안 함) 범위를 s로 교체
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q8</span><span class="qtype">단답형 — 코드 작성</span></div>
+    <div class="quiz-q">
+      1~6 랜덤 정수(주사위)를 생성하는 한 줄 코드를 작성하시오. (Math.random() 사용)
+    </div>
+    <input type="text" class="short-input" id="q8-input" placeholder="int dice = ...">
+    <button class="check-btn" onclick="chkShort('q8',['(int)(math.random()*6)+1','(int)(math.random() * 6) + 1'])">확인</button>
+    <div class="fb" id="q8">
+      ✅ <strong>정답</strong>: <code>int dice = (int)(Math.random() * 6) + 1;</code><br>
+      공식: <code>(int)(Math.random() * N) + start</code><br>
+      random() → 0.0~0.999 → × 6 → 0.0~5.999 → (int) → 0~5 → +1 → <strong>1~6</strong>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q9</span><span class="qtype">단답형 — 출력값</span></div>
+    <div class="quiz-q">다음 코드의 출력 결과를 적으시오.</div>
+    <div class="code-block"><span class="cls">String</span> s = <span class="str">"초코,레몬,딸기,바닐라"</span>;
+<span class="cls">String</span>[] arr = s.<span class="mth">split</span>(<span class="str">","</span>);
+<span class="cls">System</span>.out.<span class="mth">println</span>(arr.length);
+<span class="cls">System</span>.out.<span class="mth">println</span>(arr[<span class="num">2</span>]);</div>
+    <input type="text" class="short-input" id="q9-input" placeholder="예: 4 / 딸기">
+    <button class="check-btn" onclick="chkShort('q9',['4 / 딸기','4/딸기','4\\n딸기'])">확인</button>
+    <div class="fb" id="q9">
+      ✅ <strong>정답</strong>: 4 / 딸기<br>
+      split(",") → ["초코","레몬","딸기","바닐라"] → length = <strong>4</strong><br>
+      arr[2] = 인덱스 2 = <strong>"딸기"</strong>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q10</span><span class="qtype">버그 찾기</span></div>
+    <div class="quiz-q">다음 코드에서 논리적 버그가 있는 줄과 이유를 고르시오.</div>
+    <div class="code-block"><span class="num">01</span> <span class="cls">String</span> s1 = <span class="str">"Hello"</span>;
+<span class="num">02</span> <span class="cls">String</span> s2 = <span class="kw">new</span> <span class="cls">String</span>(<span class="str">"Hello"</span>);
+<span class="num">03</span> <span class="kw">if</span> (s1 == s2) {
+<span class="num">04</span>     <span class="cls">System</span>.out.<span class="mth">println</span>(<span class="str">"같은 문자열"</span>);
+<span class="num">05</span> }
+<span class="num">06</span> <span class="cls">Integer</span> num = <span class="num">100</span>;
+<span class="num">07</span> <span class="cls">System</span>.out.<span class="mth">println</span>(num + <span class="num">50</span>);</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q10')"><span>①</span> 7번 줄 — Integer와 int를 더할 수 없다</div>
+      <div class="opt" onclick="chk(this,true,'q10')"><span>②</span> 3번 줄 — 문자열 비교는 equals()를 사용해야 한다</div>
+      <div class="opt" onclick="chk(this,false,'q10')"><span>③</span> 6번 줄 — int를 Integer에 바로 대입할 수 없다</div>
+      <div class="opt" onclick="chk(this,false,'q10')"><span>④</span> 버그 없음</div>
+    </div>
+    <div class="fb" id="q10">
+      ✅ <strong>정답: ②</strong><br>
+      <strong>3번 줄</strong>: s2는 new String()으로 만든 별도 객체 → == 비교는 항상 false<br>
+      "같은 문자열"이 출력되려면 <code>s1.equals(s2)</code>로 바꿔야 합니다.<br>
+      7번 줄은 언박싱이 자동 적용되어 150 정상 출력.<br>
+      6번 줄은 오토박싱으로 정상 동작.
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q11</span><span class="qtype">코드 작성 — 종합</span></div>
+    <div class="quiz-q">
+      다음 조건을 모두 만족하는 코드의 빈칸을 완성하시오.<br>
+      <small style="color:var(--text-muted)">• 문자열 "Java Programming"에서 첫 단어만 추출 후 대문자로 출력<br>
+      • 정가 5000원의 15% 할인가를 Math.round()로 반올림하여 출력</small>
+    </div>
+    <div class="code-block"><span class="cls">String</span> title = <span class="str">"Java Programming"</span>;
+<span class="cls">String</span>[] parts = title.___①___(<span class="str">" "</span>);
+<span class="cls">System</span>.out.<span class="mth">println</span>(parts[<span class="num">0</span>].___②___());
+
+<span class="kw">int</span> price = <span class="num">5000</span>;
+<span class="kw">double</span> discounted = price * (<span class="num">1</span> - <span class="num">0.15</span>);
+<span class="kw">long</span> result = ___③___(discounted);
+<span class="cls">System</span>.out.<span class="mth">println</span>(result);</div>
+    <div class="opts">
+      <div class="opt" onclick="chk(this,false,'q11')"><span>①</span> ① replace / ② toLowerCase / ③ Math.ceil</div>
+      <div class="opt" onclick="chk(this,true,'q11')"><span>②</span> ① split / ② toUpperCase / ③ Math.round</div>
+      <div class="opt" onclick="chk(this,false,'q11')"><span>③</span> ① split / ② toUpperCase / ③ Math.floor</div>
+      <div class="opt" onclick="chk(this,false,'q11')"><span>④</span> ① indexOf / ② toUpperCase / ③ Math.round</div>
+    </div>
+    <div class="fb" id="q11">
+      ✅ <strong>정답: ②</strong><br>
+      ① <code>split(" ")</code>: 공백 기준 분리 → ["Java","Programming"]<br>
+      ② <code>toUpperCase()</code>: "Java" → "JAVA"<br>
+      ③ <code>Math.round(4250.0)</code> = <strong>4250</strong> (long 반환)
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="quiz-card">
+    <div><span class="qnum">Q12</span><span class="qtype">코드 작성 — 종합</span></div>
+    <div class="quiz-q">
+      toString()을 오버라이딩하여 "이름: 초코, 가격: 2000원" 형식으로 출력하는 코드를 완성하시오.
+    </div>
+    <div class="code-block"><span class="kw">class</span> <span class="cls">Donut</span> {
+    <span class="cls">String</span> name;
+    <span class="kw">int</span> price;
+
+    <span class="cls">Donut</span>(<span class="cls">String</span> name, <span class="kw">int</span> price) {
+        <span class="kw">this</span>.name = name;
+        <span class="kw">this</span>.price = price;
+    }
+
+    <span class="cmt">// 여기에 toString() 오버라이딩 작성</span>
+    ___①___
+    ___②___ <span class="cls">String</span> <span class="mth">toString</span>() {
+        <span class="kw">return</span> ___③___;
+    }
+}</div>
+    <input type="text" class="short-input" id="q12-input" placeholder="③번 반환값을 입력하세요">
+    <button class="check-btn" onclick="chkShort('q12',['\"이름: \" + name + \", 가격: \" + price + \"원\"',
+'이름: \"+name+\", 가격: \"+price+\"원','이름:','name + \", 가격: \" + price'])">확인</button>
+    <div class="fb" id="q12">
+      ✅ <strong>정답</strong>:<br>
+      ① <code>@Override</code><br>
+      ② <code>public</code><br>
+      ③ <code>"이름: " + name + ", 가격: " + price + "원"</code><br><br>
+      완성 코드:
+      <code>return "이름: " + name + ", 가격: " + price + "원";</code>
+    </div>
+  </div>
+
+</section>
+</div><!-- /container -->
+
+<script>
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? '' : 'dark');
+  document.querySelector('.nav-theme').textContent = dark ? '🌙' : '☀️';
+  localStorage.setItem('theme', dark ? 'light' : 'dark');
+}
+(function(){
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.setAttribute('data-theme','dark');
+    document.querySelector('.nav-theme').textContent = '☀️';
+  }
+})();
+
+function chk(el, correct, id) {
+  const card = el.closest('.quiz-card');
+  card.querySelectorAll('.opt').forEach(o => o.style.pointerEvents = 'none');
+  el.classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) {
+    card.querySelectorAll('.opt').forEach(o => {
+      if (o.getAttribute('onclick') && o.getAttribute('onclick').includes('true')) o.classList.add('correct');
+    });
+  }
+  const fb = document.getElementById(id);
+  fb.classList.add('show', correct ? 'cfb' : 'wfb');
+}
+
+function chkShort(id, answers) {
+  const val = document.getElementById(id+'-input').value.trim().toLowerCase().replace(/\s/g,'');
+  const fb = document.getElementById(id);
+  fb.classList.add('show');
+  const ok = answers.some(a => val.includes(a.toLowerCase().replace(/\s/g,'')));
+  fb.classList.toggle('cfb', ok);
+  fb.classList.toggle('wfb', !ok);
+  if (!ok && !fb.dataset.prefixed) {
+    fb.innerHTML = '❌ 다시 확인해보세요.<br>' + fb.innerHTML;
+    fb.dataset.prefixed = '1';
+  }
+}
+</script>
+</body>
+</html>
