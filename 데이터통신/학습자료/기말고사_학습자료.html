@@ -205,6 +205,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
 footer{text-align:center;padding:28px;color:var(--text-muted);font-size:0.82rem;}
 
+/* DRAW PRACTICE */
+.draw-practice{background:rgba(220,38,38,0.06);border:2px dashed var(--danger);border-radius:12px;padding:14px 18px;margin:14px 0;}
+.draw-practice .dp-label{font-size:0.72rem;font-weight:900;letter-spacing:2px;color:var(--danger);margin-bottom:5px;}
+.draw-practice .dp-title{font-size:1rem;font-weight:700;color:var(--danger);margin-bottom:3px;}
+.draw-practice .dp-desc{font-size:0.83rem;color:var(--text-muted);}
+
 @media(max-width:680px){
   .flash-grid,.gen-table-wrap{grid-template-columns:1fr;}
   .nav-links{display:none;}
@@ -541,6 +547,11 @@ footer{text-align:center;padding:28px;color:var(--text-muted);font-size:0.82rem;
         <li><strong>FCS</strong>: CRC 오류 검출 코드</li>
       </ul>
     </div>
+    <div class="draw-practice">
+      <div class="dp-label">★ 시험 출제 — 직접 그릴 수 있어야 함</div>
+      <div class="dp-title">HDLC 프레임 구조 그리기 연습</div>
+      <div class="dp-desc">종이에 네모 칸 6개를 그리고 순서대로 채워보세요: 플래그 | 주소부 | 제어부 | 정보부 | FCS | 플래그 — 각 필드의 역할도 함께 적을 수 있어야 합니다.</div>
+    </div>
   </div>
 
   <div class="topic">
@@ -685,25 +696,45 @@ footer{text-align:center;padding:28px;color:var(--text-muted);font-size:0.82rem;
   </div>
 
   <div class="topic">
-    <div class="topic-title"><span class="topic-num">1</span>교환 방식 분류 ★★ (그림 11-3 핵심)</div>
+    <div class="topic-title"><span class="topic-num">1</span>교환 방식 분류 ★★★ (그림 11-3 — 그릴 줄 알아야 함!)</div>
+    <div class="draw-practice">
+      <div class="dp-label">★ 시험 출제 — 직접 그릴 수 있어야 함</div>
+      <div class="dp-title">그림 11-3 교환 방식의 분류</div>
+      <div class="dp-desc">아래 트리를 종이에 보지 않고 그릴 수 있을 때까지 연습하세요.</div>
+    </div>
+    <div class="diagram" style="line-height:2.2;font-size:0.85rem;">교환 방식 ──┬── 회선 교환 (Circuit Switching)
+           │
+           └── 축적 교환 ──┬── 메시지 교환 (Message Switching)
+                          │
+                          └── 패킷 교환 ──┬── 가상 회선 방식 (Virtual Circuit)
+                                         │
+                                         └── 데이터그램 방식 (Datagram)</div>
     <div class="flash-grid">
       <div class="flash">
-        <div class="q">회선 교환 방식 (Circuit Switching)</div>
-        <div class="a">통신 전 <b>전용 회선 경로를 설정</b>하고 통신이 끝날 때까지 독점 사용. <b>전화망(PSTN)의 기본</b>. 연결 설정·해제 시간 필요. 실시간 대화에 적합.</div>
+        <div class="q">회선 교환 (Circuit Switching)</div>
+        <div class="a">통신 전 <b>전용 회선 경로를 설정</b>하고 통신이 끝날 때까지 독점 사용. <b>전화망(PSTN)</b>. 실시간 대화에 적합.</div>
       </div>
       <div class="flash">
-        <div class="q">패킷 교환 방식 (Packet Switching)</div>
-        <div class="a">데이터를 <b>패킷 단위로 분할</b>하여 전송. 회선 공유 가능. <b>데이터그램</b>(독립 경로)과 <b>가상 회선</b>(사전 경로 설정) 방식으로 분류.</div>
+        <div class="q">메시지 교환 (Message Switching)</div>
+        <div class="a">메시지 전체를 <b>축적 후 전송(Store and Forward)</b>. 큰 저장장치 필요. <b>현재 거의 사용 안 함</b>. 전자우편·파일 전송에 사용.</div>
+      </div>
+      <div class="flash">
+        <div class="q">가상 회선 방식 (Virtual Circuit)</div>
+        <div class="a">패킷 전송 전 <b>경로 사전 설정</b>. 모든 패킷이 같은 경로로 순서대로 도착. <b>연결형(Connection-oriented)</b>. 예: X.25.</div>
+      </div>
+      <div class="flash">
+        <div class="q">데이터그램 방식 (Datagram)</div>
+        <div class="a">각 패킷이 <b>독립적으로 경로 선택</b>. 순서 바뀔 수 있음 → 목적지에서 재조합. <b>인터넷 표준</b>. 비연결형.</div>
       </div>
     </div>
     <div class="tbl-wrap">
     <table class="std-table">
-      <thead><tr><th>항목</th><th>회선 교환</th><th>패킷 교환</th></tr></thead>
+      <thead><tr><th>항목</th><th>회선 교환</th><th>메시지 교환</th><th>가상 회선</th><th>데이터그램</th></tr></thead>
       <tbody>
-        <tr><td>경로</td><td>전용 경로 확보</td><td>패킷마다 다른 경로 가능</td></tr>
-        <tr><td>대역폭</td><td>고정</td><td>공유 (효율적)</td></tr>
-        <tr><td>지연</td><td>일정 (실시간 적합)</td><td>가변적</td></tr>
-        <tr><td>예</td><td>전화망(PSTN)</td><td>인터넷, X.25</td></tr>
+        <tr><td>경로 설정</td><td>전용 고정</td><td>없음</td><td>사전 설정</td><td>패킷마다 독립</td></tr>
+        <tr><td>순서 보장</td><td>O</td><td>O</td><td>O</td><td class="hl">X</td></tr>
+        <tr><td>대역폭</td><td>고정 독점</td><td>공유</td><td>공유</td><td>공유</td></tr>
+        <tr><td>예시</td><td>전화망(PSTN)</td><td>전자우편</td><td>X.25</td><td class="hl">인터넷</td></tr>
       </tbody>
     </table>
     </div>
