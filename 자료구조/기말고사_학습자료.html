@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자료구조 기말고사 학습자료</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2563eb; --primary-dark: #1e3a8a;
+  --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+  --info: #0891b2; --purple: #7c3aed; --orange: #ea580c; --teal: #0d9488;
+  --bg: #f3f4f6; --card-bg: #ffffff;
+  --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+  --nav-bg: rgba(255,255,255,0.95);
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --code-bg: #f1f5f9;
+}
+[data-theme="dark"] {
+  --bg: #0f172a; --card-bg: #1e293b;
+  --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+  --nav-bg: rgba(15,23,42,0.95);
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --code-bg: #0b1220;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; padding-top:64px; }
+
+/* NAV */
+.nav { position:fixed; top:0; left:0; right:0; height:60px; background:var(--nav-bg); backdrop-filter:blur(12px); display:flex; align-items:center; padding:0 20px; z-index:1000; border-bottom:1px solid var(--border); gap:8px; }
+.nav-logo { font-weight:900; color:var(--primary); font-size:0.95rem; white-space:nowrap; }
+.nav-links { display:flex; gap:6px; flex-wrap:wrap; }
+.nav-links a { text-decoration:none; font-size:0.78rem; padding:4px 10px; border-radius:8px; font-weight:600; white-space:nowrap; }
+.nl-q { color:var(--primary); background:rgba(37,99,235,0.1); }
+.nl-list { color:var(--purple); background:rgba(124,58,237,0.1); }
+.nl-tree { color:var(--teal); background:rgba(13,148,136,0.1); }
+.nl-quiz { color:var(--orange); background:rgba(234,88,12,0.1); }
+.nav-right { margin-left:auto; }
+.btn-theme { background:none; border:1px solid var(--border); border-radius:8px; padding:5px 10px; cursor:pointer; font-size:0.85rem; color:var(--text); }
+
+/* HEADER */
+.page-header { background:linear-gradient(135deg, #1e3a8a, #2563eb); color:white; padding:52px 24px 44px; text-align:center; }
+.week-badge { display:inline-block; background:rgba(255,255,255,0.2); padding:5px 16px; border-radius:20px; font-size:0.82rem; margin-bottom:14px; }
+.page-header h1 { font-size:2rem; font-weight:900; margin-bottom:8px; }
+.page-header .subtitle { font-size:0.95rem; opacity:0.88; }
+
+/* TOPIC OVERVIEW */
+.overview-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; max-width:960px; margin:28px auto; padding:0 16px; }
+.ov-card { background:var(--card-bg); border-radius:14px; padding:18px; box-shadow:var(--shadow); text-align:center; }
+.ov-card.c1 { border-top:4px solid var(--primary); }
+.ov-card.c2 { border-top:4px solid var(--purple); }
+.ov-card.c3 { border-top:4px solid var(--teal); }
+.ov-card.c4 { border-top:4px solid var(--orange); }
+.ov-icon { font-size:1.8rem; margin-bottom:6px; }
+.ov-title { font-size:0.95rem; font-weight:700; margin-bottom:4px; }
+.ov-sub { font-size:0.78rem; color:var(--text-muted); }
+
+/* SECTION */
+.section { max-width:960px; margin:28px auto; padding:28px; background:var(--card-bg); border-radius:16px; box-shadow:var(--shadow); }
+.section.s-q { border-top:5px solid var(--primary); }
+.section.s-list { border-top:5px solid var(--purple); }
+.section.s-tree { border-top:5px solid var(--teal); }
+.section.s-quiz { border-top:5px solid var(--orange); }
+
+.section-header { display:flex; align-items:center; gap:12px; margin-bottom:22px; padding-bottom:14px; border-bottom:2px solid var(--border); }
+.s-badge { font-size:0.78rem; font-weight:900; padding:5px 14px; border-radius:20px; color:white; letter-spacing:.5px; white-space:nowrap; }
+.s-badge.q { background:var(--primary); }
+.s-badge.list { background:var(--purple); }
+.s-badge.tree { background:var(--teal); }
+.s-badge.quiz { background:var(--orange); }
+.s-title { font-size:1.4rem; font-weight:700; }
+
+/* CONCEPT GRID */
+.concept-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:20px; }
+.concept-card { background:var(--bg); border-radius:12px; padding:16px 18px; border-left:4px solid var(--primary); }
+.concept-card.purple { border-left-color:var(--purple); }
+.concept-card.teal { border-left-color:var(--teal); }
+.concept-card.orange { border-left-color:var(--orange); }
+.concept-card.success { border-left-color:var(--success); }
+.concept-card.danger { border-left-color:var(--danger); }
+.concept-card.warning { border-left-color:var(--warning); }
+.concept-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:6px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; }
+.concept-card p, .concept-card li { font-size:0.9rem; line-height:1.7; }
+.concept-card ul { list-style:none; padding:0; }
+.concept-card li::before { content:"▸ "; color:var(--text-muted); }
+
+/* COMPARE TABLE */
+.compare-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.88rem; }
+.compare-table th { background:var(--primary); color:white; padding:10px 14px; text-align:left; font-weight:700; }
+.compare-table th:first-child { border-radius:8px 0 0 0; }
+.compare-table th:last-child { border-radius:0 8px 0 0; }
+.compare-table td { padding:9px 14px; border-bottom:1px solid var(--border); }
+.compare-table tr:last-child td { border-bottom:none; }
+.compare-table tr:nth-child(even) td { background:var(--bg); }
+
+/* CODE BLOCK */
+.code-block { background:var(--code-bg); border-radius:10px; padding:14px 18px; margin:12px 0; font-family:'Courier New',monospace; font-size:0.82rem; overflow-x:auto; border:1px solid var(--border); line-height:1.8; }
+.code-block .comment { color:var(--text-muted); font-style:italic; }
+.code-block .kw { color:var(--primary); font-weight:700; }
+.code-block .fn { color:var(--success); font-weight:600; }
+
+/* HIGHLIGHT BOX */
+.highlight-box { background:rgba(37,99,235,0.08); border:1px solid rgba(37,99,235,0.25); border-radius:10px; padding:14px 18px; margin:14px 0; }
+.highlight-box.purple { background:rgba(124,58,237,0.08); border-color:rgba(124,58,237,0.25); }
+.highlight-box.teal { background:rgba(13,148,136,0.08); border-color:rgba(13,148,136,0.25); }
+.highlight-box.danger { background:rgba(220,38,38,0.08); border-color:rgba(220,38,38,0.25); }
+.highlight-box.success { background:rgba(22,163,74,0.08); border-color:rgba(22,163,74,0.25); }
+.highlight-box .hl-title { font-size:0.8rem; font-weight:900; letter-spacing:.5px; margin-bottom:6px; color:var(--primary); }
+.highlight-box.purple .hl-title { color:var(--purple); }
+.highlight-box.teal .hl-title { color:var(--teal); }
+.highlight-box.danger .hl-title { color:var(--danger); }
+.highlight-box.success .hl-title { color:var(--success); }
+.highlight-box p, .highlight-box li { font-size:0.88rem; line-height:1.7; }
+.highlight-box ul { list-style:none; padding:0; }
+.highlight-box li::before { content:"★ "; color:var(--warning); }
+
+/* KEYWORD CARDS */
+.keyword-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:14px 0; }
+.kw-card { background:var(--bg); border-radius:10px; padding:14px; }
+.kw-card .kw-term { font-size:0.82rem; font-weight:900; color:var(--primary); margin-bottom:4px; }
+.kw-card .kw-term.purple { color:var(--purple); }
+.kw-card .kw-term.teal { color:var(--teal); }
+.kw-card .kw-def { font-size:0.85rem; color:var(--text-muted); line-height:1.6; }
+
+/* VISUAL DIAGRAMS */
+.diagram { margin:16px 0; text-align:center; }
+.diagram-inner { display:inline-flex; align-items:center; gap:0; }
+.q-cell { width:56px; height:48px; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:700; background:var(--card-bg); position:relative; }
+.q-cell.filled { background:rgba(37,99,235,0.12); border-color:var(--primary); color:var(--primary); }
+.q-cell.front-cell { background:rgba(22,163,74,0.12); border-color:var(--success); color:var(--success); }
+.q-cell.rear-cell { background:rgba(220,38,38,0.12); border-color:var(--danger); color:var(--danger); }
+.q-cell:first-child { border-radius:8px 0 0 8px; }
+.q-cell:last-child { border-radius:0 8px 8px 0; }
+.q-label { font-size:0.72rem; position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); white-space:nowrap; font-weight:700; }
+.arrow-right { font-size:1.4rem; color:var(--text-muted); margin:0 4px; }
+
+/* TREE DIAGRAM */
+.tree-container { display:flex; justify-content:center; margin:16px 0; }
+.tree-visual { position:relative; }
+.tree-row { display:flex; justify-content:center; gap:0; margin-bottom:8px; }
+.tree-node { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; border:2px solid var(--primary); background:rgba(37,99,235,0.12); color:var(--primary); margin:0 16px; }
+.tree-node.teal-node { border-color:var(--teal); background:rgba(13,148,136,0.12); color:var(--teal); }
+.tree-node.leaf { border-color:var(--success); background:rgba(22,163,74,0.12); color:var(--success); }
+
+/* STEP BOX */
+.steps { counter-reset:step; margin:14px 0; }
+.step { display:flex; gap:14px; margin-bottom:12px; align-items:flex-start; }
+.step-num { counter-increment:step; min-width:28px; height:28px; background:var(--primary); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:900; flex-shrink:0; margin-top:2px; }
+.step-num.purple { background:var(--purple); }
+.step-num.teal { background:var(--teal); }
+.step-body { font-size:0.88rem; line-height:1.7; }
+.step-body strong { font-weight:700; }
+
+/* QUIZ */
+.quiz-item { margin-bottom:20px; padding:18px; background:var(--bg); border-radius:12px; }
+.quiz-q { font-size:0.9rem; font-weight:700; margin-bottom:12px; color:var(--text); }
+.quiz-options { display:flex; flex-direction:column; gap:8px; }
+.quiz-option { padding:10px 14px; border:2px solid var(--border); border-radius:8px; cursor:pointer; font-size:0.88rem; background:var(--card-bg); transition:all .15s; user-select:none; }
+.quiz-option:hover { border-color:var(--primary); background:rgba(37,99,235,0.06); }
+.quiz-option.correct { border-color:var(--success); background:rgba(22,163,74,0.12); color:var(--success); font-weight:700; }
+.quiz-option.wrong { border-color:var(--danger); background:rgba(220,38,38,0.08); color:var(--danger); }
+.quiz-option.reveal-correct { border-color:var(--success); background:rgba(22,163,74,0.08); }
+.quiz-feedback { margin-top:8px; font-size:0.82rem; font-weight:600; display:none; padding:8px 12px; border-radius:8px; }
+.quiz-feedback.show { display:block; }
+.quiz-feedback.ok { background:rgba(22,163,74,0.1); color:var(--success); }
+.quiz-feedback.ng { background:rgba(220,38,38,0.08); color:var(--danger); }
+.short-answer { margin-top:10px; }
+.short-answer input { width:100%; padding:9px 12px; border:2px solid var(--border); border-radius:8px; font-size:0.88rem; background:var(--card-bg); color:var(--text); font-family:inherit; }
+.short-answer input:focus { outline:none; border-color:var(--primary); }
+.btn-check { margin-top:8px; padding:8px 18px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-size:0.85rem; font-weight:700; font-family:inherit; }
+
+/* SECTION SUBTITLE */
+h3.sub { font-size:1.1rem; font-weight:700; margin:20px 0 10px; padding-left:12px; border-left:3px solid var(--primary); }
+h3.sub.purple { border-left-color:var(--purple); }
+h3.sub.teal { border-left-color:var(--teal); }
+h3.sub.orange { border-left-color:var(--orange); }
+h3.sub.success { border-left-color:var(--success); }
+h3.sub.danger { border-left-color:var(--danger); }
+
+/* DIVIDER */
+.divider { border:none; border-top:2px dashed var(--border); margin:22px 0; }
+
+/* BADGE inline */
+.badge { display:inline-block; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:700; margin-left:4px; }
+.badge.blue { background:rgba(37,99,235,0.12); color:var(--primary); }
+.badge.red { background:rgba(220,38,38,0.12); color:var(--danger); }
+.badge.green { background:rgba(22,163,74,0.12); color:var(--success); }
+.badge.purple { background:rgba(124,58,237,0.12); color:var(--purple); }
+.badge.teal { background:rgba(13,148,136,0.12); color:var(--teal); }
+
+/* TAG LIST */
+.tag-list { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+.tag { padding:4px 12px; border-radius:20px; font-size:0.82rem; font-weight:600; }
+.tag.q { background:rgba(37,99,235,0.1); color:var(--primary); }
+.tag.list { background:rgba(124,58,237,0.1); color:var(--purple); }
+.tag.tree { background:rgba(13,148,136,0.1); color:var(--teal); }
+
+/* RESPONSIVE */
+@media(max-width:640px) {
+  .overview-grid { grid-template-columns:repeat(2,1fr); }
+  .concept-grid { grid-template-columns:1fr; }
+  .keyword-grid { grid-template-columns:repeat(2,1fr); }
+  .nav-links { display:none; }
+  .page-header h1 { font-size:1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <span class="nav-logo">📚 자료구조 기말</span>
+  <div class="nav-links">
+    <a href="#queue" class="nl-q">큐(Queue)</a>
+    <a href="#circular" class="nl-q">원형 큐</a>
+    <a href="#deque" class="nl-q">덱(Deque)</a>
+    <a href="#sim" class="nl-q">시뮬레이션</a>
+    <a href="#list" class="nl-list">리스트</a>
+    <a href="#linked" class="nl-list">연결 리스트</a>
+    <a href="#linked-impl" class="nl-list">연결리스트 구현</a>
+    <a href="#tree" class="nl-tree">트리</a>
+    <a href="#binary" class="nl-tree">이진 트리</a>
+    <a href="#traversal" class="nl-tree">순회</a>
+    <a href="#quiz" class="nl-quiz">연습문제</a>
+  </div>
+  <div class="nav-right">
+    <button class="btn-theme" id="themeBtn">🌙</button>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="week-badge">4월 5주차 · 5월 1~3주차</div>
+  <h1>자료구조 기말고사 학습자료</h1>
+  <p class="subtitle">큐 · 선형/원형 큐 · 덱 · 시뮬레이션 · 리스트 · 연결 리스트 · 트리 · 이진 트리</p>
+</div>
+
+<!-- OVERVIEW -->
+<div class="overview-grid">
+  <div class="ov-card c1">
+    <div class="ov-icon">📥</div>
+    <div class="ov-title">큐(Queue)</div>
+    <div class="ov-sub">FIFO · 선형/원형 · 덱</div>
+  </div>
+  <div class="ov-card c2">
+    <div class="ov-icon">🔗</div>
+    <div class="ov-title">리스트</div>
+    <div class="ov-sub">배열 · 연결 리스트 · 동적 할당</div>
+  </div>
+  <div class="ov-card c3">
+    <div class="ov-icon">🌳</div>
+    <div class="ov-title">트리</div>
+    <div class="ov-sub">이진 트리 · 포화/완전 · 순회</div>
+  </div>
+  <div class="ov-card c4">
+    <div class="ov-icon">✏️</div>
+    <div class="ov-title">연습문제</div>
+    <div class="ov-sub">객관식 + 단답형</div>
+  </div>
+</div>
+
+<!-- ============================== QUEUE ============================== -->
+<div class="section s-q" id="queue">
+  <div class="section-header">
+    <span class="s-badge q">QUEUE</span>
+    <h2 class="s-title">큐(Queue) — 기본 개념과 ADT</h2>
+  </div>
+
+  <h3 class="sub">큐(Queue)란?</h3>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <h4>정의</h4>
+      <p><strong>FIFO (First In, First Out) — 선입선출</strong><br>
+      먼저 삽입된 데이터가 먼저 삭제되는 자료구조.<br>
+      줄 서기, 프린터 인쇄 대기열이 대표적인 예시.</p>
+    </div>
+    <div class="concept-card purple">
+      <h4>스택 vs 큐</h4>
+      <ul>
+        <li><strong>스택(Stack)</strong>: 나중에 넣은 것이 먼저 나옴 (LIFO)</li>
+        <li><strong>큐(Queue)</strong>: 먼저 넣은 것이 먼저 나옴 (FIFO)</li>
+        <li>삽입 위치: 큐는 <em>맨 뒤(rear)</em></li>
+        <li>삭제 위치: 큐는 <em>맨 앞(front)</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub">큐의 포인터 — front와 rear</h3>
+  <div class="concept-grid">
+    <div class="concept-card success">
+      <h4>front (프런트)</h4>
+      <p>큐의 맨 앞 요소를 가리키는 인덱스.<br>
+      <strong>삭제(dequeue)</strong>가 일어나는 위치.<br>
+      초기값: <strong>-1</strong></p>
+    </div>
+    <div class="concept-card danger">
+      <h4>rear (리어)</h4>
+      <p>큐의 맨 뒤 요소를 가리키는 인덱스.<br>
+      <strong>삽입(enqueue)</strong>이 일어나는 위치.<br>
+      초기값: <strong>-1</strong></p>
+    </div>
+  </div>
+
+  <!-- Queue Visual -->
+  <div class="diagram">
+    <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:10px;">큐 삽입/삭제 시각화 (MAX=5, 10·20·30 삽입 후)</p>
+    <div class="diagram-inner">
+      <div class="q-cell" style="background:rgba(107,114,128,0.1);">
+        <span style="color:var(--text-muted);font-size:0.75rem;">비어있음</span>
+        <span class="q-label" style="color:var(--success);">↑front(-1)</span>
+      </div>
+      <div class="q-cell filled">10<span class="q-label" style="color:var(--text-muted);">[0]</span></div>
+      <div class="q-cell filled">20<span class="q-label" style="color:var(--text-muted);">[1]</span></div>
+      <div class="q-cell filled">30
+        <span class="q-label" style="color:var(--danger);">↑rear(2)</span>
+      </div>
+      <div class="q-cell" style="background:rgba(107,114,128,0.06);">빈칸<span class="q-label" style="color:var(--text-muted);">[3]</span></div>
+      <div class="q-cell" style="background:rgba(107,114,128,0.06);">빈칸<span class="q-label" style="color:var(--text-muted);">[4]</span></div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:24px;margin-top:28px;font-size:0.82rem;">
+      <span><span style="color:var(--success);">■</span> front: 삭제 방향 →</span>
+      <span><span style="color:var(--danger);">■</span> rear: 삽입 위치</span>
+    </div>
+  </div>
+
+  <h3 class="sub">큐의 ADT (추상 데이터 타입)</h3>
+  <p style="font-size:0.88rem;margin-bottom:10px;">코딩 전에 먼저 <strong>추상 데이터 타입</strong>으로 기능과 인터페이스를 정의하는 것이 중요.</p>
+  <div class="code-block">
+<span class="comment">// 큐 ADT 정의</span>
+<span class="kw">create</span>(size)      <span class="comment">→ 크기가 size인 빈 큐 생성</span>
+<span class="kw">enqueue</span>(q, e)    <span class="comment">→ 큐 q의 맨 뒤에 데이터 e 삽입 (isFull 먼저 확인)</span>
+<span class="kw">dequeue</span>(q)       <span class="comment">→ 큐 q의 맨 앞 데이터 삭제 후 반환 (isEmpty 먼저 확인)</span>
+<span class="kw">isEmpty</span>(q)       <span class="comment">→ 큐가 비어있으면 TRUE 반환</span>
+<span class="kw">isFull</span>(q)        <span class="comment">→ 큐가 가득 찼으면 TRUE 반환</span>
+  </div>
+
+  <h3 class="sub">선형 큐 구현 (배열 이용)</h3>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <h4>isEmpty 조건</h4>
+      <p><code>front == rear</code><br>
+      초기 상태가 front=rear=-1이므로, 둘이 같으면 비어있음.</p>
+    </div>
+    <div class="concept-card danger">
+      <h4>isFull 조건</h4>
+      <p><code>rear == MAX_SIZE - 1</code><br>
+      rear가 배열의 마지막 인덱스에 도달하면 가득 참.</p>
+    </div>
+    <div class="concept-card success">
+      <h4>enqueue (인큐)</h4>
+      <p>① isFull 확인<br>
+      ② <code>rear++</code><br>
+      ③ <code>Q[rear] = e</code></p>
+    </div>
+    <div class="concept-card warning">
+      <h4>dequeue (디큐)</h4>
+      <p>① isEmpty 확인<br>
+      ② <code>front++</code><br>
+      ③ <code>return Q[front]</code><br>
+      ※ 실제로 데이터를 지우는 게 아니라 <em>front 포인터만 이동</em></p>
+    </div>
+  </div>
+
+  <div class="code-block">
+<span class="comment">// 선형 큐 C 구조체</span>
+<span class="kw">typedef struct</span> {
+    element  data[MAX_QUEUE_SIZE];   <span class="comment">// 데이터 배열</span>
+    <span class="kw">int</span>      front;                  <span class="comment">// 맨 앞 인덱스 (초기값 -1)</span>
+    <span class="kw">int</span>      rear;                   <span class="comment">// 맨 뒤 인덱스 (초기값 -1)</span>
+} QueueType;
+
+<span class="comment">// 초기화</span>
+<span class="fn">void</span> init_queue(QueueType *q) { q->front = q->rear = -1; }
+
+<span class="comment">// enqueue</span>
+<span class="fn">void</span> enqueue(QueueType *q, element e) {
+    q->data[++(q->rear)] = e;         <span class="comment">// rear 먼저 증가 후 저장</span>
+}
+
+<span class="comment">// dequeue</span>
+<span class="fn">element</span> dequeue(QueueType *q) {
+    <span class="kw">return</span> q->data[++(q->front)];    <span class="comment">// front 먼저 증가 후 반환</span>
+}
+  </div>
+
+  <div class="highlight-box danger">
+    <div class="hl-title">⚠️ 선형 큐의 한계 — 공간 낭비 문제</div>
+    <p>dequeue를 반복하면 front가 오른쪽으로 이동하여 <strong>왼쪽 공간이 낭비</strong>된다.<br>
+    rear가 MAX-1에 도달하면 앞에 빈 공간이 남아있어도 isFull이 되어버리는 문제 발생.<br>
+    → 해결책: <strong>원형 큐(Circular Queue)</strong></p>
+  </div>
+</div>
+
+<!-- ============================== CIRCULAR QUEUE ============================== -->
+<div class="section s-q" id="circular">
+  <div class="section-header">
+    <span class="s-badge q">CIRCULAR QUEUE</span>
+    <h2 class="s-title">원형 큐 (Circular Queue)</h2>
+  </div>
+
+  <h3 class="sub">원형 큐란?</h3>
+  <p style="font-size:0.88rem;margin-bottom:12px;">배열의 끝을 원형으로 이어붙인 구조. 나머지 연산자 <code>%</code>를 사용해 인덱스를 순환시킨다.</p>
+
+  <div class="concept-grid">
+    <div class="concept-card success">
+      <h4>핵심 아이디어</h4>
+      <p><code>(index + 1) % MAX_SIZE</code><br>
+      rear나 front가 배열 끝에 도달하면 <strong>자동으로 0으로 돌아감</strong>.<br>
+      선형 큐처럼 빈 공간이 낭비되지 않음.</p>
+    </div>
+    <div class="concept-card warning">
+      <h4>공간 1칸 희생 이유</h4>
+      <p>isEmpty와 isFull 판별을 위해 배열 칸 1개를 사용하지 않음.<br>
+      <strong>isEmpty</strong>: <code>front == rear</code><br>
+      <strong>isFull</strong>: <code>(rear+1) % MAX == front</code></p>
+    </div>
+    <div class="concept-card success">
+      <h4>enqueue (원형)</h4>
+      <p>① <code>rear = (rear+1) % MAX</code><br>
+      ② <code>Q[rear] = e</code></p>
+    </div>
+    <div class="concept-card danger">
+      <h4>dequeue (원형)</h4>
+      <p>① <code>front = (front+1) % MAX</code><br>
+      ② <code>return Q[front]</code></p>
+    </div>
+  </div>
+
+  <div class="code-block">
+<span class="comment">// 원형 큐 핵심 코드</span>
+<span class="fn">void</span> enqueue(QueueType *q, element e) {
+    q->rear = (q->rear + 1) % MAX_QUEUE_SIZE;  <span class="comment">// % 연산으로 순환</span>
+    q->data[q->rear] = e;
+}
+
+<span class="fn">element</span> dequeue(QueueType *q) {
+    q->front = (q->front + 1) % MAX_QUEUE_SIZE;
+    <span class="kw">return</span> q->data[q->front];
+}
+
+<span class="fn">int</span> is_full(QueueType *q) {
+    <span class="kw">return</span> (q->rear + 1) % MAX_QUEUE_SIZE == q->front;
+}
+  </div>
+
+  <div class="highlight-box">
+    <div class="hl-title">📌 선형 큐 vs 원형 큐 비교</div>
+    <table class="compare-table" style="margin:0;">
+      <tr>
+        <th>항목</th><th>선형 큐</th><th>원형 큐</th>
+      </tr>
+      <tr>
+        <td>isFull 조건</td>
+        <td><code>rear == MAX-1</code></td>
+        <td><code>(rear+1)%MAX == front</code></td>
+      </tr>
+      <tr>
+        <td>인덱스 증가</td>
+        <td><code>rear++</code></td>
+        <td><code>rear = (rear+1) % MAX</code></td>
+      </tr>
+      <tr>
+        <td>공간 효율</td>
+        <td>삭제 후 공간 낭비</td>
+        <td>공간 재활용 가능</td>
+      </tr>
+      <tr>
+        <td>구현 복잡도</td>
+        <td>단순</td>
+        <td>약간 복잡 (% 연산)</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================== DEQUE ============================== -->
+<div class="section s-q" id="deque">
+  <div class="section-header">
+    <span class="s-badge q">DEQUE</span>
+    <h2 class="s-title">덱 (Deque — Double-ended Queue)</h2>
+  </div>
+
+  <p style="font-size:0.88rem;margin-bottom:14px;">양쪽 끝(front, rear) 어디서든 삽입과 삭제가 가능한 큐의 변형.</p>
+
+  <div class="concept-grid">
+    <div class="concept-card success">
+      <h4>add_front</h4>
+      <p>앞쪽에 데이터 삽입.<br>
+      <code>front = (front-1+MAX) % MAX</code><br>
+      <code>Q[front] = e</code></p>
+    </div>
+    <div class="concept-card">
+      <h4>add_rear</h4>
+      <p>뒤쪽에 데이터 삽입.<br>
+      일반 enqueue와 동일.<br>
+      <code>rear = (rear+1) % MAX</code></p>
+    </div>
+    <div class="concept-card danger">
+      <h4>delete_front</h4>
+      <p>앞쪽에서 삭제.<br>
+      일반 dequeue와 동일.<br>
+      <code>front = (front+1) % MAX</code></p>
+    </div>
+    <div class="concept-card warning">
+      <h4>delete_rear</h4>
+      <p>뒤쪽에서 삭제.<br>
+      <code>rear = (rear-1+MAX) % MAX</code><br>
+      ※ 반시계 방향으로 1 감소</p>
+    </div>
+  </div>
+
+  <div class="highlight-box success">
+    <div class="hl-title">✅ 덱과 스택/큐의 관계</div>
+    <ul>
+      <li>덱에서 <strong>front에서만 삽입·삭제</strong> → 스택(Stack)처럼 동작</li>
+      <li>덱에서 <strong>rear에 삽입, front에서 삭제</strong> → 일반 큐처럼 동작</li>
+      <li>원형 큐 코드를 활용해 구현 가능</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================== SIMULATION ============================== -->
+<div class="section s-q" id="sim">
+  <div class="section-header">
+    <span class="s-badge q">APPLICATION</span>
+    <h2 class="s-title">큐의 응용 — 시뮬레이션 (은행 대기열)</h2>
+  </div>
+
+  <p style="font-size:0.88rem;margin-bottom:14px;">큐는 <strong>순서대로 처리</strong>해야 하는 상황에 적합. 은행 창구 대기 시뮬레이션이 대표적인 예.</p>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <h4>시뮬레이션 목적</h4>
+      <p>고객이 평균적으로 얼마나 기다리는지 계산.<br>
+      입력 변수(도착 확률, 서비스 시간)를 바꿔가며 여러 번 실행.</p>
+    </div>
+    <div class="concept-card purple">
+      <h4>랜덤 변수 활용</h4>
+      <p>고객 도착 확률: <strong>50%</strong> (1분에 한 명)<br>
+      서비스 타임: <strong>난수</strong>로 결정<br>
+      서비스 타임 > 0 → 현재 고객 서비스 중<br>
+      서비스 타임 = 0 → 다음 고객 대기</p>
+    </div>
+  </div>
+
+  <h3 class="sub">시뮬레이션 흐름</h3>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><strong>고객 도착</strong>: 매 분 확률(50%)로 고객이 큐에 enqueue</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><strong>서비스 진행</strong>: 현재 서비스 타임 > 0이면 감소시키며 처리 계속</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><strong>서비스 완료</strong>: 서비스 타임 = 0이 되면 큐 앞에서 dequeue하여 다음 고객 처리 시작</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><strong>대기 시간 누적</strong>: 각 고객의 도착 시각과 서비스 시작 시각 차이로 대기 시간 계산</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-body"><strong>평균 계산</strong>: 전체 대기 시간 / 고객 수 → 평균 대기 시간 출력</div></div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hl-title">📌 시뮬레이션 핵심</div>
+    <ul>
+      <li>duration(시뮬레이션 시간)이 다를 때마다 결과가 달라짐</li>
+      <li>랜덤 변수이므로 실행할 때마다 다른 결과 → 여러 번 실행하여 평균값 사용</li>
+      <li>현실에서 큰 영향(은행 직원 수 결정 등)을 미치므로 신중하게 적용</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================== LIST ============================== -->
+<div class="section s-list" id="list">
+  <div class="section-header">
+    <span class="s-badge list">LIST</span>
+    <h2 class="s-title">리스트 (List) — 기본 개념과 배열 구현</h2>
+  </div>
+
+  <h3 class="sub purple">리스트란?</h3>
+  <div class="concept-grid">
+    <div class="concept-card purple">
+      <h4>정의</h4>
+      <p><strong>순서 있는 데이터의 모임</strong>.<br>
+      삽입과 삭제가 <em>어느 위치든</em> 가능한 것이 리스트의 특징.<br>
+      스택, 큐는 리스트의 특수한 형태 (삽입/삭제 위치에 제한 있음).</p>
+    </div>
+    <div class="concept-card">
+      <h4>리스트 vs 스택·큐</h4>
+      <ul>
+        <li><strong>리스트</strong>: 아무 위치에서나 삽입/삭제 가능</li>
+        <li><strong>스택</strong>: 오직 top에서만 삽입/삭제</li>
+        <li><strong>큐</strong>: 삽입은 rear, 삭제는 front</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub purple">배열로 리스트 구현</h3>
+  <div class="concept-grid">
+    <div class="concept-card warning">
+      <h4>배열 삽입 시 문제</h4>
+      <p>원하는 위치에 삽입하려면 <strong>그 이후 데이터를 모두 한 칸씩 뒤로 이동</strong>해야 함.<br>
+      데이터가 많을수록 이동 비용이 커짐 → 비효율적.</p>
+    </div>
+    <div class="concept-card warning">
+      <h4>배열 삭제 시 문제</h4>
+      <p>특정 위치 삭제 시 <strong>그 이후 데이터를 모두 한 칸씩 앞으로 이동</strong>해야 함.<br>
+      데이터 이동이 계속 발생 → 오버헤드 큼.</p>
+    </div>
+  </div>
+
+  <div class="highlight-box danger">
+    <div class="hl-title">⚠️ 배열 구현의 단점</div>
+    <p>삽입/삭제 시마다 데이터가 왔다 갔다 하여 비효율적.<br>
+    배열 크기를 미리 정해야 하므로 메모리 낭비 또는 부족 가능성 있음.<br>
+    → 해결책: <strong>연결 리스트(Linked List)</strong></p>
+  </div>
+</div>
+
+<!-- ============================== LINKED LIST ============================== -->
+<div class="section s-list" id="linked">
+  <div class="section-header">
+    <span class="s-badge list">LINKED LIST</span>
+    <h2 class="s-title">연결 리스트 (Linked List)</h2>
+  </div>
+
+  <h3 class="sub purple">노드(Node) 구조</h3>
+  <div class="concept-grid">
+    <div class="concept-card purple">
+      <h4>데이터 필드 (Data Field)</h4>
+      <p>실제 데이터(값)를 저장하는 공간.</p>
+    </div>
+    <div class="concept-card">
+      <h4>링크 필드 (Link Field)</h4>
+      <p><strong>다음 노드의 메모리 주소</strong>를 저장하는 포인터.<br>
+      마지막 노드의 링크는 <code>NULL</code>.</p>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin:16px 0;">
+    <div style="display:inline-flex;align-items:center;gap:0;font-size:0.88rem;">
+      <div style="border:2px solid var(--purple);border-radius:8px;overflow:hidden;display:flex;">
+        <div style="padding:10px 16px;background:rgba(124,58,237,0.1);font-weight:700;color:var(--purple);">10</div>
+        <div style="padding:10px 16px;background:rgba(124,58,237,0.06);color:var(--text-muted);border-left:2px solid var(--border);">→ 200번지</div>
+      </div>
+      <div style="padding:0 12px;color:var(--text-muted);font-size:1.2rem;">→</div>
+      <div style="border:2px solid var(--purple);border-radius:8px;overflow:hidden;display:flex;">
+        <div style="padding:10px 16px;background:rgba(124,58,237,0.1);font-weight:700;color:var(--purple);">20</div>
+        <div style="padding:10px 16px;background:rgba(124,58,237,0.06);color:var(--text-muted);border-left:2px solid var(--border);">→ 350번지</div>
+      </div>
+      <div style="padding:0 12px;color:var(--text-muted);font-size:1.2rem;">→</div>
+      <div style="border:2px solid var(--purple);border-radius:8px;overflow:hidden;display:flex;">
+        <div style="padding:10px 16px;background:rgba(124,58,237,0.1);font-weight:700;color:var(--purple);">30</div>
+        <div style="padding:10px 16px;background:rgba(124,58,237,0.06);color:var(--text-muted);border-left:2px solid var(--border);">NULL</div>
+      </div>
+    </div>
+    <p style="font-size:0.78rem;color:var(--text-muted);margin-top:8px;">헤드(head) 포인터 → 첫 번째 노드 가리킴</p>
+  </div>
+
+  <h3 class="sub purple">연결 리스트의 종류</h3>
+  <table class="compare-table">
+    <tr>
+      <th>종류</th><th>특징</th><th>마지막 노드 링크</th>
+    </tr>
+    <tr>
+      <td><strong>단순 연결 리스트</strong></td>
+      <td>각 노드가 다음 노드 주소만 가짐</td>
+      <td>NULL</td>
+    </tr>
+    <tr>
+      <td><strong>원형 연결 리스트</strong></td>
+      <td>마지막 노드가 첫 번째 노드를 가리킴</td>
+      <td>첫 번째 노드 주소</td>
+    </tr>
+    <tr>
+      <td><strong>이중 연결 리스트</strong></td>
+      <td>앞 노드 주소 + 뒤 노드 주소 모두 보유</td>
+      <td>NULL (양방향)</td>
+    </tr>
+  </table>
+
+  <h3 class="sub purple">동적 메모리 할당</h3>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <h4>정적 할당 (Static)</h4>
+      <p>프로그램 실행 전에 메모리 결정.<br>
+      배열이 대표적 예시.<br>
+      크기가 고정되어 유연성 부족.</p>
+    </div>
+    <div class="concept-card success">
+      <h4>동적 할당 (Dynamic)</h4>
+      <p>프로그램 <strong>실행 도중</strong>에 필요한 만큼 메모리 할당.<br>
+      연결 리스트가 대표적 예시.<br>
+      <code>malloc()</code>으로 할당, <code>free()</code>로 해제.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+<span class="comment">// 연결 리스트 노드 구조체 (C언어)</span>
+<span class="kw">typedef struct</span> ListNode {
+    element          data;    <span class="comment">// 데이터 필드</span>
+    <span class="kw">struct</span> ListNode *link;   <span class="comment">// 링크 필드 (다음 노드 주소)</span>
+} ListNode;
+
+<span class="comment">// 동적 할당으로 새 노드 생성</span>
+ListNode *new_node = (ListNode *)<span class="fn">malloc</span>(<span class="kw">sizeof</span>(ListNode));
+new_node->data = 10;
+new_node->link = NULL;
+  </div>
+
+  <div class="highlight-box purple">
+    <div class="hl-title">📌 연결 리스트의 장점</div>
+    <ul>
+      <li>삽입/삭제 시 데이터를 이동시킬 필요 없음 → <strong>링크(주소)만 변경</strong></li>
+      <li>크기가 미리 정해지지 않음 → 필요할 때마다 동적 할당</li>
+      <li>연속된 메모리 공간 불필요 → 메모리 어디에든 저장 가능</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================== LINKED LIST IMPL ============================== -->
+<div class="section s-list" id="linked-impl">
+  <div class="section-header">
+    <span class="s-badge list">LINKED LIST 구현</span>
+    <h2 class="s-title">연결 리스트 삽입·삭제·스택·큐 구현</h2>
+  </div>
+
+  <h3 class="sub purple">맨 앞에 삽입 (insert_front)</h3>
+  <div class="steps">
+    <div class="step"><div class="step-num purple">1</div><div class="step-body"><strong>동적 할당</strong>: <code>malloc()</code>으로 새 노드 생성</div></div>
+    <div class="step"><div class="step-num purple">2</div><div class="step-body"><strong>데이터 저장</strong>: 새 노드의 data 필드에 값 저장</div></div>
+    <div class="step"><div class="step-num purple">3</div><div class="step-body"><strong>링크 연결</strong>: 새 노드의 link → 기존 head가 가리키던 노드</div></div>
+    <div class="step"><div class="step-num purple">4</div><div class="step-body"><strong>헤드 갱신</strong>: head → 새 노드 (head 포인터 변경)<br>
+    ※ head를 변경하려면 <code>**head</code> 또는 <code>ListNode**</code>로 주소의 주소를 전달해야 함</div></div>
+  </div>
+
+  <h3 class="sub purple">중간에 삽입</h3>
+  <div class="steps">
+    <div class="step"><div class="step-num purple">1</div><div class="step-body">삽입할 위치의 <strong>이전 노드(prev)</strong> 를 찾음</div></div>
+    <div class="step"><div class="step-num purple">2</div><div class="step-body">새 노드의 link → prev의 다음 노드</div></div>
+    <div class="step"><div class="step-num purple">3</div><div class="step-body">prev의 link → 새 노드<br>
+    <span style="color:var(--danger);font-size:0.82rem;">⚠️ 순서가 중요! 3번을 먼저 하면 기존 링크를 잃어버림</span></div></div>
+  </div>
+
+  <h3 class="sub purple">노드 삭제</h3>
+  <div class="steps">
+    <div class="step"><div class="step-num purple">1</div><div class="step-body">삭제할 노드의 <strong>이전 노드(prev)</strong> 주소를 알아야 함</div></div>
+    <div class="step"><div class="step-num purple">2</div><div class="step-body">prev의 link → 삭제할 노드의 다음 노드 (연결을 건너뜀)</div></div>
+    <div class="step"><div class="step-num purple">3</div><div class="step-body"><code>free(삭제할노드)</code> → 동적 할당 해제</div></div>
+  </div>
+
+  <div class="highlight-box danger">
+    <div class="hl-title">⚠️ 헤드 포인터와 이중 포인터</div>
+    <p>함수 안에서 head 포인터 값 자체를 바꾸려면 <strong>포인터의 포인터 (<code>ListNode **head</code>)</strong>로 주소를 전달해야 함.<br>
+    단순히 <code>ListNode *head</code>를 넘기면 복사본이 되어 원본 head가 변경되지 않음.</p>
+  </div>
+
+  <hr class="divider">
+
+  <h3 class="sub purple">두 리스트 합치기 (concatenate)</h3>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body">head1 == NULL이면 head2를 그대로 반환</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">head2 == NULL이면 head1을 그대로 반환</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">head1의 마지막 노드까지 순회 (while로 link != NULL 체크)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body">마지막 노드의 link → head2 (두 리스트 연결)</div></div>
+  </div>
+
+  <hr class="divider">
+
+  <h3 class="sub success">스택의 연결 리스트 구현 (Linked Stack)</h3>
+  <div class="concept-grid">
+    <div class="concept-card success">
+      <h4>구조</h4>
+      <p>스택 노드 = 데이터 필드 + 링크 필드<br>
+      <code>top</code> 포인터가 최상위 노드를 가리킴<br>
+      빈 스택: <code>top == NULL</code></p>
+    </div>
+    <div class="concept-card success">
+      <h4>push 연산</h4>
+      <p>① 동적 할당으로 새 노드 생성<br>
+      ② 새 노드의 data = 삽입 값<br>
+      ③ 새 노드의 link = 기존 top<br>
+      ④ top = 새 노드 (top 갱신)</p>
+    </div>
+    <div class="concept-card danger">
+      <h4>pop 연산</h4>
+      <p>① top 노드의 데이터 저장<br>
+      ② top = top의 link (다음 노드로 이동)<br>
+      ③ 기존 top 노드 free()<br>
+      ④ 저장된 데이터 반환</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h3 class="sub">큐의 연결 리스트 구현 (Linked Queue)</h3>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <h4>구조</h4>
+      <p><code>front</code>: 맨 앞 노드 포인터 (dequeue 위치)<br>
+      <code>rear</code>: 맨 뒤 노드 포인터 (enqueue 위치)<br>
+      빈 큐: <code>front == rear == NULL</code></p>
+    </div>
+    <div class="concept-card success">
+      <h4>enqueue (연결 리스트)</h4>
+      <p>① 동적 할당으로 새 노드 생성<br>
+      ② 새 노드의 link = NULL<br>
+      ③ rear의 link = 새 노드 (뒤에 연결)<br>
+      ④ rear = 새 노드</p>
+    </div>
+    <div class="concept-card danger">
+      <h4>dequeue (연결 리스트)</h4>
+      <p>① front 노드의 데이터 저장<br>
+      ② front = front의 link<br>
+      ③ 기존 front 노드 free()<br>
+      ④ front == NULL이면 rear도 NULL로</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== TREE ============================== -->
+<div class="section s-tree" id="tree">
+  <div class="section-header">
+    <span class="s-badge tree">TREE</span>
+    <h2 class="s-title">트리 (Tree) — 개념과 용어</h2>
+  </div>
+
+  <h3 class="sub teal">트리란?</h3>
+  <p style="font-size:0.88rem;margin-bottom:14px;"><strong>비선형(Non-linear) 자료구조</strong>로, 계층적 관계를 표현. 폴더·디렉토리 구조, 조직도가 대표적인 예.</p>
+
+  <div class="concept-grid">
+    <div class="concept-card teal">
+      <h4>선형 vs 비선형</h4>
+      <ul>
+        <li><strong>선형</strong>: 배열, 연결 리스트, 스택, 큐 → 순서 O</li>
+        <li><strong>비선형</strong>: 트리, 그래프 → 계층/연결 구조</li>
+      </ul>
+    </div>
+    <div class="concept-card">
+      <h4>트리의 특징</h4>
+      <ul>
+        <li>노드(node)들과 간선(edge)들로 구성</li>
+        <li><strong>사이클 없음</strong> (트리와 그래프의 차이)</li>
+        <li>간선 수 = 노드 수 - 1</li>
+        <li>루트에서 모든 노드로 경로가 유일함</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub teal">트리 핵심 용어</h3>
+  <div class="keyword-grid">
+    <div class="kw-card">
+      <div class="kw-term teal">루트 (Root)</div>
+      <div class="kw-def">트리의 최상위 노드. 부모가 없음.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term teal">부모 (Parent)</div>
+      <div class="kw-def">자식 노드를 가진 상위 노드.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term teal">자식 (Child)</div>
+      <div class="kw-def">부모 노드로부터 이어지는 하위 노드.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term teal">잎 (Leaf)</div>
+      <div class="kw-def">자식이 없는 노드 (단말 노드).</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term teal">높이 (Height)</div>
+      <div class="kw-def">루트에서 가장 깊은 노드까지의 레벨 수.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term teal">레벨 (Level)</div>
+      <div class="kw-def">루트가 레벨 1, 아래로 내려갈수록 증가.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term teal">서브트리 (Subtree)</div>
+      <div class="kw-def">특정 노드와 그 자손들로 이루어진 트리.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term teal">차수 (Degree)</div>
+      <div class="kw-def">한 노드가 가진 자식의 수.</div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-term teal">간선 (Edge)</div>
+      <div class="kw-def">부모-자식 노드를 연결하는 선.<br>간선 수 = 노드 수 - 1</div>
+    </div>
+  </div>
+
+  <!-- Tree visual -->
+  <div class="tree-container" style="margin-top:16px;">
+    <div>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">트리 구조 예시 (높이 3)</p>
+      <div class="tree-row">
+        <div class="tree-node" style="margin:0;">A<span style="font-size:0.65rem;display:block;color:var(--text-muted);">루트</span></div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:0;margin-bottom:4px;">
+        <div style="width:2px;height:20px;background:var(--border);margin:0 70px;"></div>
+        <div style="width:2px;height:20px;background:var(--border);margin:0 70px;"></div>
+      </div>
+      <div class="tree-row" style="gap:40px;">
+        <div class="tree-node teal-node" style="margin:0;">B</div>
+        <div class="tree-node teal-node" style="margin:0;">C</div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:0;margin-bottom:4px;">
+        <div style="width:2px;height:20px;background:var(--border);margin:0 26px;"></div>
+        <div style="width:2px;height:20px;background:var(--border);margin:0 26px;"></div>
+        <div style="width:2px;height:20px;background:var(--border);margin:0 26px;margin-left:58px;"></div>
+      </div>
+      <div class="tree-row" style="gap:16px;">
+        <div class="tree-node leaf" style="margin:0;">D<span style="font-size:0.6rem;display:block;color:var(--success);">잎</span></div>
+        <div class="tree-node leaf" style="margin:0;">E<span style="font-size:0.6rem;display:block;color:var(--success);">잎</span></div>
+        <div style="width:44px;"></div>
+        <div class="tree-node leaf" style="margin:0;">F<span style="font-size:0.6rem;display:block;color:var(--success);">잎</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== BINARY TREE ============================== -->
+<div class="section s-tree" id="binary">
+  <div class="section-header">
+    <span class="s-badge tree">BINARY TREE</span>
+    <h2 class="s-title">이진 트리 (Binary Tree)</h2>
+  </div>
+
+  <h3 class="sub teal">이진 트리란?</h3>
+  <p style="font-size:0.88rem;margin-bottom:12px;">각 노드의 <strong>자식 수가 최대 2개</strong>인 트리. 왼쪽 자식과 오른쪽 자식으로 구분.</p>
+
+  <div class="concept-grid">
+    <div class="concept-card teal">
+      <h4>노드 수 — 최솟값</h4>
+      <p>높이가 h일 때 최소 노드 수: <strong>h개</strong><br>
+      (각 레벨에 노드 1개씩만 있을 때)</p>
+    </div>
+    <div class="concept-card success">
+      <h4>노드 수 — 최댓값</h4>
+      <p>높이가 h일 때 최대 노드 수: <strong>2<sup>h</sup> - 1개</strong><br>
+      (모든 레벨이 꽉 찬 경우)<br>
+      예) h=3 → 2³-1 = <strong>7개</strong></p>
+    </div>
+  </div>
+
+  <h3 class="sub teal">이진 트리의 종류</h3>
+  <table class="compare-table">
+    <tr>
+      <th>종류</th><th>조건</th><th>예시 (h=3)</th>
+    </tr>
+    <tr>
+      <td><strong>포화 이진트리</strong><br><span style="font-size:0.8rem;color:var(--text-muted);">Full Binary Tree</span></td>
+      <td>모든 레벨의 노드가 <strong>꽉 참</strong>. 노드에 번호를 1부터 순서대로 붙일 수 있음.</td>
+      <td>7개 노드 (2³-1)</td>
+    </tr>
+    <tr>
+      <td><strong>완전 이진트리</strong><br><span style="font-size:0.8rem;color:var(--text-muted);">Complete Binary Tree</span></td>
+      <td>높이 h-1까지 꽉 차고, 마지막 레벨은 <strong>왼쪽부터</strong> 순서대로 채워짐.</td>
+      <td>4~7개 노드</td>
+    </tr>
+    <tr>
+      <td><strong>경사 이진트리</strong><br><span style="font-size:0.8rem;color:var(--text-muted);">Skewed Binary Tree</span></td>
+      <td>모든 노드가 한쪽으로만 치우침.</td>
+      <td>h개 노드</td>
+    </tr>
+  </table>
+
+  <h3 class="sub teal">배열로 이진 트리 표현</h3>
+  <p style="font-size:0.88rem;margin-bottom:10px;">노드에 번호를 붙이면 <strong>부모-자식 관계</strong>를 배열 인덱스로 계산 가능.</p>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <h4>인덱스 규칙 (루트 = 1)</h4>
+      <ul>
+        <li>노드 i의 <strong>왼쪽 자식</strong>: <code>2 × i</code></li>
+        <li>노드 i의 <strong>오른쪽 자식</strong>: <code>2 × i + 1</code></li>
+        <li>노드 i의 <strong>부모</strong>: <code>i / 2</code> (정수 나눗셈)</li>
+      </ul>
+    </div>
+    <div class="concept-card warning">
+      <h4>배열 표현의 단점</h4>
+      <p>경사 이진트리의 경우 메모리 낭비가 심함.<br>
+      높이 h 경사트리 → 2<sup>h</sup>개 배열 공간 필요하지만 h개만 사용.</p>
+    </div>
+  </div>
+
+  <h3 class="sub teal">연결 리스트로 이진 트리 표현</h3>
+  <div class="code-block">
+<span class="comment">// 이진 트리 노드 구조체</span>
+<span class="kw">typedef struct</span> TreeNode {
+    element          data;    <span class="comment">// 데이터</span>
+    <span class="kw">struct</span> TreeNode *left;   <span class="comment">// 왼쪽 자식 노드 주소</span>
+    <span class="kw">struct</span> TreeNode *right;  <span class="comment">// 오른쪽 자식 노드 주소</span>
+} TreeNode;
+
+<span class="comment">// 예시: 루트 노드 A, 왼쪽 자식 B, 오른쪽 자식 C</span>
+TreeNode *root = (TreeNode *)<span class="fn">malloc</span>(<span class="kw">sizeof</span>(TreeNode));
+root->data = 'A';
+root->left = nodeB;
+root->right = nodeC;
+  </div>
+</div>
+
+<!-- ============================== TRAVERSAL ============================== -->
+<div class="section s-tree" id="traversal">
+  <div class="section-header">
+    <span class="s-badge tree">TRAVERSAL</span>
+    <h2 class="s-title">이진 트리 순회 (Tree Traversal)</h2>
+  </div>
+
+  <p style="font-size:0.88rem;margin-bottom:14px;">트리의 <strong>모든 노드를 체계적으로 방문</strong>하는 방법. 루트(R), 왼쪽 서브트리(L), 오른쪽 서브트리(R)의 방문 순서에 따라 구분.</p>
+
+  <div class="concept-grid">
+    <div class="concept-card teal">
+      <h4>전위 순회 (Preorder)</h4>
+      <p>방문 순서: <strong>루트 → 왼쪽 → 오른쪽</strong><br>
+      (Root → Left → Right)<br>
+      루트를 가장 먼저 방문.</p>
+    </div>
+    <div class="concept-card">
+      <h4>중위 순회 (Inorder)</h4>
+      <p>방문 순서: <strong>왼쪽 → 루트 → 오른쪽</strong><br>
+      (Left → Root → Right)<br>
+      이진 탐색 트리에서 오름차순 출력.</p>
+    </div>
+    <div class="concept-card purple">
+      <h4>후위 순회 (Postorder)</h4>
+      <p>방문 순서: <strong>왼쪽 → 오른쪽 → 루트</strong><br>
+      (Left → Right → Root)<br>
+      루트를 가장 마지막에 방문.</p>
+    </div>
+  </div>
+
+  <h3 class="sub teal">순회 예제</h3>
+  <p style="font-size:0.85rem;margin-bottom:8px;">다음 트리의 순회 결과:</p>
+  <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin:12px 0;">
+    <div style="text-align:center;">
+      <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px;">트리 구조</div>
+      <div style="font-family:monospace;background:var(--code-bg);padding:12px 16px;border-radius:8px;font-size:0.88rem;line-height:2;">
+        &nbsp;&nbsp;&nbsp;&nbsp;A<br>
+        &nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;\<br>
+        &nbsp;B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C<br>
+        /&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/<br>
+       D&nbsp;&nbsp;E&nbsp;&nbsp;F
+      </div>
+    </div>
+    <div style="flex:1;min-width:200px;">
+      <div style="background:rgba(13,148,136,0.08);border-radius:10px;padding:12px 16px;margin-bottom:8px;border-left:3px solid var(--teal);">
+        <div style="font-size:0.78rem;font-weight:700;color:var(--teal);margin-bottom:4px;">전위 순회 결과</div>
+        <div style="font-family:monospace;font-size:0.9rem;font-weight:700;">A → B → D → E → C → F</div>
+      </div>
+      <div style="background:rgba(37,99,235,0.08);border-radius:10px;padding:12px 16px;margin-bottom:8px;border-left:3px solid var(--primary);">
+        <div style="font-size:0.78rem;font-weight:700;color:var(--primary);margin-bottom:4px;">중위 순회 결과</div>
+        <div style="font-family:monospace;font-size:0.9rem;font-weight:700;">D → B → E → A → F → C</div>
+      </div>
+      <div style="background:rgba(124,58,237,0.08);border-radius:10px;padding:12px 16px;border-left:3px solid var(--purple);">
+        <div style="font-size:0.78rem;font-weight:700;color:var(--purple);margin-bottom:4px;">후위 순회 결과</div>
+        <div style="font-family:monospace;font-size:0.9rem;font-weight:700;">D → E → B → F → C → A</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-block">
+<span class="comment">// 전위 순회 재귀 구현</span>
+<span class="fn">void</span> preorder(TreeNode *root) {
+    <span class="kw">if</span> (root != NULL) {
+        printf("%c ", root->data);   <span class="comment">// 루트 먼저</span>
+        preorder(root->left);         <span class="comment">// 왼쪽</span>
+        preorder(root->right);        <span class="comment">// 오른쪽</span>
+    }
+}
+  </div>
+
+  <div class="highlight-box teal">
+    <div class="hl-title">📌 순회 핵심 암기 포인트</div>
+    <ul>
+      <li><strong>전위(Pre)</strong>: 루트가 앞(pre)에 옴 → <strong>루트 → L → R</strong></li>
+      <li><strong>중위(In)</strong>: 루트가 가운데(in)에 옴 → <strong>L → 루트 → R</strong></li>
+      <li><strong>후위(Post)</strong>: 루트가 뒤(post)에 옴 → <strong>L → R → 루트</strong></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================== KEYWORDS ============================== -->
+<div class="section s-tree">
+  <div class="section-header">
+    <span class="s-badge tree">KEYWORDS</span>
+    <h2 class="s-title">전체 핵심 키워드 정리</h2>
+  </div>
+  <div class="keyword-grid">
+    <div class="kw-card"><div class="kw-term">FIFO</div><div class="kw-def">First In First Out. 큐의 동작 원칙 — 먼저 들어온 것이 먼저 나감.</div></div>
+    <div class="kw-card"><div class="kw-term">enqueue / dequeue</div><div class="kw-def">enqueue: 큐에 삽입(rear에). dequeue: 큐에서 삭제(front에서).</div></div>
+    <div class="kw-card"><div class="kw-term">front / rear</div><div class="kw-def">front: 삭제 위치 포인터. rear: 삽입 위치 포인터. 초기값 -1.</div></div>
+    <div class="kw-card"><div class="kw-term">원형 큐</div><div class="kw-def">나머지(%) 연산으로 인덱스 순환. 선형 큐의 공간 낭비 해결.</div></div>
+    <div class="kw-card"><div class="kw-term">덱 (Deque)</div><div class="kw-def">Double-ended Queue. 앞뒤 양쪽에서 삽입·삭제 가능.</div></div>
+    <div class="kw-card"><div class="kw-term">ADT</div><div class="kw-def">Abstract Data Type. 구현 방법보다 기능(인터페이스)을 먼저 정의하는 개념.</div></div>
+    <div class="kw-card"><div class="kw-term purple">노드 (Node)</div><div class="kw-def">연결 리스트의 기본 단위. 데이터 필드 + 링크 필드(다음 주소).</div></div>
+    <div class="kw-card"><div class="kw-term purple">동적 할당</div><div class="kw-def">malloc()으로 실행 중 메모리 할당. free()로 해제. 연결 리스트에 필요.</div></div>
+    <div class="kw-card"><div class="kw-term purple">헤드 포인터</div><div class="kw-def">연결 리스트의 첫 번째 노드를 가리키는 포인터.</div></div>
+    <div class="kw-card"><div class="kw-term teal">루트 (Root)</div><div class="kw-def">트리의 최상위 노드. 부모가 없음.</div></div>
+    <div class="kw-card"><div class="kw-term teal">포화 이진트리</div><div class="kw-def">모든 레벨이 꽉 찬 이진 트리. 높이 h → 2ʰ-1개 노드.</div></div>
+    <div class="kw-card"><div class="kw-term teal">완전 이진트리</div><div class="kw-def">마지막 레벨만 왼쪽부터 채워진 이진 트리. 배열로 표현하기 적합.</div></div>
+  </div>
+</div>
+
+<!-- ============================== QUIZ ============================== -->
+<div class="section s-quiz" id="quiz">
+  <div class="section-header">
+    <span class="s-badge quiz">연습문제</span>
+    <h2 class="s-title">기말고사 예상 문제</h2>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-item" id="q1">
+    <div class="quiz-q">1. 큐(Queue)의 동작 원칙으로 올바른 것은?</div>
+    <div class="quiz-options">
+      <div class="quiz-option" onclick="checkMC('q1',this,false)">① LIFO — 나중에 들어온 것이 먼저 나간다</div>
+      <div class="quiz-option" onclick="checkMC('q1',this,true)">② FIFO — 먼저 들어온 것이 먼저 나간다</div>
+      <div class="quiz-option" onclick="checkMC('q1',this,false)">③ 임의 순서로 삽입과 삭제가 가능하다</div>
+      <div class="quiz-option" onclick="checkMC('q1',this,false)">④ 삽입과 삭제가 모두 같은 위치에서 일어난다</div>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-item" id="q2">
+    <div class="quiz-q">2. 선형 큐에서 isEmpty 조건으로 올바른 것은?</div>
+    <div class="quiz-options">
+      <div class="quiz-option" onclick="checkMC('q2',this,false)">① rear == MAX_SIZE - 1</div>
+      <div class="quiz-option" onclick="checkMC('q2',this,true)">② front == rear</div>
+      <div class="quiz-option" onclick="checkMC('q2',this,false)">③ front == 0</div>
+      <div class="quiz-option" onclick="checkMC('q2',this,false)">④ rear == 0</div>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-item" id="q3">
+    <div class="quiz-q">3. 원형 큐에서 isFull(가득 찬 상태) 조건으로 올바른 것은? (MAX = MAX_QUEUE_SIZE)</div>
+    <div class="quiz-options">
+      <div class="quiz-option" onclick="checkMC('q3',this,false)">① rear == MAX - 1</div>
+      <div class="quiz-option" onclick="checkMC('q3',this,false)">② front == rear</div>
+      <div class="quiz-option" onclick="checkMC('q3',this,true)">③ (rear + 1) % MAX == front</div>
+      <div class="quiz-option" onclick="checkMC('q3',this,false)">④ rear == front + 1</div>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-item" id="q4">
+    <div class="quiz-q">4. 연결 리스트에서 각 노드의 구성으로 올바른 것은?</div>
+    <div class="quiz-options">
+      <div class="quiz-option" onclick="checkMC('q4',this,false)">① 인덱스 필드 + 크기 필드</div>
+      <div class="quiz-option" onclick="checkMC('q4',this,true)">② 데이터 필드 + 링크 필드(다음 노드 주소)</div>
+      <div class="quiz-option" onclick="checkMC('q4',this,false)">③ 키 필드 + 값 필드</div>
+      <div class="quiz-option" onclick="checkMC('q4',this,false)">④ 데이터 필드 + 배열 인덱스</div>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-item" id="q5">
+    <div class="quiz-q">5. 이진 트리에서 높이가 h일 때 최대 노드 수는?</div>
+    <div class="quiz-options">
+      <div class="quiz-option" onclick="checkMC('q5',this,false)">① h</div>
+      <div class="quiz-option" onclick="checkMC('q5',this,false)">② 2h</div>
+      <div class="quiz-option" onclick="checkMC('q5',this,true)">③ 2ʰ - 1</div>
+      <div class="quiz-option" onclick="checkMC('q5',this,false)">④ 2ʰ</div>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-item" id="q6">
+    <div class="quiz-q">6. 이진 트리 전위 순회(Preorder)의 방문 순서는?</div>
+    <div class="quiz-options">
+      <div class="quiz-option" onclick="checkMC('q6',this,true)">① 루트 → 왼쪽 → 오른쪽</div>
+      <div class="quiz-option" onclick="checkMC('q6',this,false)">② 왼쪽 → 루트 → 오른쪽</div>
+      <div class="quiz-option" onclick="checkMC('q6',this,false)">③ 왼쪽 → 오른쪽 → 루트</div>
+      <div class="quiz-option" onclick="checkMC('q6',this,false)">④ 오른쪽 → 루트 → 왼쪽</div>
+    </div>
+    <div class="quiz-feedback" id="q6-fb"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-item" id="q7">
+    <div class="quiz-q">7. 덱(Deque)에 대한 설명으로 올바른 것은?</div>
+    <div class="quiz-options">
+      <div class="quiz-option" onclick="checkMC('q7',this,false)">① 삽입은 rear에서만, 삭제는 front에서만 가능하다</div>
+      <div class="quiz-option" onclick="checkMC('q7',this,false)">② 삽입과 삭제가 모두 한쪽 끝에서만 일어난다</div>
+      <div class="quiz-option" onclick="checkMC('q7',this,true)">③ 양쪽 끝(front, rear) 어디서든 삽입과 삭제가 가능하다</div>
+      <div class="quiz-option" onclick="checkMC('q7',this,false)">④ 삽입만 가능하고 삭제는 불가능하다</div>
+    </div>
+    <div class="quiz-feedback" id="q7-fb"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-item" id="q8">
+    <div class="quiz-q">8. 배열을 이용한 리스트 구현의 단점은?</div>
+    <div class="quiz-options">
+      <div class="quiz-option" onclick="checkMC('q8',this,false)">① 메모리 동적 할당이 어렵다</div>
+      <div class="quiz-option" onclick="checkMC('q8',this,true)">② 삽입·삭제 시 데이터를 한 칸씩 이동해야 해서 비효율적이다</div>
+      <div class="quiz-option" onclick="checkMC('q8',this,false)">③ 인덱스로 원소에 접근할 수 없다</div>
+      <div class="quiz-option" onclick="checkMC('q8',this,false)">④ 링크 필드가 추가로 필요해 메모리를 더 차지한다</div>
+    </div>
+    <div class="quiz-feedback" id="q8-fb"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-item" id="q9">
+    <div class="quiz-q">9. 배열로 이진 트리를 표현할 때 (루트 인덱스=1), 노드 i의 왼쪽 자식 인덱스는?</div>
+    <div class="quiz-options">
+      <div class="quiz-option" onclick="checkMC('q9',this,false)">① i - 1</div>
+      <div class="quiz-option" onclick="checkMC('q9',this,true)">② 2 × i</div>
+      <div class="quiz-option" onclick="checkMC('q9',this,false)">③ 2 × i + 1</div>
+      <div class="quiz-option" onclick="checkMC('q9',this,false)">④ i / 2</div>
+    </div>
+    <div class="quiz-feedback" id="q9-fb"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-item" id="q10">
+    <div class="quiz-q">10. 다음 이진 트리의 중위 순회(Inorder) 결과로 올바른 것은?<br>
+    <span style="font-family:monospace;font-size:0.85rem;display:inline-block;margin-top:6px;color:var(--text-muted);">트리: 루트=A, A의 왼쪽=B, A의 오른쪽=C, B의 왼쪽=D, B의 오른쪽=E</span></div>
+    <div class="quiz-options">
+      <div class="quiz-option" onclick="checkMC('q10',this,false)">① A B D E C</div>
+      <div class="quiz-option" onclick="checkMC('q10',this,true)">② D B E A C</div>
+      <div class="quiz-option" onclick="checkMC('q10',this,false)">③ D E B C A</div>
+      <div class="quiz-option" onclick="checkMC('q10',this,false)">④ A B C D E</div>
+    </div>
+    <div class="quiz-feedback" id="q10-fb"></div>
+  </div>
+
+  <hr class="divider">
+  <h3 class="sub orange" style="border-left-color:var(--orange);">단답형 문제</h3>
+
+  <!-- SA1 -->
+  <div class="quiz-item" id="sa1">
+    <div class="quiz-q">SA1. 큐의 삽입 연산을 뜻하는 용어를 쓰시오.</div>
+    <div class="short-answer">
+      <input type="text" id="sa1-input" placeholder="답을 입력하세요">
+      <button class="btn-check" onclick="checkSA('sa1', ['인큐', 'enqueue', 'Enqueue', 'EnQueue'])">확인</button>
+    </div>
+    <div class="quiz-feedback" id="sa1-fb"></div>
+  </div>
+
+  <!-- SA2 -->
+  <div class="quiz-item" id="sa2">
+    <div class="quiz-q">SA2. 선형 큐의 문제점을 해결하기 위해 나머지(%) 연산을 활용한 큐의 이름을 쓰시오.</div>
+    <div class="short-answer">
+      <input type="text" id="sa2-input" placeholder="답을 입력하세요">
+      <button class="btn-check" onclick="checkSA('sa2', ['원형 큐', '원형큐', 'circular queue', 'Circular Queue', 'Circular queue'])">확인</button>
+    </div>
+    <div class="quiz-feedback" id="sa2-fb"></div>
+  </div>
+
+  <!-- SA3 -->
+  <div class="quiz-item" id="sa3">
+    <div class="quiz-q">SA3. 연결 리스트에서 새 노드를 동적으로 생성할 때 사용하는 C 표준 함수를 쓰시오.</div>
+    <div class="short-answer">
+      <input type="text" id="sa3-input" placeholder="답을 입력하세요">
+      <button class="btn-check" onclick="checkSA('sa3', ['malloc', 'malloc()', 'malloc( )'])">확인</button>
+    </div>
+    <div class="quiz-feedback" id="sa3-fb"></div>
+  </div>
+
+  <!-- SA4 -->
+  <div class="quiz-item" id="sa4">
+    <div class="quiz-q">SA4. 이진 트리에서 모든 레벨이 완전히 채워진 트리를 무엇이라 하는가?</div>
+    <div class="short-answer">
+      <input type="text" id="sa4-input" placeholder="답을 입력하세요">
+      <button class="btn-check" onclick="checkSA('sa4', ['포화 이진트리', '포화이진트리', '포화 이진 트리', 'Full Binary Tree', 'full binary tree'])">확인</button>
+    </div>
+    <div class="quiz-feedback" id="sa4-fb"></div>
+  </div>
+
+  <!-- SA5 -->
+  <div class="quiz-item" id="sa5">
+    <div class="quiz-q">SA5. 이진 트리의 순회 중 "왼쪽 → 루트 → 오른쪽" 순서로 방문하는 순회 방법은?</div>
+    <div class="short-answer">
+      <input type="text" id="sa5-input" placeholder="답을 입력하세요">
+      <button class="btn-check" onclick="checkSA('sa5', ['중위 순회', '중위순회', 'inorder', 'Inorder', '인오더'])">확인</button>
+    </div>
+    <div class="quiz-feedback" id="sa5-fb"></div>
+  </div>
+
+  <!-- SA6 -->
+  <div class="quiz-item" id="sa6">
+    <div class="quiz-q">SA6. 연결 리스트에서 노드의 삭제 시, 반드시 알아야 하는 노드는 삭제할 노드의 어느 쪽 노드인가?</div>
+    <div class="short-answer">
+      <input type="text" id="sa6-input" placeholder="답을 입력하세요">
+      <button class="btn-check" onclick="checkSA('sa6', ['이전 노드', '바로 앞 노드', '앞 노드', 'prev', 'previous', '직전 노드'])">확인</button>
+    </div>
+    <div class="quiz-feedback" id="sa6-fb"></div>
+  </div>
+</div>
+
+<div style="height:60px;"></div>
+
+<script>
+// Theme
+const btn = document.getElementById('themeBtn');
+const saved = localStorage.getItem('ds-final-theme') || 'light';
+document.documentElement.setAttribute('data-theme', saved);
+btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+btn.addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  btn.textContent = next === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('ds-final-theme', next);
+});
+
+// MC Quiz
+function checkMC(qid, el, isCorrect) {
+  const container = document.getElementById(qid);
+  const opts = container.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  opts.forEach(o => { o.style.pointerEvents = 'none'; });
+  if (isCorrect) {
+    el.classList.add('correct');
+    fb.textContent = '✅ 정답입니다!';
+    fb.className = 'quiz-feedback show ok';
+  } else {
+    el.classList.add('wrong');
+    opts.forEach(o => {
+      if (o.getAttribute('onclick').includes('true')) o.classList.add('reveal-correct');
+    });
+    fb.textContent = '❌ 오답입니다. 초록색으로 표시된 것이 정답입니다.';
+    fb.className = 'quiz-feedback show ng';
+  }
+}
+
+// Short Answer Quiz
+function checkSA(qid, answers) {
+  const input = document.getElementById(qid + '-input');
+  const fb = document.getElementById(qid + '-fb');
+  const val = input.value.trim();
+  if (!val) { fb.textContent = '답을 입력하세요.'; fb.className = 'quiz-feedback show ng'; return; }
+  const correct = answers.some(a => a.toLowerCase() === val.toLowerCase());
+  if (correct) {
+    fb.textContent = '✅ 정답입니다! (' + answers[0] + ')';
+    fb.className = 'quiz-feedback show ok';
+    input.style.borderColor = 'var(--success)';
+  } else {
+    fb.textContent = '❌ 오답입니다. 정답: ' + answers[0];
+    fb.className = 'quiz-feedback show ng';
+    input.style.borderColor = 'var(--danger)';
+  }
+}
+</script>
+</body>
+</html>

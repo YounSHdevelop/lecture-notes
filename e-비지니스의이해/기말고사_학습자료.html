@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기말고사 학습자료 | 7장·8장 e-비즈니스의 이해</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2563eb; --primary-dark: #1e3a8a;
+  --success: #16a34a; --danger: #dc2626; --warning: #d97706;
+  --purple: #7c3aed; --cyan: #0891b2; --orange: #ea580c;
+  --bg: #f3f4f6; --card-bg: #ffffff;
+  --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
+  --nav-bg: rgba(255,255,255,0.95);
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
+}
+[data-theme="dark"] {
+  --bg: #0f172a; --card-bg: #1e293b;
+  --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+  --nav-bg: rgba(15,23,42,0.95);
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-hover: 0 8px 32px rgba(0,0,0,0.6);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding-top: 64px; transition: background 0.3s, color 0.3s; }
+
+/* NAV */
+.nav { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: var(--nav-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 12px; z-index: 1000; }
+.nav-logo { font-weight: 700; font-size: 0.95rem; color: var(--primary); text-decoration: none; white-space: nowrap; }
+.nav-links { display: flex; gap: 4px; flex: 1; overflow-x: auto; }
+.nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.8rem; padding: 6px 10px; border-radius: 6px; white-space: nowrap; transition: all 0.2s; }
+.nav-links a:hover { background: rgba(37,99,235,0.1); color: var(--primary); }
+.nav-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.nav-home { text-decoration: none; font-size: 0.85rem; color: var(--text-muted); }
+.btn-theme { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 1rem; color: var(--text); }
+
+/* HEADER */
+.page-header { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; padding: 56px 24px 48px; text-align: center; }
+.week-badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 16px; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.05em; margin-bottom: 16px; }
+.page-header h1 { font-size: 2rem; font-weight: 900; margin-bottom: 10px; }
+.page-header .subtitle { font-size: 1rem; opacity: 0.85; }
+
+/* EXAM BANNER */
+.exam-banner { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; margin: 24px auto; max-width: 900px; border-radius: 16px; padding: 28px 32px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.exam-banner-item { text-align: center; }
+.exam-banner-label { font-size: 0.75rem; opacity: 0.8; font-weight: 500; letter-spacing: 0.05em; margin-bottom: 6px; }
+.exam-banner-value { font-size: 1.1rem; font-weight: 700; }
+.exam-banner-sub { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+@media (max-width: 680px) { .exam-banner { grid-template-columns: 1fr; } }
+
+/* MAIN */
+main { max-width: 900px; margin: 0 auto; padding: 0 20px 60px; }
+
+/* SECTION CARD */
+.section-card { background: var(--card-bg); border-radius: 20px; padding: 36px 32px; margin-bottom: 32px; box-shadow: var(--shadow); transition: box-shadow 0.3s; }
+.section-card:hover { box-shadow: var(--shadow-hover); }
+.section-card.blue { border-top: 4px solid #2563eb; }
+.section-card.purple { border-top: 4px solid #7c3aed; }
+.section-card.cyan { border-top: 4px solid #0891b2; }
+.section-card.amber { border-top: 4px solid #d97706; }
+.section-card.orange { border-top: 4px solid #ea580c; }
+.section-card.green { border-top: 4px solid #16a34a; }
+.section-card.red { border-top: 4px solid #dc2626; }
+
+.section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+.chapter-tag { font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 12px; color: white; }
+.ch7-tag { background: #2563eb; }
+.ch8-tag { background: #7c3aed; }
+
+/* KEYWORD BOX */
+.keyword-box { background: rgba(37,99,235,0.06); border-left: 4px solid #2563eb; border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 12px; }
+.keyword-box.purple { background: rgba(124,58,237,0.06); border-left-color: #7c3aed; }
+.keyword-box.cyan { background: rgba(8,145,178,0.06); border-left-color: #0891b2; }
+.keyword-box.amber { background: rgba(217,119,6,0.06); border-left-color: #d97706; }
+.keyword-box.green { background: rgba(22,163,74,0.06); border-left-color: #16a34a; }
+.keyword-box.orange { background: rgba(234,88,12,0.06); border-left-color: #ea580c; }
+.term { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; color: var(--primary); }
+.keyword-box.purple .term { color: #7c3aed; }
+.keyword-box.cyan .term { color: #0891b2; }
+.keyword-box.amber .term { color: #d97706; }
+.keyword-box.green .term { color: #16a34a; }
+.keyword-box.orange .term { color: #ea580c; }
+.def { font-size: 0.9rem; line-height: 1.75; }
+.def ul { padding-left: 18px; margin-top: 4px; }
+.def li { margin-bottom: 3px; }
+
+/* SUB HEADING */
+.sub-h { font-size: 1rem; font-weight: 700; margin: 24px 0 12px; color: var(--text); border-bottom: 2px solid var(--border); padding-bottom: 6px; }
+
+/* STRATEGY GRID */
+.strategy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 12px; }
+.strategy-card { border-radius: 12px; padding: 16px; text-align: center; }
+.strategy-card.cost { background: rgba(37,99,235,0.08); border: 1.5px solid rgba(37,99,235,0.25); }
+.strategy-card.diff { background: rgba(124,58,237,0.08); border: 1.5px solid rgba(124,58,237,0.25); }
+.strategy-card.focus { background: rgba(8,145,178,0.08); border: 1.5px solid rgba(8,145,178,0.25); }
+.strategy-card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; }
+.strategy-card.cost h4 { color: #2563eb; }
+.strategy-card.diff h4 { color: #7c3aed; }
+.strategy-card.focus h4 { color: #0891b2; }
+.strategy-card p { font-size: 0.8rem; line-height: 1.6; color: var(--text-muted); }
+@media (max-width: 680px) { .strategy-grid { grid-template-columns: 1fr; } }
+
+/* E-TRANSFORM */
+.etrans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 12px; }
+.etrans-card { border-radius: 12px; padding: 18px; border: 1.5px solid var(--border); }
+.etrans-num { font-size: 1.4rem; font-weight: 900; margin-bottom: 8px; }
+.etrans-card:nth-child(1) .etrans-num { color: #2563eb; }
+.etrans-card:nth-child(2) .etrans-num { color: #7c3aed; }
+.etrans-card:nth-child(3) .etrans-num { color: #0891b2; }
+.etrans-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 6px; }
+.etrans-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+@media (max-width: 680px) { .etrans-grid { grid-template-columns: 1fr; } }
+
+/* STRATEGY TABLE */
+.strategy-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.stype-card { background: rgba(37,99,235,0.04); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px; }
+.stype-card h4 { font-size: 0.88rem; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+.stype-card ul { padding-left: 16px; }
+.stype-card li { font-size: 0.82rem; line-height: 1.7; }
+@media (max-width: 680px) { .strategy-type-grid { grid-template-columns: 1fr; } }
+
+/* SWOT */
+.swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.swot-card { border-radius: 12px; padding: 14px; }
+.swot-card.so { background: rgba(22,163,74,0.08); border: 1.5px solid rgba(22,163,74,0.3); }
+.swot-card.st { background: rgba(37,99,235,0.08); border: 1.5px solid rgba(37,99,235,0.3); }
+.swot-card.wo { background: rgba(217,119,6,0.08); border: 1.5px solid rgba(217,119,6,0.3); }
+.swot-card.wt { background: rgba(220,38,38,0.08); border: 1.5px solid rgba(220,38,38,0.3); }
+.swot-card .swot-label { font-size: 1.1rem; font-weight: 900; margin-bottom: 4px; }
+.swot-card.so .swot-label { color: #16a34a; }
+.swot-card.st .swot-label { color: #2563eb; }
+.swot-card.wo .swot-label { color: #d97706; }
+.swot-card.wt .swot-label { color: #dc2626; }
+.swot-card h4 { font-size: 0.82rem; font-weight: 700; margin-bottom: 4px; }
+.swot-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+@media (max-width: 680px) { .swot-grid { grid-template-columns: 1fr; } }
+
+/* VALUE CHAIN */
+.value-chain { margin-top: 14px; }
+.vc-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.vc-label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); width: 70px; flex-shrink: 0; display: flex; align-items: center; }
+.vc-box { flex: 1; background: rgba(37,99,235,0.07); border: 1px solid rgba(37,99,235,0.2); border-radius: 8px; padding: 6px 10px; font-size: 0.78rem; text-align: center; font-weight: 500; min-width: 80px; }
+.vc-box.support { background: rgba(8,145,178,0.07); border-color: rgba(8,145,178,0.2); }
+
+/* STP */
+.stp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 12px; }
+.stp-card { border-radius: 12px; padding: 18px; text-align: center; }
+.stp-card.s { background: rgba(37,99,235,0.08); border: 1.5px solid rgba(37,99,235,0.3); }
+.stp-card.t { background: rgba(124,58,237,0.08); border: 1.5px solid rgba(124,58,237,0.3); }
+.stp-card.p { background: rgba(8,145,178,0.08); border: 1.5px solid rgba(8,145,178,0.3); }
+.stp-letter { font-size: 2rem; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+.stp-card.s .stp-letter { color: #2563eb; }
+.stp-card.t .stp-letter { color: #7c3aed; }
+.stp-card.p .stp-letter { color: #0891b2; }
+.stp-card h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
+.stp-card p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+@media (max-width: 680px) { .stp-grid { grid-template-columns: 1fr; } }
+
+/* TARGETING */
+.target-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.target-chip { flex: 1; border-radius: 10px; padding: 12px 14px; min-width: 130px; text-align: center; }
+.target-chip:nth-child(1) { background: rgba(37,99,235,0.08); border: 1.5px solid rgba(37,99,235,0.25); }
+.target-chip:nth-child(2) { background: rgba(124,58,237,0.08); border: 1.5px solid rgba(124,58,237,0.25); }
+.target-chip:nth-child(3) { background: rgba(8,145,178,0.08); border: 1.5px solid rgba(8,145,178,0.25); }
+.target-chip h4 { font-size: 0.82rem; font-weight: 700; margin-bottom: 4px; }
+
+/* PROMOTION */
+.promo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+.promo-card { border-radius: 12px; padding: 16px; border: 1.5px solid var(--border); }
+.promo-card h4 { font-size: 0.85rem; font-weight: 700; color: var(--purple); margin-bottom: 6px; }
+.promo-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+@media (max-width: 680px) { .promo-grid { grid-template-columns: 1fr; } }
+
+/* CASE CARDS */
+.case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.case-card { border-radius: 16px; padding: 22px; border: 1.5px solid var(--border); }
+.case-card.interpark { border-top: 4px solid #2563eb; }
+.case-card.marketkurly { border-top: 4px solid #16a34a; }
+.case-card.amorepacific { border-top: 4px solid #7c3aed; }
+.case-card.full { grid-column: 1 / -1; }
+.case-company { font-weight: 900; font-size: 1rem; margin-bottom: 4px; }
+.case-badge { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 2px 10px; border-radius: 10px; margin-bottom: 10px; color: white; }
+.badge-blue { background: #2563eb; }
+.badge-green { background: #16a34a; }
+.badge-purple { background: #7c3aed; }
+.case-item { font-size: 0.84rem; line-height: 1.75; padding-left: 2px; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 8px; }
+.case-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.case-item strong { color: var(--primary); font-size: 0.8rem; display: block; margin-bottom: 2px; }
+.case-card.marketkurly .case-item strong { color: #16a34a; }
+.case-card.amorepacific .case-item strong { color: #7c3aed; }
+@media (max-width: 680px) { .case-grid { grid-template-columns: 1fr; } }
+
+/* QUIZ */
+.quiz-item { background: var(--bg); border: 1.5px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 16px; }
+.quiz-q { font-size: 0.95rem; font-weight: 600; line-height: 1.6; margin-bottom: 14px; }
+.q-num { display: inline-block; background: var(--primary); color: white; font-size: 0.75rem; font-weight: 700; padding: 2px 9px; border-radius: 8px; margin-right: 8px; }
+.btn-reveal { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 8px 18px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: 'Noto Sans KR', sans-serif; }
+.btn-reveal:hover { background: var(--primary-dark); }
+.btn-reveal.revealed { background: #6b7280; }
+.quiz-answer { display: none; margin-top: 14px; padding: 14px 18px; background: rgba(22,163,74,0.07); border: 1.5px solid rgba(22,163,74,0.3); border-radius: 10px; font-size: 0.87rem; line-height: 1.8; }
+.quiz-answer .ans-label { font-weight: 700; color: #16a34a; margin-bottom: 6px; display: block; font-size: 0.8rem; }
+.quiz-answer ul { padding-left: 18px; }
+.quiz-answer li { margin-bottom: 4px; }
+
+/* CONDITIONS */
+.conditions-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 10px; }
+.cond-box { border-radius: 10px; padding: 12px 8px; text-align: center; font-size: 0.78rem; font-weight: 600; }
+.cond-box:nth-child(1) { background: rgba(37,99,235,0.08); color: #2563eb; }
+.cond-box:nth-child(2) { background: rgba(124,58,237,0.08); color: #7c3aed; }
+.cond-box:nth-child(3) { background: rgba(8,145,178,0.08); color: #0891b2; }
+.cond-box:nth-child(4) { background: rgba(217,119,6,0.08); color: #d97706; }
+.cond-box:nth-child(5) { background: rgba(22,163,74,0.08); color: #16a34a; }
+@media (max-width: 680px) { .conditions-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* FIVE FORCES */
+.five-forces { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto auto; gap: 10px; margin-top: 14px; }
+.force-box { border-radius: 10px; padding: 12px; text-align: center; font-size: 0.8rem; font-weight: 600; border: 1.5px solid var(--border); }
+.force-box.center { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; border: none; font-size: 0.85rem; }
+.force-box.top { grid-column: 2; }
+.force-box.mid-left { grid-column: 1; }
+.force-box.mid-center { grid-column: 2; }
+.force-box.mid-right { grid-column: 3; }
+.force-box.bottom { grid-column: 2; }
+
+/* PROSUMER/PARETO */
+.paradigm-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.paradigm-arrow { display: flex; align-items: center; flex: 1; gap: 8px; min-width: 200px; }
+.paradigm-before { background: rgba(220,38,38,0.08); border: 1.5px solid rgba(220,38,38,0.25); border-radius: 10px; padding: 10px 14px; font-size: 0.82rem; font-weight: 600; text-align: center; flex: 1; color: #dc2626; }
+.paradigm-after { background: rgba(22,163,74,0.08); border: 1.5px solid rgba(22,163,74,0.25); border-radius: 10px; padding: 10px 14px; font-size: 0.82rem; font-weight: 600; text-align: center; flex: 1; color: #16a34a; }
+.arrow-mid { font-size: 1.2rem; color: var(--text-muted); }
+
+/* FOOTER */
+footer { text-align: center; padding: 24px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="./index.html" class="nav-logo">e-비즈니스의 이해</a>
+  <div class="nav-links">
+    <a href="#exam-info">📋 시험안내</a>
+    <a href="#ch7">📘 7장 이론</a>
+    <a href="#ch8">📗 8장 이론</a>
+    <a href="#cases">💼 사례분석</a>
+    <a href="#quiz">✏️ 단답퀴즈</a>
+  </div>
+  <div class="nav-right">
+    <a href="./index.html" class="nav-home">🏠</a>
+    <button class="btn-theme" id="themeToggle" title="테마 전환">🌙</button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="week-badge">기말고사 · e-비즈니스의 이해</div>
+  <h1>7장·8장 기말고사 학습자료</h1>
+  <p class="subtitle">전자상거래 전략 · e-마케팅 관리와 전략 · 사례 분석</p>
+</header>
+
+<main>
+
+<!-- 시험 안내 -->
+<div class="exam-banner" id="exam-info">
+  <div class="exam-banner-item">
+    <div class="exam-banner-label">🗓 일시 · 장소</div>
+    <div class="exam-banner-value">6월 9일(화) 오후 1:30</div>
+    <div class="exam-banner-sub">18523 강의실</div>
+  </div>
+  <div class="exam-banner-item">
+    <div class="exam-banner-label">📚 시험 범위</div>
+    <div class="exam-banner-value">제 7장 · 제 8장</div>
+    <div class="exam-banner-sub">전자상거래전략 · e-마케팅</div>
+  </div>
+  <div class="exam-banner-item">
+    <div class="exam-banner-label">📝 시험 형식</div>
+    <div class="exam-banner-value">총 40점 만점</div>
+    <div class="exam-banner-sub">서술형 30점(3중 2선택) + 단답형 10점(10문제)</div>
+  </div>
+</div>
+
+<!-- ===== 7장 ===== -->
+<section class="section-card blue" id="ch7">
+  <h2 class="section-title">📘 7장 — 전자상거래 전략 <span class="chapter-tag ch7-tag">Chapter 7</span></h2>
+
+  <div class="sub-h">① 경영전략의 개념</div>
+  <div class="keyword-box">
+    <div class="term">경영전략 정의</div>
+    <div class="def">기업이 기본적이고 장기적인 목표를 설정하고, 그 목표를 달성하는데 필요한 <strong>자사의 자원을 효과적으로 배분하는 의사결정</strong>. 경쟁우위를 창출하는 중요한 의사결정 및 분석체계.</div>
+  </div>
+  <div class="keyword-box">
+    <div class="term">기업의 목표 = 기업가치 극대화</div>
+    <div class="def">
+      <ul>
+        <li><strong>수익성 증가:</strong> 자사 제품의 가치를 높이거나 원가를 감소시키는 전략</li>
+        <li><strong>성장성 향상:</strong> 기존 시장에서의 판매확대 및 새로운 시장의 진입</li>
+      </ul>
+    </div>
+  </div>
+  <div class="keyword-box">
+    <div class="term">경쟁우위</div>
+    <div class="def">독특한 능력이나 우월한 지위. 우수한 기술과 자원을 가지고 저원가·고품질 생산, 우수한 유통망, 독특한 서비스를 통해 산업 내 평균 수익 이상을 획득하는 것.</div>
+  </div>
+
+  <div class="sub-h">② 경쟁우위를 획득하기 위한 조건 5가지</div>
+  <div class="conditions-grid">
+    <div class="cond-box">비교 우위성<br><small style="font-weight:400;font-size:0.72rem">경쟁자 능가</small></div>
+    <div class="cond-box">혁신성<br><small style="font-weight:400;font-size:0.72rem">새롭고 기발함</small></div>
+    <div class="cond-box">독창성<br><small style="font-weight:400;font-size:0.72rem">전략이 독창적</small></div>
+    <div class="cond-box">매력성<br><small style="font-weight:400;font-size:0.72rem">구매자에게 매력적</small></div>
+    <div class="cond-box">수익성<br><small style="font-weight:400;font-size:0.72rem">수익을 가져다줌</small></div>
+  </div>
+
+  <div class="sub-h" style="margin-top:28px">③ M Porter의 본원적 전략</div>
+  <div class="strategy-grid">
+    <div class="strategy-card cost">
+      <h4>① 원가우위전략</h4>
+      <p>원가를 낮추기 위한 노력으로 원가면에서 우세한 위치를 확립하는 전략. 설비규모 적정화, 원가·간접비 절감, R&D·광고비 최소화 등으로 실현.</p>
+    </div>
+    <div class="strategy-card diff">
+      <h4>② 차별화전략</h4>
+      <p>제품·서비스를 차별화함으로써 산업 전반에서 우월하다는 이미지를 창출하는 전략. 고객 서비스, 디자인, 상품 이미지, 마케팅 등 다양한 요소에서 차별화.</p>
+    </div>
+    <div class="strategy-card focus">
+      <h4>③ 집중화전략</h4>
+      <p>세분화된 시장에 초점을 맞춰 제품·서비스를 판매하는 전략.<br>• 원가집중화: 세분시장 내 원가우위<br>• 차별집중화: 세분시장 특별 욕구 반영</p>
+    </div>
+  </div>
+
+  <div class="sub-h" style="margin-top:28px">④ 전자상거래 전략의 특징 (기존 경영전략과 차이점)</div>
+  <div class="keyword-box cyan">
+    <div class="term">전자상거래 환경의 특수성</div>
+    <div class="def">
+      <ul>
+        <li>기업환경의 불확실성 증가</li>
+        <li>변화 예측의 곤란성</li>
+        <li>짧은 정보기술의 발전주기</li>
+        <li>급속한 경쟁의 심화</li>
+      </ul>
+      → 인터넷·디지털 기술을 분명한 방향 설정과 자원 효율적 활용의 핵심으로 삼아야 함
+    </div>
+  </div>
+
+  <div class="sub-h" style="margin-top:28px">⑤ e-변환전략 (e-Transformation)</div>
+  <div class="keyword-box amber">
+    <div class="term">e-Transformation 정의</div>
+    <div class="def">전통적인 기업이 <strong>사업의 영역과 비즈니스 프로세스의 정보화·지식화</strong>를 추구하는 것. 인터넷이 기업 혁신의 중요한 패러다임으로 작용.</div>
+  </div>
+  <div class="etrans-grid">
+    <div class="etrans-card">
+      <div class="etrans-num">①</div>
+      <h4>신규 전자상거래 창출</h4>
+      <p>기존과 다른 새로운 전자상거래를 별도로 창출. 기존 인프라를 유지한 채 별도의 사업부문을 신설.</p>
+    </div>
+    <div class="etrans-card">
+      <div class="etrans-num">②</div>
+      <h4>제품과 서비스의 변화</h4>
+      <p>기존 제품·서비스의 내용을 인터넷 비즈니스에 맞게 변화. 역량·노하우의 연장선에서 새로운 제품 제공.</p>
+    </div>
+    <div class="etrans-card">
+      <div class="etrans-num">③</div>
+      <h4>업무프로세스의 변화</h4>
+      <p>마케팅·재무·인사·구매·조달·서비스 등 업무에 인터넷 활용. 판매의 인터넷화(B2C), 구매의 인터넷화(B2B).</p>
+    </div>
+  </div>
+
+  <div class="sub-h" style="margin-top:28px">⑥ 전자상거래 추진전략 유형 (인터넷 비즈니스 전략)</div>
+  <div class="strategy-type-grid">
+    <div class="stype-card">
+      <h4>상품확보 전략</h4>
+      <ul>
+        <li>직접판매 전략</li>
+        <li>수수료 전략</li>
+        <li>저작권 수집전략</li>
+      </ul>
+    </div>
+    <div class="stype-card">
+      <h4>상품다양화 전략</h4>
+      <ul>
+        <li>시간 차원의 다양화</li>
+        <li>데이터 차원의 다양화</li>
+        <li>기능 차원의 다양화</li>
+        <li>사용성 차원의 다양화</li>
+        <li>묶음판매, 온/오프 병행</li>
+      </ul>
+    </div>
+    <div class="stype-card">
+      <h4>시장대응 전략</h4>
+      <ul>
+        <li>시장방어 전략</li>
+        <li>시장선점 전략</li>
+        <li>초기진입 vs 후발진입</li>
+      </ul>
+    </div>
+    <div class="stype-card">
+      <h4>가격결정 전략</h4>
+      <ul>
+        <li>요금부과 방식: 정액제 · 종량제</li>
+        <li>가격 차별화: 개인화 · 집단화 유형</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-h" style="margin-top:28px">⑦ e-마켓플레이스 참여전략</div>
+  <div class="keyword-box cyan">
+    <div class="term">e-마켓플레이스 (e-Marketplace)</div>
+    <div class="def">인터넷을 매개로 <strong>가상공간에서 동종 산업 혹은 이종 산업 기업들이 만나 종합적으로 거래가 이루어지는 시장</strong>. 플랫폼 형태의 종합 쇼핑몰. 벤처 수준에서 시작하여 대기업들이 참여하면서 크게 확장.</div>
+  </div>
+
+  <div class="sub-h" style="margin-top:28px">⑧ 전략 분석 도구</div>
+
+  <p style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">M Porter 경쟁세력 모형 (5 Forces)</p>
+  <div class="five-forces">
+    <div></div>
+    <div class="force-box top">신규 진입 기업의 위협</div>
+    <div></div>
+    <div class="force-box mid-left">공급자와의 교섭력</div>
+    <div class="force-box center mid-center">기존 경쟁자간<br>경쟁</div>
+    <div class="force-box mid-right">구매자와의 교섭력</div>
+    <div></div>
+    <div class="force-box bottom">대체재의 위협</div>
+    <div></div>
+  </div>
+
+  <p style="font-size:0.85rem;font-weight:600;margin:20px 0 8px;">M Porter 가치사슬 모형</p>
+  <div class="value-chain">
+    <div class="vc-row">
+      <div class="vc-label">주 활동</div>
+      <div class="vc-box">원자재 투입<br><small>Inbound Logistics</small></div>
+      <div class="vc-box">생산/운영<br><small>Operation</small></div>
+      <div class="vc-box">출고와 물류<br><small>Outbound Logistics</small></div>
+      <div class="vc-box">마케팅/판매<br><small>Marketing & Sales</small></div>
+      <div class="vc-box">서비스<br><small>Service</small></div>
+    </div>
+    <div class="vc-row">
+      <div class="vc-label">보조 활동</div>
+      <div class="vc-box support">기업 인프라</div>
+      <div class="vc-box support">인적 자원 관리</div>
+      <div class="vc-box support">기술 관리</div>
+      <div class="vc-box support">조달 활동</div>
+    </div>
+  </div>
+  <p style="font-size:0.78rem;color:var(--text-muted);margin-top:8px;">→ 주활동과 보조활동을 통해 <strong>이윤(Margin)</strong>을 창출하며, 경쟁우위의 원천을 파악하는 도구</p>
+
+  <p style="font-size:0.85rem;font-weight:600;margin:20px 0 8px;">핵심역량 분석</p>
+  <div class="keyword-box green">
+    <div class="term">핵심역량 (Core Competence)</div>
+    <div class="def">경쟁 기업에 비해서 우월한 경쟁우위를 가져다주는 기업의 능력이며, <strong>기업 성장의 근원</strong>. 핵심역량 → 핵심제품 → 사업부 → 최종 제품으로 연결.</div>
+  </div>
+
+  <p style="font-size:0.85rem;font-weight:600;margin:20px 0 8px;">SWOT 분석</p>
+  <div class="swot-grid">
+    <div class="swot-card so">
+      <div class="swot-label">SO 전략</div>
+      <h4>시장선점 · 다각화 전략</h4>
+      <p>시장기회와 전략적 강점이 많은 경우, 시장을 선점하거나 시장/제품의 다각화 전략을 추구</p>
+    </div>
+    <div class="swot-card st">
+      <div class="swot-label">ST 전략</div>
+      <h4>시장침투 · 제품계열 확충</h4>
+      <p>위협요인이 있으나 상대적 강점을 갖고 있는 경우, 공격적 시장침투 전략을 쓰거나 제품계열을 확충</p>
+    </div>
+    <div class="swot-card wo">
+      <div class="swot-label">WO 전략</div>
+      <h4>핵심역량 강화 · 전략적 제휴</h4>
+      <p>시장기회는 존재하나 핵심역량이 부족한 경우, 핵심역량을 강화하거나 전략적 제휴를 선택</p>
+    </div>
+    <div class="swot-card wt">
+      <div class="swot-label">WT 전략</div>
+      <h4>집중화 혹은 철수</h4>
+      <p>위협요인이 많고 핵심역량도 부족한 경우, 제품/시장을 재구축(Restructuring)하거나 철수하는 전략</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8장 ===== -->
+<section class="section-card purple" id="ch8">
+  <h2 class="section-title">📗 8장 — e-마케팅 관리와 전략 <span class="chapter-tag ch8-tag">Chapter 8</span></h2>
+
+  <div class="sub-h">① e-마케팅의 정의</div>
+  <div class="keyword-box purple">
+    <div class="term">e-마케팅 정의 (김정구)</div>
+    <div class="def">기업이 고객의 <strong>필요, 욕구, 꿈</strong>을 찾아내어 그것들을 채워줄 수 있는 가치 있는 제품·서비스를 경쟁자보다 더 <strong>효과적·효율적으로 전달</strong>하되, 전체 또는 부분적으로 <strong>인터넷을 중심으로 하는 전자적 수단</strong>을 사용하는 것.</div>
+  </div>
+  <div class="keyword-box purple">
+    <div class="term">전통적 마케팅에서의 확장: 두 가지 관점</div>
+    <div class="def">
+      <ul>
+        <li><strong>첫째:</strong> 기존 전통 기업의 마케팅 방식에 인터넷을 새로운 매체로 받아들임 (예: 백화점 제품을 인터넷으로 판매)</li>
+        <li><strong>둘째:</strong> 인터넷이라는 새로운 틀 속에서 전개되는 완전히 새로운 방식의 마케팅 (예: 인터넷 사이트에서 정보·S/W·서비스 제공 수익)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-h" style="margin-top:28px">② 마케팅 패러다임의 변화</div>
+  <div class="keyword-box purple">
+    <div class="term">정보장벽 붕괴의 시장</div>
+    <div class="def">전자상거래 시장은 '정보장벽 붕괴의 시장'으로 변화. 정보의 신뢰감이 중요해짐. 고객개척→니즈개척→시장개척에서 <strong>커뮤니티 창조</strong>로 변화.</div>
+  </div>
+
+  <div class="paradigm-row">
+    <div class="paradigm-arrow">
+      <div class="paradigm-before">수동형 소비자</div>
+      <div class="arrow-mid">→</div>
+      <div class="paradigm-after">능동형 소비자<br>(전략적 소비자)</div>
+    </div>
+    <div class="paradigm-arrow">
+      <div class="paradigm-before">파레토 법칙<br>(80:20 법칙)</div>
+      <div class="arrow-mid">→</div>
+      <div class="paradigm-after">롱 테일 법칙</div>
+    </div>
+  </div>
+
+  <div class="keyword-box purple" style="margin-top:14px">
+    <div class="term">프로슈머 (Prosumer)</div>
+    <div class="def"><strong>Producer(생산자) + Consumer(소비자)</strong>의 합성어. 상품 생산의 프로세스에도 참가하는 소비자. e-마케팅에서 프로슈머형 소비자 개발이 중요.</div>
+  </div>
+  <div class="keyword-box purple">
+    <div class="term">파레토 법칙 (80:20 법칙)</div>
+    <div class="def">상위 20%의 고객이 전체 매출의 80%를 차지한다는 법칙. e-마케팅 시대에는 <strong>롱테일 법칙</strong>이 적용되는 시대로 변화.</div>
+  </div>
+
+  <div class="sub-h" style="margin-top:28px">③ 4P의 변화</div>
+  <div class="keyword-box purple">
+    <div class="term">4P (마케팅 믹스)</div>
+    <div class="def">제품·서비스의 마케팅 프로세스를 구성하는 4가지 핵심요소로 마케팅 목표를 달성하는 도구의 집합체.<br>
+    <strong>Product(제품) · Price(가격) · Place(유통) · Promotion(촉진)</strong><br>
+    → 인터넷 마케팅에서도 4P는 여전히 중요하나 적용 방식이 변화함.</div>
+  </div>
+
+  <div class="sub-h" style="margin-top:28px">④ e-STP 전략</div>
+  <div class="keyword-box purple">
+    <div class="term">e-STP 전략의 의미</div>
+    <div class="def">마케팅에서 시장을 세분화하고, 세분된 시장 중에서 표적시장을 선정하고, 선정된 표적시장에서 어떤 위상을 확보할 것인지에 대한 방안을 수립하는 전략. <br><strong>"소비자 욕구를 파악하라"</strong></div>
+  </div>
+  <div class="stp-grid">
+    <div class="stp-card s">
+      <div class="stp-letter">S</div>
+      <h4>Segmentation<br>시장세분화</h4>
+      <p>전체시장에서 비슷한 욕구를 가진 소비자를 찾아내어 동질적인 부분시장으로 분류하는 것<br><br>• 공급자 중심: 상품의 가격·성능·크기·특성<br>• 수요자 중심: 인구통계적·지역·지리·심리적 세분화</p>
+    </div>
+    <div class="stp-card t">
+      <div class="stp-letter">T</div>
+      <h4>Targeting<br>표적시장 선정</h4>
+      <p>판매자가 모든 가능한 기업의 자원을 이용하여 특정 노력을 집중시키는 고객의 집단<br><br>선정 기준: 시장 매력도, 기업 경쟁우위, 경쟁의 정도 고려</p>
+    </div>
+    <div class="stp-card p">
+      <div class="stp-letter">P</div>
+      <h4>Positioning<br>포지셔닝</h4>
+      <p>세분화된 시장 중에서 표적시장을 정한 후, 표적 고객의 마음 속에 경쟁제품과 다른 <strong>차별적인 자사 제품의 특성을 강화</strong>시키는 것</p>
+    </div>
+  </div>
+
+  <div class="sub-h" style="margin-top:24px">표적시장 선정전략 3가지</div>
+  <div class="target-row">
+    <div class="target-chip">
+      <h4>① 비차별화 마케팅</h4>
+      <p style="font-size:0.78rem;color:var(--text-muted);">전체 시장을 하나의 시장으로 보고 동일한 마케팅 전략 적용</p>
+    </div>
+    <div class="target-chip">
+      <h4>② 차별화 마케팅</h4>
+      <p style="font-size:0.78rem;color:var(--text-muted);">여러 세분시장을 선정하여 각각 다른 마케팅 전략 적용</p>
+    </div>
+    <div class="target-chip">
+      <h4>③ 집중 마케팅</h4>
+      <p style="font-size:0.78rem;color:var(--text-muted);">특정 세분시장에 모든 자원을 집중하는 전략</p>
+    </div>
+  </div>
+
+  <div class="sub-h" style="margin-top:28px">⑤ 촉진전략 (Promotion Strategy)</div>
+  <div class="promo-grid">
+    <div class="promo-card">
+      <h4>1대1 관계 마케팅</h4>
+      <p>고객정보를 체계적으로 분석하여 개별 고객에게 맞는 <strong>맞춤정보</strong>를 제공함으로써 사이트 충성도를 높여 나가는 방식</p>
+    </div>
+    <div class="promo-card">
+      <h4>직접 마케팅</h4>
+      <p>제품·서비스 생산업자가 <strong>중간상을 거치지 않고</strong> 고객과 직접 연결함으로써 중간상의 중요성이 점차 줄어드는 마케팅 방식</p>
+    </div>
+    <div class="promo-card">
+      <h4>차별적 마케팅</h4>
+      <p>사이트간의 차별화가 이루어지고 <strong>적정 마진과 고품질 정보</strong>가 포함된 사이트로서의 차별적 마케팅을 통해 경쟁우위 확보</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 사례 분석 ===== -->
+<section class="section-card orange" id="cases">
+  <h2 class="section-title">💼 사례 분석 — 이론 적용</h2>
+
+  <div class="case-grid">
+    <!-- 인터파크 -->
+    <div class="case-card interpark full">
+      <div class="case-company">인터파크 (Interpark)</div>
+      <span class="case-badge badge-blue">7장 연계 — 전자상거래 전략</span>
+      <div class="case-item">
+        <strong>기업 개요 · 최초 타이틀</strong>
+        1996년 국내 최초로 인터넷 쇼핑사업 시작(이기형 회장). 1995년 데이콤의 사내 벤처로 출발. 우리나라 최초의 온라인 종합쇼핑몰. B2C와 B2B 쇼핑몰을 동시에 운영하는 국내 유일 기업.
+      </div>
+      <div class="case-item">
+        <strong>차별화 전략 (7장 Porter 본원적 전략)</strong>
+        • 2003년 업계 최초 도서판매 무료배송 → 도서 판매액 3배, 전체 판매액 2배 증가, 1위 YES24 매출 능가<br>
+        • "최초" 포지셔닝: 소비자는 최고·최초만을 기억함 → 최초의 종합쇼핑몰이라는 브랜드 인식<br>
+        • 공연·여행·도서 등 문화 아이템 강자 쇼핑몰
+      </div>
+      <div class="case-item">
+        <strong>집중화 전략 (7장 Porter 본원적 전략)</strong>
+        2000년부터 도서·화장품·티켓 상품에 집중하는 집중화 전략 추진 → 타 상품에 대한 연계 구매 증가.
+      </div>
+      <div class="case-item">
+        <strong>추진전략 적용 (7장 추진전략 유형)</strong>
+        수수료 전략 + 직접판매 전략 / 도서·화장품·공연티켓 집중화·차별화 / 시장선점 전략(최초 진입) · 시장방어 전략 / 가격차별화 전략(무료배송)
+      </div>
+      <div class="case-item">
+        <strong>e-마켓플레이스 전략 (7장 e-마켓플레이스)</strong>
+        2011년 MRO 관련 e-마켓플레이스 아이마켓코리아 인수. 삼성그룹 소모성 자재(MRO) 공급 구매대행업체. 2016년까지 삼성그룹에서 연간 2조원 물량 보장 → B2B e-마켓플레이스 전략의 실행.
+      </div>
+      <div class="case-item">
+        <strong>G마켓 분사·매각 (e-변환전략 — 신규 e-Commerce 창출 후 매각)</strong>
+        2000년 사내기업 G마켓 탄생(취득원가 27억) → 2009년 이베이에 4,688억원 매각(약 4,661억 차익) → 2021년 신세계그룹이 재인수.
+      </div>
+      <div class="case-item">
+        <strong>공연·여행 시장 구축 (업무프로세스 변화 — e-변환 ③)</strong>
+        공연: 영세 공연기획사 지원, 공연장 건립(용산 블루스퀘어) → 국내 공연티켓 시장 점유율 70% / 여행: 항공권 대규모 구입·패키지 개발 → 국내 온라인 항공권 점유율 47%
+      </div>
+    </div>
+
+    <!-- 마켓컬리 -->
+    <div class="case-card marketkurly full">
+      <div class="case-company">마켓컬리 (Market Kurly)</div>
+      <span class="case-badge badge-green">7장 + 8장 연계 — e-변환 · e-마케팅</span>
+      <div class="case-item">
+        <strong>사업 개요 · 새벽배송 최초 도입</strong>
+        2015년 국내에 새벽배송 최초 도입(스타트업 마켓컬리). 2018년 쿠팡 진입, 이후 SSG닷컴·롯데온·BGF리테일·GS리테일 참여.
+        새벽배송: 우유·신문처럼 새벽에 집 앞에 두고 가는 방식. 교통 체증 없는 새벽 시간대로 배송 효율성 높음.
+      </div>
+      <div class="case-item">
+        <strong>시장 진입 요인 (7장 시장선점 전략)</strong>
+        • 우리나라 온라인 식품시장 침투율이 아직 낮음(2026년 현재 26%)<br>
+        • 가전(58.1%)·가구(48.8%)·화장품(48%)·패션(49%)보다 낮은 수준 → 성장 가능성 있는 시장
+      </div>
+      <div class="case-item">
+        <strong>핵심 전략 — AI·빅데이터 활용 (7장 e-변환 ③ 업무프로세스 변화)</strong>
+        신선식품은 하루만 지나도 가치 하락 → 재고 = 손실. 빅데이터·머신러닝 기반 판매예측시스템으로 수요 예측. <strong>폐기율 7년간 1% 유지</strong>가 목표이자 경쟁력의 핵심.
+      </div>
+      <div class="case-item">
+        <strong>AI 6대 활용 영역 (8장 e-마케팅 전략과 연계)</strong>
+        ① 개인화 추천 시스템 (협업필터링·컨텐츠 기반·하이브리드) — 8장 1대1 관계마케팅<br>
+        ② 수요 예측 및 재고관리 (회귀분석·시계열 예측, 자동발주시스템)<br>
+        ③ 물류 최적화 (실시간 교통·날씨·주문량 분석, 경로 최적화)<br>
+        ④ 챗봇 고객 서비스 (24시간 자동화, 주문·배송·상품 지원) — 8장 직접 마케팅<br>
+        ⑤ AI 기반 품질관리 (신선도 검사·유통기한 모니터링)<br>
+        ⑥ 마케팅 최적화 (고객 세분화·타겟팅·캠페인 자동화) — 8장 e-STP 연계
+      </div>
+      <div class="case-item">
+        <strong>경쟁력 분석</strong>
+        독보적 물류시스템(자체 물류센터·통합 물류) / 기술혁신(AI 수요예측·경로 최적화) / 고객 경험·신뢰(맞춤형 서비스·품질관리) / 브랜드·마케팅 능력(소셜 미디어·컨텐츠 마케팅)
+      </div>
+    </div>
+
+    <!-- 아모레퍼시픽·스타벅스 -->
+    <div class="case-card amorepacific full">
+      <div class="case-company">아모레퍼시픽 · 스타벅스</div>
+      <span class="case-badge badge-purple">8장 연계 — e-STP 전략</span>
+      <div class="case-item">
+        <strong>STP 전략을 수행하는 이유</strong>
+        ① 소비자 욕구가 다양해 하나의 접근 방식으로 모든 소비자 만족 불가<br>
+        ② 한정된 자원으로 최대의 이익 → 효과가 큰 고객집단에 집중 필요<br>
+        ③ 분산 전략보다 한 곳 집중이 투자 자원 효과가 더 큼
+      </div>
+      <div class="case-item">
+        <strong>아모레퍼시픽 — Segmentation</strong>
+        상품 기준(공급자 중심): 가격·기능성·크기·특성 / 고객 기준(수요자 중심): 연령대·색조 선호·가격대별 세분화
+      </div>
+      <div class="case-item">
+        <strong>아모레퍼시픽 — Targeting · Positioning</strong>
+        다양한 연령대·라이프스타일별 타겟 브랜드 운영(설화수·라네즈·에뛰드하우스 등).<br>
+        포지셔닝 기준: 색조 · 가격 · 기능성 · 연령대 → 포지셔닝 맵으로 브랜드별 차별화 위상 확보.
+      </div>
+      <div class="case-item">
+        <strong>스타벅스 — STP 전략</strong>
+        Segmentation: 라이프스타일·소득수준·연령별 세분화 / Targeting: 도시 직장인·학생 등 특정 고객층 / Positioning: '프리미엄 커피 경험'·'제3의 공간'으로 포지셔닝
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 단답형 퀴즈 ===== -->
+<section class="section-card green" id="quiz">
+  <h2 class="section-title">✏️ 단답형 퀴즈 <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">— 정답 확인 후 학습</span></h2>
+  <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:24px;">각 문항을 스스로 생각한 뒤 [정답 확인] 버튼을 누르세요.</p>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q1</span> 경영전략을 정의하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a1',this)">정답 확인</button>
+    <div class="quiz-answer" id="a1">
+      <span class="ans-label">✅ 모범 답안</span>
+      기업이 기본적이고 장기적인 목표를 설정하고, 그 목표를 달성하는데 필요한 자사의 자원을 효과적으로 배분하는 의사결정. 오늘날에는 기업에게 경쟁우위를 제공하고 유지시켜줄 수 있는 중요한 의사결정 및 분석체계를 의미함.
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q2</span> M Porter의 본원적 전략 3가지를 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a2',this)">정답 확인</button>
+    <div class="quiz-answer" id="a2">
+      <span class="ans-label">✅ 모범 답안</span>
+      <ul>
+        <li><strong>① 원가우위전략:</strong> 원가를 낮추기 위한 노력으로 원가면에서 우세한 위치를 확립하는 전략 (설비 적정화, 원가·간접비 절감 등)</li>
+        <li><strong>② 차별화전략:</strong> 제품·서비스를 차별화함으로써 산업 전반에서 우월하다는 이미지를 창출하는 전략</li>
+        <li><strong>③ 집중화전략:</strong> 세분화된 시장에 초점을 맞춰 제품·서비스를 판매하는 전략. 원가집중화와 차별집중화로 구분됨.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q3</span> 경쟁전략에서 경쟁우위를 획득하기 위한 조건 5가지를 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a3',this)">정답 확인</button>
+    <div class="quiz-answer" id="a3">
+      <span class="ans-label">✅ 모범 답안</span>
+      <ul>
+        <li><strong>① 비교 우위성:</strong> 전략이 경쟁자들을 능가하는 특정한 강점을 제공하는 것</li>
+        <li><strong>② 혁신성:</strong> 전략이 새롭고 기발하고 혁신적이어야 하는 것</li>
+        <li><strong>③ 독창성:</strong> 전략이 독창적이어야 하는 것</li>
+        <li><strong>④ 매력성:</strong> 전략이 구매자들에게 매력적이어야 하는 것</li>
+        <li><strong>⑤ 수익성:</strong> 전략이 수익성을 가져다 주어야 하는 것</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q4</span> e-변환전략(e-Transformation)을 정의하고, 3가지 형태를 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a4',this)">정답 확인</button>
+    <div class="quiz-answer" id="a4">
+      <span class="ans-label">✅ 모범 답안</span>
+      <strong>정의:</strong> 전통적인 기업이 사업의 영역과 비즈니스 프로세스의 정보화·지식화를 추구하는 것.<br><br>
+      <strong>3가지 형태:</strong>
+      <ul>
+        <li><strong>① 신규 전자상거래 창출:</strong> 기존 사업과 다른 새로운 전자상거래를 별도로 창출. 기존 인프라를 유지한 채 별도 사업부문 신설.</li>
+        <li><strong>② 제품과 서비스의 변화:</strong> 기존 제품·서비스를 인터넷 비즈니스에 맞게 변화. 역량·노하우의 연장선에서 새로운 제품 제공.</li>
+        <li><strong>③ 업무프로세스의 변화:</strong> 마케팅·재무·인사·구매·조달·서비스 등 업무에 인터넷 활용. 판매의 인터넷화(B2C), 구매의 인터넷화(B2B).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q5</span> 상품확보 전략 유형 3가지를 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a5',this)">정답 확인</button>
+    <div class="quiz-answer" id="a5">
+      <span class="ans-label">✅ 모범 답안</span>
+      <ul>
+        <li><strong>① 직접판매 전략:</strong> 기업이 상품을 소비자에게 직접 판매하는 방식</li>
+        <li><strong>② 수수료 전략:</strong> 거래를 중개하고 수수료를 받는 방식</li>
+        <li><strong>③ 저작권 수집전략:</strong> 디지털 콘텐츠 등 저작권을 활용하여 수익을 창출하는 방식</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q6</span> e-마켓플레이스를 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a6',this)">정답 확인</button>
+    <div class="quiz-answer" id="a6">
+      <span class="ans-label">✅ 모범 답안</span>
+      인터넷을 매개로 가상공간에서 동종 산업 혹은 이종 산업 기업들이 만나 종합적으로 거래가 이루어지는 시장. 플랫폼 형태의 종합 쇼핑몰. 벤처 수준에서 시작하여 대기업들이 참여하면서 크게 확장됨.
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q7</span> M Porter의 가치사슬 모형을 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a7',this)">정답 확인</button>
+    <div class="quiz-answer" id="a7">
+      <span class="ans-label">✅ 모범 답안</span>
+      기업의 활동을 <strong>주활동</strong>과 <strong>보조활동</strong>으로 구분하여 이윤을 창출하는 경쟁우위의 원천을 파악하는 분석 도구.<br><br>
+      <strong>주활동:</strong> 원자재투입(Inbound Logistics) → 생산/운영(Operation) → 출고와 물류(Outbound Logistics) → 마케팅 및 판매(Marketing &amp; Sales) → 서비스(Service)<br>
+      <strong>보조활동:</strong> 기업인프라 / 인적 자원 관리 / 기술 관리 / 조달 활동
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q8</span> SWOT 분석의 4가지 전략(SO·ST·WO·WT)을 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a8',this)">정답 확인</button>
+    <div class="quiz-answer" id="a8">
+      <span class="ans-label">✅ 모범 답안</span>
+      <ul>
+        <li><strong>SO전략 (시장선점·다각화):</strong> 시장기회와 강점이 많은 경우, 시장을 선점하거나 시장·제품의 다각화 전략 추구</li>
+        <li><strong>ST전략 (시장침투·제품계열 확충):</strong> 위협이 있으나 강점을 보유한 경우, 공격적 시장침투 또는 제품계열을 확충하는 전략</li>
+        <li><strong>WO전략 (핵심역량 강화·전략적 제휴):</strong> 시장기회는 있으나 핵심역량이 부족한 경우, 역량 강화 또는 전략적 제휴 선택</li>
+        <li><strong>WT전략 (집중화 혹은 철수):</strong> 위협이 많고 핵심역량도 부족한 경우, 제품·시장을 재구축(Restructuring)하거나 철수하는 전략</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q9</span> e-마케팅을 정의하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a9',this)">정답 확인</button>
+    <div class="quiz-answer" id="a9">
+      <span class="ans-label">✅ 모범 답안</span>
+      기업이 고객의 필요·욕구·꿈을 찾아내어 그것들을 채워줄 수 있는 가치 있는 제품이나 서비스를 경쟁자보다 더 효과적·효율적으로 전달하되, 전체 또는 부분적으로 인터넷을 중심으로 하는 전자적 수단을 사용하는 것.
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q10</span> 프로슈머(Prosumer)를 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a10',this)">정답 확인</button>
+    <div class="quiz-answer" id="a10">
+      <span class="ans-label">✅ 모범 답안</span>
+      생산자(Producer)와 소비자(Consumer)의 합성어. 상품 생산의 프로세스에도 참가하는 소비자. 수동형 소비자에서 능동형 소비자로 변화한 e-마케팅 시대의 소비자 유형으로, 프로슈머형 소비자 개발이 중요함.
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q11</span> e-STP전략의 S(세분화), T(타겟팅), P(포지셔닝)를 각각 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a11',this)">정답 확인</button>
+    <div class="quiz-answer" id="a11">
+      <span class="ans-label">✅ 모범 답안</span>
+      <ul>
+        <li><strong>S - Segmentation(시장세분화):</strong> 전체시장에서 비슷한 욕구를 가진 소비자를 찾아내어 동질적인 부분시장으로 분류하는 것</li>
+        <li><strong>T - Targeting(표적시장 선정):</strong> 판매자가 모든 가능한 기업의 자원을 이용하여 특정 노력을 집중시키는 고객의 집단을 선정하는 것</li>
+        <li><strong>P - Positioning(포지셔닝):</strong> 세분화된 시장 중에서 표적시장을 정한 후, 표적 고객의 마음 속에 경쟁제품과 다른 차별적인 자사 제품의 특성을 강화시키는 것</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q12</span> 표적시장 선정전략 3가지를 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a12',this)">정답 확인</button>
+    <div class="quiz-answer" id="a12">
+      <span class="ans-label">✅ 모범 답안</span>
+      <ul>
+        <li><strong>① 비차별화 마케팅:</strong> 전체 시장을 하나로 보고 모든 소비자에게 동일한 마케팅 전략 적용</li>
+        <li><strong>② 차별화 마케팅:</strong> 여러 세분시장을 선정하고 각 시장에 맞는 서로 다른 마케팅 전략 적용</li>
+        <li><strong>③ 집중 마케팅:</strong> 특정 하나의 세분시장에 모든 자원과 노력을 집중하는 전략</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q13</span> e-마케팅의 촉진전략 3가지를 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a13',this)">정답 확인</button>
+    <div class="quiz-answer" id="a13">
+      <span class="ans-label">✅ 모범 답안</span>
+      <ul>
+        <li><strong>① 1대1 관계 마케팅:</strong> 고객정보를 체계적으로 분석하여 개별 고객에게 맞는 맞춤정보를 제공함으로써 사이트 충성도를 높이는 방식</li>
+        <li><strong>② 직접 마케팅:</strong> 제품·서비스 생산업자가 중간상을 거치지 않고 고객과 직접 연결하여 중간상의 역할을 최소화하는 방식</li>
+        <li><strong>③ 차별적 마케팅:</strong> 적정 마진과 고품질 정보가 포함된 사이트로서 사이트간 차별화를 이루는 마케팅</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q14</span> 파레토 법칙과 롱테일 법칙을 비교하여 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a14',this)">정답 확인</button>
+    <div class="quiz-answer" id="a14">
+      <span class="ans-label">✅ 모범 답안</span>
+      <strong>파레토 법칙(80:20 법칙):</strong> 상위 20%의 고객이 전체 매출의 80%를 차지한다는 법칙. 오프라인 시장에서 주로 적용됨.<br><br>
+      <strong>롱테일 법칙:</strong> 인터넷·e-마케팅 시대에는 파레토 법칙 대신 롱테일 법칙이 적용되는 시대로 변화. 나머지 80%의 다양한 소수 고객들이 합산하여 큰 매출을 만들어내는 구조.
+    </div>
+  </div>
+
+  <div class="quiz-item">
+    <p class="quiz-q"><span class="q-num">Q15</span> 가격결정 전략 2가지 유형을 설명하시오.</p>
+    <button class="btn-reveal" onclick="toggleAnswer('a15',this)">정답 확인</button>
+    <div class="quiz-answer" id="a15">
+      <span class="ans-label">✅ 모범 답안</span>
+      <ul>
+        <li><strong>① 요금부과 방식 전략:</strong> 정액제(일정 금액을 내고 무제한 사용)와 종량제(사용량에 따라 요금 부과)로 구분</li>
+        <li><strong>② 가격 차별화 전략:</strong> 개인화 유형(개별 고객에 따라 다른 가격 책정)과 집단화 유형(고객 집단별로 다른 가격 책정)으로 구분</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  e-비즈니스의 이해 · 기말고사 학습자료 · 한신대학교 2학년 1학기
+</footer>
+
+<script>
+// Dark Mode
+const html = document.documentElement;
+const btn = document.getElementById('themeToggle');
+const saved = localStorage.getItem('theme') || 'light';
+html.setAttribute('data-theme', saved);
+btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+btn.addEventListener('click', () => {
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  btn.textContent = next === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('theme', next);
+});
+
+// Quiz Toggle
+function toggleAnswer(id, btn) {
+  const ans = document.getElementById(id);
+  const showing = ans.style.display === 'block';
+  ans.style.display = showing ? 'none' : 'block';
+  btn.textContent = showing ? '정답 확인' : '정답 숨기기';
+  btn.classList.toggle('revealed', !showing);
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
