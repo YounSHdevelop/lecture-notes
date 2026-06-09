@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>자료구조 기말고사 학습자료</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --primary: #2563eb; --primary-dark: #1e3a8a;
@@ -14,14 +14,14 @@
   --text: #111827; --text-muted: #6b7280; --border: #e5e7eb;
   --nav-bg: rgba(255,255,255,0.95);
   --shadow: 0 4px 24px rgba(0,0,0,0.08);
-  --code-bg: #f1f5f9;
+  --code-bg: #f6f8fa; --code-border: #dde1e7;
 }
 [data-theme="dark"] {
   --bg: #0f172a; --card-bg: #1e293b;
   --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
   --nav-bg: rgba(15,23,42,0.95);
   --shadow: 0 4px 24px rgba(0,0,0,0.4);
-  --code-bg: #0b1220;
+  --code-bg: #161b22; --code-border: #30363d;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; padding-top:64px; }
@@ -94,10 +94,14 @@ body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--
 .compare-table tr:nth-child(even) td { background:var(--bg); }
 
 /* CODE BLOCK */
-.code-block { background:var(--code-bg); border-radius:10px; padding:14px 18px; margin:12px 0; font-family:'Courier New',monospace; font-size:0.82rem; overflow-x:auto; border:1px solid var(--border); line-height:1.8; }
-.code-block .comment { color:var(--text-muted); font-style:italic; }
-.code-block .kw { color:var(--primary); font-weight:700; }
-.code-block .fn { color:var(--success); font-weight:600; }
+.code-block { background:#1a2035; color:#cdd6f4; border-radius:12px; padding:0.35rem 1.4rem; font-family:'JetBrains Mono','Fira Code','Courier New',monospace; font-size:0.87rem; line-height:2; overflow-x:auto; margin:14px 0; white-space:pre; }
+[data-theme="dark"] .code-block { background:#11172a; }
+.code-block .kw  { color:#89b4fa; font-weight:700; }   /* 키워드: typedef struct int return if void */
+.code-block .cls { color:#f9e2af; font-weight:600; }   /* 타입명: QueueType ListNode TreeNode element */
+.code-block .mth { color:#cba6f7; font-weight:600; }   /* 함수명: enqueue dequeue malloc printf */
+.code-block .cm  { color:#6c7086; font-style:italic; } /* 주석 */
+.code-block .str { color:#a6e3a1; }                    /* 문자열 리터럴 */
+.code-block .num { color:#fab387; }                    /* 숫자 */
 
 /* HIGHLIGHT BOX */
 .highlight-box { background:rgba(37,99,235,0.08); border:1px solid rgba(37,99,235,0.25); border-radius:10px; padding:14px 18px; margin:14px 0; }
@@ -326,12 +330,12 @@ h3.sub.danger { border-left-color:var(--danger); }
   <h3 class="sub">큐의 ADT (추상 데이터 타입)</h3>
   <p style="font-size:0.88rem;margin-bottom:10px;">코딩 전에 먼저 <strong>추상 데이터 타입</strong>으로 기능과 인터페이스를 정의하는 것이 중요.</p>
   <div class="code-block">
-<span class="comment">// 큐 ADT 정의</span>
-<span class="kw">create</span>(size)      <span class="comment">→ 크기가 size인 빈 큐 생성</span>
-<span class="kw">enqueue</span>(q, e)    <span class="comment">→ 큐 q의 맨 뒤에 데이터 e 삽입 (isFull 먼저 확인)</span>
-<span class="kw">dequeue</span>(q)       <span class="comment">→ 큐 q의 맨 앞 데이터 삭제 후 반환 (isEmpty 먼저 확인)</span>
-<span class="kw">isEmpty</span>(q)       <span class="comment">→ 큐가 비어있으면 TRUE 반환</span>
-<span class="kw">isFull</span>(q)        <span class="comment">→ 큐가 가득 찼으면 TRUE 반환</span>
+<span class="cm">// Queue ADT — 연산 목록 (함수 원형)</span>
+<span class="kw">void</span>    <span class="mth">create</span>(<span class="cls">QueueType</span> *q);              <span class="cm">// 빈 큐 초기화</span>
+<span class="kw">void</span>    <span class="mth">enqueue</span>(<span class="cls">QueueType</span> *q, <span class="cls">element</span> e); <span class="cm">// 맨 뒤에 삽입</span>
+<span class="cls">element</span> <span class="mth">dequeue</span>(<span class="cls">QueueType</span> *q);              <span class="cm">// 맨 앞에서 삭제 후 반환</span>
+<span class="kw">int</span>     <span class="mth">isEmpty</span>(<span class="cls">QueueType</span> *q);              <span class="cm">// 비어있으면 1 반환</span>
+<span class="kw">int</span>     <span class="mth">isFull</span>(<span class="cls">QueueType</span> *q);               <span class="cm">// 가득 찼으면 1 반환</span>
   </div>
 
   <h3 class="sub">선형 큐 구현 (배열 이용)</h3>
@@ -362,24 +366,29 @@ h3.sub.danger { border-left-color:var(--danger); }
   </div>
 
   <div class="code-block">
-<span class="comment">// 선형 큐 C 구조체</span>
+<span class="cm">// 선형 큐 구조체 및 구현</span>
+<span class="kw">#define</span> MAX_QUEUE_SIZE <span class="num">100</span>
+<span class="kw">typedef int</span> <span class="cls">element</span>;
+
 <span class="kw">typedef struct</span> {
-    element  data[MAX_QUEUE_SIZE];   <span class="comment">// 데이터 배열</span>
-    <span class="kw">int</span>      front;                  <span class="comment">// 맨 앞 인덱스 (초기값 -1)</span>
-    <span class="kw">int</span>      rear;                   <span class="comment">// 맨 뒤 인덱스 (초기값 -1)</span>
-} QueueType;
+    <span class="cls">element</span> data[MAX_QUEUE_SIZE];
+    <span class="kw">int</span> front; <span class="cm">// 삭제 위치 (초기값: -1)</span>
+    <span class="kw">int</span> rear;  <span class="cm">// 삽입 위치 (초기값: -1)</span>
+} <span class="cls">QueueType</span>;
 
-<span class="comment">// 초기화</span>
-<span class="fn">void</span> init_queue(QueueType *q) { q->front = q->rear = -1; }
-
-<span class="comment">// enqueue</span>
-<span class="fn">void</span> enqueue(QueueType *q, element e) {
-    q->data[++(q->rear)] = e;         <span class="comment">// rear 먼저 증가 후 저장</span>
+<span class="kw">void</span> <span class="mth">init_queue</span>(<span class="cls">QueueType</span> *q) {
+    q->front = <span class="num">-1</span>;
+    q->rear  = <span class="num">-1</span>;
 }
 
-<span class="comment">// dequeue</span>
-<span class="fn">element</span> dequeue(QueueType *q) {
-    <span class="kw">return</span> q->data[++(q->front)];    <span class="comment">// front 먼저 증가 후 반환</span>
+<span class="kw">void</span> <span class="mth">enqueue</span>(<span class="cls">QueueType</span> *q, <span class="cls">element</span> e) {
+    <span class="cm">// rear를 먼저 증가시킨 후 데이터 저장</span>
+    q->data[++(q->rear)] = e;
+}
+
+<span class="cls">element</span> <span class="mth">dequeue</span>(<span class="cls">QueueType</span> *q) {
+    <span class="cm">// front를 먼저 증가시킨 후 데이터 반환</span>
+    <span class="kw">return</span> q->data[++(q->front)];
 }
   </div>
 
@@ -427,19 +436,24 @@ h3.sub.danger { border-left-color:var(--danger); }
   </div>
 
   <div class="code-block">
-<span class="comment">// 원형 큐 핵심 코드</span>
-<span class="fn">void</span> enqueue(QueueType *q, element e) {
-    q->rear = (q->rear + 1) % MAX_QUEUE_SIZE;  <span class="comment">// % 연산으로 순환</span>
+<span class="kw">void</span> <span class="mth">enqueue</span>(<span class="cls">QueueType</span> *q, <span class="cls">element</span> e) {
+    <span class="cm">// % 연산으로 인덱스를 0으로 순환시킴</span>
+    q->rear = (q->rear + <span class="num">1</span>) % MAX_QUEUE_SIZE;
     q->data[q->rear] = e;
 }
 
-<span class="fn">element</span> dequeue(QueueType *q) {
-    q->front = (q->front + 1) % MAX_QUEUE_SIZE;
+<span class="cls">element</span> <span class="mth">dequeue</span>(<span class="cls">QueueType</span> *q) {
+    q->front = (q->front + <span class="num">1</span>) % MAX_QUEUE_SIZE;
     <span class="kw">return</span> q->data[q->front];
 }
 
-<span class="fn">int</span> is_full(QueueType *q) {
-    <span class="kw">return</span> (q->rear + 1) % MAX_QUEUE_SIZE == q->front;
+<span class="kw">int</span> <span class="mth">is_empty</span>(<span class="cls">QueueType</span> *q) {
+    <span class="kw">return</span> q->front == q->rear;
+}
+
+<span class="kw">int</span> <span class="mth">is_full</span>(<span class="cls">QueueType</span> *q) {
+    <span class="cm">// front 바로 앞이 rear면 가득 찬 것</span>
+    <span class="kw">return</span> (q->rear + <span class="num">1</span>) % MAX_QUEUE_SIZE == q->front;
 }
   </div>
 
@@ -688,16 +702,18 @@ h3.sub.danger { border-left-color:var(--danger); }
   </div>
 
   <div class="code-block">
-<span class="comment">// 연결 리스트 노드 구조체 (C언어)</span>
-<span class="kw">typedef struct</span> ListNode {
-    element          data;    <span class="comment">// 데이터 필드</span>
-    <span class="kw">struct</span> ListNode *link;   <span class="comment">// 링크 필드 (다음 노드 주소)</span>
-} ListNode;
+<span class="kw">#include</span> <span class="str">&lt;stdlib.h&gt;</span>
+<span class="kw">typedef int</span> <span class="cls">element</span>;
 
-<span class="comment">// 동적 할당으로 새 노드 생성</span>
-ListNode *new_node = (ListNode *)<span class="fn">malloc</span>(<span class="kw">sizeof</span>(ListNode));
-new_node->data = 10;
-new_node->link = NULL;
+<span class="kw">typedef struct</span> <span class="cls">ListNode</span> {
+    <span class="cls">element</span> data;          <span class="cm">// 데이터 필드</span>
+    <span class="kw">struct</span> <span class="cls">ListNode</span> *link; <span class="cm">// 다음 노드 주소 (없으면 NULL)</span>
+} <span class="cls">ListNode</span>;
+
+<span class="cm">// 동적 할당으로 새 노드 생성</span>
+<span class="cls">ListNode</span> *node = (<span class="cls">ListNode</span> *)<span class="mth">malloc</span>(<span class="kw">sizeof</span>(<span class="cls">ListNode</span>));
+node->data = <span class="num">10</span>;
+node->link = <span class="kw">NULL</span>;
   </div>
 
   <div class="highlight-box purple">
@@ -976,17 +992,19 @@ new_node->link = NULL;
 
   <h3 class="sub teal">연결 리스트로 이진 트리 표현</h3>
   <div class="code-block">
-<span class="comment">// 이진 트리 노드 구조체</span>
-<span class="kw">typedef struct</span> TreeNode {
-    element          data;    <span class="comment">// 데이터</span>
-    <span class="kw">struct</span> TreeNode *left;   <span class="comment">// 왼쪽 자식 노드 주소</span>
-    <span class="kw">struct</span> TreeNode *right;  <span class="comment">// 오른쪽 자식 노드 주소</span>
-} TreeNode;
+<span class="kw">#include</span> <span class="str">&lt;stdlib.h&gt;</span>
+<span class="kw">typedef char</span> <span class="cls">element</span>;
 
-<span class="comment">// 예시: 루트 노드 A, 왼쪽 자식 B, 오른쪽 자식 C</span>
-TreeNode *root = (TreeNode *)<span class="fn">malloc</span>(<span class="kw">sizeof</span>(TreeNode));
-root->data = 'A';
-root->left = nodeB;
+<span class="kw">typedef struct</span> <span class="cls">TreeNode</span> {
+    <span class="cls">element</span> data;
+    <span class="kw">struct</span> <span class="cls">TreeNode</span> *left;  <span class="cm">// 왼쪽 자식</span>
+    <span class="kw">struct</span> <span class="cls">TreeNode</span> *right; <span class="cm">// 오른쪽 자식</span>
+} <span class="cls">TreeNode</span>;
+
+<span class="cm">// 루트 A, 왼쪽 자식 B, 오른쪽 자식 C 연결</span>
+<span class="cls">TreeNode</span> *root = (<span class="cls">TreeNode</span> *)<span class="mth">malloc</span>(<span class="kw">sizeof</span>(<span class="cls">TreeNode</span>));
+root->data  = <span class="str">'A'</span>;
+root->left  = nodeB;
 root->right = nodeC;
   </div>
 </div>
@@ -1051,13 +1069,14 @@ root->right = nodeC;
   </div>
 
   <div class="code-block">
-<span class="comment">// 전위 순회 재귀 구현</span>
-<span class="fn">void</span> preorder(TreeNode *root) {
-    <span class="kw">if</span> (root != NULL) {
-        printf("%c ", root->data);   <span class="comment">// 루트 먼저</span>
-        preorder(root->left);         <span class="comment">// 왼쪽</span>
-        preorder(root->right);        <span class="comment">// 오른쪽</span>
-    }
+<span class="cm">// 전위 순회: 루트 → 왼쪽 → 오른쪽</span>
+<span class="kw">void</span> <span class="mth">preorder</span>(<span class="cls">TreeNode</span> *root) {
+    <span class="kw">if</span> (root == <span class="kw">NULL</span>)
+        <span class="kw">return</span>;
+
+    <span class="mth">printf</span>(<span class="str">"%c "</span>, root->data); <span class="cm">// 현재 노드 방문</span>
+    <span class="mth">preorder</span>(root->left);       <span class="cm">// 왼쪽 서브트리</span>
+    <span class="mth">preorder</span>(root->right);      <span class="cm">// 오른쪽 서브트리</span>
 }
   </div>
 

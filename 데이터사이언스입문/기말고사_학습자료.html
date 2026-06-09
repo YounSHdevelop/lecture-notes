@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터사이언스입문 기말고사 학습자료 (7~10장)</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e3a8a;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #06b6d4;
+  --purple: #8b5cf6;
+  --orange: #f97316;
+  --bg: #f3f4f6;
+  --card-bg: #ffffff;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --nav-bg: #ffffff;
+  --code-bg: #f8fafc;
+}
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card-bg: #1e293b;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: #334155;
+  --nav-bg: #1e293b;
+  --code-bg: #0f172a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+}
+header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+header p { font-size: 1rem; opacity: 0.85; }
+.chapter-badges { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+.badge {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 20px;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+nav .nav-links { display: flex; gap: 0; flex: 1; overflow-x: auto; }
+nav a {
+  color: var(--text); text-decoration: none;
+  padding: 1rem 1.1rem; font-size: 0.85rem; font-weight: 500; white-space: nowrap;
+  border-bottom: 3px solid transparent; transition: all 0.2s;
+}
+nav a:hover { color: var(--primary); border-bottom-color: var(--primary); }
+.theme-btn {
+  background: none; border: 1px solid var(--border); border-radius: 8px;
+  padding: 0.4rem 0.8rem; cursor: pointer; font-size: 1.1rem; color: var(--text); flex-shrink: 0;
+}
+main { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+section { margin-bottom: 3rem; }
+.section-title {
+  font-size: 1.5rem; font-weight: 700; color: var(--text);
+  margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem;
+}
+.section-title::after { content:''; flex: 1; height: 2px; background: var(--border); }
+.card-grid { display: grid; grid-template-columns: 1fr; gap: 1.2rem; }
+.card-grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.2rem; }
+.card {
+  background: var(--card-bg); border-radius: 12px; padding: 1.4rem;
+  border-top: 4px solid var(--primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+.card.green  { border-top-color: var(--success); }
+.card.red    { border-top-color: var(--danger); }
+.card.yellow { border-top-color: var(--warning); }
+.card.purple { border-top-color: var(--purple); }
+.card.cyan   { border-top-color: var(--info); }
+.card.orange { border-top-color: var(--orange); }
+.card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; color: var(--text); }
+.card h4 { font-size: 0.9rem; font-weight: 600; color: var(--primary); margin-bottom: 0.5rem; margin-top: 0.8rem; }
+.card p, .card li { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; }
+.card ul { padding-left: 1.2rem; }
+.card ul li { margin-bottom: 0.3rem; }
+.goal-card {
+  background: var(--card-bg); border-radius: 12px;
+  padding: 1.2rem 1.4rem; display: flex; align-items: flex-start; gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.goal-number {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1rem; flex-shrink: 0;
+}
+.goal-number.ch7  { background: #dbeafe; color: #1d4ed8; }
+.goal-number.ch8  { background: #d1fae5; color: #065f46; }
+.goal-number.ch9  { background: #ede9fe; color: #5b21b6; }
+.goal-number.ch10 { background: #fef3c7; color: #92400e; }
+.goal-content h4 { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+.goal-content p  { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+code, .code {
+  font-family: 'Consolas','Monaco',monospace;
+  background: var(--code-bg); border: 1px solid var(--border);
+  border-radius: 4px; padding: 0.1em 0.4em;
+  font-size: 0.82em; color: #c7254e;
+}
+[data-theme="dark"] code, [data-theme="dark"] .code { color: #f472b6; }
+pre {
+  background: #1a2035; color: #cdd6f4;
+  border-radius: 12px; padding: 0.35rem 1.4rem; overflow-x: auto;
+  font-size: 0.87rem; line-height: 2; margin: 0.8rem 0;
+  font-family: 'JetBrains Mono','Fira Code','Courier New',monospace;
+  white-space: pre;
+}
+pre .kw  { color: #89b4fa; font-weight: 700; }
+pre .cls { color: #f9e2af; font-weight: 600; }
+pre .mth { color: #cba6f7; font-weight: 600; }
+pre .cm  { color: #6c7086; font-style: italic; }
+pre .str { color: #a6e3a1; }
+pre .num { color: #fab387; }
+.table-wrap { overflow-x: auto; border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+th { background: var(--primary); color: white; padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; }
+td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--border); color: var(--text); }
+tr:nth-child(even) td { background: var(--bg); }
+.formula {
+  background: linear-gradient(135deg,#eff6ff,#dbeafe);
+  border: 1px solid #93c5fd; border-radius: 8px;
+  padding: 0.7rem 1rem; font-size: 0.88rem; text-align: center;
+  font-weight: 600; color: #1e40af; margin: 0.5rem 0;
+}
+[data-theme="dark"] .formula { background: rgba(37,99,235,0.1); border-color: #3b82f6; color: #93c5fd; }
+.timeline { position: relative; padding-left: 2rem; }
+.timeline::before {
+  content:''; position: absolute; left: 0.75rem; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.timeline-item { position: relative; margin-bottom: 1.5rem; }
+.timeline-dot {
+  position: absolute; left: -1.55rem; top: 0.2rem;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--primary); border: 3px solid var(--card-bg);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+.timeline-content { background: var(--card-bg); border-radius: 10px; padding: 1rem 1.2rem; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+.timeline-title { font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 0.3rem; }
+.timeline-desc  { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+.catch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 1rem; }
+.catch-item {
+  background: var(--card-bg); border-radius: 10px;
+  padding: 1rem 1.2rem; border-left: 4px solid var(--danger);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.catch-item.yellow { border-left-color: var(--warning); }
+.catch-item.green  { border-left-color: var(--success); }
+.catch-item.purple { border-left-color: var(--purple); }
+.catch-item.cyan   { border-left-color: var(--info); }
+.catch-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--danger); margin-bottom: 0.3rem; }
+.catch-item.yellow .catch-label { color: var(--warning); }
+.catch-item.green  .catch-label { color: var(--success); }
+.catch-item.purple .catch-label { color: var(--purple); }
+.catch-item.cyan   .catch-label { color: var(--info); }
+.catch-item h4 { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+.catch-item p  { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+.keyword-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 1rem; }
+.keyword-card { background: var(--card-bg); border-radius: 10px; padding: 1rem 1.2rem; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+.keyword-en { font-size: 0.72rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem; }
+.keyword-ko { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+.keyword-def { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+.quiz-container { display: flex; flex-direction: column; gap: 1.5rem; }
+.quiz-item { background: var(--card-bg); border-radius: 12px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.quiz-q { font-weight: 600; font-size: 0.95rem; margin-bottom: 1rem; color: var(--text); }
+.qnum {
+  display: inline-block; background: var(--primary); color: white;
+  border-radius: 50%; width: 24px; height: 24px; text-align: center;
+  line-height: 24px; font-size: 0.8rem; margin-right: 0.5rem;
+}
+.options { display: flex; flex-direction: column; gap: 0.5rem; }
+.option {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.6rem 0.9rem; border: 1.5px solid var(--border); border-radius: 8px;
+  cursor: pointer; font-size: 0.875rem; color: var(--text);
+  transition: all 0.2s; background: var(--bg);
+}
+.option:hover { border-color: var(--primary); background: #eff6ff; }
+[data-theme="dark"] .option:hover { background: rgba(37,99,235,0.1); }
+.option.correct { border-color: var(--success); background: #d1fae5; color: #065f46; }
+[data-theme="dark"] .option.correct { background: rgba(16,185,129,0.1); color: #6ee7b7; }
+.option.wrong { border-color: var(--danger); background: #fee2e2; color: #991b1b; }
+[data-theme="dark"] .option.wrong { background: rgba(239,68,68,0.1); color: #fca5a5; }
+.option.disabled { pointer-events: none; }
+.feedback { margin-top: 0.8rem; padding: 0.6rem 0.9rem; border-radius: 8px; font-size: 0.85rem; display: none; }
+.feedback.show { display: block; }
+.feedback.correct { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.feedback.wrong   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+[data-theme="dark"] .feedback.correct { background: rgba(16,185,129,0.1); color: #6ee7b7; border-color: #059669; }
+[data-theme="dark"] .feedback.wrong   { background: rgba(239,68,68,0.1); color: #fca5a5; border-color: #dc2626; }
+.short-answer { display: flex; gap: 0.6rem; margin-top: 0.5rem; }
+.short-answer input {
+  flex: 1; padding: 0.6rem 0.8rem; border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 0.875rem; background: var(--bg); color: var(--text); font-family: inherit;
+}
+.short-answer input:focus { outline: none; border-color: var(--primary); }
+.short-answer button {
+  padding: 0.6rem 1.2rem; background: var(--primary); color: white; border: none;
+  border-radius: 8px; cursor: pointer; font-size: 0.875rem; font-weight: 600; font-family: inherit;
+  transition: background 0.2s;
+}
+.short-answer button:hover { background: var(--primary-dark); }
+.chapter-section { margin-bottom: 2rem; }
+.chapter-label {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--primary); color: white; border-radius: 20px;
+  padding: 0.3rem 0.9rem; font-size: 0.82rem; font-weight: 700; margin-bottom: 1rem;
+}
+.chapter-label.ch8  { background: var(--success); }
+.chapter-label.ch9  { background: var(--purple); }
+.chapter-label.ch10 { background: var(--warning); color: #1a1a1a; }
+.score-bar {
+  background: var(--card-bg); border-radius: 12px; padding: 1.2rem; margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 1rem;
+}
+#score-display { font-weight: 700; font-size: 1.1rem; color: var(--primary); min-width: 60px; }
+.score-progress { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+#score-fill { height: 100%; background: var(--primary); border-radius: 4px; width: 0; transition: width 0.5s; }
+.two-col { display: grid; grid-template-columns: 1fr; gap: 1.2rem; }
+@media (max-width: 640px) {
+  header h1 { font-size: 1.4rem; }
+  .card-grid, .card-grid-2, .two-col { grid-template-columns: 1fr; }
+  .catch-grid, .keyword-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📊 데이터사이언스입문 기말고사</h1>
+  <p>7장 ~ 10장 핵심 학습자료 | 5시간 완전 정복</p>
+  <div class="chapter-badges">
+    <span class="badge">7장 matplotlib 시각화</span>
+    <span class="badge">8장 지도학습</span>
+    <span class="badge">9장 비지도학습</span>
+    <span class="badge">10장 모델 검증·튜닝</span>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-links">
+    <a href="#goals">🎯 학습목표</a>
+    <a href="#summary">📚 핵심요약</a>
+    <a href="#timeline">📅 타임라인</a>
+    <a href="#catch">🔥 핵심캐치</a>
+    <a href="#keywords">📖 키워드</a>
+    <a href="#quiz">✏️ 연습문제</a>
+  </div>
+  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">🌙</button>
+</nav>
+
+<main>
+
+<!-- ===== 1. 학습 목표 ===== -->
+<section id="goals">
+  <h2 class="section-title">🎯 학습 목표</h2>
+  <div class="card-grid">
+    <div class="goal-card">
+      <div class="goal-number ch7">7</div>
+      <div class="goal-content">
+        <h4>matplotlib 데이터 시각화</h4>
+        <p>막대·원·버블·금융 차트를 구현하고, 이동평균·로그시계열을 계산하며 데이터 스토리를 전달하는 두괄식 보고서를 작성할 수 있다.</p>
+      </div>
+    </div>
+    <div class="goal-card">
+      <div class="goal-number ch8">8</div>
+      <div class="goal-content">
+        <h4>지도학습 알고리즘</h4>
+        <p>다중회귀, 로지스틱회귀, Ridge/Lasso 정규화 회귀, 의사결정나무, k-NN, SVM의 원리와 scikit-learn 구현 5단계를 설명할 수 있다.</p>
+      </div>
+    </div>
+    <div class="goal-card">
+      <div class="goal-number ch9">9</div>
+      <div class="goal-content">
+        <h4>비지도학습 알고리즘</h4>
+        <p>K-Means 군집분석(엘보우·실루엣), PCA 차원 축소, 장바구니 연관 규칙(지지도·신뢰도·향상도)을 구현하고 해석할 수 있다.</p>
+      </div>
+    </div>
+    <div class="goal-card">
+      <div class="goal-number ch10">10</div>
+      <div class="goal-content">
+        <h4>모델 검증과 튜닝</h4>
+        <p>과적합 해결(홀드아웃·k-fold), GridSearchCV 튜닝, 오차행렬·F1·ROC-AUC·RMSE 등 성능 지표를 계산하고 상황에 맞게 선택할 수 있다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. 핵심 요약 ===== -->
+<section id="summary">
+  <h2 class="section-title">📚 핵심 요약</h2>
+
+  <!-- 7장 -->
+  <div class="chapter-section">
+    <div class="chapter-label">7장 matplotlib 시각화</div>
+    <div class="card-grid-2">
+      <div class="card">
+        <h3>📊 그래프 종류별 코드</h3>
+        <div class="table-wrap" style="margin-top:0.6rem">
+          <table>
+            <tr><th>그래프</th><th>핵심 코드</th></tr>
+            <tr><td>막대 (세로)</td><td><code>plt.bar(x, y, width=0.5)</code></td></tr>
+            <tr><td>막대 (가로)</td><td><code>plt.barh(y, x)</code></td></tr>
+            <tr><td>그룹형 막대</td><td>두 번째 <code>x += w</code> (x 이동)</td></tr>
+            <tr><td>누적형 막대</td><td><code>plt.bar(..., bottom=height1)</code></td></tr>
+            <tr><td>원형</td><td><code>plt.pie(sizes, explode, autopct='%1.1f%%')</code></td></tr>
+            <tr><td>버블</td><td><code>plt.scatter(x, y, s=area, c=colors, alpha=0.5)</code></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card green">
+        <h3>📈 금융 데이터 시각화</h3>
+        <h4>OHLC 데이터</h4>
+        <ul>
+          <li>시가(Open), 고가(High), 저가(Low), 종가(Close)</li>
+          <li><code>pd.Series(rnd_walk).resample('B').ohlc()</code></li>
+        </ul>
+        <h4>캔들스틱 차트 (Plotly)</h4>
+        <pre><span class="kw">import</span> plotly.graph_objects <span class="kw">as</span> go
+fig = go.<span class="cls">Figure</span>(go.<span class="cls">Candlestick</span>(
+  x=df.index,
+  open=df[<span class="str">'open'</span>], high=df[<span class="str">'high'</span>],
+  low=df[<span class="str">'low'</span>],   close=df[<span class="str">'close'</span>]))
+fig.<span class="mth">show</span>()</pre>
+        <h4>이동평균 &amp; 로그수익률</h4>
+        <div class="formula">이동평균: mat = Σ(ys) / n</div>
+        <div class="formula">로그수익률: r_t = log(y_t / y_{t-1})</div>
+      </div>
+      <div class="card yellow">
+        <h3>📝 데이터 보고서 작성 원칙</h3>
+        <ul>
+          <li><strong>두괄식</strong>: 핵심 결론을 먼저 제시</li>
+          <li><strong>스토리 구조</strong>: 핵심 → 배경 → 실행계획</li>
+          <li>숫자는 반드시 시각화로 뒷받침</li>
+          <li>독자 수준에 맞는 언어 사용</li>
+          <li>이상치·계절성 등 패턴을 명시적으로 서술</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8장 -->
+  <div class="chapter-section">
+    <div class="chapter-label ch8">8장 지도학습</div>
+    <div class="card-grid-2">
+      <div class="card">
+        <h3>🤖 머신러닝 개요</h3>
+        <p style="text-align:center; font-size:1.1rem; padding:0.6rem 0; font-weight:700">AI ⊃ 머신러닝(ML) ⊃ 딥러닝(DL)</p>
+        <h4>Tom Mitchell 정의 (1997)</h4>
+        <p>경험(E)을 통해 특정 과제(T)에서의 성능(P)이 향상되는 컴퓨터 프로그램</p>
+        <h4>학습 유형 3가지</h4>
+        <div class="table-wrap" style="margin-top:0.4rem">
+          <table>
+            <tr><th>유형</th><th>특징</th><th>대표 알고리즘</th></tr>
+            <tr><td>지도학습</td><td>레이블 있음</td><td>SVM, 로지스틱회귀</td></tr>
+            <tr><td>비지도학습</td><td>레이블 없음</td><td>K-Means, PCA</td></tr>
+            <tr><td>강화학습</td><td>보상/패널티</td><td>Q-Learning</td></tr>
+          </table>
+        </div>
+        <h4>분류 vs 회귀</h4>
+        <ul>
+          <li><strong>분류</strong>: 출력이 이산(discrete) — 스팸/정상</li>
+          <li><strong>회귀</strong>: 출력이 연속(continuous) — 주가·아파트 값</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>📐 모델 구축 5단계 (공통 패턴)</h3>
+        <div class="timeline" style="margin-top:0.5rem">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">① 인스턴스 생성</div>
+              <div class="timeline-desc"><code>model = LinearRegression()</code></div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">② X, y 분리</div>
+              <div class="timeline-desc"><code>X = df.drop('price', axis=1); y = df['price']</code></div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">③ train/test 분할</div>
+              <div class="timeline-desc"><code>train_test_split(X, y, test_size=0.5, random_state=0)</code></div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">④ 모델 학습</div>
+              <div class="timeline-desc"><code>model.fit(X_train, y_train)</code></div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--success)"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">⑤ 성능 평가</div>
+              <div class="timeline-desc"><code>model.score(X_test, y_test)</code><br>결정계수: 1.0=완벽, 0.7~0.9=좋음, 0.5이하=설명력 부족</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card purple">
+        <h3>📊 지도학습 알고리즘 한눈에 비교</h3>
+        <div class="table-wrap" style="margin-top:0.4rem">
+          <table>
+            <tr><th>알고리즘</th><th>유형</th><th>핵심 특징</th></tr>
+            <tr><td>다중회귀</td><td>회귀</td><td>선형 결합, 해석 용이</td></tr>
+            <tr><td>로지스틱회귀</td><td>분류</td><td>시그모이드 함수, 확률 출력</td></tr>
+            <tr><td>Ridge</td><td>회귀</td><td>L2 정규화, 계수 축소</td></tr>
+            <tr><td>Lasso</td><td>회귀</td><td>L1 정규화, 변수 선택</td></tr>
+            <tr><td>의사결정나무</td><td>분류/회귀</td><td>트리 구조, 해석 쉬움</td></tr>
+            <tr><td>k-NN</td><td>분류/회귀</td><td>거리 기반, 직관적</td></tr>
+            <tr><td>SVM</td><td>분류</td><td>최대 마진 + 커널, 고차원 강점</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card red">
+        <h3>⚡ Ridge vs Lasso 정규화</h3>
+        <div class="formula">비용함수: Σ(yi - f(xi))² + λΣ|wj|^q<br><small>q=2 → Ridge(L2)&nbsp;&nbsp;&nbsp; q=1 → Lasso(L1)</small></div>
+        <div class="two-col" style="margin-top:0.8rem">
+          <div>
+            <strong style="color:var(--primary)">Ridge (L2)</strong>
+            <ul style="font-size:0.8rem;color:var(--text-muted);padding-left:1rem;margin-top:0.3rem">
+              <li>모든 변수 활용</li>
+              <li>계수를 0이 아닌 작은 값으로</li>
+              <li>상관관계 높을 때 안정적</li>
+            </ul>
+          </div>
+          <div>
+            <strong style="color:var(--danger)">Lasso (L1)</strong>
+            <ul style="font-size:0.8rem;color:var(--text-muted);padding-left:1rem;margin-top:0.3rem">
+              <li>변수 선택 기능</li>
+              <li>일부 계수를 정확히 0으로</li>
+              <li>불필요한 변수 많을 때 유리</li>
+            </ul>
+          </div>
+        </div>
+        <pre><span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> <span class="cls">Ridge</span>, <span class="cls">Lasso</span>
+ridge = <span class="cls">Ridge</span>(alpha=<span class="num">1.0</span>)
+lasso = <span class="cls">Lasso</span>(alpha=<span class="num">200.0</span>)</pre>
+      </div>
+      <div class="card cyan">
+        <h3>📋 주요 데이터셋 정리</h3>
+        <h4>다중회귀 — UCI Auto 데이터</h4>
+        <ul>
+          <li>205행 × 26열, 결측값: '?' 문자</li>
+          <li><code>auto.replace('?', np.nan).dropna()</code> → (199, 4)</li>
+          <li><code>auto.assign(price=pd.to_numeric(auto.price))</code></li>
+          <li>horsepower-price 상관계수: 0.810 (강함)</li>
+        </ul>
+        <h4>로지스틱회귀 — UCI Adult 데이터</h4>
+        <ul>
+          <li>32561행 × 15열</li>
+          <li><code>adult['fin_flg'] = adult['flg-50K'].map(lambda x: 1 if x==' &gt;50K' else 0)</code></li>
+          <li>정확도: 스케일링 전 0.797 → 스케일링 후 0.811</li>
+        </ul>
+        <h4>의사결정나무 — 버섯 데이터</h4>
+        <ul>
+          <li>8124행 × 23열, 결측값 없음</li>
+          <li><code>pd.get_dummies(mushroom[feat_cols])</code> (원-핫 인코딩)</li>
+        </ul>
+      </div>
+      <div class="card orange">
+        <h3>🔗 변수선택 3가지 방법</h3>
+        <ul>
+          <li><strong>변수증가법 (Forward Selection)</strong>: 변수를 하나씩 추가하며 유의한 것만 포함</li>
+          <li><strong>변수감소법 (Backward Elimination)</strong>: 전체 변수에서 무의미한 것을 하나씩 제거</li>
+          <li><strong>스텝와이즈 (Stepwise)</strong>: 추가와 제거를 반복 → 실무에서 가장 선호</li>
+        </ul>
+        <h4>오즈비 (Odds Ratio)</h4>
+        <div class="formula">odds ratio = e^β</div>
+        <ul>
+          <li>오즈비 &gt;1: 해당 변수가 양성 확률 증가</li>
+          <li>오즈비 &lt;1: 해당 변수가 음성 확률 증가</li>
+          <li><code>np.exp(model.coef_)</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9장 -->
+  <div class="chapter-section">
+    <div class="chapter-label ch9">9장 비지도학습</div>
+    <div class="card-grid-2">
+      <div class="card">
+        <h3>🔵 비지도학습 3가지 유형</h3>
+        <div class="table-wrap" style="margin-top:0.4rem">
+          <table>
+            <tr><th>유형</th><th>대표 알고리즘</th></tr>
+            <tr><td>군집화</td><td>K-Means, DBSCAN, Hierarchical</td></tr>
+            <tr><td>변환(차원 축소)</td><td>PCA, t-SNE, UMAP</td></tr>
+            <tr><td>연관 규칙</td><td>Apriori, FP-Growth</td></tr>
+          </table>
+        </div>
+        <h4>계층적 vs 비계층적 군집분석</h4>
+        <div class="table-wrap" style="margin-top:0.3rem">
+          <table>
+            <tr><th>구분</th><th>계층적</th><th>비계층적(K-Means)</th></tr>
+            <tr><td>K 사전 지정</td><td>불필요</td><td>필요</td></tr>
+            <tr><td>대용량</td><td>어려움</td><td>가능</td></tr>
+            <tr><td>결과 시각화</td><td>덴드로그램</td><td>산점도</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card green">
+        <h3>⚙️ K-Means 알고리즘 & 코드</h3>
+        <ol style="padding-left:1.2rem;font-size:0.85rem;color:var(--text-muted);line-height:1.8">
+          <li>K값(군집 수) 입력</li>
+          <li>무작위로 K개 초기 중심 선택</li>
+          <li>각 데이터를 가장 가까운 군집에 배정</li>
+          <li>군집 평균으로 새 중심 계산 → μ_k = (1/N_k) × Σx_i</li>
+          <li>중심이 변하지 않을 때까지 3-4 반복</li>
+        </ol>
+        <div class="formula">새 중심: μ_k = (1/N_k) × Σx_i</div>
+        <pre><span class="kw">from</span> sklearn.cluster <span class="kw">import</span> <span class="cls">KMeans</span>
+kmeans = <span class="cls">KMeans</span>(init=<span class="str">'random'</span>, n_clusters=<span class="num">6</span>, random_state=<span class="num">0</span>)
+kmeans.<span class="mth">fit</span>(X_std)
+labels = pd.<span class="cls">Series</span>(kmeans.labels_, name=<span class="str">'cluster_number'</span>)</pre>
+        <p style="font-size:0.8rem;color:var(--danger);margin-top:0.4rem">⚠️ 거리 기반 → 반드시 StandardScaler 표준화 필요!</p>
+      </div>
+      <div class="card purple">
+        <h3>📏 최적 K 결정 방법</h3>
+        <h4>① 엘보우법 (Elbow Method)</h4>
+        <ul>
+          <li><code>kmeans.inertia_</code>: 군집 내 거리의 제곱합</li>
+          <li>K 증가 시 inertia 감소 → 급격히 줄어드는 지점 선택</li>
+        </ul>
+        <h4>② 실루엣 계수 (Silhouette Score)</h4>
+        <div class="formula">s = (b - a) / max(a, b)</div>
+        <ul>
+          <li>a: 자기 군집 내 평균 거리 (응집도)</li>
+          <li>b: 가장 가까운 다른 군집과의 평균 거리 (분리도)</li>
+        </ul>
+        <div class="table-wrap" style="margin-top:0.3rem">
+          <table>
+            <tr><th>값 범위</th><th>해석</th></tr>
+            <tr><td>0.7 ~ 1.0</td><td>매우 좋음</td></tr>
+            <tr><td>0.5 ~ 0.7</td><td>좋음</td></tr>
+            <tr><td>0.25 ~ 0.5</td><td>보통</td></tr>
+            <tr><td>-0.25 ~ 0</td><td>경계/애매</td></tr>
+          </table>
+        </div>
+        <pre><span class="kw">from</span> sklearn.metrics <span class="kw">import</span> <span class="cls">silhouette_score</span>
+score = <span class="mth">silhouette_score</span>(X_std, kmeans.labels_)</pre>
+      </div>
+      <div class="card cyan">
+        <h3>📉 PCA 주성분 분석</h3>
+        <ul>
+          <li>고차원 데이터 → 저차원으로 변환, 정보 최대 보존</li>
+          <li>상관계수: |r|&gt;0.8 강함, 0.4~0.8 중간, &lt;0.4 약함</li>
+        </ul>
+        <pre><span class="kw">from</span> sklearn.decomposition <span class="kw">import</span> <span class="cls">PCA</span>
+pca = <span class="cls">PCA</span>(n_components=<span class="num">2</span>)
+pca.<span class="mth">fit</span>(X_std)
+X_pca = pca.<span class="mth">transform</span>(X_std)
+
+pca.components_           <span class="cm"># 방향벡터</span>
+pca.explained_variance_   <span class="cm"># 실제 분산값</span>
+pca.explained_variance_ratio_  <span class="cm"># 분산 설명 비율</span></pre>
+        <h4>유방암 데이터 결과</h4>
+        <ul>
+          <li>30개 특징 → 2개 주성분으로 축소</li>
+          <li>explained_variance_ratio_ = [0.443, 0.19]</li>
+          <li>합산: <strong>0.633 → 원본 분산의 63% 보존</strong></li>
+        </ul>
+      </div>
+      <div class="card orange">
+        <h3>🛒 장바구니 분석 3대 지표</h3>
+        <div class="formula">지지도(Support) = P(A∩B) = (A∩B 거래수) / 전체 거래수</div>
+        <div class="formula">신뢰도(Confidence) = P(B|A) = (A∩B 거래수) / A 거래수</div>
+        <div class="formula">향상도(Lift) = 신뢰도 / P(B) = Confidence / Support(B)</div>
+        <h4>기저귀 &amp; 맥주 예시 (전체 100건)</h4>
+        <div class="table-wrap">
+          <table>
+            <tr><th>지표</th><th>계산</th><th>결과</th></tr>
+            <tr><td>지지도</td><td>20 / 100</td><td>0.20</td></tr>
+            <tr><td>신뢰도</td><td>20 / 40</td><td>0.50</td></tr>
+            <tr><td>향상도</td><td>0.50 / 0.30</td><td><strong>1.67</strong></td></tr>
+          </table>
+        </div>
+        <p style="margin-top:0.5rem;font-size:0.82rem">Lift &gt;1: 양의 연관 | Lift = 1: 독립 | Lift &lt;1: 음의 연관</p>
+        <pre>trans_ab = trans_a &amp; trans_b          <span class="cm"># 교집합</span>
+support    = <span class="mth">len</span>(trans_ab) / <span class="mth">len</span>(trans_all)
+confidence = <span class="mth">len</span>(trans_ab) / <span class="mth">len</span>(trans_a)
+lift       = confidence / (<span class="mth">len</span>(trans_b) / <span class="mth">len</span>(trans_all))</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10장 -->
+  <div class="chapter-section">
+    <div class="chapter-label ch10">10장 모델 검증·튜닝</div>
+    <div class="card-grid-2">
+      <div class="card">
+        <h3>⚖️ 과적합 vs 과소적합</h3>
+        <div class="two-col">
+          <div>
+            <strong style="color:var(--danger)">과적합 (Overfitting)</strong>
+            <ul style="font-size:0.8rem;color:var(--text-muted);margin-top:0.3rem;padding-left:1rem">
+              <li>훈련↑ 테스트↓</li>
+              <li>노이즈까지 학습</li>
+              <li>해결: 정규화·특징 감소(PCA)·데이터 증가</li>
+            </ul>
+          </div>
+          <div>
+            <strong style="color:var(--warning)">과소적합 (Underfitting)</strong>
+            <ul style="font-size:0.8rem;color:var(--text-muted);margin-top:0.3rem;padding-left:1rem">
+              <li>훈련↓ 테스트↓</li>
+              <li>모델이 너무 단순</li>
+              <li>해결: 특징 추가·모델 복잡도 증가</li>
+            </ul>
+          </div>
+        </div>
+        <h4>검증 방법 비교</h4>
+        <ul>
+          <li><strong>홀드아웃</strong>: train 70~80% / test 20~30%</li>
+          <li><strong>k-겹 교차검증</strong>: 데이터를 k 블록으로 나눠 k번 검증 → 평균 성능</li>
+          <li><strong>LOOCV</strong>: k=n (Leave-One-Out), 가장 엄격</li>
+        </ul>
+        <pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> <span class="cls">cross_val_score</span>
+scores = <span class="mth">cross_val_score</span>(tree,
+  cancer.data, cancer.target, cv=<span class="num">5</span>)
+<span class="cm"># [0.904, 0.912, 0.956, 0.939, 0.956]</span>
+<span class="cm"># 평균: 0.933 ± 0.022</span></pre>
+      </div>
+      <div class="card green">
+        <h3>🔧 하이퍼파라미터 튜닝</h3>
+        <div class="table-wrap" style="margin-top:0.4rem">
+          <table>
+            <tr><th>방법</th><th>특징</th><th>계산량</th></tr>
+            <tr><td>Grid Search</td><td>모든 조합 탐색, 체계적</td><td>높음</td></tr>
+            <tr><td>Random Search</td><td>무작위 조합, 넓은 탐색</td><td>낮음</td></tr>
+            <tr><td>Hyperopt</td><td>베이지안 최적화, 가장 효율</td><td>매우 낮음</td></tr>
+          </table>
+        </div>
+        <pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> <span class="cls">GridSearchCV</span>
+param_grid = {<span class="str">'C'</span>:[<span class="num">0.001</span>,<span class="num">0.01</span>,<span class="num">0.1</span>,<span class="num">1</span>,<span class="num">10</span>],
+              <span class="str">'gamma'</span>:[<span class="num">0.001</span>,<span class="num">0.01</span>,<span class="num">0.1</span>,<span class="num">1</span>]}
+gs = <span class="cls">GridSearchCV</span>(<span class="cls">SVC</span>(), param_grid, cv=<span class="num">5</span>)
+gs.<span class="mth">fit</span>(X_train, y_train)
+
+gs.best_score_   <span class="cm"># 0.925</span>
+gs.best_params_  <span class="cm"># {'C':1.0, 'gamma':0.001}</span>
+gs.<span class="mth">score</span>(X_test, y_test)  <span class="cm"># 0.909</span></pre>
+        <p style="font-size:0.8rem;color:var(--text-muted)">연습문제 10-2: 4×4=16조합 × 5겹 = <strong>80회</strong> 학습</p>
+      </div>
+      <div class="card red">
+        <h3>🎯 오차행렬 &amp; 분류 지표</h3>
+        <div class="table-wrap" style="margin-top:0.4rem">
+          <table>
+            <tr><th></th><th>예측 양성</th><th>예측 음성</th></tr>
+            <tr><td><strong>실제 양성</strong></td><td style="background:#d1fae5">TP</td><td style="background:#fee2e2">FN (2종 오류)</td></tr>
+            <tr><td><strong>실제 음성</strong></td><td style="background:#fee2e2">FP (1종 오류)</td><td style="background:#d1fae5">TN</td></tr>
+          </table>
+        </div>
+        <div style="margin-top:0.7rem">
+          <div class="formula">정확도 = (TP+TN) / (TP+TN+FP+FN)</div>
+          <div class="formula">정밀도(Precision) = TP / (TP+FP)</div>
+          <div class="formula">재현율(Recall) = TP / (TP+FN)</div>
+          <div class="formula">F1 = 2 × (Precision × Recall) / (Precision + Recall)</div>
+        </div>
+        <h4>F1 Score 해석</h4>
+        <div class="table-wrap">
+          <table>
+            <tr><th>범위</th><th>의미</th></tr>
+            <tr><td>0.90 이상</td><td>매우 우수</td></tr>
+            <tr><td>0.80 ~ 0.90</td><td>우수</td></tr>
+            <tr><td>0.70 ~ 0.80</td><td>양호</td></tr>
+            <tr><td>0.50 이하</td><td>성능 부족</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card purple">
+        <h3>📉 ROC 곡선 &amp; AUC</h3>
+        <ul>
+          <li><strong>ROC 곡선</strong>: 진양성률(TPR) vs 위양성률(FPR)</li>
+          <li>TPR = Recall = TP / (TP+FN) (y축)</li>
+          <li>FPR = FP / (FP+TN) (x축)</li>
+          <li><strong>AUC</strong>: ROC 곡선 아래 면적 (1에 가까울수록 좋음)</li>
+        </ul>
+        <div class="table-wrap" style="margin-top:0.4rem">
+          <table>
+            <tr><th>AUC</th><th>해석</th></tr>
+            <tr><td>1.0</td><td>완벽</td></tr>
+            <tr><td>0.9</td><td>매우 좋음</td></tr>
+            <tr><td>0.8</td><td>좋음</td></tr>
+            <tr><td>0.7</td><td>보통</td></tr>
+            <tr><td>0.5</td><td>랜덤 (무의미)</td></tr>
+          </table>
+        </div>
+        <pre><span class="kw">from</span> sklearn.metrics <span class="kw">import</span> <span class="cls">roc_curve</span>, <span class="cls">auc</span>
+fpr, tpr, _ = <span class="mth">roc_curve</span>(y_test, y_pred)
+auc_score = <span class="mth">auc</span>(fpr, tpr)   <span class="cm"># 예: 0.992</span></pre>
+        <p style="font-size:0.8rem;color:var(--danger);margin-top:0.4rem">불균형 데이터 → 정확도 대신 AUC 사용!</p>
+      </div>
+      <div class="card cyan">
+        <h3>📊 회귀 모델 성능 지표</h3>
+        <div class="formula">MSE = (1/n) × Σ(yi - ŷi)²</div>
+        <div class="formula">MAE = (1/n) × Σ|yi - ŷi|</div>
+        <div class="formula">RMSE = √MSE</div>
+        <div class="formula">R² = 1 - SSE/SST = 1 - Σ(yi-ŷi)² / Σ(yi-ȳ)²</div>
+        <div class="formula">MAPE = (100/n) × Σ|yi-ŷi| / yi (%)</div>
+        <h4>선택 가이드</h4>
+        <ul>
+          <li><strong>RMSE</strong>: 가장 널리 사용, 큰 오차에 민감</li>
+          <li><strong>MAE</strong>: 이상치에 덜 민감</li>
+          <li><strong>MAPE</strong>: % 단위, 비즈니스 해석 용이</li>
+          <li><strong>R²</strong>: 설명력 (1에 가까울수록 좋음)</li>
+        </ul>
+      </div>
+      <div class="card orange">
+        <h3>🎪 앙상블 학습</h3>
+        <p>여러 모델을 결합하여 단일 모델보다 높은 성능 달성</p>
+        <div class="two-col" style="margin-top:0.6rem">
+          <div>
+            <strong style="color:var(--primary)">배깅 (Bagging)</strong>
+            <ul style="font-size:0.8rem;color:var(--text-muted);margin-top:0.3rem;padding-left:1rem">
+              <li>병렬 학습</li>
+              <li>결과를 투표로 결합</li>
+              <li>대표: <strong>Random Forest</strong></li>
+              <li>과적합 감소 효과</li>
+            </ul>
+          </div>
+          <div>
+            <strong style="color:var(--danger)">부스팅 (Boosting)</strong>
+            <ul style="font-size:0.8rem;color:var(--text-muted);margin-top:0.3rem;padding-left:1rem">
+              <li>순차 학습</li>
+              <li>이전 모델 오류 보정</li>
+              <li>대표: <strong>XGBoost</strong></li>
+              <li>일반적으로 높은 성능</li>
+            </ul>
+          </div>
+        </div>
+        <h4>모델 종류별 용도</h4>
+        <ul>
+          <li><strong>프로파일링</strong>: X와 y가 같은 기간 (K-Means, 비지도학습)</li>
+          <li><strong>예측</strong>: X가 y보다 앞선 기간 (Logistic Regression)</li>
+          <li><strong>주가예측</strong>: 시계열 (LSTM, Random Forest)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 타임라인 ===== -->
+<section id="timeline">
+  <h2 class="section-title">📅 타임라인</h2>
+  <div class="two-col">
+    <div>
+      <h3 style="font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--text)">머신러닝 발전 역사</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">1943 — McCulloch-Pitts 뉴런</div>
+            <div class="timeline-desc">최초의 수학적 인공신경망 모델 제안</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">1950 — 튜링 테스트</div>
+            <div class="timeline-desc">Alan Turing, "기계가 생각할 수 있는가?"</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">1957 — Perceptron</div>
+            <div class="timeline-desc">Rosenblatt, 최초의 학습 알고리즘</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">1997 — Tom Mitchell ML 정의</div>
+            <div class="timeline-desc">"경험(E), 과제(T), 성능(P)"으로 ML 정형화</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">2007 — scikit-learn 탄생</div>
+            <div class="timeline-desc">파이썬 ML 표준 라이브러리, 오픈소스 시작</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">2012 — 딥러닝 부흥 (AlexNet)</div>
+            <div class="timeline-desc">GPU 가속 CNN, ImageNet 압도적 성능</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">2020s — Data-Centric AI</div>
+            <div class="timeline-desc">모델보다 데이터 품질이 더 중요하다는 패러다임 전환</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--text)">지도학습 프로젝트 전체 흐름</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--success)"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">① 문제 정의</div>
+            <div class="timeline-desc">분류? 회귀? → 목표 변수(y)와 입력 특징(X) 결정</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--success)"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">② 데이터 수집 &amp; 전처리</div>
+            <div class="timeline-desc">결측값 처리, 자료형 변환, 원-핫 인코딩, 표준화</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--success)"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">③ 탐색적 데이터 분석 (EDA)</div>
+            <div class="timeline-desc">auto.corr() → 상관관계 파악, 시각화로 분포 확인</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--success)"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">④ 모델 학습</div>
+            <div class="timeline-desc">model.fit(X_train, y_train)</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--success)"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">⑤ 성능 평가</div>
+            <div class="timeline-desc">분류 → F1, AUC / 회귀 → RMSE, R²</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--success)"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">⑥ 하이퍼파라미터 튜닝</div>
+            <div class="timeline-desc">GridSearchCV → 최적 파라미터 탐색 후 재평가</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--success)"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">⑦ 배포 &amp; 모니터링</div>
+            <div class="timeline-desc">실서비스 적용, 성능 드리프트 지속 모니터링</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. 핵심 캐치 ===== -->
+<section id="catch">
+  <h2 class="section-title">🔥 핵심 캐치 (시험 포인트)</h2>
+  <div class="catch-grid">
+    <div class="catch-item">
+      <div class="catch-label">⚠️ 혼동 주의</div>
+      <h4>로지스틱회귀는 분류 알고리즘!</h4>
+      <p>이름에 "회귀"가 들어가지만 출력이 0/1인 <strong>분류</strong> 알고리즘. 시그모이드 함수로 확률을 출력하고 임계값(0.5)으로 분류.</p>
+    </div>
+    <div class="catch-item yellow">
+      <div class="catch-label">⭐ 자주 출제</div>
+      <h4>Ridge vs Lasso 핵심 차이</h4>
+      <p>Ridge(L2): 계수를 <strong>작게 만들지만 0이 되진 않음</strong> → 변수 선택 불가<br>Lasso(L1): 계수를 <strong>정확히 0으로 만들 수 있음</strong> → 변수 선택 가능</p>
+    </div>
+    <div class="catch-item green">
+      <div class="catch-label">✅ 공식 암기</div>
+      <h4>향상도 = 신뢰도 / 지지도(B)</h4>
+      <p>기저귀&amp;맥주: 신뢰도=0.50, 맥주 지지도=0.30 → Lift=<strong>1.67</strong><br>Lift&gt;1: 양의 연관, =1: 독립, &lt;1: 음의 연관</p>
+    </div>
+    <div class="catch-item purple">
+      <div class="catch-label">🎯 평가지표 선택</div>
+      <h4>모델 유형별 핵심 지표</h4>
+      <p><strong>분류</strong> → F1 Score, ROC-AUC<br><strong>회귀</strong> → RMSE, MAPE<br><strong>불균형 데이터</strong> → AUC (정확도는 신뢰 불가)</p>
+    </div>
+    <div class="catch-item cyan">
+      <div class="catch-label">🔑 K-Means 필수</div>
+      <h4>거리 기반 → 표준화 필수!</h4>
+      <p>K-Means, k-NN, SVM 등 거리 기반 알고리즘은 반드시 StandardScaler 적용. 표준화 없으면 단위 큰 변수가 결과를 왜곡.</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-label">⚠️ 혼동 주의</div>
+      <h4>FP(1종 오류) vs FN(2종 오류)</h4>
+      <p>FP: 실제 음성 → 양성으로 예측 (1종, False Alarm)<br>FN: 실제 양성 → 음성으로 예측 (2종, 놓침)<br>의료 진단에서 FN이 더 위험!</p>
+    </div>
+    <div class="catch-item yellow">
+      <div class="catch-label">⭐ 계산 출제</div>
+      <h4>GridSearchCV 총 학습 횟수</h4>
+      <p>param_grid가 4×4=16조합, cv=5이면 <strong>16×5=80회</strong><br>(연습문제 10-2 정답: max_depth=4, min_samples_leaf=5)</p>
+    </div>
+    <div class="catch-item green">
+      <div class="catch-label">✅ PCA 해석</div>
+      <h4>explained_variance_ratio_ 합산</h4>
+      <p>유방암 데이터: [0.443, 0.19] → 두 주성분 합산 <strong>0.633 = 63%</strong><br>원본 30개 특징의 63%를 2개 PC로 보존!</p>
+    </div>
+    <div class="catch-item purple">
+      <div class="catch-label">🎯 모델 분류</div>
+      <h4>프로파일링 vs 예측 모델</h4>
+      <p><strong>프로파일링</strong>: X와 y가 같은 기간 → K-Means(비지도)<br><strong>예측</strong>: X가 y보다 과거 기간 → Logistic Regression<br><strong>주가예측</strong>: 시계열 → LSTM, Random Forest</p>
+    </div>
+    <div class="catch-item cyan">
+      <div class="catch-label">🔑 시계열</div>
+      <h4>이동평균 vs 로그수익률</h4>
+      <p>이동평균: mat = Σ(ys)/n → 추세 파악<br>로그수익률: r_t = log(y_t/y_{t-1}) → 정규분포에 가까워 통계 분석 용이</p>
+    </div>
+    <div class="catch-item">
+      <div class="catch-label">⚠️ 핵심 개념</div>
+      <h4>교차검증의 진짜 목적</h4>
+      <p>더 높은 정확도 수치를 얻는 것이 아니라 <strong>모델의 신뢰성과 안정성을 판단</strong>하는 것!</p>
+    </div>
+    <div class="catch-item yellow">
+      <div class="catch-label">⭐ 데이터셋 암기</div>
+      <h4>주요 실습 데이터셋</h4>
+      <p>UCI Auto: 205×26 (다중회귀)<br>UCI Adult: 32561×15 (로지스틱회귀)<br>버섯: 8124×23 (의사결정나무)<br>은행: 45211×17 (K-Means)</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. 핵심 키워드 ===== -->
+<section id="keywords">
+  <h2 class="section-title">📖 핵심 키워드</h2>
+  <div class="keyword-grid">
+    <div class="keyword-card">
+      <div class="keyword-en">Supervised Learning</div>
+      <div class="keyword-ko">지도학습</div>
+      <div class="keyword-def">레이블(정답)이 있는 훈련 데이터로 모델을 학습. 분류·회귀 문제에 사용. 대표: SVM, 로지스틱회귀, 의사결정나무.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">Unsupervised Learning</div>
+      <div class="keyword-ko">비지도학습</div>
+      <div class="keyword-def">레이블 없이 데이터의 패턴을 스스로 탐색. 군집화·차원 축소·연관 규칙. 대표: K-Means, PCA.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">Overfitting</div>
+      <div class="keyword-ko">과적합</div>
+      <div class="keyword-def">훈련 데이터에 너무 최적화되어 새로운 데이터에서 성능이 떨어지는 현상. 해결: 정규화, 차원 축소, 데이터 증가.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">Cross Validation</div>
+      <div class="keyword-ko">교차검증</div>
+      <div class="keyword-def">데이터를 k개 블록으로 나눠 번갈아 학습/검증 반복. 모델 신뢰성·안정성 판단이 목적. cross_val_score(model, X, y, cv=5)</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">Regularization</div>
+      <div class="keyword-ko">정규화</div>
+      <div class="keyword-def">과적합 방지를 위해 손실함수에 패널티 항 추가. Ridge(L2): 계수 축소, Lasso(L1): 변수 선택.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">Confusion Matrix</div>
+      <div class="keyword-ko">오차행렬</div>
+      <div class="keyword-def">분류 모델의 예측 결과를 TP/TN/FP/FN 4가지로 구분한 표. 모든 분류 지표의 기반.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">ROC-AUC</div>
+      <div class="keyword-ko">수신자 조작 특성 곡선 &amp; 면적</div>
+      <div class="keyword-def">TPR vs FPR 곡선 아래 면적. 불균형 데이터에 적합. 1=완벽, 0.5=랜덤. 분류 모델 핵심 지표.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">F1 Score</div>
+      <div class="keyword-ko">F1 점수</div>
+      <div class="keyword-def">Precision과 Recall의 조화평균. 두 지표의 균형을 고려. 불균형 데이터에서 정확도 대신 사용.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">K-Means Clustering</div>
+      <div class="keyword-ko">K-평균 군집분석</div>
+      <div class="keyword-def">K개 중심점 기준으로 데이터를 반복 군집화. 비지도학습의 대표 알고리즘. 거리 기반이므로 표준화 필수!</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">Principal Component Analysis</div>
+      <div class="keyword-ko">주성분 분석 (PCA)</div>
+      <div class="keyword-def">고차원 데이터를 정보 손실 최소화하며 저차원으로 변환. explained_variance_ratio_로 설명력 확인.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">Association Rule</div>
+      <div class="keyword-ko">연관 규칙</div>
+      <div class="keyword-def">함께 발생하는 항목 간의 규칙 발견. 지지도·신뢰도·향상도로 강도 측정. 장바구니 분석의 핵심.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">GridSearchCV</div>
+      <div class="keyword-ko">그리드 서치 교차검증</div>
+      <div class="keyword-def">지정한 하이퍼파라미터의 모든 조합을 교차검증으로 탐색. best_score_, best_params_ 반환.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">StandardScaler</div>
+      <div class="keyword-ko">표준화</div>
+      <div class="keyword-def">모든 변수를 평균=0, 표준편차=1로 변환. K-Means, k-NN, SVM, 로지스틱회귀에서 필수 전처리.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">One-Hot Encoding</div>
+      <div class="keyword-ko">원-핫 인코딩</div>
+      <div class="keyword-def">범주형 변수를 0/1 이진 변수로 변환. pd.get_dummies() 사용. 의사결정나무 실습에서 사용됨.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">Elbow Method</div>
+      <div class="keyword-ko">엘보우법</div>
+      <div class="keyword-def">K-Means에서 최적 K 결정법. 군집 내 거리 제곱합(inertia_)이 급격히 감소하다 완만해지는 꺾이는 점 선택.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">Silhouette Score</div>
+      <div class="keyword-ko">실루엣 계수</div>
+      <div class="keyword-def">군집화 품질 지표. s=(b-a)/max(a,b). a=군집 내 응집도, b=분리도. -1~1 범위, 1에 가까울수록 우수.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">Odds Ratio</div>
+      <div class="keyword-ko">오즈비</div>
+      <div class="keyword-def">로지스틱회귀에서 각 변수의 영향 배율. odds ratio = e^β. 1보다 크면 양성 확률 증가, 작으면 감소.</div>
+    </div>
+    <div class="keyword-card">
+      <div class="keyword-en">RMSE</div>
+      <div class="keyword-ko">평균제곱근오차</div>
+      <div class="keyword-def">Root Mean Squared Error. 회귀 모델의 핵심 평가 지표. 실제값과 예측값 차이의 제곱 평균에 루트를 씌운 값.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. 연습문제 ===== -->
+<section id="quiz">
+  <h2 class="section-title">✏️ 연습문제</h2>
+  <div class="score-bar">
+    <div id="score-display">0 / 20</div>
+    <div class="score-progress"><div id="score-fill"></div></div>
+    <span style="font-size:0.85rem;color:var(--text-muted)">맞힌 개수</span>
+  </div>
+
+  <div class="quiz-container">
+
+    <!-- Q1 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">1</span> 다음 중 <strong>분류(Classification)</strong> 문제에 해당하는 것은?</div>
+      <div class="options" data-answer="2">
+        <div class="option" onclick="checkAnswer(this,0,1)">① 내일 주가 예측</div>
+        <div class="option" onclick="checkAnswer(this,1,1)">② 아파트 매매가 예측</div>
+        <div class="option" onclick="checkAnswer(this,2,1)">③ 이메일 스팸 여부 판별</div>
+        <div class="option" onclick="checkAnswer(this,3,1)">④ 기온 예측</div>
+      </div>
+      <div class="feedback" id="fb-1">✅ 스팸/정상은 이산(discrete) 출력 → 분류. 나머지는 연속값 → 회귀입니다.</div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">2</span> Ridge 회귀와 Lasso 회귀의 차이로 <strong>올바른</strong> 것은?</div>
+      <div class="options" data-answer="1">
+        <div class="option" onclick="checkAnswer(this,0,2)">① Ridge는 변수 선택이 가능하고, Lasso는 불가능하다</div>
+        <div class="option" onclick="checkAnswer(this,1,2)">② Lasso는 일부 계수를 정확히 0으로 만들어 변수 선택 기능을 한다</div>
+        <div class="option" onclick="checkAnswer(this,2,2)">③ Ridge는 L1 정규화, Lasso는 L2 정규화를 사용한다</div>
+        <div class="option" onclick="checkAnswer(this,3,2)">④ 두 방법 모두 변수 선택이 불가능하다</div>
+      </div>
+      <div class="feedback" id="fb-2">✅ Lasso(L1)는 일부 계수를 0으로 → 변수 선택 가능. Ridge(L2)는 계수를 작게 만들지만 0이 되지는 않습니다.</div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">3</span> K-Means 군집분석 수행 전에 반드시 해야 할 전처리는?</div>
+      <div class="options" data-answer="2">
+        <div class="option" onclick="checkAnswer(this,0,3)">① 원-핫 인코딩 (One-Hot Encoding)</div>
+        <div class="option" onclick="checkAnswer(this,1,3)">② PCA 차원 축소</div>
+        <div class="option" onclick="checkAnswer(this,2,3)">③ 표준화 (StandardScaler)</div>
+        <div class="option" onclick="checkAnswer(this,3,3)">④ 결측값 행 삭제</div>
+      </div>
+      <div class="feedback" id="fb-3">✅ K-Means는 유클리드 거리 기반이므로, 단위 차이가 큰 변수가 결과를 왜곡하지 않도록 반드시 StandardScaler 표준화가 필요합니다.</div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">4</span> 기저귀&amp;맥주 구매 데이터: 전체 100건, 기저귀 40건, 맥주 30건, 동시 구매 20건일 때 <strong>향상도(Lift)</strong>는?</div>
+      <div class="options" data-answer="2">
+        <div class="option" onclick="checkAnswer(this,0,4)">① 0.50</div>
+        <div class="option" onclick="checkAnswer(this,1,4)">② 1.20</div>
+        <div class="option" onclick="checkAnswer(this,2,4)">③ 1.67</div>
+        <div class="option" onclick="checkAnswer(this,3,4)">④ 2.00</div>
+      </div>
+      <div class="feedback" id="fb-4">✅ 신뢰도=20/40=0.50, 맥주 지지도=30/100=0.30 → Lift=0.50/0.30≈<strong>1.67</strong>. 1보다 크므로 양의 연관!</div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">5</span> k-겹 교차검증(k-fold cross validation)의 <strong>주요 목적</strong>은?</div>
+      <div class="options" data-answer="1">
+        <div class="option" onclick="checkAnswer(this,0,5)">① 더 높은 정확도 수치를 얻기 위해</div>
+        <div class="option" onclick="checkAnswer(this,1,5)">② 모델의 신뢰성과 안정성을 판단하기 위해</div>
+        <div class="option" onclick="checkAnswer(this,2,5)">③ 하이퍼파라미터를 자동으로 최적화하기 위해</div>
+        <div class="option" onclick="checkAnswer(this,3,5)">④ 훈련 데이터를 증강하기 위해</div>
+      </div>
+      <div class="feedback" id="fb-5">✅ 교차검증의 목적은 높은 수치가 아니라 <strong>모델 신뢰성과 안정성 판단</strong>입니다. (강의 슬라이드 핵심 내용)</div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">6</span> 불균형 데이터(클래스 비율 불균등)에서 분류 모델 평가에 가장 적합한 지표는?</div>
+      <div class="options" data-answer="0">
+        <div class="option" onclick="checkAnswer(this,0,6)">① ROC-AUC</div>
+        <div class="option" onclick="checkAnswer(this,1,6)">② 정확도 (Accuracy)</div>
+        <div class="option" onclick="checkAnswer(this,2,6)">③ MSE</div>
+        <div class="option" onclick="checkAnswer(this,3,6)">④ R²</div>
+      </div>
+      <div class="feedback" id="fb-6">✅ 불균형 데이터에서 정확도는 무의미할 수 있음(95%가 정상이면 항상 정상 예측해도 95%). ROC-AUC는 클래스 비율 무관하게 성능 평가 가능!</div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">7</span> PCA의 explained_variance_ratio_ = [0.443, 0.19]가 의미하는 것은?</div>
+      <div class="options" data-answer="3">
+        <div class="option" onclick="checkAnswer(this,0,7)">① 1번째 주성분이 44.3개의 특징을 담고 있다</div>
+        <div class="option" onclick="checkAnswer(this,1,7)">② 전체 분산의 19%만 보존된다</div>
+        <div class="option" onclick="checkAnswer(this,2,7)">③ 2개의 주성분 중 1번째가 더 중요하다는 의미만 있다</div>
+        <div class="option" onclick="checkAnswer(this,3,7)">④ 2개의 주성분으로 원본 데이터 분산의 약 63%를 설명한다</div>
+      </div>
+      <div class="feedback" id="fb-7">✅ 0.443 + 0.19 = <strong>0.633 ≈ 63%</strong>! 두 주성분이 원본 30개 특징의 분산 63%를 보존합니다. 유방암 데이터 실습 결과.</div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">8</span> GridSearchCV에서 param_grid = {'max_depth': [2,3,4,5], 'min_samples_leaf': [2,3,4,5]}, cv=5일 때 총 학습 횟수는?</div>
+      <div class="options" data-answer="2">
+        <div class="option" onclick="checkAnswer(this,0,8)">① 20회</div>
+        <div class="option" onclick="checkAnswer(this,1,8)">② 40회</div>
+        <div class="option" onclick="checkAnswer(this,2,8)">③ 80회</div>
+        <div class="option" onclick="checkAnswer(this,3,8)">④ 100회</div>
+      </div>
+      <div class="feedback" id="fb-8">✅ 4×4=16조합, 각 조합마다 5겹 = <strong>16×5=80회</strong>! (연습문제 10-2 정답: max_depth=4, min_samples_leaf=5)</div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">9</span> 다음 중 <strong>비지도학습</strong>에 해당하는 알고리즘은?</div>
+      <div class="options" data-answer="1">
+        <div class="option" onclick="checkAnswer(this,0,9)">① 로지스틱회귀</div>
+        <div class="option" onclick="checkAnswer(this,1,9)">② K-Means</div>
+        <div class="option" onclick="checkAnswer(this,2,9)">③ SVM</div>
+        <div class="option" onclick="checkAnswer(this,3,9)">④ 의사결정나무</div>
+      </div>
+      <div class="feedback" id="fb-9">✅ K-Means는 레이블 없이 데이터를 군집화하는 <strong>비지도학습</strong>. 나머지는 모두 레이블이 필요한 지도학습(분류)입니다.</div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">10</span> 오차행렬에서 FP(False Positive)를 올바르게 설명한 것은?</div>
+      <div class="options" data-answer="0">
+        <div class="option" onclick="checkAnswer(this,0,10)">① 실제는 음성인데 양성으로 예측한 경우 (1종 오류)</div>
+        <div class="option" onclick="checkAnswer(this,1,10)">② 실제는 양성인데 음성으로 예측한 경우 (2종 오류)</div>
+        <div class="option" onclick="checkAnswer(this,2,10)">③ 실제 양성을 양성으로 정확히 예측한 경우</div>
+        <div class="option" onclick="checkAnswer(this,3,10)">④ 실제 음성을 음성으로 정확히 예측한 경우</div>
+      </div>
+      <div class="feedback" id="fb-10">✅ FP(False Positive)=1종 오류: 실제 음성 → 양성으로 오예측. FN(False Negative)=2종 오류: 실제 양성 → 음성으로 오예측.</div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">11</span> F1 Score의 계산 공식은?</div>
+      <div class="options" data-answer="3">
+        <div class="option" onclick="checkAnswer(this,0,11)">① (Precision + Recall) / 2</div>
+        <div class="option" onclick="checkAnswer(this,1,11)">② Precision × Recall</div>
+        <div class="option" onclick="checkAnswer(this,2,11)">③ Precision² × Recall / (Precision + Recall)</div>
+        <div class="option" onclick="checkAnswer(this,3,11)">④ 2 × (Precision × Recall) / (Precision + Recall)</div>
+      </div>
+      <div class="feedback" id="fb-11">✅ F1 = 2×(P×R)/(P+R). 조화평균으로 두 지표의 균형을 고려. 한쪽이 낮으면 F1도 낮아짐.</div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">12</span> 과적합(Overfitting) 해결책으로 <strong>적절하지 않은</strong> 것은?</div>
+      <div class="options" data-answer="3">
+        <div class="option" onclick="checkAnswer(this,0,12)">① PCA로 차원 감소</div>
+        <div class="option" onclick="checkAnswer(this,1,12)">② Ridge 또는 Lasso 정규화 적용</div>
+        <div class="option" onclick="checkAnswer(this,2,12)">③ 훈련 데이터 증가</div>
+        <div class="option" onclick="checkAnswer(this,3,12)">④ 모델 복잡도 증가 (특징 추가)</div>
+      </div>
+      <div class="feedback" id="fb-12">✅ 특징 추가는 <strong>과소적합</strong> 해결책! 과적합에는 ①차원 감소, ②정규화, ③데이터 증가가 해결책입니다.</div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">13</span> 실루엣 계수 s = (b-a)/max(a,b)에서 a와 b의 의미는?</div>
+      <div class="options" data-answer="1">
+        <div class="option" onclick="checkAnswer(this,0,13)">① a: 다른 군집과의 평균 거리, b: 자기 군집 내 평균 거리</div>
+        <div class="option" onclick="checkAnswer(this,1,13)">② a: 자기 군집 내 평균 거리, b: 가장 가까운 다른 군집과의 평균 거리</div>
+        <div class="option" onclick="checkAnswer(this,2,13)">③ a: 군집 중심과의 거리, b: 군집 반지름</div>
+        <div class="option" onclick="checkAnswer(this,3,13)">④ a: 최소 거리, b: 최대 거리</div>
+      </div>
+      <div class="feedback" id="fb-13">✅ a=자기 군집 내 응집도(작을수록 좋음), b=가장 가까운 다른 군집과의 거리(클수록 좋음). s=1에 가까울수록 군집화 품질 우수!</div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">14</span> matplotlib에서 <strong>누적 막대그래프</strong>를 그릴 때 두 번째 plt.bar()에 추가해야 할 파라미터는?</div>
+      <div class="options" data-answer="2">
+        <div class="option" onclick="checkAnswer(this,0,14)">① align='edge'</div>
+        <div class="option" onclick="checkAnswer(this,1,14)">② stacked=True</div>
+        <div class="option" onclick="checkAnswer(this,2,14)">③ bottom=height1</div>
+        <div class="option" onclick="checkAnswer(this,3,14)">④ offset=height1</div>
+      </div>
+      <div class="feedback" id="fb-14">✅ 누적 막대그래프: 두 번째 plt.bar()에 <code>bottom=height1</code>을 지정. 그룹형은 x+=w (막대 위치 이동)!</div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">15</span> 앙상블에서 배깅(Bagging)과 부스팅(Boosting)의 차이로 옳은 것은?</div>
+      <div class="options" data-answer="0">
+        <div class="option" onclick="checkAnswer(this,0,15)">① 배깅은 병렬 학습+투표 결합, 부스팅은 순차 학습+이전 오류 보정</div>
+        <div class="option" onclick="checkAnswer(this,1,15)">② 배깅은 순차 학습, 부스팅은 병렬 학습</div>
+        <div class="option" onclick="checkAnswer(this,2,15)">③ 배깅의 대표 알고리즘은 XGBoost이다</div>
+        <div class="option" onclick="checkAnswer(this,3,15)">④ 부스팅은 과적합 감소 효과가 없다</div>
+      </div>
+      <div class="feedback" id="fb-15">✅ 배깅: <strong>병렬</strong>+투표 → Random Forest / 부스팅: <strong>순차</strong>+오류 보정 → XGBoost. 배깅이 과적합 감소에 더 효과적!</div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">16</span> 다음 중 <strong>회귀(Regression)</strong> 모델의 핵심 평가 지표로 옳게 짝지어진 것은?</div>
+      <div class="options" data-answer="3">
+        <div class="option" onclick="checkAnswer(this,0,16)">① F1 Score, ROC-AUC</div>
+        <div class="option" onclick="checkAnswer(this,1,16)">② Precision, Recall</div>
+        <div class="option" onclick="checkAnswer(this,2,16)">③ AUC, Accuracy</div>
+        <div class="option" onclick="checkAnswer(this,3,16)">④ RMSE, MAPE</div>
+      </div>
+      <div class="feedback" id="fb-16">✅ 분류→F1, ROC-AUC / 회귀→<strong>RMSE, MAPE</strong>. R²도 회귀 지표지만 핵심은 RMSE와 MAPE입니다.</div>
+    </div>
+
+    <!-- Q17 (단답형) -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">17</span> [단답형] K-Means에서 군집 내 거리의 제곱합을 나타내는 파이썬 속성 이름은? (예: kmeans.???)</div>
+      <div class="short-answer">
+        <input type="text" id="sa-17" placeholder="kmeans.???">
+        <button onclick="checkShort(17,['inertia_','kmeans.inertia_'])">확인</button>
+      </div>
+      <div class="feedback" id="fb-17"></div>
+    </div>
+
+    <!-- Q18 (단답형) -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">18</span> [단답형] RMSE의 전체 영어 이름을 쓰세요.</div>
+      <div class="short-answer">
+        <input type="text" id="sa-18" placeholder="Root...">
+        <button onclick="checkShort(18,['Root Mean Squared Error','root mean squared error','Root Mean Square Error','root mean square error'])">확인</button>
+      </div>
+      <div class="feedback" id="fb-18"></div>
+    </div>
+
+    <!-- Q19 (단답형) -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">19</span> [단답형] 로지스틱회귀에서 각 변수의 영향 배율(e^β)을 나타내는 지표를 한글로 쓰세요.</div>
+      <div class="short-answer">
+        <input type="text" id="sa-19" placeholder="오즈...">
+        <button onclick="checkShort(19,['오즈비','odds ratio','Odds Ratio'])">확인</button>
+      </div>
+      <div class="feedback" id="fb-19"></div>
+    </div>
+
+    <!-- Q20 -->
+    <div class="quiz-item">
+      <div class="quiz-q"><span class="qnum">20</span> 로지스틱회귀에서 UCI Adult 데이터에 StandardScaler를 적용했을 때의 효과로 옳은 것은?</div>
+      <div class="options" data-answer="1">
+        <div class="option" onclick="checkAnswer(this,0,20)">① 정확도가 0.797에서 0.750으로 감소했다</div>
+        <div class="option" onclick="checkAnswer(this,1,20)">② 정확도가 0.797에서 0.811로 향상되었다</div>
+        <div class="option" onclick="checkAnswer(this,2,20)">③ 과적합이 심해졌다</div>
+        <div class="option" onclick="checkAnswer(this,3,20)">④ 표준화는 로지스틱회귀에 영향을 미치지 않는다</div>
+      </div>
+      <div class="feedback" id="fb-20">✅ UCI Adult 실습에서 StandardScaler 적용 후 정확도 0.797 → train 0.811, test 0.810으로 향상! 표준화로 학습 안정성 증가.</div>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer style="text-align:center;padding:2rem;color:var(--text-muted);font-size:0.82rem;border-top:1px solid var(--border)">
+  한신대학교 데이터사이언스입문 기말고사 학습자료 | 7~10장 | 2026
+</footer>
+
+<script>
+let correct = 0;
+const total = 20;
+const answered = new Set();
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-btn').textContent = isDark ? '🌙' : '☀️';
+  localStorage.setItem('ds-theme', isDark ? 'light' : 'dark');
+}
+
+function checkAnswer(el, idx, qNum) {
+  if (answered.has(qNum)) return;
+  const options = el.parentElement.querySelectorAll('.option');
+  const correctIdx = parseInt(el.parentElement.getAttribute('data-answer'));
+  options.forEach(o => o.classList.add('disabled'));
+  const fb = document.getElementById('fb-' + qNum);
+  if (idx === correctIdx) {
+    el.classList.add('correct');
+    fb.classList.add('show', 'correct');
+    correct++; updateScore();
+  } else {
+    el.classList.add('wrong');
+    options[correctIdx].classList.add('correct');
+    fb.classList.add('show', 'wrong');
+  }
+  answered.add(qNum);
+}
+
+function checkShort(qNum, answers) {
+  if (answered.has(qNum)) return;
+  const input = document.getElementById('sa-' + qNum);
+  const val = input.value.trim();
+  const fb = document.getElementById('fb-' + qNum);
+  const isCorrect = answers.some(a => val.toLowerCase() === a.toLowerCase());
+  fb.classList.add('show');
+  if (isCorrect) {
+    fb.classList.add('correct');
+    fb.textContent = '✅ 정답입니다! ' + answers[0];
+    correct++; updateScore();
+  } else {
+    fb.classList.add('wrong');
+    fb.textContent = '❌ 오답입니다. 정답: ' + answers[0];
+  }
+  answered.add(qNum);
+  input.disabled = true;
+}
+
+function updateScore() {
+  document.getElementById('score-display').textContent = correct + ' / ' + total;
+  document.getElementById('score-fill').style.width = (correct / total * 100) + '%';
+}
+
+(function() {
+  const saved = localStorage.getItem('ds-theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('theme-btn').textContent = '☀️';
+  }
+})();
+</script>
+</body>
+</html>
