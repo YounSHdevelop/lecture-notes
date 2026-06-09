@@ -120,6 +120,7 @@ code{background:var(--bg);padding:.1rem .4rem;border-radius:4px;font-family:'Jet
 </head>
 <body>
 <nav>
+  <a href="index.html" style="font-weight:700">← 목차</a>
   <a href="#objectives">학습목표</a>
   <a href="#summary">핵심요약</a>
   <a href="#stream">스트림 개요</a>
@@ -767,7 +768,7 @@ fin.<span class="mth">close</span>();</div>
       <small style="color:var(--text-muted)">"data.txt" 파일에 내용을 이어 쓰는 FileWriter 생성문 (append 모드)</small>
     </div>
     <input type="text" class="short-input" id="q11-input" placeholder="FileWriter fout = new FileWriter(...)">
-    <button class="check-btn" onclick="chkShort('q11', ['filewriter(\"data.txt\", true)','filewriter(\'data.txt\', true)','data.txt\", true'])">확인</button>
+    <button class="check-btn" onclick="chkShort('q11', ['filewriter(&quot;data.txt&quot;,true)','data.txt&quot;,true','data.txt\',true'])">확인</button>
     <div class="fb" id="q11">
       ✅ <strong>정답</strong>: <code>FileWriter fout = new FileWriter("data.txt", true);</code><br>
       두 번째 인자 <code>true</code>가 append(이어쓰기) 모드입니다.
