@@ -95,6 +95,7 @@ tr:nth-child(even) td{background:rgba(0,0,0,.02)}
   <a href="#circular">원형 큐</a>
   <a href="#deque">덱</a>
   <a href="#linked">연결 리스트</a>
+  <a href="#pointer">포인터 개념</a>
   <a href="#tree">트리 순회</a>
   <button class="nav-theme" onclick="toggleTheme()">🌙</button>
 </nav>
@@ -491,7 +492,74 @@ tr:nth-child(even) td{background:rgba(0,0,0,.02)}
 
 <!-- ══════════════════════════════ 연결 리스트 ══════════════════════════════ -->
 <div id="linked"></div>
+<div id="pointer"></div>
 <div class="chapter-divider">🔗 연결 리스트 (Linked List)</div>
+
+<div class="sec-title">🤔 link가 뭔지부터</div>
+<div class="grid2">
+  <div class="card">
+    <strong style="font-size:.88rem">배열 — 데이터가 붙어있음</strong>
+    <div class="vis-box" style="margin-top:.6rem">
+      <div class="arr-row">
+        <div class="arr-cell filled">10</div>
+        <div class="arr-cell filled">20</div>
+        <div class="arr-cell filled">30</div>
+      </div>
+      <div style="font-size:.8rem;color:var(--text-muted);margin-top:.4rem">인덱스[0][1][2]로 다음 데이터를 찾음</div>
+    </div>
+  </div>
+  <div class="card">
+    <strong style="font-size:.88rem">연결 리스트 — 데이터가 메모리 여기저기 흩어져 있음</strong>
+    <div class="vis-box" style="margin-top:.6rem;line-height:2;font-size:.82rem">
+      100번지: [10]&nbsp;&nbsp;&nbsp;205번지: [20]&nbsp;&nbsp;&nbsp;371번지: [30]
+    </div>
+    <p style="font-size:.84rem;margin-top:.5rem;line-height:1.7">흩어져 있으니까 <strong>"다음 게 어디 있는지 주소를 직접 저장"</strong>해야 해요.<br>그게 바로 <code>link</code>예요.</p>
+  </div>
+</div>
+<div class="card">
+  <div style="font-size:.88rem;margin-bottom:.6rem"><strong>link = 다음 노드의 주소를 적어두는 칸</strong></div>
+  <div class="node-row">
+    <div class="node"><div class="node-data">10</div><div class="node-link">205번지</div></div>
+    <div class="node-arrow">→</div>
+    <div class="node"><div class="node-data">20</div><div class="node-link">371번지</div></div>
+    <div class="node-arrow">→</div>
+    <div class="node"><div class="node-data">30</div><div class="node-link">NULL</div></div>
+  </div>
+  <p style="font-size:.84rem;margin-top:.6rem;color:var(--text-muted)">마지막 노드의 link = NULL (다음이 없음)</p>
+</div>
+
+<div class="sec-title">🤔 포인터 * 하나 vs ** 두 개</div>
+<div class="card">
+  <table>
+    <tr><th>구분</th><th>의미</th><th>언제 쓰나</th></tr>
+    <tr><td><code>*head</code></td><td>head가 가리키는 노드의 <strong>내용</strong> 수정</td><td>중간 삽입, 삭제, 큐 연산</td></tr>
+    <tr><td><code>**head</code></td><td>head가 <strong>가리키는 곳 자체</strong>를 변경</td><td>맨 앞 삽입 (head가 새 노드를 가리켜야 할 때)</td></tr>
+  </table>
+</div>
+<div class="grid2">
+  <div class="card">
+    <div style="font-size:.82rem;font-weight:700;color:var(--danger);margin-bottom:.5rem">❌ * 하나로 하면 — 원본 head 안 바뀜</div>
+    <div class="code-block"><span class="kw">void</span> <span class="mth">insert</span>(<span class="cls">ListNode</span> *head, <span class="kw">int</span> data) {
+  <span class="cls">ListNode</span> *new = <span class="mth">malloc</span>(...);
+  new->link = head;
+  head = new; <span class="cm">// 복사본만 바뀜!</span>
+              <span class="cm">// 원본 head는 그대로</span>
+}</div>
+  </div>
+  <div class="card">
+    <div style="font-size:.82rem;font-weight:700;color:var(--success);margin-bottom:.5rem">✅ ** 두 개로 하면 — 원본 head 바뀜</div>
+    <div class="code-block"><span class="kw">void</span> <span class="mth">insert</span>(<span class="cls">ListNode</span> **head, <span class="kw">int</span> data) {
+  <span class="cls">ListNode</span> *new = <span class="mth">malloc</span>(...);
+  new->link = *head;
+  *head = new; <span class="cm">// 원본 head가 new를 가리킴!</span>
+}</div>
+  </div>
+</div>
+<div class="highlight">
+  <strong>큐는 왜 * 하나?</strong><br>
+  큐는 <code>q</code>가 가리키는 곳을 바꾸는 게 아니라 <strong>q 안의 내용물</strong>(rear, data[])을 수정하는 거라서 * 하나로 충분해요.<br>
+  맨 앞 삽입은 head가 완전히 <strong>다른 노드를 가리키도록</strong> 바꿔야 하니까 **가 필요해요.
+</div>
 
 <div class="sec-title">노드 구조체</div>
 <div class="grid2">
@@ -565,6 +633,14 @@ tr:nth-child(even) td{background:rgba(0,0,0,.02)}
 }</div>
     <div class="highlight-danger" style="margin-top:.6rem">
       ①번을 먼저 안 하면 <code>prev->link</code>가 덮어써져서<br>기존 다음 노드 주소를 <strong>영원히 잃어버려요!</strong>
+    </div>
+    <div class="vis-box" style="margin-top:.6rem">
+      <div class="vis-label">❌ ②먼저 하면 어떻게 되는가</div>
+      <div style="font-size:.82rem;line-height:2">
+        prev->link = new &nbsp;&nbsp;&nbsp;→ [10] → [20]<br>
+        new->link = prev->link → new->link = <strong style="color:var(--danger)">new 자기 자신!</strong><br>
+        [30] 주소를 이미 잃어버린 상태 💀
+      </div>
     </div>
   </div>
   <div class="card">
@@ -643,6 +719,25 @@ tr:nth-child(even) td{background:rgba(0,0,0,.02)}
       <tr><td>포인터</td><td><code>*link</code> 1개</td><td><code>*left, *right</code> 2개</td></tr>
       <tr><td>방향</td><td>단방향</td><td>두 갈래</td></tr>
     </table>
+  </div>
+</div>
+
+<div class="sec-title">🤔 if (root == NULL) return 이 왜 필요한가?</div>
+<div class="grid2">
+  <div class="card">
+    <p style="font-size:.88rem;line-height:1.8">순회는 <strong>재귀함수</strong>예요. 자기 자신을 계속 호출하다가<br>잎 노드(자식 없음)에서 멈춰야 해요.<br>잎 노드의 left, right는 <code>NULL</code>이기 때문에<br>NULL 체크가 없으면 <strong>무한루프</strong>가 발생해요.</p>
+  </div>
+  <div class="card">
+    <div class="vis-box">
+      <div class="vis-label">preorder(D) 호출 흐름 — D는 잎 노드</div>
+      <div style="font-size:.82rem;line-height:2">
+        preorder(D) 호출<br>
+        &nbsp;&nbsp;printf D<br>
+        &nbsp;&nbsp;preorder(NULL) → <strong style="color:var(--success)">if NULL → return!</strong><br>
+        &nbsp;&nbsp;preorder(NULL) → <strong style="color:var(--success)">if NULL → return!</strong><br>
+        ← 여기서 멈추고 상위 함수로 돌아감
+      </div>
+    </div>
   </div>
 </div>
 
