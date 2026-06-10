@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자료구조 코드 구현 학습자료</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f4f6;--card:#fff;--text:#111827;--text-muted:#6b7280;--border:#e5e7eb;
+  --primary:#2563eb;--primary-light:#60a5fa;
+  --success:#16a34a;--danger:#dc2626;--warning:#d97706;--purple:#7c3aed;--teal:#0891b2;
+  --nav-bg:rgba(255,255,255,0.95);
+}
+[data-theme="dark"]{
+  --bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--text-muted:#94a3b8;--border:#334155;
+  --nav-bg:rgba(15,23,42,0.97);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding-top:52px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 1rem;display:flex;align-items:center;gap:.3rem;height:52px;overflow-x:auto;white-space:nowrap}
+nav a{color:var(--text-muted);text-decoration:none;font-size:.74rem;font-weight:500;padding:.25rem .55rem;border-radius:6px;transition:all .2s;flex-shrink:0}
+nav a:hover{background:var(--primary);color:#fff}
+nav a.home{font-weight:700;color:var(--primary-light)}
+.nav-theme{margin-left:auto;background:none;border:1px solid var(--border);color:var(--text);cursor:pointer;padding:.3rem .7rem;border-radius:6px;font-size:.9rem;flex-shrink:0}
+header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;padding:5rem 2rem 3rem;text-align:center}
+header .badge{display:inline-block;background:rgba(255,255,255,.15);border-radius:20px;padding:.3rem 1.2rem;font-size:.8rem;margin-bottom:1rem;letter-spacing:.06em}
+header h1{font-size:2rem;font-weight:700;margin-bottom:.4rem}
+header p{opacity:.85;font-size:.95rem}
+.wrap{max-width:960px;margin:0 auto;padding:2rem 1rem 6rem}
+.chapter-divider{margin:3rem 0 1.5rem;padding:.6rem 1.2rem;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;border-radius:10px;font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:.6rem}
+.sec-title{font-size:1rem;font-weight:700;margin:1.8rem 0 .8rem;color:var(--text);display:flex;align-items:center;gap:.5rem}
+.sec-title::before{content:'';width:4px;height:1rem;background:var(--primary-light);border-radius:2px;display:inline-block}
+.card{background:var(--card);border-radius:12px;padding:1.2rem 1.4rem;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:1rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem}
+@media(max-width:640px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:.15rem .6rem;border-radius:20px;margin:.1rem}
+.tag-r{background:#fee2e2;color:#b91c1c}
+.tag-g{background:#dcfce7;color:#15803d}
+.tag-b{background:#dbeafe;color:#1d4ed8}
+.tag-p{background:#ede9fe;color:#6d28d9}
+.tag-y{background:#fef3c7;color:#92400e}
+code{font-family:'JetBrains Mono',monospace;background:rgba(37,99,235,.08);padding:.1rem .35rem;border-radius:4px;font-size:.85em}
+.code-block{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:.5rem 1.2rem;font-family:'JetBrains Mono',monospace;font-size:.85rem;line-height:2;overflow-x:auto;margin:.6rem 0;white-space:pre}
+[data-theme="dark"] .code-block{background:#020617}
+.kw{color:#93c5fd}.cls{color:#fde68a}.str{color:#86efac}.cm{color:#6b7280}.num{color:#f9a8d4}.mth{color:#c084fc}.pp{color:#fb923c}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{background:var(--primary);color:#fff;padding:.5rem .8rem;text-align:left}
+td{padding:.45rem .8rem;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:rgba(0,0,0,.02)}
+[data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.highlight{background:#fef9c3;border-left:4px solid var(--warning);padding:.7rem 1rem;border-radius:0 8px 8px 0;font-size:.87rem;margin:.6rem 0;line-height:1.7}
+.highlight-danger{background:#fef2f2;border-left:4px solid var(--danger);padding:.7rem 1rem;border-radius:0 8px 8px 0;font-size:.87rem;margin:.6rem 0;line-height:1.7}
+.highlight-success{background:#f0fdf4;border-left:4px solid var(--success);padding:.7rem 1rem;border-radius:0 8px 8px 0;font-size:.87rem;margin:.6rem 0;line-height:1.7}
+[data-theme="dark"] .highlight{background:#1c1408;color:#fde68a}
+[data-theme="dark"] .highlight-danger{background:#1c0808;color:#fca5a5}
+[data-theme="dark"] .highlight-success{background:#052e16;color:#86efac}
+.badge-imp{display:inline-block;background:#fee2e2;color:#b91c1c;font-size:.68rem;font-weight:700;padding:.1rem .5rem;border-radius:20px;margin-left:.4rem}
+.step-list{list-style:none;padding:0;margin:.6rem 0}
+.step-list li{display:flex;gap:.8rem;align-items:flex-start;padding:.5rem 0;font-size:.88rem;border-bottom:1px solid var(--border)}
+.step-list li:last-child{border-bottom:none}
+.step-num{background:var(--primary);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;margin-top:.15rem}
+
+/* 시각화 박스 */
+.vis-box{background:var(--bg);border-radius:10px;padding:1rem 1.2rem;border:1px solid var(--border);margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.9}
+.vis-label{font-size:.72rem;font-weight:700;color:var(--text-muted);margin-bottom:.4rem;font-family:'Noto Sans KR',sans-serif}
+.arr-row{display:flex;align-items:center;gap:0;margin:.3rem 0}
+.arr-cell{border:2px solid var(--border);padding:.35rem .7rem;min-width:48px;text-align:center;font-weight:600;background:var(--card)}
+.arr-cell.filled{background:rgba(37,99,235,.1);border-color:var(--primary);color:var(--primary)}
+.arr-cell.front-cell{border-color:var(--success);}
+.arr-cell.rear-cell{border-color:var(--danger);}
+.arr-cell.empty-used{background:rgba(107,114,128,.07);color:var(--text-muted)}
+.arr-idx{font-size:.68rem;color:var(--text-muted);text-align:center;min-width:48px}
+.ptr-row{display:flex;gap:16px;margin-top:.5rem;font-size:.8rem}
+.ptr-f{color:var(--success);font-weight:700}
+.ptr-r{color:var(--danger);font-weight:700}
+
+/* 연결 리스트 시각화 */
+.node-row{display:flex;align-items:center;flex-wrap:wrap;gap:.3rem;margin:.5rem 0}
+.node{display:flex;border:2px solid var(--purple);border-radius:8px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:.82rem}
+.node-data{padding:.35rem .7rem;background:rgba(124,58,237,.1);font-weight:700;color:var(--purple)}
+.node-link{padding:.35rem .7rem;background:rgba(124,58,237,.05);color:var(--text-muted);border-left:2px solid var(--border)}
+.node-arrow{font-size:1.1rem;color:var(--text-muted);padding:0 .2rem}
+.node-null{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text-muted);padding:.35rem .5rem}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="home">← 목차</a>
+  <a href="#linear">선형 큐</a>
+  <a href="#circular">원형 큐</a>
+  <a href="#deque">덱</a>
+  <a href="#linked">연결 리스트</a>
+  <a href="#tree">트리 순회</a>
+  <button class="nav-theme" onclick="toggleTheme()">🌙</button>
+</nav>
+
+<header>
+  <div class="badge">자료구조 · 코드 구현</div>
+  <h1>자료구조 코드 구현 학습자료</h1>
+  <p>선형 큐 · 원형 큐 · 덱 · 연결 리스트 · 이진 트리 순회</p>
+</header>
+
+<div class="wrap">
+
+<!-- ══════════════════════════════ 선형 큐 ══════════════════════════════ -->
+<div id="linear"></div>
+<div class="chapter-divider">📦 선형 큐 (Linear Queue)</div>
+
+<div class="sec-title">구조체 & 초기화</div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="pp">#define</span> MAX_SIZE <span class="num">5</span>
+
+<span class="kw">typedef struct</span> {
+  <span class="kw">int</span> data[MAX_SIZE]; <span class="cm">// 데이터 배열</span>
+  <span class="kw">int</span> front;          <span class="cm">// 삭제 위치</span>
+  <span class="kw">int</span> rear;           <span class="cm">// 삽입 위치</span>
+} <span class="cls">QueueType</span>;
+
+<span class="kw">void</span> <span class="mth">init</span>(<span class="cls">QueueType</span> *q) {
+  q->front = <span class="num">-1</span>;
+  q->rear  = <span class="num">-1</span>;
+}</div>
+  </div>
+  <div class="card">
+    <strong style="font-size:.88rem">왜 -1로 초기화?</strong>
+    <p style="margin-top:.5rem;font-size:.86rem;line-height:1.8">공백 조건이 <code>front == rear</code>이기 때문에 초기에 둘 다 같은 값으로 맞춰야 해요.<br>-1에서 시작해 삽입/삭제마다 <code>++</code> 하면 인덱스 0부터 사용돼요.</p>
+    <div class="vis-box" style="margin-top:.8rem">
+      <div class="vis-label">초기 상태 (front = rear = -1)</div>
+      <div class="arr-row">
+        <div class="arr-cell">?</div>
+        <div class="arr-cell">?</div>
+        <div class="arr-cell">?</div>
+        <div class="arr-cell">?</div>
+        <div class="arr-cell">?</div>
+      </div>
+      <div class="arr-row">
+        <div class="arr-idx">[0]</div>
+        <div class="arr-idx">[1]</div>
+        <div class="arr-idx">[2]</div>
+        <div class="arr-idx">[3]</div>
+        <div class="arr-idx">[4]</div>
+      </div>
+      <div class="ptr-row"><span class="ptr-f">front = -1</span><span class="ptr-r">rear = -1</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-title">isEmpty / isFull</div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">int</span> <span class="mth">isEmpty</span>(<span class="cls">QueueType</span> *q) {
+  <span class="kw">return</span> q->front == q->rear;
+}
+
+<span class="kw">int</span> <span class="mth">isFull</span>(<span class="cls">QueueType</span> *q) {
+  <span class="kw">return</span> q->rear == MAX_SIZE - <span class="num">1</span>;
+}</div>
+  </div>
+  <div class="card">
+    <table>
+      <tr><th>조건</th><th>판별식</th></tr>
+      <tr><td>공백 (Empty)</td><td><code>front == rear</code></td></tr>
+      <tr><td>포화 (Full)</td><td><code>rear == MAX_SIZE - 1</code></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sec-title">enqueue (삽입) <span class="badge-imp">rear 먼저 증가</span></div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">void</span> <span class="mth">enqueue</span>(<span class="cls">QueueType</span> *q, <span class="kw">int</span> e) {
+  <span class="kw">if</span> (<span class="mth">isFull</span>(q)) <span class="kw">return</span>;
+  q->data[++(q->rear)] = e;
+  <span class="cm">// rear++ 후 data[rear] = e 와 동일</span>
+}</div>
+    <div class="highlight" style="margin-top:.7rem">rear를 <strong>먼저 증가</strong>시킨 후 그 자리에 데이터를 저장해요.</div>
+  </div>
+  <div class="card">
+    <div class="vis-label">enqueue(10) → enqueue(20) → enqueue(30)</div>
+    <div class="vis-box">
+      <div class="vis-label">enqueue(10) 후</div>
+      <div class="arr-row">
+        <div class="arr-cell front-cell" title="front=-1 (앞에 있음)">·</div>
+        <div class="arr-cell filled rear-cell">10</div>
+        <div class="arr-cell">·</div>
+        <div class="arr-cell">·</div>
+        <div class="arr-cell">·</div>
+      </div>
+      <div class="ptr-row"><span class="ptr-f">front=-1</span><span class="ptr-r">rear=0</span></div>
+    </div>
+    <div class="vis-box">
+      <div class="vis-label">enqueue(20), enqueue(30) 후</div>
+      <div class="arr-row">
+        <div class="arr-cell">·</div>
+        <div class="arr-cell filled">10</div>
+        <div class="arr-cell filled">20</div>
+        <div class="arr-cell filled rear-cell">30</div>
+        <div class="arr-cell">·</div>
+      </div>
+      <div class="ptr-row"><span class="ptr-f">front=-1</span><span class="ptr-r">rear=2</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-title">dequeue (삭제) <span class="badge-imp">front 먼저 증가</span></div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">int</span> <span class="mth">dequeue</span>(<span class="cls">QueueType</span> *q) {
+  <span class="kw">if</span> (<span class="mth">isEmpty</span>(q)) <span class="kw">return</span> <span class="num">-1</span>;
+  <span class="kw">return</span> q->data[++(q->front)];
+  <span class="cm">// front++ 후 data[front] 반환과 동일</span>
+}</div>
+    <div class="highlight" style="margin-top:.7rem">실제로 데이터를 지우지 않고 <strong>front 포인터만 이동</strong>해요.<br>front 왼쪽 = "이미 꺼낸 것"으로 취급.</div>
+  </div>
+  <div class="card">
+    <div class="vis-box">
+      <div class="vis-label">dequeue() 실행 전</div>
+      <div class="arr-row">
+        <div class="arr-cell">·</div>
+        <div class="arr-cell filled">10</div>
+        <div class="arr-cell filled">20</div>
+        <div class="arr-cell filled rear-cell">30</div>
+        <div class="arr-cell">·</div>
+      </div>
+      <div class="ptr-row"><span class="ptr-f">front=-1</span><span class="ptr-r">rear=2</span></div>
+    </div>
+    <div class="vis-box">
+      <div class="vis-label">dequeue() → 10 반환 후</div>
+      <div class="arr-row">
+        <div class="arr-cell empty-used">10</div>
+        <div class="arr-cell filled front-cell">20</div>
+        <div class="arr-cell filled rear-cell">30</div>
+        <div class="arr-cell">·</div>
+        <div class="arr-cell">·</div>
+      </div>
+      <div class="ptr-row"><span class="ptr-f">front=0 →</span><span class="ptr-r">rear=2</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="highlight-danger">
+  <strong>⚠️ 선형 큐의 문제점</strong><br>
+  dequeue를 반복하면 front가 오른쪽으로 밀려 왼쪽 공간이 낭비돼요.<br>
+  rear가 MAX-1에 닿으면 앞에 빈 칸이 있어도 isFull 판정 → <strong>해결: 원형 큐</strong>
+</div>
+
+
+<!-- ══════════════════════════════ 원형 큐 ══════════════════════════════ -->
+<div id="circular"></div>
+<div class="chapter-divider">🔄 원형 큐 (Circular Queue)</div>
+
+<div class="sec-title">선형 큐와 달라지는 점</div>
+<div class="card">
+  <table>
+    <tr><th>항목</th><th>선형 큐</th><th>원형 큐</th></tr>
+    <tr><td>초기값</td><td><code>front = rear = -1</code></td><td><code>front = rear = 0</code></td></tr>
+    <tr><td>인덱스 증가</td><td><code>rear++</code></td><td><code>rear = (rear+1) % MAX</code></td></tr>
+    <tr><td>isFull 조건</td><td><code>rear == MAX-1</code></td><td><code>(rear+1) % MAX == front</code></td></tr>
+    <tr><td>공간 효율</td><td>삭제 후 공간 낭비</td><td>공간 재활용 ✅</td></tr>
+  </table>
+</div>
+
+<div class="sec-title">구조체 & 초기화</div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="pp">#define</span> MAX_SIZE <span class="num">5</span>
+
+<span class="kw">typedef struct</span> {
+  <span class="kw">int</span> data[MAX_SIZE];
+  <span class="kw">int</span> front;
+  <span class="kw">int</span> rear;
+} <span class="cls">QueueType</span>;
+
+<span class="kw">void</span> <span class="mth">init</span>(<span class="cls">QueueType</span> *q) {
+  q->front = <span class="num">0</span>; <span class="cm">// 선형은 -1, 원형은 0</span>
+  q->rear  = <span class="num">0</span>;
+}</div>
+  </div>
+  <div class="card">
+    <strong style="font-size:.88rem">왜 0으로 초기화?</strong>
+    <p style="margin-top:.5rem;font-size:.86rem;line-height:1.8"><code>% MAX</code> 연산을 사용하기 때문에 -1이 아닌 0에서 시작해요.<br>공백 조건 <code>front == rear</code>는 동일하게 성립해요.</p>
+    <div class="highlight" style="margin-top:.7rem">
+      <strong>1칸을 항상 비워두는 이유</strong><br>
+      공백: <code>front == rear</code><br>
+      포화: <code>(rear+1) % MAX == front</code><br>
+      두 조건을 구분하기 위해 배열 한 칸은 사용하지 않아요.
+    </div>
+  </div>
+</div>
+
+<div class="sec-title">isEmpty / isFull</div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">int</span> <span class="mth">isEmpty</span>(<span class="cls">QueueType</span> *q) {
+  <span class="kw">return</span> q->front == q->rear;
+}
+
+<span class="kw">int</span> <span class="mth">isFull</span>(<span class="cls">QueueType</span> *q) {
+  <span class="kw">return</span> (q->rear + <span class="num">1</span>) % MAX_SIZE
+         == q->front;
+}</div>
+  </div>
+  <div class="card">
+    <div class="vis-box">
+      <div class="vis-label">포화 상태 시각화 (MAX=5)</div>
+      <div class="arr-row">
+        <div class="arr-cell front-cell">·</div>
+        <div class="arr-cell filled">10</div>
+        <div class="arr-cell filled">20</div>
+        <div class="arr-cell filled">30</div>
+        <div class="arr-cell filled rear-cell">40</div>
+      </div>
+      <div class="arr-row">
+        <div class="arr-idx">[0]↑F</div>
+        <div class="arr-idx">[1]</div>
+        <div class="arr-idx">[2]</div>
+        <div class="arr-idx">[3]</div>
+        <div class="arr-idx">[4]↑R</div>
+      </div>
+      <div style="font-size:.8rem;margin-top:.5rem;color:var(--danger)">(4+1) % 5 = 0 == front(0) → 가득 참!</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-title">enqueue / dequeue</div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">void</span> <span class="mth">enqueue</span>(<span class="cls">QueueType</span> *q, <span class="kw">int</span> e) {
+  <span class="kw">if</span> (<span class="mth">isFull</span>(q)) <span class="kw">return</span>;
+  q->rear = (q->rear + <span class="num">1</span>) % MAX_SIZE;
+  q->data[q->rear] = e;
+}
+
+<span class="kw">int</span> <span class="mth">dequeue</span>(<span class="cls">QueueType</span> *q) {
+  <span class="kw">if</span> (<span class="mth">isEmpty</span>(q)) <span class="kw">return</span> <span class="num">-1</span>;
+  q->front = (q->front + <span class="num">1</span>) % MAX_SIZE;
+  <span class="kw">return</span> q->data[q->front];
+}</div>
+  </div>
+  <div class="card">
+    <div class="vis-box">
+      <div class="vis-label">원형 순환 — rear가 끝에 닿으면 0으로!</div>
+      <div style="font-size:.82rem;line-height:2">
+        rear=0 → (0+1)%5 = <strong>1</strong><br>
+        rear=1 → (1+1)%5 = <strong>2</strong><br>
+        rear=2 → (2+1)%5 = <strong>3</strong><br>
+        rear=3 → (3+1)%5 = <strong>4</strong><br>
+        rear=4 → (4+1)%5 = <strong style="color:var(--danger)">0 ← 처음으로!</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════ 덱 ══════════════════════════════ -->
+<div id="deque"></div>
+<div class="chapter-divider">↔️ 덱 (Deque — Double-ended Queue)</div>
+
+<div class="sec-title">4가지 연산 한눈에 비교</div>
+<div class="card">
+  <table>
+    <tr><th>연산</th><th>방향</th><th>포인터 이동 수식</th><th>저장/반환 순서</th></tr>
+    <tr><td><code>add_rear</code></td><td>→ 오른쪽</td><td><code>rear = (rear+1) % MAX</code></td><td>이동 먼저 → 저장</td></tr>
+    <tr><td><code>delete_front</code></td><td>→ 오른쪽</td><td><code>front = (front+1) % MAX</code></td><td>이동 먼저 → 반환</td></tr>
+    <tr><td><code>add_front</code></td><td>← 왼쪽</td><td><code>front = (front-1+MAX) % MAX</code></td><td>저장 먼저 → 이동</td></tr>
+    <tr><td><code>delete_rear</code></td><td>← 왼쪽</td><td><code>rear = (rear-1+MAX) % MAX</code></td><td>저장 먼저 → 이동</td></tr>
+  </table>
+  <div class="highlight" style="margin-top:.8rem">
+    <strong>오른쪽 이동</strong>: <code>(x+1) % MAX</code> &nbsp;|&nbsp;
+    <strong>왼쪽 이동</strong>: <code>(x-1+MAX) % MAX</code> (음수 방지용 +MAX)
+  </div>
+</div>
+
+<div class="sec-title">add_rear / delete_front (원형 큐와 동일)</div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">void</span> <span class="mth">add_rear</span>(<span class="cls">QueueType</span> *q, <span class="kw">int</span> e) {
+  <span class="kw">if</span> (<span class="mth">isFull</span>(q)) <span class="kw">return</span>;
+  q->rear = (q->rear + <span class="num">1</span>) % MAX_SIZE;
+  q->data[q->rear] = e;
+  <span class="cm">// 원형 큐 enqueue와 완전히 동일</span>
+}
+
+<span class="kw">int</span> <span class="mth">delete_front</span>(<span class="cls">QueueType</span> *q) {
+  <span class="kw">if</span> (<span class="mth">isEmpty</span>(q)) <span class="kw">return</span> <span class="num">-1</span>;
+  q->front = (q->front + <span class="num">1</span>) % MAX_SIZE;
+  <span class="kw">return</span> q->data[q->front];
+  <span class="cm">// 원형 큐 dequeue와 완전히 동일</span>
+}</div>
+  </div>
+  <div class="card">
+    <strong style="font-size:.88rem">실행 흐름 — add_rear(10), add_rear(20)</strong>
+    <div class="vis-box" style="margin-top:.6rem">
+      <div class="arr-row">
+        <div class="arr-cell front-cell">·</div>
+        <div class="arr-cell filled">10</div>
+        <div class="arr-cell filled rear-cell">20</div>
+        <div class="arr-cell">·</div>
+        <div class="arr-cell">·</div>
+      </div>
+      <div class="ptr-row"><span class="ptr-f">front=0</span><span class="ptr-r">rear=2</span></div>
+    </div>
+    <strong style="font-size:.88rem">delete_front() → 10 반환</strong>
+    <div class="vis-box" style="margin-top:.6rem">
+      <div class="arr-row">
+        <div class="arr-cell empty-used">10</div>
+        <div class="arr-cell front-cell filled">20</div>
+        <div class="arr-cell rear-cell">·</div>
+        <div class="arr-cell">·</div>
+        <div class="arr-cell">·</div>
+      </div>
+      <div class="ptr-row"><span class="ptr-f">front=1</span><span class="ptr-r">rear=2</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-title">add_front (앞쪽 삽입) <span class="badge-imp">저장 먼저!</span></div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">void</span> <span class="mth">add_front</span>(<span class="cls">QueueType</span> *q, <span class="kw">int</span> e) {
+  <span class="kw">if</span> (<span class="mth">isFull</span>(q)) <span class="kw">return</span>;
+  q->data[q->front] = e;  <span class="cm">// ① 저장 먼저</span>
+  q->front = (q->front - <span class="num">1</span> + MAX_SIZE)
+             % MAX_SIZE;  <span class="cm">// ② 왼쪽 이동</span>
+}</div>
+    <div class="highlight-danger" style="margin-top:.6rem">
+      add_rear는 <strong>이동 → 저장</strong> 순서인데<br>
+      add_front는 <strong>저장 → 이동</strong>으로 순서가 반대예요!
+    </div>
+  </div>
+  <div class="card">
+    <div class="vis-box">
+      <div class="vis-label">add_front(5) 실행 — front=1일 때</div>
+      <div style="font-size:.82rem;line-height:2">
+        ① data[front] = data[1] = 5<br>
+        ② front = (1-1+5)%5 = <strong>0</strong>
+      </div>
+    </div>
+    <div class="vis-box">
+      <div class="arr-row">
+        <div class="arr-cell front-cell">·</div>
+        <div class="arr-cell filled">5</div>
+        <div class="arr-cell filled">10</div>
+        <div class="arr-cell filled rear-cell">20</div>
+        <div class="arr-cell">·</div>
+      </div>
+      <div class="ptr-row"><span class="ptr-f">front=0</span><span class="ptr-r">rear=3</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-title">delete_rear (뒤쪽 삭제) <span class="badge-imp">저장 먼저!</span></div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">int</span> <span class="mth">delete_rear</span>(<span class="cls">QueueType</span> *q) {
+  <span class="kw">if</span> (<span class="mth">isEmpty</span>(q)) <span class="kw">return</span> <span class="num">-1</span>;
+  <span class="kw">int</span> ret = q->data[q->rear]; <span class="cm">// ① 저장 먼저</span>
+  q->rear = (q->rear - <span class="num">1</span> + MAX_SIZE)
+            % MAX_SIZE;          <span class="cm">// ② 왼쪽 이동</span>
+  <span class="kw">return</span> ret;
+}</div>
+  </div>
+  <div class="card">
+    <div class="vis-box">
+      <div class="vis-label">delete_rear() — rear=3일 때</div>
+      <div style="font-size:.82rem;line-height:2">
+        ① ret = data[3] = 20<br>
+        ② rear = (3-1+5)%5 = <strong>2</strong><br>
+        return 20
+      </div>
+    </div>
+    <div class="vis-box">
+      <div class="arr-row">
+        <div class="arr-cell front-cell">·</div>
+        <div class="arr-cell filled">5</div>
+        <div class="arr-cell filled rear-cell">10</div>
+        <div class="arr-cell empty-used">20</div>
+        <div class="arr-cell">·</div>
+      </div>
+      <div class="ptr-row"><span class="ptr-f">front=0</span><span class="ptr-r">rear=2</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════ 연결 리스트 ══════════════════════════════ -->
+<div id="linked"></div>
+<div class="chapter-divider">🔗 연결 리스트 (Linked List)</div>
+
+<div class="sec-title">노드 구조체</div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="pp">#include</span> <span class="str">&lt;stdlib.h&gt;</span>
+
+<span class="kw">typedef struct</span> <span class="cls">ListNode</span> {
+  <span class="kw">int</span> data;                  <span class="cm">// 데이터 필드</span>
+  <span class="kw">struct</span> <span class="cls">ListNode</span> *link;    <span class="cm">// 다음 노드 주소</span>
+} <span class="cls">ListNode</span>;
+
+<span class="cls">ListNode</span> *head = <span class="kw">NULL</span>;  <span class="cm">// 처음엔 비어있음</span></div>
+  </div>
+  <div class="card">
+    <strong style="font-size:.88rem">노드 구조</strong>
+    <div class="node-row" style="margin-top:.8rem">
+      <div class="node"><div class="node-data">10</div><div class="node-link">→ 200번지</div></div>
+      <div class="node-arrow">→</div>
+      <div class="node"><div class="node-data">20</div><div class="node-link">→ 350번지</div></div>
+      <div class="node-arrow">→</div>
+      <div class="node"><div class="node-data">30</div><div class="node-link">NULL</div></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text-muted);margin-top:.6rem">↑ head가 첫 번째 노드를 가리킴</p>
+    <div class="highlight" style="margin-top:.6rem">
+      새 노드 생성: <code>malloc(sizeof(ListNode))</code><br>
+      메모리 해제: <code>free(node)</code>
+    </div>
+  </div>
+</div>
+
+<div class="sec-title">맨 앞에 삽입 (insert_front)</div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">void</span> <span class="mth">insert_front</span>(<span class="cls">ListNode</span> **head,
+                    <span class="kw">int</span> data) {
+  <span class="cls">ListNode</span> *new =
+    (<span class="cls">ListNode</span>*)<span class="mth">malloc</span>(<span class="kw">sizeof</span>(<span class="cls">ListNode</span>));
+  new->data = data;
+  new->link = *head;  <span class="cm">// ① 기존 head 연결</span>
+  *head = new;        <span class="cm">// ② head를 새 노드로</span>
+}</div>
+    <div class="highlight" style="margin-top:.6rem">
+      <code>**head</code>인 이유: 함수 안에서 head 포인터 자체를 바꿔야 하기 때문.
+      <code>*head</code>만 넘기면 복사본이라 원본이 안 바뀌어요.
+    </div>
+  </div>
+  <div class="card">
+    <div class="vis-box">
+      <div class="vis-label">insert_front(5) 실행</div>
+      <div style="font-size:.82rem;margin-bottom:.5rem">before: head → [10] → [20] → NULL</div>
+      <ol style="font-size:.82rem;padding-left:1.2rem;line-height:2">
+        <li>new 노드 생성, data=5</li>
+        <li>new->link = *head (= [10])</li>
+        <li>*head = new</li>
+      </ol>
+      <div style="font-size:.82rem;margin-top:.5rem">after: head → [5] → [10] → [20] → NULL</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-title">중간에 삽입 (insert_after) <span class="badge-imp">순서 중요!</span></div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">void</span> <span class="mth">insert_after</span>(<span class="cls">ListNode</span> *prev,
+                   <span class="kw">int</span> data) {
+  <span class="cls">ListNode</span> *new =
+    (<span class="cls">ListNode</span>*)<span class="mth">malloc</span>(<span class="kw">sizeof</span>(<span class="cls">ListNode</span>));
+  new->data = data;
+  new->link = prev->link; <span class="cm">// ① 먼저!</span>
+  prev->link = new;       <span class="cm">// ② 나중에!</span>
+}</div>
+    <div class="highlight-danger" style="margin-top:.6rem">
+      ①번을 먼저 안 하면 <code>prev->link</code>가 덮어써져서<br>기존 다음 노드 주소를 <strong>영원히 잃어버려요!</strong>
+    </div>
+  </div>
+  <div class="card">
+    <div class="vis-box">
+      <div class="vis-label">prev=[10] 뒤에 [20] 삽입</div>
+      <div style="font-size:.82rem;line-height:2">
+        before: [10] → [30] → NULL<br>
+        ① new->link = prev->link = [30]<br>
+        &nbsp;&nbsp;&nbsp;([20] → [30] 연결됨)<br>
+        ② prev->link = new<br>
+        &nbsp;&nbsp;&nbsp;([10] → [20] 연결됨)<br>
+        after: [10] → [20] → [30] → NULL ✅
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-title">노드 삭제 (delete_after)</div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">void</span> <span class="mth">delete_after</span>(<span class="cls">ListNode</span> *prev) {
+  <span class="cls">ListNode</span> *target = prev->link; <span class="cm">// ① 저장</span>
+  prev->link = target->link;     <span class="cm">// ② 건너뜀</span>
+  <span class="mth">free</span>(target);                  <span class="cm">// ③ 해제</span>
+}</div>
+  </div>
+  <div class="card">
+    <div class="vis-box">
+      <div class="vis-label">prev=[10] 다음 [20] 삭제</div>
+      <div style="font-size:.82rem;line-height:2">
+        before: [10] → [20] → [30] → NULL<br>
+        ① target = [20]<br>
+        ② prev->link = target->link = [30]<br>
+        &nbsp;&nbsp;&nbsp;([10] → [30])<br>
+        ③ free([20])<br>
+        after: [10] → [30] → NULL ✅
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-title">전체 순회 (print_list)</div>
+<div class="card">
+  <div class="code-block"><span class="kw">void</span> <span class="mth">print_list</span>(<span class="cls">ListNode</span> *head) {
+  <span class="cls">ListNode</span> *cur = head;
+  <span class="kw">while</span> (cur != <span class="kw">NULL</span>) {
+    <span class="mth">printf</span>(<span class="str">"%d → "</span>, cur->data);
+    cur = cur->link;  <span class="cm">// 다음 노드로 이동</span>
+  }
+  <span class="mth">printf</span>(<span class="str">"NULL\n"</span>);
+}</div>
+  <div class="highlight" style="margin-top:.6rem">
+    <strong>순회 패턴</strong>: <code>cur = head</code> → <code>while(cur != NULL)</code> → <code>cur = cur->link</code><br>
+    이 패턴은 연결 리스트 어디서든 자주 쓰여요.
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════ 트리 순회 ══════════════════════════════ -->
+<div id="tree"></div>
+<div class="chapter-divider">🌳 이진 트리 순회 (Tree Traversal)</div>
+
+<div class="sec-title">트리 노드 구조체</div>
+<div class="grid2">
+  <div class="card">
+    <div class="code-block"><span class="kw">typedef struct</span> <span class="cls">TreeNode</span> {
+  <span class="kw">char</span> data;
+  <span class="kw">struct</span> <span class="cls">TreeNode</span> *left;  <span class="cm">// 왼쪽 자식</span>
+  <span class="kw">struct</span> <span class="cls">TreeNode</span> *right; <span class="cm">// 오른쪽 자식</span>
+} <span class="cls">TreeNode</span>;</div>
+  </div>
+  <div class="card">
+    <strong style="font-size:.88rem">연결 리스트와 비교</strong>
+    <table style="margin-top:.6rem">
+      <tr><th>구분</th><th>연결 리스트</th><th>이진 트리</th></tr>
+      <tr><td>포인터</td><td><code>*link</code> 1개</td><td><code>*left, *right</code> 2개</td></tr>
+      <tr><td>방향</td><td>단방향</td><td>두 갈래</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sec-title">3가지 순회 — print 위치만 다름!</div>
+<div class="card">
+  <table>
+    <tr><th>순회</th><th>순서</th><th>기억법</th></tr>
+    <tr><td><strong>전위 (Preorder)</strong></td><td>루트 → 왼쪽 → 오른쪽</td><td>루트가 <strong>앞</strong>(pre)</td></tr>
+    <tr><td><strong>중위 (Inorder)</strong></td><td>왼쪽 → 루트 → 오른쪽</td><td>루트가 <strong>중간</strong>(in)</td></tr>
+    <tr><td><strong>후위 (Postorder)</strong></td><td>왼쪽 → 오른쪽 → 루트</td><td>루트가 <strong>뒤</strong>(post)</td></tr>
+  </table>
+</div>
+
+<div class="grid3">
+  <div class="card">
+    <div style="font-size:.82rem;font-weight:700;color:var(--teal);margin-bottom:.5rem">전위 순회 (Preorder)</div>
+    <div class="code-block"><span class="kw">void</span> <span class="mth">preorder</span>(
+  <span class="cls">TreeNode</span> *root) {
+  <span class="kw">if</span>(root==<span class="kw">NULL</span>) <span class="kw">return</span>;
+  <span class="mth">printf</span>(<span class="str">"%c "</span>, root->data);
+  <span class="cm">// ↑ 루트 먼저</span>
+  <span class="mth">preorder</span>(root->left);
+  <span class="mth">preorder</span>(root->right);
+}</div>
+  </div>
+  <div class="card">
+    <div style="font-size:.82rem;font-weight:700;color:var(--primary);margin-bottom:.5rem">중위 순회 (Inorder)</div>
+    <div class="code-block"><span class="kw">void</span> <span class="mth">inorder</span>(
+  <span class="cls">TreeNode</span> *root) {
+  <span class="kw">if</span>(root==<span class="kw">NULL</span>) <span class="kw">return</span>;
+  <span class="mth">inorder</span>(root->left);
+  <span class="mth">printf</span>(<span class="str">"%c "</span>, root->data);
+  <span class="cm">// ↑ 루트 중간</span>
+  <span class="mth">inorder</span>(root->right);
+}</div>
+  </div>
+  <div class="card">
+    <div style="font-size:.82rem;font-weight:700;color:var(--purple);margin-bottom:.5rem">후위 순회 (Postorder)</div>
+    <div class="code-block"><span class="kw">void</span> <span class="mth">postorder</span>(
+  <span class="cls">TreeNode</span> *root) {
+  <span class="kw">if</span>(root==<span class="kw">NULL</span>) <span class="kw">return</span>;
+  <span class="mth">postorder</span>(root->left);
+  <span class="mth">postorder</span>(root->right);
+  <span class="mth">printf</span>(<span class="str">"%c "</span>, root->data);
+  <span class="cm">// ↑ 루트 마지막</span>
+}</div>
+  </div>
+</div>
+
+<div class="sec-title">순회 결과 예제</div>
+<div class="grid2">
+  <div class="card">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.88rem;line-height:2;background:var(--bg);padding:.8rem 1rem;border-radius:8px">
+&nbsp;&nbsp;&nbsp;&nbsp;A<br>
+&nbsp;&nbsp;&nbsp;/ \<br>
+&nbsp;&nbsp;B&nbsp;&nbsp;&nbsp;C<br>
+&nbsp;/ \&nbsp;&nbsp;&nbsp;\<br>
+D&nbsp;&nbsp;&nbsp;E&nbsp;&nbsp;&nbsp;F
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="background:rgba(13,148,136,.08);border-left:3px solid var(--teal);padding:.5rem .8rem;border-radius:0 8px 8px 0;font-size:.86rem">
+        <span style="font-weight:700;color:var(--teal)">전위:</span> A → B → D → E → C → F
+      </div>
+      <div style="background:rgba(37,99,235,.08);border-left:3px solid var(--primary);padding:.5rem .8rem;border-radius:0 8px 8px 0;font-size:.86rem">
+        <span style="font-weight:700;color:var(--primary)">중위:</span> D → B → E → A → F → C
+      </div>
+      <div style="background:rgba(124,58,237,.08);border-left:3px solid var(--purple);padding:.5rem .8rem;border-radius:0 8px 8px 0;font-size:.86rem">
+        <span style="font-weight:700;color:var(--purple)">후위:</span> D → E → B → F → C → A
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="highlight-success">
+  <strong>✅ 핵심 암기 포인트</strong><br>
+  세 함수 구조는 완전히 같고 <code>printf</code> 위치만 달라요!<br>
+  전위: printf <strong>맨 위</strong> | 중위: printf <strong>중간</strong> | 후위: printf <strong>맨 아래</strong>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+function toggleTheme(){
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.querySelector('.nav-theme').textContent = isDark ? '🌙' : '☀️';
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+}
+(function(){
+  const t = localStorage.getItem('theme');
+  if(t){
+    document.documentElement.setAttribute('data-theme', t);
+    if(t === 'dark') document.querySelector('.nav-theme').textContent = '☀️';
+  }
+})();
+</script>
+</body>
+</html>
